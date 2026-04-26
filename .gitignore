@@ -9,3 +9,6 @@ dist/
 coverage/
 next-env.d.ts
 data/
+tsconfig.tsbuildinfo
+.claude/
+docs/superpowers/
