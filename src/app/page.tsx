@@ -144,14 +144,23 @@ function ExercisesPanel({
 }) {
   return (
     <>
-      <div className="mb-6 flex items-center justify-between">
+      <div className="mb-6 flex items-center justify-between gap-3">
         <h2 className="text-lg font-semibold text-neutral-300">Your exercises</h2>
-        <Link
-          href="/exercises/new"
-          className="rounded-lg bg-accent px-4 py-2 font-semibold text-black transition hover:bg-accent-strong"
-        >
-          + Add exercise
-        </Link>
+        <div className="flex items-center gap-2">
+          <Link
+            href="/free-play"
+            className="rounded-lg border border-bg-border px-4 py-2 font-semibold text-neutral-200 transition hover:bg-bg-elevated"
+            title="A count-up timer for unstructured practice — transcribing, fiddling, or noodling. Time is recorded in your stats."
+          >
+            Free play
+          </Link>
+          <Link
+            href="/exercises/new"
+            className="rounded-lg bg-accent px-4 py-2 font-semibold text-black transition hover:bg-accent-strong"
+          >
+            + Add exercise
+          </Link>
+        </div>
       </div>
 
       {!loaded ? (
@@ -161,7 +170,7 @@ function ExercisesPanel({
       ) : (
         <>
           <p className="mb-3 text-xs text-neutral-500">
-            Drag the ⋮⋮ handle to reorder. Each exercise runs a fixed 5-minute session.
+            Drag the ⋮⋮ handle to reorder. Tap an exercise to edit or run it.
           </p>
           <ExerciseList exercises={exercises} />
         </>

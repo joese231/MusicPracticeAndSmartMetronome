@@ -12,6 +12,8 @@ type NewExerciseInput = {
   workingBpm: number;
   stepPercent?: number;
   sessionMinutes?: number;
+  openEnded?: boolean;
+  metronomeEnabled?: boolean;
 };
 
 type ExercisesState = {
@@ -24,6 +26,10 @@ type ExercisesState = {
   deleteExercise: (id: string) => Promise<void>;
   reorderExercises: (orderedIds: string[]) => Promise<void>;
   incrementPracticeTime: (id: string, seconds: number) => Promise<void>;
+  /** Add a (possibly-negative) delta to totalPracticeSec, clamped at 0.
+   * Used by the session-edit modal to roll back when a session is trimmed
+   * or deleted. */
+  adjustPracticeTime: (id: string, deltaSec: number) => Promise<void>;
 };
 
 const genId = (): string => {
@@ -60,6 +66,8 @@ export const useExercisesStore = create<ExercisesState>((set, get) => ({
       warmupBpm: null,
       stepPercent: input.stepPercent ?? DEFAULT_STEP_PERCENT,
       sessionMinutes: input.sessionMinutes ?? DEFAULT_EXERCISE_MINUTES,
+      openEnded: input.openEnded ?? false,
+      metronomeEnabled: input.metronomeEnabled ?? true,
       totalPracticeSec: 0,
       sortIndex: nextSortIndex,
       createdAt: now,
@@ -102,6 +110,19 @@ export const useExercisesStore = create<ExercisesState>((set, get) => ({
     const updated: Exercise = {
       ...e,
       totalPracticeSec: e.totalPracticeSec + Math.round(seconds),
+      updatedAt: nowIso(),
+    };
+    await getRepository().upsertExercise(updated);
+    set({ exercises: get().exercises.map((x) => (x.id === id ? updated : x)) });
+  },
+
+  adjustPracticeTime: async (id, deltaSec) => {
+    const e = get().exercises.find((x) => x.id === id);
+    if (!e) return;
+    const next = Math.max(0, e.totalPracticeSec + Math.round(deltaSec));
+    const updated: Exercise = {
+      ...e,
+      totalPracticeSec: next,
       updatedAt: nowIso(),
     };
     await getRepository().upsertExercise(updated);

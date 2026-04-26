@@ -1,4 +1,5 @@
 import type { BlockDef } from "@/types/block";
+import type { Exercise } from "@/types/exercise";
 import { CONSCIOUS_PRACTICE_BLOCK, INSTRUCTIONS } from "./blocks";
 import { overspeedBpm, slowReferenceBpm } from "./tempo";
 
@@ -61,11 +62,27 @@ export const buildExerciseTimedBlocks = (minutes: number): BlockDef[] => {
 };
 
 /**
- * Build the full block list for an exercise session of `minutes` minutes.
- * Always prepends the unbounded Conscious Practice warm-up — same warm-up
- * shape as songs.
+ * Single open-ended block — count-up timer at the exercise's working BPM.
+ * No warm-up, no structured blocks. Used when `Exercise.openEnded` is true.
  */
-export const buildExerciseBlocks = (minutes: number): BlockDef[] => [
-  CONSCIOUS_PRACTICE_BLOCK,
-  ...buildExerciseTimedBlocks(minutes),
-];
+export const OPEN_ENDED_BLOCK: BlockDef = {
+  kind: "openEnded",
+  label: "Open-ended",
+  durationSec: 0,
+  unbounded: true,
+  tempoFn: (s) => s.workingBpm,
+  showEarnedButton: false,
+  promotes: null,
+  instructions: INSTRUCTIONS.openEnded,
+};
+
+/**
+ * Build the full block list for an exercise session. Branches on the
+ * exercise's `openEnded` flag:
+ *  - openEnded === true → single unbounded count-up block
+ *  - otherwise           → Conscious Practice warm-up + Build + Burst + Cool Down
+ */
+export const buildExerciseBlocks = (exercise: Exercise): BlockDef[] => {
+  if (exercise.openEnded) return [OPEN_ENDED_BLOCK];
+  return [CONSCIOUS_PRACTICE_BLOCK, ...buildExerciseTimedBlocks(exercise.sessionMinutes)];
+};

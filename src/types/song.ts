@@ -31,9 +31,11 @@ export type Settings = {
    */
   autoAdvanceBlocks: boolean;
   /**
-   * Seconds to wait after a song's session completes before the next song
-   * in the list auto-starts. 0 disables the pause — the next session starts
-   * immediately. Shown as a countdown overlay with skip/cancel controls.
+   * Seconds to wait after a session completes before the next item in the
+   * list auto-starts. Applies to both songs and exercises (the field name
+   * is legacy from when only songs had the auto-advance flow). 0 disables
+   * the pause — the next session starts immediately. Shown as a countdown
+   * overlay with skip/cancel controls.
    */
   interSongPauseSec: number;
 };

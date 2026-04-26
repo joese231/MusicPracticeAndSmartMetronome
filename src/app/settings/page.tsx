@@ -1,7 +1,12 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useSettingsStore } from "@/lib/store/useSettingsStore";
+import { useSongsStore } from "@/lib/store/useSongsStore";
+import { useExercisesStore } from "@/lib/store/useExercisesStore";
+import { useSessionHistoryStore } from "@/lib/store/useSessionHistoryStore";
+import { useSessionStore } from "@/lib/store/useSessionStore";
+import { getRepository } from "@/lib/db/localRepository";
 import { Metronome } from "@/lib/metronome/scheduler";
 
 export default function SettingsPage() {
@@ -10,7 +15,17 @@ export default function SettingsPage() {
   const load = useSettingsStore((s) => s.load);
   const update = useSettingsStore((s) => s.update);
 
+  const loadSongs = useSongsStore((s) => s.load);
+  const loadExercises = useExercisesStore((s) => s.load);
+  const loadHistory = useSessionHistoryStore((s) => s.load);
+  const clearLatestRecording = useSessionStore((s) => s.clearLatestRecording);
+
   const metronomeRef = useRef<Metronome | null>(null);
+
+  const [confirmReset, setConfirmReset] = useState(false);
+  const [confirmFactory, setConfirmFactory] = useState(false);
+  const [busyAction, setBusyAction] = useState<null | "reset" | "factory">(null);
+  const [actionMessage, setActionMessage] = useState<string | null>(null);
 
   useEffect(() => {
     if (!loaded) void load();
@@ -33,6 +48,45 @@ export default function SettingsPage() {
     m.setVolume(settings.metronomeVolume);
     m.setAccentsEnabled(settings.accentsEnabled);
     m.playPreviewClick();
+  };
+
+  const handleResetStats = async () => {
+    setBusyAction("reset");
+    setActionMessage(null);
+    try {
+      await getRepository().resetAllStatistics();
+      await Promise.all([loadSongs(), loadExercises(), loadHistory()]);
+      setActionMessage("All practice times zeroed and session history erased.");
+      setConfirmReset(false);
+    } catch (err) {
+      setActionMessage(
+        err instanceof Error ? `Reset failed: ${err.message}` : "Reset failed",
+      );
+    } finally {
+      setBusyAction(null);
+    }
+  };
+
+  const handleFactoryReset = async () => {
+    setBusyAction("factory");
+    setActionMessage(null);
+    try {
+      await getRepository().factoryReset();
+      clearLatestRecording();
+      await Promise.all([loadSongs(), loadExercises(), loadHistory()]);
+      setActionMessage(
+        "All songs, exercises, and session history deleted. Settings preserved.",
+      );
+      setConfirmFactory(false);
+    } catch (err) {
+      setActionMessage(
+        err instanceof Error
+          ? `Factory reset failed: ${err.message}`
+          : "Factory reset failed",
+      );
+    } finally {
+      setBusyAction(null);
+    }
   };
 
   return (
@@ -77,8 +131,8 @@ export default function SettingsPage() {
           </Row>
 
           <Row
-            label="Pause between songs"
-            hint="After a song's session finishes, wait this long before the next song in the list starts. Press Space during the countdown to skip, or Esc to exit. 0 disables the pause."
+            label="Pause between items"
+            hint="After a song or exercise session finishes, wait this long before the next item in the list starts. Press Space during the countdown to skip, or Esc to exit. 0 disables the pause."
           >
             <div className="flex items-center gap-4">
               <input
@@ -126,6 +180,103 @@ export default function SettingsPage() {
               </button>
             </div>
           </Row>
+
+          <section className="mt-10 space-y-4 rounded-lg border border-red-900/50 bg-red-950/10 p-5">
+            <div>
+              <h2 className="text-sm font-semibold uppercase tracking-wider text-red-300">
+                Danger zone
+              </h2>
+              <p className="mt-1 text-xs text-neutral-500">
+                Destructive actions. There is no undo.
+              </p>
+            </div>
+
+            {actionMessage && (
+              <div className="rounded border border-emerald-900 bg-emerald-950/30 px-3 py-2 text-sm text-emerald-200">
+                {actionMessage}
+              </div>
+            )}
+
+            <DangerRow
+              label="Reset all statistics"
+              hint="Zero out every song's and exercise's total practice time and erase all session history. Your songs and exercises themselves stay — including their working BPM and trouble spots."
+            >
+              {!confirmReset ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setActionMessage(null);
+                    setConfirmReset(true);
+                    setConfirmFactory(false);
+                  }}
+                  className="rounded-lg border border-red-900 px-4 py-2 text-sm font-semibold text-red-200 transition hover:bg-red-950/40"
+                  disabled={busyAction !== null}
+                >
+                  Reset stats…
+                </button>
+              ) : (
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => void handleResetStats()}
+                    disabled={busyAction !== null}
+                    className="rounded-lg bg-red-700 px-4 py-2 text-sm font-semibold text-white hover:bg-red-600 disabled:opacity-60"
+                  >
+                    {busyAction === "reset" ? "Resetting…" : "Yes, reset everything"}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setConfirmReset(false)}
+                    disabled={busyAction !== null}
+                    className="rounded-lg border border-bg-border px-3 py-2 text-sm text-neutral-300 hover:bg-bg-elevated"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              )}
+            </DangerRow>
+
+            <DangerRow
+              label="Delete all songs and exercises"
+              hint="Factory reset — wipes every song, every exercise, and every session record. Settings (volume, accents, recording) are preserved. Use this when handing the app to a new user."
+            >
+              {!confirmFactory ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setActionMessage(null);
+                    setConfirmFactory(true);
+                    setConfirmReset(false);
+                  }}
+                  className="rounded-lg border border-red-900 px-4 py-2 text-sm font-semibold text-red-200 transition hover:bg-red-950/40"
+                  disabled={busyAction !== null}
+                >
+                  Factory reset…
+                </button>
+              ) : (
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => void handleFactoryReset()}
+                    disabled={busyAction !== null}
+                    className="rounded-lg bg-red-700 px-4 py-2 text-sm font-semibold text-white hover:bg-red-600 disabled:opacity-60"
+                  >
+                    {busyAction === "factory"
+                      ? "Wiping…"
+                      : "Yes, delete everything"}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setConfirmFactory(false)}
+                    disabled={busyAction !== null}
+                    className="rounded-lg border border-bg-border px-3 py-2 text-sm text-neutral-300 hover:bg-bg-elevated"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              )}
+            </DangerRow>
+          </section>
         </div>
       )}
     </main>
@@ -150,6 +301,26 @@ function Row({
         </div>
         <div>{children}</div>
       </div>
+    </div>
+  );
+}
+
+function DangerRow({
+  label,
+  hint,
+  children,
+}: {
+  label: string;
+  hint?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="flex flex-wrap items-start justify-between gap-4 rounded-lg border border-red-900/40 bg-bg/30 p-4">
+      <div className="min-w-0 flex-1">
+        <div className="font-semibold text-neutral-100">{label}</div>
+        {hint && <div className="mt-1 text-xs text-neutral-500">{hint}</div>}
+      </div>
+      <div className="shrink-0">{children}</div>
     </div>
   );
 }

@@ -34,3 +34,19 @@ export async function POST(req: Request) {
   await writeJsonAtomic(FILE, rows);
   return NextResponse.json({ ok: true });
 }
+
+// Replace the entire array. Used by the "Reset all statistics" and "Factory
+// reset" actions in Settings to clear session history.
+export async function PUT(req: Request) {
+  let body: unknown;
+  try {
+    body = await req.json();
+  } catch {
+    return NextResponse.json({ error: "invalid json" }, { status: 400 });
+  }
+  if (!Array.isArray(body)) {
+    return NextResponse.json({ error: "expected array" }, { status: 400 });
+  }
+  await writeJsonAtomic(FILE, body);
+  return NextResponse.json({ ok: true });
+}

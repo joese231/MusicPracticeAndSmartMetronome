@@ -14,6 +14,8 @@ export type ExerciseFormValues = {
   workingBpm: number;
   stepPercent: number;
   sessionMinutes: number;
+  openEnded: boolean;
+  metronomeEnabled: boolean;
 };
 
 type Props = {
@@ -46,6 +48,10 @@ export function ExerciseForm({
   const [sessionMinutes, setSessionMinutes] = useState<string>(
     String(initial?.sessionMinutes ?? DEFAULT_EXERCISE_MINUTES),
   );
+  const [openEnded, setOpenEnded] = useState<boolean>(initial?.openEnded ?? false);
+  const [metronomeEnabled, setMetronomeEnabled] = useState<boolean>(
+    initial?.metronomeEnabled ?? true,
+  );
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
@@ -65,23 +71,31 @@ export function ExerciseForm({
       return null;
     }
     const sm = parseInt(sessionMinutes, 10);
+    // Session length is irrelevant for open-ended exercises but we still
+    // persist a sane value so toggling the flag back on restores a length.
     if (
-      !Number.isFinite(sm) ||
-      sm < MIN_EXERCISE_MINUTES ||
-      sm > MAX_EXERCISE_MINUTES
+      !openEnded &&
+      (!Number.isFinite(sm) ||
+        sm < MIN_EXERCISE_MINUTES ||
+        sm > MAX_EXERCISE_MINUTES)
     ) {
       setError(
         `Session length must be between ${MIN_EXERCISE_MINUTES} and ${MAX_EXERCISE_MINUTES} minutes.`,
       );
       return null;
     }
+    const safeMinutes = Number.isFinite(sm)
+      ? Math.max(MIN_EXERCISE_MINUTES, Math.min(MAX_EXERCISE_MINUTES, sm))
+      : DEFAULT_EXERCISE_MINUTES;
     return {
       name: name.trim(),
       link: link.trim() ? link.trim() : null,
       notes: notes.trim() ? notes.trim() : null,
       workingBpm: w,
       stepPercent: sp,
-      sessionMinutes: sm,
+      sessionMinutes: safeMinutes,
+      openEnded,
+      metronomeEnabled,
     };
   };
 
@@ -172,22 +186,39 @@ export function ExerciseForm({
           />
         </Field>
 
-        <Field
-          label="Session length (minutes)"
-          hint={`Total metronome-on time per session (${MIN_EXERCISE_MINUTES}–${MAX_EXERCISE_MINUTES}). Burst stays 1.5 min and Cool Down stays 30 sec — extra time goes into Build.`}
-        >
-          <input
-            type="number"
-            inputMode="numeric"
-            min={MIN_EXERCISE_MINUTES}
-            max={MAX_EXERCISE_MINUTES}
-            step={1}
-            value={sessionMinutes}
-            onChange={(e) => setSessionMinutes(e.target.value)}
-            className="field-input"
-            required
-          />
-        </Field>
+        {!openEnded && (
+          <Field
+            label="Session length (minutes)"
+            hint={`Total metronome-on time per session (${MIN_EXERCISE_MINUTES}–${MAX_EXERCISE_MINUTES}). Burst stays 1.5 min and Cool Down stays 30 sec — extra time goes into Build.`}
+          >
+            <input
+              type="number"
+              inputMode="numeric"
+              min={MIN_EXERCISE_MINUTES}
+              max={MAX_EXERCISE_MINUTES}
+              step={1}
+              value={sessionMinutes}
+              onChange={(e) => setSessionMinutes(e.target.value)}
+              className="field-input"
+              required
+            />
+          </Field>
+        )}
+      </div>
+
+      <div className="space-y-3 rounded-lg border border-bg-border bg-bg/40 p-4">
+        <Checkbox
+          checked={openEnded}
+          onChange={setOpenEnded}
+          label="Open-ended (no time blocks — just a count-up timer)"
+          hint="When on, the session is a single count-up timer at your working BPM — no warm-up, no Build/Burst/Cool Down. Useful for transcribing or unstructured practice. Press Esc when you're done."
+        />
+        <Checkbox
+          checked={!metronomeEnabled}
+          onChange={(v) => setMetronomeEnabled(!v)}
+          label="Disable metronome for this exercise"
+          hint="When on, the session runs without the click. Saved on this exercise so transcribing-style drills don't need to re-toggle every session."
+        />
       </div>
 
       {error && (
@@ -257,6 +288,33 @@ function Field({
       <div className="mb-1 text-sm font-medium text-neutral-200">{label}</div>
       {children}
       {hint && <div className="mt-1 text-xs text-neutral-500">{hint}</div>}
+    </label>
+  );
+}
+
+function Checkbox({
+  checked,
+  onChange,
+  label,
+  hint,
+}: {
+  checked: boolean;
+  onChange: (v: boolean) => void;
+  label: string;
+  hint?: string;
+}) {
+  return (
+    <label className="flex cursor-pointer items-start gap-3">
+      <input
+        type="checkbox"
+        checked={checked}
+        onChange={(e) => onChange(e.target.checked)}
+        className="mt-1 h-4 w-4 cursor-pointer accent-amber-500"
+      />
+      <div>
+        <div className="text-sm font-medium text-neutral-200">{label}</div>
+        {hint && <div className="mt-0.5 text-xs text-neutral-500">{hint}</div>}
+      </div>
     </label>
   );
 }

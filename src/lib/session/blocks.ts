@@ -57,6 +57,14 @@ export const INSTRUCTIONS: Record<string, string[]> = {
     "Last reps of the session — make them the cleanest.",
     "End on a clean rep. Always.",
   ],
+  openEnded: [
+    "Just play. No timer, no targets — the clock counts up.",
+    "Press End (or Esc) when you're done. Your time is recorded.",
+  ],
+  freePlay: [
+    "Free play — count-up timer for unstructured practice.",
+    "Toggle the metronome on/off below if you want a click. Press End (or Esc) when you're done.",
+  ],
 };
 
 /**

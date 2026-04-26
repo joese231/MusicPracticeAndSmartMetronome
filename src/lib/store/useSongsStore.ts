@@ -23,6 +23,10 @@ type SongsState = {
   deleteSong: (id: string) => Promise<void>;
   reorderSongs: (orderedIds: string[]) => Promise<void>;
   incrementPracticeTime: (id: string, seconds: number) => Promise<void>;
+  /** Add a (possibly-negative) delta to totalPracticeSec, clamped at 0.
+   * Used by the session-edit modal to roll back when a session is trimmed
+   * or deleted. */
+  adjustPracticeTime: (id: string, deltaSec: number) => Promise<void>;
 };
 
 const genId = (): string => {
@@ -120,6 +124,16 @@ export const useSongsStore = create<SongsState>((set, get) => ({
       totalPracticeSec: s.totalPracticeSec + Math.round(seconds),
       updatedAt: nowIso(),
     };
+    await getRepository().upsertSong(updated);
+    set({ songs: get().songs.map((x) => (x.id === id ? updated : x)) });
+    void postPracticeTime(id, updated.totalPracticeSec);
+  },
+
+  adjustPracticeTime: async (id, deltaSec) => {
+    const s = get().songs.find((x) => x.id === id);
+    if (!s) return;
+    const next = Math.max(0, s.totalPracticeSec + Math.round(deltaSec));
+    const updated: Song = { ...s, totalPracticeSec: next, updatedAt: nowIso() };
     await getRepository().upsertSong(updated);
     set({ songs: get().songs.map((x) => (x.id === id ? updated : x)) });
     void postPracticeTime(id, updated.totalPracticeSec);

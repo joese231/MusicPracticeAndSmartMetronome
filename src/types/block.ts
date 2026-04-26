@@ -9,7 +9,9 @@ export type BlockKind =
   | "consolidation"
   | "slowMusical"
   | "exerciseBuild"
-  | "exerciseCoolDown";
+  | "exerciseCoolDown"
+  | "openEnded"
+  | "freePlay";
 
 export type BlockPromotion =
   | { kind: "working" }

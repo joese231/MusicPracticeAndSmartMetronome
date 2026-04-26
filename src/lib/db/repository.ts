@@ -21,4 +21,18 @@ export interface Repository {
 
   listSessions(): Promise<SessionRecord[]>;
   appendSession(rec: SessionRecord): Promise<void>;
+  /** Edit a session record. Currently only `durationSec` is patchable
+   * (server validates: trimming-only, never extending). Returns the updated
+   * record. */
+  updateSession(
+    id: string,
+    patch: { durationSec: number },
+  ): Promise<SessionRecord>;
+  /** Delete a session record by id. Returns the removed record. */
+  deleteSession(id: string): Promise<SessionRecord>;
+
+  /** Zero out totalPracticeSec on every song and exercise, and clear sessions.json. */
+  resetAllStatistics(): Promise<void>;
+  /** Wipe songs.json, exercises.json, and sessions.json. Settings preserved. */
+  factoryReset(): Promise<void>;
 }

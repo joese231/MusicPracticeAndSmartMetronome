@@ -95,6 +95,57 @@ export class LocalRepository implements Repository {
   async appendSession(_rec: SessionRecord): Promise<void> {
     // legacy adapter is migration-only — no-op.
   }
+
+  async updateSession(
+    _id: string,
+    patch: { durationSec: number },
+  ): Promise<SessionRecord> {
+    // legacy adapter is migration-only — no-op. Return a zero-shape record so
+    // callers that ignore the return value still type-check.
+    return {
+      id: "",
+      itemId: "",
+      itemKind: "song",
+      itemTitle: "",
+      startedAt: "",
+      endedAt: "",
+      durationSec: patch.durationSec,
+      endedReason: "complete",
+      plannedMinutes: 0,
+      startWorkingBpm: 0,
+      endWorkingBpm: 0,
+      startTroubleBpms: [],
+      endTroubleBpms: [],
+      promotions: [],
+    };
+  }
+
+  async deleteSession(_id: string): Promise<SessionRecord> {
+    return {
+      id: "",
+      itemId: "",
+      itemKind: "song",
+      itemTitle: "",
+      startedAt: "",
+      endedAt: "",
+      durationSec: 0,
+      endedReason: "complete",
+      plannedMinutes: 0,
+      startWorkingBpm: 0,
+      endWorkingBpm: 0,
+      startTroubleBpms: [],
+      endTroubleBpms: [],
+      promotions: [],
+    };
+  }
+
+  async resetAllStatistics(): Promise<void> {
+    // legacy adapter is migration-only — no-op.
+  }
+
+  async factoryReset(): Promise<void> {
+    // legacy adapter is migration-only — no-op.
+  }
 }
 
 let _repo: Repository | null = null;

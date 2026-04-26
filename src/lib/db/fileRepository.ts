@@ -38,6 +38,16 @@ function sortExercises(rows: Exercise[]): Exercise[] {
   });
 }
 
+// Backfill fields added in newer app versions onto rows that may have been
+// written by an older build. Lazy — applied on read; the corrected shape is
+// persisted on the next upsert.
+function normalizeExercise(row: Exercise): Exercise {
+  const next = { ...row };
+  if (typeof next.openEnded !== "boolean") next.openEnded = false;
+  if (typeof next.metronomeEnabled !== "boolean") next.metronomeEnabled = true;
+  return next;
+}
+
 export class FileRepository implements Repository {
   // Per-collection write queue: serialize read-modify-write so concurrent
   // mutations from the same client don't lose updates.
@@ -107,12 +117,13 @@ export class FileRepository implements Repository {
 
   async listExercises(): Promise<Exercise[]> {
     const rows = await getJson<Exercise[]>(EXERCISES_URL);
-    return sortExercises(rows);
+    return sortExercises(rows.map(normalizeExercise));
   }
 
   async getExercise(id: string): Promise<Exercise | null> {
     const rows = await getJson<Exercise[]>(EXERCISES_URL);
-    return rows.find((e) => e.id === id) ?? null;
+    const found = rows.find((e) => e.id === id);
+    return found ? normalizeExercise(found) : null;
   }
 
   upsertExercise(exercise: Exercise): Promise<void> {
@@ -170,5 +181,55 @@ export class FileRepository implements Repository {
       body: JSON.stringify(rec),
     });
     if (!res.ok) throw new Error(`POST ${SESSIONS_URL} failed: ${res.status}`);
+  }
+
+  async updateSession(
+    id: string,
+    patch: { durationSec: number },
+  ): Promise<SessionRecord> {
+    const url = `${SESSIONS_URL}/${encodeURIComponent(id)}`;
+    const res = await fetch(url, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(patch),
+    });
+    if (!res.ok) throw new Error(`PATCH ${url} failed: ${res.status}`);
+    return (await res.json()) as SessionRecord;
+  }
+
+  async deleteSession(id: string): Promise<SessionRecord> {
+    const url = `${SESSIONS_URL}/${encodeURIComponent(id)}`;
+    const res = await fetch(url, { method: "DELETE" });
+    if (!res.ok) throw new Error(`DELETE ${url} failed: ${res.status}`);
+    return (await res.json()) as SessionRecord;
+  }
+
+  async resetAllStatistics(): Promise<void> {
+    // Zero totalPracticeSec on every song and exercise.
+    const songs = await getJson<Song[]>(SONGS_URL);
+    const songsZeroed = songs.map((s) => ({ ...s, totalPracticeSec: 0 }));
+    await this.chainSongs(async () => {
+      await putJson(SONGS_URL, songsZeroed);
+    });
+    const exercises = await getJson<Exercise[]>(EXERCISES_URL);
+    const exercisesZeroed = exercises.map((e) => ({
+      ...e,
+      totalPracticeSec: 0,
+    }));
+    await this.chainExercises(async () => {
+      await putJson(EXERCISES_URL, exercisesZeroed);
+    });
+    // Clear session history.
+    await putJson(SESSIONS_URL, []);
+  }
+
+  async factoryReset(): Promise<void> {
+    await this.chainSongs(async () => {
+      await putJson(SONGS_URL, []);
+    });
+    await this.chainExercises(async () => {
+      await putJson(EXERCISES_URL, []);
+    });
+    await putJson(SESSIONS_URL, []);
   }
 }

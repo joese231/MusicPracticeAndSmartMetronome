@@ -95,6 +95,23 @@ export class AppDB extends Dexie {
             if (row.warmupBpm === undefined) row.warmupBpm = null;
           });
       });
+    this.version(7)
+      .stores({
+        songs: "id, title, updatedAt, sortIndex",
+        settings: "id",
+        exercises: "id, name, updatedAt, sortIndex",
+      })
+      .upgrade(async (tx) => {
+        await tx
+          .table<Exercise, string>("exercises")
+          .toCollection()
+          .modify((row) => {
+            if (typeof row.openEnded !== "boolean") row.openEnded = false;
+            if (typeof row.metronomeEnabled !== "boolean") {
+              row.metronomeEnabled = true;
+            }
+          });
+      });
   }
 }
 

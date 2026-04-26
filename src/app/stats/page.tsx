@@ -7,6 +7,7 @@ import { useSessionHistoryStore } from "@/lib/store/useSessionHistoryStore";
 import { CalendarHeatmap } from "@/components/stats/CalendarHeatmap";
 import { PracticeMinutesChart } from "@/components/stats/PracticeMinutesChart";
 import { PromotionVelocityTable } from "@/components/stats/PromotionVelocityTable";
+import { RecentSessionsList } from "@/components/stats/RecentSessionsList";
 import {
   totalPracticeMinutes,
   currentStreakDays,
@@ -45,6 +46,13 @@ export default function StatsPage() {
   const streak = currentStreakDays(records);
   const totalPromotions = records.reduce((n, r) => n + r.promotions.length, 0);
 
+  // Today's sessions — anything that started since local midnight.
+  const todayStart = new Date();
+  todayStart.setHours(0, 0, 0, 0);
+  const todaysRecords = records.filter(
+    (r) => new Date(r.startedAt) >= todayStart,
+  );
+
   return (
     <main className="mx-auto max-w-4xl px-6 py-10">
       <header className="mb-8 flex items-center justify-between">
@@ -81,6 +89,15 @@ export default function StatsPage() {
             <Stat label="Current streak" value={`${streak}d`} />
           </section>
 
+          {todaysRecords.length > 0 && (
+            <RecentSessionsList
+              records={todaysRecords}
+              limit={20}
+              heading="Today's sessions"
+              showItemTitle
+            />
+          )}
+
           <CalendarHeatmap records={records} weeks={26} />
 
           <PracticeMinutesChart records={records} days={30} />
@@ -89,6 +106,13 @@ export default function StatsPage() {
             records={records}
             songs={songs}
             exercises={exercises}
+          />
+
+          <RecentSessionsList
+            records={records}
+            limit={20}
+            heading="Recent sessions (all)"
+            showItemTitle
           />
         </div>
       )}
