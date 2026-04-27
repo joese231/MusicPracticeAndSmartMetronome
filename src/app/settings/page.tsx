@@ -101,6 +101,18 @@ export default function SettingsPage() {
       ) : (
         <div className="mt-8 space-y-6">
           <Row
+            label="Default practice mode for new items"
+            hint="Used as the starting choice when you create a new song or exercise. Smart runs the three-tempo ladder; Simple plays a steady BPM for the chosen length, like a regular metronome. You can still change it per-item afterwards."
+          >
+            <SegmentedTwo
+              value={settings.defaultPracticeMode === "simple" ? "simple" : "smart"}
+              onChange={(v) => update({ defaultPracticeMode: v })}
+              left={{ value: "smart", label: "Smart" }}
+              right={{ value: "simple", label: "Simple" }}
+            />
+          </Row>
+
+          <Row
             label="Record practice sessions"
             hint="When off, no audio is captured during a session and the microphone permission is not requested."
           >
@@ -347,5 +359,44 @@ function Toggle({
         }`}
       />
     </button>
+  );
+}
+
+function SegmentedTwo<T extends string>({
+  value,
+  onChange,
+  left,
+  right,
+}: {
+  value: T;
+  onChange: (v: T) => void;
+  left: { value: T; label: string };
+  right: { value: T; label: string };
+}) {
+  return (
+    <div
+      role="radiogroup"
+      className="inline-flex overflow-hidden rounded-lg border border-bg-border bg-bg"
+    >
+      {[left, right].map((opt) => {
+        const active = value === opt.value;
+        return (
+          <button
+            key={opt.value}
+            type="button"
+            role="radio"
+            aria-checked={active}
+            onClick={() => onChange(opt.value)}
+            className={`px-4 py-1.5 text-sm font-semibold transition ${
+              active
+                ? "bg-accent text-black"
+                : "text-neutral-300 hover:bg-bg-elevated"
+            }`}
+          >
+            {opt.label}
+          </button>
+        );
+      })}
+    </div>
   );
 }

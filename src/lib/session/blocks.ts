@@ -61,6 +61,10 @@ export const INSTRUCTIONS: Record<string, string[]> = {
     "Just play. No timer, no targets — the clock counts up.",
     "Press End (or Esc) when you're done. Your time is recorded.",
   ],
+  simpleMetronome: [
+    "Plain metronome at your working BPM — no ladder, no targets, no promotions.",
+    "Just play until the timer ends. Take it as a long sustained pass.",
+  ],
   freePlay: [
     "Free play — count-up timer for unstructured practice.",
     "Toggle the metronome on/off below if you want a click. Press End (or Esc) when you're done.",
@@ -85,6 +89,21 @@ export const CONSCIOUS_PRACTICE_BLOCK: BlockDef = {
   promotes: null,
   instructions: INSTRUCTIONS.consciousPractice,
 };
+
+/**
+ * Single steady-BPM block at the song/exercise's working BPM. Used by
+ * "simple" practice mode to mimic a regular metronome with a stop timer.
+ * Timed (not unbounded) — ends automatically when `durationSec` elapses.
+ */
+export const buildSimpleMetronomeBlock = (durationSec: number): BlockDef => ({
+  kind: "simpleMetronome",
+  label: "Steady BPM",
+  durationSec,
+  tempoFn: (s: Song) => s.workingBpm,
+  showEarnedButton: false,
+  promotes: null,
+  instructions: INSTRUCTIONS.simpleMetronome,
+});
 
 // Canonical 10-minute template with exactly one Trouble Spot block.
 // Longer sessions scale every block proportionally; `buildBlocks` then
@@ -207,6 +226,7 @@ export const clampSessionMinutes = (n: number): number => {
  * song's `totalPracticeSec`.
  */
 export const sessionLengthSec = (minutes: number, song: Song): number => {
+  if (song.practiceMode === "simple") return minutes * 60;
   if (minutes === 5) {
     return FIVE_MIN_BLOCKS.reduce((a, b) => a + b.durationSec, 0);
   }
@@ -218,14 +238,37 @@ export const sessionLengthSec = (minutes: number, song: Song): number => {
 };
 
 /**
+ * True iff the song wants the slow Conscious Practice warm-up block prepended
+ * to its session. Defaults to true on legacy rows that predate the field.
+ */
+const wantsWarmup = (song: Song): boolean =>
+  song.includeWarmupBlock !== false;
+
+/**
  * Build the block list for a session of `minutes` base minutes against a
- * specific song. Scales block durations proportionally from the canonical
- * 10-minute template, then replaces the single trouble-spot block with
- * one block per song trouble spot. Rounding residual is absorbed into the
- * Ceiling Work block so totals land exactly on `sessionLengthSec`.
+ * specific song. Branches on `song.practiceMode`:
+ *  - `simple` → optional Conscious Practice + a single steady-BPM block at
+ *    workingBpm for the entire session length.
+ *  - `smart`  → optional Conscious Practice + the scaled three-tempo ladder.
+ *
+ * In smart mode the canonical 10-minute template is scaled proportionally and
+ * the single trouble-spot block is replicated once per song trouble spot.
+ * Rounding residual is absorbed into the Ceiling Work block so smart-mode
+ * totals land exactly on `sessionLengthSec`.
  */
 export const buildBlocks = (minutes: number, song: Song): BlockDef[] => {
-  if (minutes === 5) return [CONSCIOUS_PRACTICE_BLOCK, ...FIVE_MIN_BLOCKS];
+  const result: BlockDef[] = [];
+  if (wantsWarmup(song)) result.push(CONSCIOUS_PRACTICE_BLOCK);
+
+  if (song.practiceMode === "simple") {
+    result.push(buildSimpleMetronomeBlock(minutes * 60));
+    return result;
+  }
+
+  if (minutes === 5) {
+    result.push(...FIVE_MIN_BLOCKS);
+    return result;
+  }
 
   const scale = minutes / 10;
   const count = song.troubleSpots.length;
@@ -237,7 +280,6 @@ export const buildBlocks = (minutes: number, song: Song): BlockDef[] => {
 
   const scaledTroubleSec = Math.round(120 * scale);
 
-  const result: BlockDef[] = [CONSCIOUS_PRACTICE_BLOCK];
   for (const b of scaled) {
     if (b.kind !== "troubleSpot") {
       result.push(b);
@@ -257,9 +299,13 @@ export const buildBlocks = (minutes: number, song: Song): BlockDef[] => {
     // count === 0 → skip entirely, no trouble block added
   }
 
+  // sessionLengthSec covers only the body; subtract any non-body (warm-up)
+  // blocks from the actual sum before computing the residual.
   const target = sessionLengthSec(minutes, song);
-  const actual = result.reduce((a, b) => a + b.durationSec, 0);
-  const residual = target - actual;
+  const bodyActual = result
+    .filter((b) => b.kind !== "consciousPractice")
+    .reduce((a, b) => a + b.durationSec, 0);
+  const residual = target - bodyActual;
   if (residual !== 0) {
     const ceilingIdx = result.findIndex((b) => b.kind === "ceilingWork");
     if (ceilingIdx >= 0) {

@@ -1,6 +1,10 @@
 import type { BlockDef } from "@/types/block";
 import type { Exercise } from "@/types/exercise";
-import { CONSCIOUS_PRACTICE_BLOCK, INSTRUCTIONS } from "./blocks";
+import {
+  buildSimpleMetronomeBlock,
+  CONSCIOUS_PRACTICE_BLOCK,
+  INSTRUCTIONS,
+} from "./blocks";
 import { overspeedBpm, slowReferenceBpm } from "./tempo";
 
 /** Default session length for new exercises. */
@@ -78,11 +82,32 @@ export const OPEN_ENDED_BLOCK: BlockDef = {
 
 /**
  * Build the full block list for an exercise session. Branches on the
- * exercise's `openEnded` flag:
- *  - openEnded === true → single unbounded count-up block
- *  - otherwise           → Conscious Practice warm-up + Build + Burst + Cool Down
+ * exercise's flags, in priority order:
+ *  - openEnded === true     → single unbounded count-up block (no warm-up)
+ *  - practiceMode === "simple" → optional Conscious Practice + a single
+ *                                 steady-BPM block at workingBpm for the
+ *                                 full sessionMinutes
+ *  - otherwise (smart)      → optional Conscious Practice + Build + Burst +
+ *                              Cool Down
+ *
+ * `includeWarmupBlock === false` skips the Conscious Practice prefix in both
+ * the smart and simple branches. It's ignored when openEnded is true.
  */
 export const buildExerciseBlocks = (exercise: Exercise): BlockDef[] => {
   if (exercise.openEnded) return [OPEN_ENDED_BLOCK];
-  return [CONSCIOUS_PRACTICE_BLOCK, ...buildExerciseTimedBlocks(exercise.sessionMinutes)];
+
+  const out: BlockDef[] = [];
+  if (exercise.includeWarmupBlock !== false) out.push(CONSCIOUS_PRACTICE_BLOCK);
+
+  if (exercise.practiceMode === "simple") {
+    const minutes = Math.max(
+      MIN_EXERCISE_MINUTES,
+      Math.min(MAX_EXERCISE_MINUTES, Math.round(exercise.sessionMinutes)),
+    );
+    out.push(buildSimpleMetronomeBlock(minutes * 60));
+    return out;
+  }
+
+  out.push(...buildExerciseTimedBlocks(exercise.sessionMinutes));
+  return out;
 };

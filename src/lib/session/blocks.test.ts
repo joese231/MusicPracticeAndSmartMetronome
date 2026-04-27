@@ -8,7 +8,10 @@ import {
 } from "./blocks";
 import type { Song, TroubleSpot } from "@/types/song";
 
-const makeSong = (spots: TroubleSpot[] = [{ bpm: 150 }]): Song => ({
+const makeSong = (
+  spots: TroubleSpot[] = [{ bpm: 150 }],
+  overrides: Partial<Song> = {},
+): Song => ({
   id: "s1",
   title: "Test",
   link: null,
@@ -17,10 +20,13 @@ const makeSong = (spots: TroubleSpot[] = [{ bpm: 150 }]): Song => ({
   troubleSpots: spots,
   originalBpm: null,
   stepPercent: 2.5,
+  practiceMode: "smart",
+  includeWarmupBlock: true,
   totalPracticeSec: 0,
   sortIndex: 0,
   createdAt: "",
   updatedAt: "",
+  ...overrides,
 });
 
 const sumDur = (blocks: { durationSec: number }[]): number =>
@@ -164,6 +170,67 @@ describe("buildBlocks — scaling to longer durations", () => {
   it("30 min with 1 spot sums to exactly 1800 s", () => {
     const blocks = buildBlocks(30, makeSong([{ bpm: 150 }]));
     expect(sumDur(blocks)).toBe(1800);
+  });
+});
+
+describe("buildBlocks — simple practice mode", () => {
+  it("returns Conscious + a single Steady BPM block at workingBpm", () => {
+    const song = makeSong([{ bpm: 150 }], { practiceMode: "simple" });
+    const blocks = buildBlocks(10, song);
+    expect(blocks).toHaveLength(2);
+    expect(blocks[0].kind).toBe("consciousPractice");
+    expect(blocks[1].kind).toBe("simpleMetronome");
+    expect(blocks[1].durationSec).toBe(600);
+    expect(blocks[1].unbounded).not.toBe(true);
+    expect(blocks[1].tempoFn(song)).toBe(song.workingBpm);
+    expect(blocks[1].showEarnedButton).toBe(false);
+    expect(blocks[1].promotes).toBeNull();
+  });
+
+  it("ignores trouble spots in simple mode", () => {
+    const song = makeSong(
+      [{ bpm: 150 }, { bpm: 160 }, { bpm: 170 }],
+      { practiceMode: "simple" },
+    );
+    const blocks = buildBlocks(10, song);
+    expect(blocks.some((b) => b.kind === "troubleSpot")).toBe(false);
+  });
+
+  it("scales the Steady block to the chosen session length", () => {
+    for (const minutes of [5, 10, 20, 30]) {
+      const song = makeSong([], { practiceMode: "simple" });
+      const blocks = buildBlocks(minutes, song);
+      const steady = blocks.find((b) => b.kind === "simpleMetronome");
+      expect(steady?.durationSec).toBe(minutes * 60);
+    }
+  });
+});
+
+describe("buildBlocks — includeWarmupBlock = false", () => {
+  it("smart mode without warmup: drops the Conscious Practice prefix", () => {
+    const song = makeSong([{ bpm: 150 }], { includeWarmupBlock: false });
+    const blocks = buildBlocks(10, song);
+    expect(blocks[0].kind).not.toBe("consciousPractice");
+    expect(blocks.some((b) => b.kind === "consciousPractice")).toBe(false);
+    // Body sums to the same target as before (one trouble spot @ 10 min = 600s).
+    expect(sumDur(blocks)).toBe(600);
+  });
+
+  it("simple mode without warmup: just the Steady BPM block", () => {
+    const song = makeSong([], {
+      practiceMode: "simple",
+      includeWarmupBlock: false,
+    });
+    const blocks = buildBlocks(10, song);
+    expect(blocks).toHaveLength(1);
+    expect(blocks[0].kind).toBe("simpleMetronome");
+    expect(blocks[0].durationSec).toBe(600);
+  });
+
+  it("smart 5-min without warmup: just FIVE_MIN_BLOCKS, no Conscious prefix", () => {
+    const song = makeSong([], { includeWarmupBlock: false });
+    const blocks = buildBlocks(5, song);
+    expect(blocks).toEqual(FIVE_MIN_BLOCKS);
   });
 });
 

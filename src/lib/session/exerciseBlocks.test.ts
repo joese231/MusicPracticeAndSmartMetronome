@@ -24,6 +24,8 @@ const makeExercise = (
   sessionMinutes,
   openEnded: false,
   metronomeEnabled: true,
+  practiceMode: "smart",
+  includeWarmupBlock: true,
   totalPracticeSec: 0,
   sortIndex: 0,
   createdAt: "",
@@ -118,6 +120,58 @@ describe("buildExerciseBlocks", () => {
     const blocks = buildExerciseBlocks(makeExercise(120));
     expect(blocks[0].tempoFn(exerciseAsSong(makeExercise(120)))).toBe(40);
     expect(blocks[0].tempoFn(exerciseAsSong(makeExercise(30)))).toBe(20);
+  });
+
+  describe("simple practice mode", () => {
+    it("produces Conscious + a single Steady BPM block for sessionMinutes", () => {
+      const ex = makeExercise(120, 10, { practiceMode: "simple" });
+      const blocks = buildExerciseBlocks(ex);
+      expect(blocks).toHaveLength(2);
+      expect(blocks[0].kind).toBe("consciousPractice");
+      expect(blocks[1].kind).toBe("simpleMetronome");
+      expect(blocks[1].durationSec).toBe(600);
+      expect(blocks[1].showEarnedButton).toBe(false);
+      expect(blocks[1].promotes).toBeNull();
+    });
+
+    it("Steady block plays at workingBpm", () => {
+      const ex = makeExercise(140, 5, { practiceMode: "simple" });
+      const blocks = buildExerciseBlocks(ex);
+      const steady = blocks.find((b) => b.kind === "simpleMetronome");
+      expect(steady?.tempoFn(exerciseAsSong(ex))).toBe(140);
+    });
+  });
+
+  describe("includeWarmupBlock = false", () => {
+    it("smart mode: drops the Conscious Practice prefix", () => {
+      const blocks = buildExerciseBlocks(
+        makeExercise(100, 10, { includeWarmupBlock: false }),
+      );
+      expect(blocks.some((b) => b.kind === "consciousPractice")).toBe(false);
+      expect(blocks).toHaveLength(3); // Build + Burst + Cool Down
+    });
+
+    it("simple mode: only the Steady BPM block", () => {
+      const blocks = buildExerciseBlocks(
+        makeExercise(100, 10, {
+          practiceMode: "simple",
+          includeWarmupBlock: false,
+        }),
+      );
+      expect(blocks).toHaveLength(1);
+      expect(blocks[0].kind).toBe("simpleMetronome");
+    });
+
+    it("openEnded ignores includeWarmupBlock — still exactly the open-ended block", () => {
+      const blocks = buildExerciseBlocks(
+        makeExercise(100, 10, {
+          openEnded: true,
+          includeWarmupBlock: false,
+        }),
+      );
+      expect(blocks).toHaveLength(1);
+      expect(blocks[0].kind).toBe("openEnded");
+    });
   });
 
   describe("openEnded exercises", () => {

@@ -264,6 +264,8 @@ export default function SongDetailPage() {
                   troubleSpots: song.troubleSpots,
                   originalBpm: song.originalBpm,
                   stepPercent: song.stepPercent,
+                  practiceMode: song.practiceMode,
+                  includeWarmupBlock: song.includeWarmupBlock,
                 }}
                 onSubmit={async (values) => {
                   await updateSong({

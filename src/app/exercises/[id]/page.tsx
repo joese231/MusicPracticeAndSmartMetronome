@@ -178,6 +178,8 @@ export default function ExerciseDetailPage() {
                   sessionMinutes: exercise.sessionMinutes,
                   openEnded: exercise.openEnded,
                   metronomeEnabled: exercise.metronomeEnabled,
+                  practiceMode: exercise.practiceMode,
+                  includeWarmupBlock: exercise.includeWarmupBlock,
                 }}
                 onSubmit={async (values) => {
                   await updateExercise({

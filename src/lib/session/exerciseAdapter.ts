@@ -16,6 +16,8 @@ export const exerciseAsSong = (e: Exercise): Song => ({
   troubleSpots: [],
   originalBpm: null,
   stepPercent: e.stepPercent,
+  practiceMode: e.practiceMode,
+  includeWarmupBlock: e.includeWarmupBlock,
   totalPracticeSec: e.totalPracticeSec,
   sortIndex: e.sortIndex,
   createdAt: e.createdAt,

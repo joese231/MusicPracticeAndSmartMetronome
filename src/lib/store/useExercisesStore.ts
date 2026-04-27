@@ -1,9 +1,15 @@
 import { create } from "zustand";
 import type { Exercise } from "@/types/exercise";
-import { DEFAULT_STEP_PERCENT } from "@/types/song";
+import type { PracticeMode } from "@/types/song";
+import {
+  DEFAULT_INCLUDE_WARMUP,
+  DEFAULT_PRACTICE_MODE,
+  DEFAULT_STEP_PERCENT,
+} from "@/types/song";
 import { getRepository } from "@/lib/db/localRepository";
 import { nowIso } from "@/lib/session/tempo";
 import { DEFAULT_EXERCISE_MINUTES } from "@/lib/session/exerciseBlocks";
+import { useSettingsStore } from "./useSettingsStore";
 
 type NewExerciseInput = {
   name: string;
@@ -14,6 +20,8 @@ type NewExerciseInput = {
   sessionMinutes?: number;
   openEnded?: boolean;
   metronomeEnabled?: boolean;
+  practiceMode?: PracticeMode;
+  includeWarmupBlock?: boolean;
 };
 
 type ExercisesState = {
@@ -57,6 +65,9 @@ export const useExercisesStore = create<ExercisesState>((set, get) => ({
       existing.length === 0
         ? 0
         : Math.max(...existing.map((e) => e.sortIndex)) + 1;
+    const settingsDefault =
+      useSettingsStore.getState().settings.defaultPracticeMode ??
+      DEFAULT_PRACTICE_MODE;
     const exercise: Exercise = {
       id: genId(),
       name: input.name.trim(),
@@ -68,6 +79,8 @@ export const useExercisesStore = create<ExercisesState>((set, get) => ({
       sessionMinutes: input.sessionMinutes ?? DEFAULT_EXERCISE_MINUTES,
       openEnded: input.openEnded ?? false,
       metronomeEnabled: input.metronomeEnabled ?? true,
+      practiceMode: input.practiceMode ?? settingsDefault,
+      includeWarmupBlock: input.includeWarmupBlock ?? DEFAULT_INCLUDE_WARMUP,
       totalPracticeSec: 0,
       sortIndex: nextSortIndex,
       createdAt: now,

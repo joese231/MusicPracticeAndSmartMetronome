@@ -20,6 +20,8 @@ const makeSong = (overrides: Partial<Song> = {}): Song => ({
   troubleSpots: [{ bpm: 150 }],
   originalBpm: null,
   stepPercent: 2.5,
+  practiceMode: "smart",
+  includeWarmupBlock: true,
   totalPracticeSec: 0,
   sortIndex: 0,
   createdAt: "",

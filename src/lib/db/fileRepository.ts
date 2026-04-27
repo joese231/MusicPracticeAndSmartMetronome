@@ -41,10 +41,23 @@ function sortExercises(rows: Exercise[]): Exercise[] {
 // Backfill fields added in newer app versions onto rows that may have been
 // written by an older build. Lazy — applied on read; the corrected shape is
 // persisted on the next upsert.
+function normalizeSong(row: Song): Song {
+  const next = { ...row };
+  if (next.practiceMode !== "simple") next.practiceMode = "smart";
+  if (typeof next.includeWarmupBlock !== "boolean") {
+    next.includeWarmupBlock = true;
+  }
+  return next;
+}
+
 function normalizeExercise(row: Exercise): Exercise {
   const next = { ...row };
   if (typeof next.openEnded !== "boolean") next.openEnded = false;
   if (typeof next.metronomeEnabled !== "boolean") next.metronomeEnabled = true;
+  if (next.practiceMode !== "simple") next.practiceMode = "smart";
+  if (typeof next.includeWarmupBlock !== "boolean") {
+    next.includeWarmupBlock = true;
+  }
   return next;
 }
 
@@ -73,12 +86,13 @@ export class FileRepository implements Repository {
 
   async listSongs(): Promise<Song[]> {
     const rows = await getJson<Song[]>(SONGS_URL);
-    return sortSongs(rows);
+    return sortSongs(rows.map(normalizeSong));
   }
 
   async getSong(id: string): Promise<Song | null> {
     const rows = await getJson<Song[]>(SONGS_URL);
-    return rows.find((s) => s.id === id) ?? null;
+    const found = rows.find((s) => s.id === id);
+    return found ? normalizeSong(found) : null;
   }
 
   upsertSong(song: Song): Promise<void> {

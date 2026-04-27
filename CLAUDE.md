@@ -1,57 +1,21 @@
 # Guitar Song Practice Metronome
 
-A web app that drives structured bluegrass speed-practice sessions. The app owns the tempo ladder, the block timer, and the metronome — and otherwise stays out of the player's way.
+A web app for structured bluegrass speed-practice sessions. Drives a **three-tempo ladder** (working / target / overspeed) with a promotion rule, trouble-spot isolation, and optional audio recording. Two modes: **Songs** (full session with trouble-spot blocks) and **Exercises** (warm-up + Build/Burst/Cool Down, or `openEnded` count-up). Each song and exercise also carries a per-item `practiceMode` (`smart` = the default ladder; `simple` = a single steady-BPM block at workingBpm for the chosen length, like a regular metronome with a stop timer) and an `includeWarmupBlock` flag that toggles the slow Conscious Practice prefix. **Free Play** (`/free-play`) is an ad-hoc timer not tied to any item — time accrues to global stats under `__freeplay__`.
 
-## What this project is
-
-A live-session driver for a specific practice method: short, structured sessions built around a **three-tempo ladder** (working / target / overspeed), a **three-clean-reps promotion rule**, and **trouble-spot isolation**. The player adds songs manually; the app runs customizable-length sessions (5 min compact or 10–60 min base, scaled proportionally from the 10-min template) against a running metronome, promotes tempos when the player taps "I earned it", and records the session audio in memory for immediate playback.
-
-A second mode — **Exercises** — runs technique drills (scales, arpeggios, picking patterns) at a customizable session length (5–60 min, default 5, saved per exercise). Same warm-up + metronome + recorder, but a slimmer block flow: Conscious Practice (unbounded) → Build (working) → Burst (1.5 min @ overspeed) → Cool Down (30 sec @ ~77% of working). Burst (90s) and Cool Down (30s) are fixed; the Build block absorbs all extra time. Only Build earns. The Cool Down deliberately ends below working tempo to release tension and leave the player on a clean memory rep.
-
-Exercises also support an **open-ended** mode (per-exercise `openEnded: true`): the session collapses to a single unbounded count-up timer at the working BPM — no warm-up, no Build/Burst/Cool Down. Useful for transcribing or unstructured drills. Each exercise also carries a `metronomeEnabled: boolean` flag so transcribing-style drills can run without the click. A separate **Free Play** button on the home page (`/free-play`) opens an ad-hoc count-up session that isn't tied to any specific item — its time accrues to the global stats (heatmap, daily-minutes) under the synthetic `__freeplay__` id but is silently skipped from per-item rollups.
-
-The full method is explained in-app at `/method`. The authoritative design record is [swirling-swimming-owl.md](C:/Users/Yosi/.claude/plans/swirling-swimming-owl.md).
-
-## Core decisions (what's in, what's out)
-
-**In scope**
-- Manually-managed song list with title, optional link, working BPM, 0–5 trouble spots (each with its own optional starting BPM), optional original-recording BPM, per-song step %
-- Customizable session length: 5-min compact form (fixed, no trouble-spot blocks), or 10–60 min base length that proportionally scales the canonical 10-min template
-- A **Conscious Practice** warm-up runs first in every session regardless of length. Unbounded (no countdown) — the player ends it with `N` / Finish warm-up when ready. Metronome plays the song/exercise's saved `warmupBpm` if set, else ⅓ × `workingBpm` (floored at 20). A **Set BPM…** editor (with Reset-to-default) writes through to `warmupBpm` and persists across sessions; a **2× slower** toggle halves whatever the warm-up would otherwise play and stays session-local (resets on block advance)
-- Each trouble spot contributes one additional Trouble Spot block to the session and adds its scaled duration to the total — more spots means a longer session, not a more-crowded one
-- Percentage-based tempo promotion (default 2.5%, editable per song)
-- "I earned it" button promotes working BPM (Ceiling Work block) or the specific spot's BPM (Trouble Spot blocks) persistently, each trouble spot on its own independent ladder
-- Metronome with all-beats (default) / backbeat 2&4 toggle, live on the session page
-- Global settings: recording on/off (default ON), metronome accents on/off (default ON), volume
-- Ephemeral session-wide audio recording — in-memory only, single "latest recording" slot
-- Per-block on-screen instructions
-- 1-second inter-block transition with a two-note chime
-- Method page with Blackberry Blossom worked example
-- Keyboard shortcuts: `Space` = I earned it, `N` = skip block, `Esc` = end session
-- After a session completes, automatic flow into the next song or exercise in the user's ordered list, with a configurable countdown (`Settings.interSongPauseSec`, default 20s) that can be skipped (`Space`), paused (`P`), or cancelled (`Esc`)
-- **Edit / delete** any individual session record via the Edit button on every row in `RecentSessionsList` — trim a session whose timer was left running, or delete it entirely. The corresponding `totalPracticeSec` on the song/exercise is rolled back automatically
-- Settings → **Danger zone**: "Reset all statistics" zeroes every `totalPracticeSec` and clears `sessions.json`; "Factory reset" wipes songs, exercises, and sessions while preserving Settings
-
-**Out of scope for v1**
-- No accounts, backend, or multi-device sync
-- No rotation engine, no "due for practice" list, no twice-a-day warnings
-- No end-of-block self-check prompts (Earned/Close/Tense/Rough)
-- No persistent recording storage — recordings die on new session or page reload
-- No auto-flub detection or audio ML
-- No PWA / offline install
+**Out of scope for v1**: no accounts/backend/sync, no rotation engine, no persistent recordings, no audio ML, no PWA.
 
 ## Tech stack
 
 | Concern | Choice |
 |---|---|
 | Framework | Next.js 14 (App Router) + TypeScript |
-| Styling | Tailwind CSS (desktop-first, dark theme default) |
+| Styling | Tailwind CSS (desktop-first, dark theme) |
 | State | Zustand |
-| Persistence | JSON files in `data/` (`songs.json`, `exercises.json`, `settings.json`, `sessions.json`) via Next.js API routes, behind a `Repository` interface — swappable for a cloud adapter later. Dexie/IndexedDB code is kept only as a one-time migration source for users upgrading from the old browser-storage build. |
-| Metronome | Raw Web Audio API (`AudioContext`) with a look-ahead scheduler |
+| Persistence | JSON files in `data/` via Next.js API routes, behind a `Repository` interface |
+| Metronome | Raw Web Audio API with a look-ahead scheduler |
 | Audio capture | MediaRecorder API (ephemeral, in-memory only) |
-| Tests | Vitest — focused on tempo math, block sums, driver state machine, and stats aggregates |
-| Charts | recharts (`^2`) for line + bar; calendar heatmap is hand-rolled CSS grid |
+| Tests | Vitest — tempo math, block sums, driver state machine, stats aggregates |
+| Charts | recharts + hand-rolled CSS grid heatmap |
 
 ## Architecture map
 
@@ -60,204 +24,119 @@ src/
   app/                        Next.js App Router pages
     page.tsx                  Home — Songs / Exercises tabs
     songs/new/page.tsx        Add song form
-    songs/[id]/page.tsx       Song detail — edit form, start session, latest recording panel
-    session/[id]/page.tsx     Live song session — the driver UI
+    songs/[id]/page.tsx       Song detail — edit, start session, recording panel
+    session/[id]/page.tsx     Live song session
     exercises/new/page.tsx    Add exercise form
-    exercises/[id]/page.tsx   Exercise detail — edit form, start session at saved length
-    exercise-session/[id]/page.tsx  Live exercise session — length from exercise.sessionMinutes
-    settings/page.tsx         Global settings (incl. Danger zone: reset stats, factory reset)
-    stats/page.tsx            Global stats dashboard — today's sessions, calendar heatmap, daily minutes, promotion velocity, recent sessions
+    exercises/[id]/page.tsx   Exercise detail — edit, start session
+    exercise-session/[id]/page.tsx  Live exercise session
+    settings/page.tsx         Global settings + Danger zone
+    stats/page.tsx            Global stats dashboard
     method/page.tsx           Static method explanation + Blackberry Blossom example
-    free-play/page.tsx        Free Play / Transcribe — ad-hoc count-up timer with optional metronome
+    free-play/page.tsx        Free Play / Transcribe — ad-hoc count-up with optional metronome
   components/                 UI components grouped by area (metronome, session, songs, exercises, stats)
   lib/
     metronome/                Pure Web Audio scheduler and click voices
     session/                  Pure session logic — blocks, driver state machine, tempo math
-    stats/                    Pure aggregate fns over SessionRecord[] — byDayMinutes, bpmTimeline, promotionVelocity, stalledSongs
+    stats/                    Pure aggregate fns over SessionRecord[]
     audio/                    MediaRecorder wrapper
-    db/                       Repository interface + Dexie adapter
+    db/                       Repository interface + FileRepository + Dexie adapter
     store/                    Zustand stores wired to the repository
   types/                      Shared TS types
 ```
 
-**The persistence seam**: everything talks to `Repository` (src/lib/db/repository.ts), never the file/HTTP layer directly. The current implementation is `FileRepository` (src/lib/db/fileRepository.ts) which proxies through Next.js API routes (`/api/songs`, `/api/exercises`, `/api/settings`, `/api/sessions`) backed by JSON files in `data/`. Server-side IO goes through `src/lib/db/fileStore.ts` (atomic write-then-rename + per-file mutex). To add cloud sync later, drop in `cloudRepository.ts` behind the same interface.
+**Persistence seam**: everything talks to `Repository` (src/lib/db/repository.ts), never HTTP directly. `FileRepository` proxies through Next.js API routes backed by JSON files in `data/`. Atomic write-then-rename + per-file mutex in `src/lib/db/fileStore.ts`.
 
-**Legacy IndexedDB path**: `LocalRepository` (Dexie) is retained only for the one-time migration that runs on app boot via `src/components/BootMigration.tsx` → `migrateFromIndexedDB.ts`. It reads any pre-existing IndexedDB rows and POSTs them to `/api/migrate`, which only writes JSON files when they're empty/missing. Guarded by `localStorage["gspm:migrated-to-files"]` so it runs once per browser. IndexedDB is left intact (not deleted) so the user can verify before discarding.
+**Exercises** reuse the song session pipeline via `lib/session/exerciseAdapter.ts:exerciseAsSong(e)` — the driver, metronome, recorder, and all session UI take a `Song`, so the exercise page wraps its `Exercise` as a Song-shaped runtime object. Exercise blocks are built by `lib/session/exerciseBlocks.ts`.
 
-**Exercises reuse the song session machinery via a one-way adapter** (`lib/session/exerciseAdapter.ts:exerciseAsSong(e)`). The driver, metronome, recorder, every `BlockDef.tempoFn`, and every session UI subcomponent take a `Song`, so the exercise session page wraps its `Exercise` as a Song-shaped runtime object and lets the rest of the pipeline run unchanged. Promotion is detected the same way (`promotes.kind === "working"`) but the exercise session writes back to `useExercisesStore` instead of `useSongsStore`. The exercise block list is built by `lib/session/exerciseBlocks.ts:buildExerciseBlocks(exercise)` and branches on the exercise's `openEnded` flag: when false (default), the list is warm-up + Build + Burst + Cool Down (Burst 90s, Cool Down 30s, Build absorbs all extra time from `sessionMinutes * 60`); when true, the list collapses to a single unbounded count-up block (`OPEN_ENDED_BLOCK`) at the working BPM. The exercise session page also reads `exercise.metronomeEnabled` — when false, no `Metronome` is instantiated and all metronome UI affordances (mode toggle, indicator) are hidden, but the recorder, the count-up timer, and `totalPracticeSec` accumulation all run as usual.
-
-**Inter-item auto-advance** is implemented identically on both song and exercise sessions: when a session completes (not aborted) and there is a next item in the user's ordered list, the page enters a "between items" state that renders `BetweenItemsOverlay` (src/components/session/BetweenItemsOverlay.tsx) for `Settings.interSongPauseSec` seconds before routing to the next session. `Space` skips, `P` pauses, `Esc` cancels back to home. The setting field name (`interSongPauseSec`) is legacy from when only songs had this flow — it now governs both songs and exercises and is labeled "Pause between items" in the UI.
-
-**Free Play** (`src/app/free-play/page.tsx`) is a stripped-down session page that doesn't use the block driver — just a count-up timer with an optional in-session metronome toggle (default off, since transcribing is typically silent). On end, it appends a `SessionRecord` with `itemId: "__freeplay__"` (constant in `src/lib/session/freePlay.ts`) and `itemTitle: "Free Play"`. Stats aggregates that consume `durationSec` (heatmap, daily minutes, total practice) include free-play time automatically; aggregates that resolve `itemId` against the songs/exercises stores (PromotionVelocityTable, BpmTimelineChart) silently drop these rows. Free play does **not** call `incrementPracticeTime` since there is no item to update.
-
-## Data model
+## Key types
 
 ```ts
-type TroubleSpot = {
-  bpm: number | null;           // optional starting BPM; null falls back to slowReferenceBpm
-};
-
 type Song = {
-  id: string;
-  title: string;
-  link: string | null;
-  workingBpm: number;           // user input — the full-tune earned tempo
-  warmupBpm: number | null;     // saved Conscious Practice BPM; null = ⅓ × workingBpm rule
-  troubleSpots: TroubleSpot[];  // 0..5 — each one drives its own Trouble Spot block + ladder
-  originalBpm: number | null;   // optional — display-only reference, never used by session math
-  stepPercent: number;          // default 2.5
-  totalPracticeSec: number;     // the only stat tracked
-  createdAt: string;
-  updatedAt: string;
+  id: string; title: string; link: string | null;
+  workingBpm: number;
+  warmupBpm: number | null;     // null = ⅓ × workingBpm
+  troubleSpots: TroubleSpot[]; // 0–5; each drives its own Trouble Spot block + independent ladder (smart mode only)
+  originalBpm: number | null;  // display-only, never used by session math
+  stepPercent: number;         // default 2.5
+  practiceMode: "smart" | "simple"; // default smart; simple = one Steady-BPM block, no ladder, no trouble spots
+  includeWarmupBlock: boolean; // default true; when false, skip the Conscious Practice prefix
+  totalPracticeSec: number;
+  createdAt: string; updatedAt: string;
 };
 
 type Settings = {
-  recordingEnabled: boolean;    // default true
-  metronomeVolume: number;      // 0..1, default 0.8
-  accentsEnabled: boolean;      // default true
-  autoAdvanceBlocks: boolean;   // default false — manual Space-to-continue between blocks
-  interSongPauseSec: number;    // default 20 — pause between consecutive sessions (songs OR exercises). 0 disables
+  recordingEnabled: boolean;   // default true
+  metronomeVolume: number;     // 0..1, default 0.8
+  accentsEnabled: boolean;     // default true
+  autoAdvanceBlocks: boolean;  // default false
+  interSongPauseSec: number;   // default 20; governs both songs AND exercises (legacy name)
+  defaultPracticeMode: "smart" | "simple"; // default smart; seeds practiceMode on new songs/exercises
 };
 ```
 
-Derived tempos (`targetBpm`, `overspeedBpm`, `slowReferenceBpm`, `slowMusicalBpm`, `troubleBlockBpmFor`) are **never stored** — always computed from `workingBpm` and the `troubleSpots` array in `lib/session/tempo.ts`. This is a load-bearing invariant: the consolidation block automatically runs at the just-promoted working tempo because its `tempoFn` reads live song state, and each trouble block's `tempoFn` closes over its own spot index.
+Exercise type: `src/types/exercise.ts`. Key fields: `sessionMinutes` (5–60, default 5), `openEnded: boolean` (collapses to unbounded count-up at workingBpm), `metronomeEnabled: boolean`, `practiceMode` and `includeWarmupBlock` (same semantics as on `Song`; both ignored when `openEnded` is true).
 
-The Dexie schema is versioned: v2 migrates the legacy `troubleBpm: number | null` field to `troubleSpots: TroubleSpot[]` — a non-null legacy value becomes a single-element array. v3 adds `sortIndex` on songs. v4 adds the `exercises` table. v5 backfills `sessionMinutes: 5` on existing exercises. v6 backfills `warmupBpm: null` on existing songs and exercises. v7 backfills `openEnded: false` and `metronomeEnabled: true` on existing exercises. The active `FileRepository` also lazily backfills these fields on read via `normalizeExercise` so JSON files written by older builds don't trip the type contract.
+Each trouble spot adds a full Trouble Spot block and proportional duration to the session — more spots = longer session, not a more-crowded one.
 
-**Recordings are NOT persisted.** The most recent session's blob lives in `useSessionStore.latestRecording` and dies on the next session start or page reload. The recording's `songId` field holds whichever id ran the session — song or exercise. Detail pages filter by id-match, so the same single-slot store serves both modes.
+**Recordings are NOT persisted.** Latest blob lives in `useSessionStore.latestRecording`, dies on next session start or reload.
 
-**Session history (`sessions.json`)**: every completed or aborted session appends one `SessionRecord` (src/types/sessionRecord.ts) via `Repository.appendSession` → `POST /api/sessions`. A record captures denormalized item title, start/end ISO timestamps, wall-clock `durationSec`, `endedReason`, planned minutes, start/end `workingBpm`, start/end per-trouble-spot BPMs (songs only), and a chronological `promotions: PromotionEvent[]` list. Capture happens in the session pages: `startSession` snapshots starting state into refs, `handleEarned` pushes each promotion into `promotionsRef`, and `endSession` builds the record after `incrementPracticeTime` and posts it best-effort (failure never blocks teardown). The POST endpoint dedupes on record `id` so retries are idempotent. The history feeds `useSessionHistoryStore`, read by `BpmTimelineChart` / `RecentSessionsList` on song & exercise detail pages and by the global `/stats` page (today's sessions list, heatmap, daily-minutes bars, promotion-velocity table, recent sessions list). Pure aggregate fns live in `src/lib/stats/aggregate.ts` with Vitest coverage in the sibling `.test.ts`.
+## Tempo math
 
-**Editing / deleting sessions**: every row in `RecentSessionsList` exposes an Edit button that opens `SessionEditModal`. The modal allows trimming the duration (server enforces trim-only — never extending) or deleting the whole record. Both paths call `useSessionHistoryStore.update` / `useSessionHistoryStore.remove` and then roll back the corresponding `totalPracticeSec` on the song or exercise via `adjustPracticeTime(id, delta)`. The rollback is skipped silently when the item no longer exists or for synthetic items (Free Play). API: `PATCH /api/sessions/[id]` (body `{ durationSec }`) and `DELETE /api/sessions/[id]`.
-
-**Reset / factory reset**: Settings → Danger zone exposes two destructive actions. `Repository.resetAllStatistics()` zeroes `totalPracticeSec` on every song and exercise and clears `sessions.json` (via the new `PUT /api/sessions` endpoint). `Repository.factoryReset()` PUTs empty arrays to all three collections (songs, exercises, sessions) — Settings are preserved by design. After either action, the settings page reloads the songs/exercises/history stores so in-memory state matches disk.
-
-**Exercise data model** — `src/types/exercise.ts`:
-
-```ts
-type Exercise = {
-  id: string;
-  name: string;
-  link: string | null;
-  notes: string | null;          // short free text
-  workingBpm: number;
-  warmupBpm: number | null;      // saved Conscious Practice BPM; null = ⅓ × workingBpm rule
-  stepPercent: number;           // default 2.5
-  sessionMinutes: number;        // default 5, range 5..60 — total metronome-on time (ignored when openEnded)
-  openEnded: boolean;            // default false. true = single unbounded count-up at workingBpm
-  metronomeEnabled: boolean;     // default true. false = run the session without the click
-  totalPracticeSec: number;      // the only stat tracked
-  sortIndex: number;
-  createdAt: string;
-  updatedAt: string;
-};
-```
-
-No trouble spots. No `originalBpm`. Stored in Dexie `exercises` table (schema v7). All CRUD goes through `Repository.{listExercises, getExercise, upsertExercise, deleteExercise, reorderExercises}`. The session length lives on the exercise itself — there's no per-session override or query param; editing the field in the form is what changes the next session's length.
-
-## Session flow
-
-1. User picks a session length on a song's detail page (preset chip 5/10/15/20/30 or a custom value 5–60) and taps **Start**. The chosen base length is passed as `?minutes=N`.
-2. `session/[id]/page.tsx` clamps the `minutes` query param, builds the block list via `buildBlocks(minutes, song)` (which always prepends the unbounded `CONSCIOUS_PRACTICE_BLOCK`), creates a `Metronome` instance, starts the recorder (if enabled), and drives the block sequence via the pure state machine in `lib/session/driver.ts`.
-3. The driver has three phases: `playing`, `awaiting`, `ended`. Timed blocks flip `playing → awaiting` when the countdown expires; the chime plays and the metronome keeps clicking at the current tempo so the player can finish their pass. Pressing `Space` / Continue advances to the next block. **Unbounded blocks never auto-flip** — `tickSnapshot` skips them and they stay in `playing` until `advanceSnapshot` is called explicitly (via `N` / Finish warm-up).
-4. During `ceilingWork` and `troubleSpot` blocks, the **I earned it** button is visible. Tap (or `Space`) promotes the relevant BPM via `promoteWorking` / `promoteTroubleAt(song, index)`, persists the song, and the metronome jumps to the new tempo phase-preserving. Each trouble block's `promotes` is a discriminated union `{ kind: "trouble", index }` so the session page routes the promotion to the right spot.
-5. Session ends when the driver advances past the last block, or on `Esc`. `song.totalPracticeSec` increments by elapsed wall-clock seconds (warm-up time included). Recorder stops and hands its blob to `useSessionStore.latestRecording`. User is routed to the song detail page where the blob plays back in a native `<audio controls>` panel.
-
-## Tempo math invariants
-
-- Only `workingBpm` and each trouble spot's `bpm` are stored.
-- `step(bpm, pct) = round(bpm * (1 + pct/100))` is the single promotion primitive. Implemented via integer scaling (`scale = 1_000_000`) to dodge float rounding bugs — `220 * 1.025` otherwise comes out as 225.499… and would round the wrong way.
-- `targetBpm = step(workingBpm)`, `overspeedBpm = step(targetBpm)` (two steps up).
+- `step(bpm, pct) = round(bpm * (1 + pct/100))` — uses integer scaling (`scale = 1_000_000`) to avoid float rounding bugs.
+- `targetBpm = step(workingBpm)`, `overspeedBpm = step(targetBpm)`.
 - `slowReferenceBpm = round(workingBpm * 0.77)`, `slowMusicalBpm = round(workingBpm * 0.72)`.
-- `troubleBlockBpmFor(song, index) = song.troubleSpots[index]?.bpm ?? slowReferenceBpm(song)`.
-- `buildBlocks(minutes, song)` is the one entry point for song block generation. It always prepends `CONSCIOUS_PRACTICE_BLOCK` (`unbounded: true`, `durationSec: 0`). `minutes === 5` then appends `FIVE_MIN_BLOCKS` unchanged; otherwise it scales `BASE_TEN_MIN_BLOCKS` by `minutes / 10`, replaces the canonical single Trouble Spot block with one block per `song.troubleSpots` entry, and absorbs any rounding residual into the Ceiling Work block so totals match `sessionLengthSec(minutes, song)` exactly. `sessionLengthSec` does **not** include the warm-up — it's the metronome-on time of the timed blocks only.
-- `buildExerciseBlocks(exercise)` is the entry point for exercise block generation. When `exercise.openEnded` is true, it returns a single `OPEN_ENDED_BLOCK` (unbounded count-up at `workingBpm`); otherwise it returns `[CONSCIOUS_PRACTICE_BLOCK, ...buildExerciseTimedBlocks(exercise.sessionMinutes)]`.
-- Unbounded blocks (`BlockDef.unbounded === true`) are a distinct block shape: `durationSec` is ignored, `timeLeftInPlayingSec` returns `Infinity`, and `tickSnapshot` never auto-transitions them. The session page branches on `currentBlock.unbounded` to render `BlockCountUp` instead of `BlockCountdown`. The button label depends on the block kind: warm-up shows "Finish warm-up →", `openEnded` shows "End session", and timed blocks show `EarnedButton`.
-- `originalBpm` is display-only. **Never** consumed by session math.
+- Derived tempos are **never stored** — always recomputed from `workingBpm` in `lib/session/tempo.ts`.
+- `buildBlocks(minutes, song)` — song block entry point. Branches on `song.practiceMode`: `simple` returns a single timed `simpleMetronome` block at workingBpm; `smart` uses the canonical scaled ladder (5-min compact form fixed, longer sessions scale `BASE_TEN_MIN_BLOCKS`). The unbounded `CONSCIOUS_PRACTICE_BLOCK` is prepended only when `song.includeWarmupBlock !== false`.
+- `buildExerciseBlocks(exercise)` — exercise block entry point. Branches in priority order: `openEnded` → single unbounded count-up; otherwise `practiceMode === "simple"` → optional Conscious + a single timed Steady-BPM block; else (smart) → optional Conscious + Build/Burst/Cool Down. `includeWarmupBlock === false` skips the Conscious prefix in both non-openEnded paths.
+- Schema migration: Dexie is at version **8**. v8 backfills `practiceMode = "smart"` and `includeWarmupBlock = true` on legacy songs and exercises, and `defaultPracticeMode = "smart"` on the settings singleton. The JSON-file path also lazily backfills these on read in `FileRepository.normalizeSong` / `normalizeExercise`.
 
-## Metronome notes
+## Metronome
 
-- Look-ahead scheduler pattern (Chris Wilson's "A Tale of Two Clocks"): 25ms JS tick, 100ms audio-time look-ahead horizon. Beats scheduled via `AudioBufferSourceNode.start(exactTime)`, never `setTimeout`.
-- Four click voices (`lib/metronome/click.ts`):
-  - **Accent** (1500 Hz) — backbeat 2 & 4 in backbeat mode with accents ON
-  - **Downbeat** (1200 Hz) — beat 1 in all-beats mode with accents ON
-  - **Tick** (900 Hz) — beats 2/3/4 in all-beats mode with accents ON
-  - **Uniform** (1100 Hz) — every played beat when accents are OFF
-- **Each voice is pre-rendered once as an `AudioBuffer` and cached per `AudioContext`** (`WeakMap<AudioContext, Map<string, AudioBuffer>>`). Every click of a given voice is byte-identical sample data — no per-call oscillator+envelope graph. Prevents per-call Web Audio parameter-automation variability from making "accents-off" mode sound randomly accented (see `METRONOME-BUG-LOG.md`). `Metronome.ensureContext()` calls `prewarmClickBuffers(ctx)` so the first beat pays no synthesis cost. Same approach is used for the two transition-chime notes.
-- Modes: **all-beats** (default) clicks 1-2-3-4; **backbeat** clicks only 2 & 4.
-- Tempo changes are phase-preserving: on BPM change, `nextBeatTime = max(nextBeatTime, currentTime + 0.05)` — no glitch.
-- **Drift recovery is load-bearing.** The 25 ms `setInterval` is not real-time — under main-thread stalls (React renders, RAF work, GC, backgrounded tabs) it can fire tens or hundreds of ms late, pushing `nextBeatTime` well behind `ctx.currentTime`. Without a guard, the catch-up `while` loop would schedule every missed beat with an already-past timestamp, and per Web Audio spec `osc.start(pastTime)` starts the oscillator **immediately** — so the queued beats all fire at once and sum through the shared `masterGain` into a single fatter "accented"-sounding transient. `Metronome.tick()` calls `recoverFromDrift(nextBeatTime, now)` at the top: if we're >20 ms behind, the backlog is dropped and `nextBeatTime` re-anchored to `now + 0.05`. The count surfaces as `lateTickCount` in `MetronomeDiagnostics` (visible with `?debug=1`).
-- `AudioContext` must be created from a user gesture — the Start Session button is that gesture.
-- Two-note transition chime (880 + 1320 Hz, ~250ms) via `playTransitionCue()`, routed through the same master gain as the metronome.
+Look-ahead scheduler: 25ms JS tick, 100ms audio-time horizon. Two architectural decisions worth knowing:
+
+- **Pre-rendered `AudioBuffer`s**: all four click voices and the transition chime are pre-rendered once and cached per `AudioContext`. Prevents per-call synthesis variability that made accents-off mode sound randomly accented. See `METRONOME-BUG-LOG.md`.
+- **Drift recovery is load-bearing**: if the JS tick fires >20ms late (GC, backgrounded tab), the beat backlog is dropped and `nextBeatTime` re-anchored. Without this, past-timestamp beats fire simultaneously and sound like accents.
+
+`AudioContext` must be created from a user gesture (the Start Session button).
 
 ## Block instructions
 
-All on-screen per-block guidance lives in **one place**: the `INSTRUCTIONS` map at the top of `lib/session/blocks.ts`. Edit that file to change the copy. Each block pulls from `INSTRUCTIONS[kind]`.
-
-## Keyboard shortcuts
-
-Surfaced on the session screen via `ShortcutsHint.tsx` at the bottom of the page. Same bindings on song and exercise sessions:
-
-- `Space` — advance to the next block (or out of `awaiting`)
-- `+` — promote the relevant BPM (only active during blocks where the earn button is visible)
-- `P` — pause / resume
-- `R` — reset the current block's countdown and realign the metronome to a downbeat
-- `Esc` — end session early (recording still delivered up to that point)
+All on-screen per-block guidance lives in the `INSTRUCTIONS` map at the top of `lib/session/blocks.ts`.
 
 ## Commands
 
 ```bash
-npm install         # first time
-npm run dev         # http://localhost:3000
-npm run build       # production build
-npm run test        # run the Vitest suite
+npm install
+npm run dev     # http://localhost:3000
+npm run build
+npm run test
 ```
 
 ## Assistant behavior directives
 
-These directives shape how Claude approaches work in this repo. They reference tools installed under `.claude/`.
-
 ### Always update CLAUDE.md after finishing work
 
-After completing any task that changes architecture, data model, schema version, block flow, file layout, dependencies, commands, or any other fact documented in this file, **update CLAUDE.md as part of finishing the task** — don't wait to be asked. The doc is load-bearing context for future sessions; stale claims here are worse than no claims. If the change has no impact on what's documented (e.g., a typo fix, a contained refactor, a test-only edit), skip the update and say so.
+After completing any task that changes architecture, data model, schema version, block flow, file layout, or any other documented fact, **update CLAUDE.md** — don't wait to be asked. Skip the update for typo fixes or contained refactors with no doc impact.
 
 ### When to use the `debugger` subagent
 
-Invoke the `debugger` subagent (via the Agent tool) for any task that is root-cause work, not implementation work:
+Invoke for root-cause work: bug reports, unexpected behavior, test failures whose cause isn't obvious, regression hunts, race conditions in the scheduler or driver state machine. Skip for feature work or "how does X work" questions.
 
-- A bug report or reproduction ("X is broken", "Y crashes", "this throws")
-- Unexpected behavior ("why does the metronome drift after tempo changes?")
-- Test failures whose cause isn't obvious from the error alone
-- Regression hunts ("this used to work before commit Z")
-- Race conditions or timing bugs — the scheduler and driver state machine are the hot spots
-
-Skip it for straight feature work, refactors, or questions that are clearly about "how does X work" rather than "why is X wrong."
-
-The agent's production-server techniques (distributed traces, heap dumps, log aggregation) don't apply to this client-side app — the parts that do apply are the fault-localization decision tree (steps 1–6) and the common bug patterns. Guide the agent accordingly.
+The agent's production-server techniques don't apply here — guide it toward fault-localization steps 1–6 and client-side bug patterns.
 
 ### When to use the `senior-fullstack` skill
 
-Invoke the `senior-fullstack` skill (via the Skill tool) for:
+Invoke for frontend architecture decisions, cross-file code-quality reviews, or picking patterns for new subsystems.
 
-- Frontend architecture decisions (component boundaries, state shape, Next.js App Router patterns)
-- Code-quality reviews across multiple files
-- Picking patterns for new subsystems (where does this logic live?)
+Don't invoke for its `scripts/` (assume Prisma/Postgres). This project's conventions — Zustand, Repository, pure session/tempo modules, Web Audio scheduler — take precedence over generic patterns the skill recommends.
 
-Do **not** invoke it for:
+## Design record
 
-- Backend / API / database / ORM work — this app has none
-- Docker, K8s, cloud deploy, CI/CD — out of scope for v1
-- The skill's `scripts/` (fullstack_scaffolder.py, etc.) — they assume a Prisma/Postgres stack that this project doesn't use
-
-Treat its `references/` docs as advisory, not prescriptive — this project's conventions (Zustand, Dexie-behind-Repository, pure session/tempo modules, Web Audio scheduler) take precedence over any generic pattern the skill recommends.
-
-## The method itself
-
-- In-app: [`/method`](src/app/method/page.tsx) — authoritative explanation + Blackberry Blossom worked example.
-- Original spec and full design record: [swirling-swimming-owl.md](C:/Users/Yosi/.claude/plans/swirling-swimming-owl.md)
+- In-app method: `/method` (`src/app/method/page.tsx`)
+- Full design record: [swirling-swimming-owl.md](C:/Users/Yosi/.claude/plans/swirling-swimming-owl.md)
 
 ## Pointers for future work
 
-- To add cloud sync: implement `src/lib/db/cloudRepository.ts` behind the `Repository` interface and swap the `FileRepository` constructor in `getRepository()` (src/lib/db/localRepository.ts). Nothing else in the app should need to change.
-- To persist recordings: add a `recordings` table to Dexie, write blobs on session end, and replace the single-slot `latestRecording` in `useSessionStore` with a query. The recording ephemerality is intentional for v1 — revisit only if requested.
-- To add a PWA: `next-pwa` once the core loop is stable.
+- **Cloud sync**: implement `src/lib/db/cloudRepository.ts` behind `Repository`, swap in `getRepository()`. Nothing else changes.
+- **Persistent recordings**: add a `recordings` table, write blobs on session end, replace single-slot `latestRecording` in `useSessionStore`.
+- **PWA**: `next-pwa` once the core loop is stable.

@@ -45,6 +45,8 @@ const mkSong = (id: string): Song => ({
   troubleSpots: [],
   originalBpm: null,
   stepPercent: 2.5,
+  practiceMode: "smart",
+  includeWarmupBlock: true,
   totalPracticeSec: 0,
   sortIndex: 0,
   createdAt: "2026-01-01T00:00:00.000Z",

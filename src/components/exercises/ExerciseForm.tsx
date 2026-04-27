@@ -1,11 +1,16 @@
 "use client";
-import { useState, type FormEvent } from "react";
-import { DEFAULT_STEP_PERCENT } from "@/types/song";
+import { useEffect, useState, type FormEvent } from "react";
+import {
+  DEFAULT_INCLUDE_WARMUP,
+  DEFAULT_STEP_PERCENT,
+} from "@/types/song";
+import type { PracticeMode } from "@/types/song";
 import {
   DEFAULT_EXERCISE_MINUTES,
   MAX_EXERCISE_MINUTES,
   MIN_EXERCISE_MINUTES,
 } from "@/lib/session/exerciseBlocks";
+import { useSettingsStore } from "@/lib/store/useSettingsStore";
 
 export type ExerciseFormValues = {
   name: string;
@@ -16,6 +21,8 @@ export type ExerciseFormValues = {
   sessionMinutes: number;
   openEnded: boolean;
   metronomeEnabled: boolean;
+  practiceMode: PracticeMode;
+  includeWarmupBlock: boolean;
 };
 
 type Props = {
@@ -52,6 +59,29 @@ export function ExerciseForm({
   const [metronomeEnabled, setMetronomeEnabled] = useState<boolean>(
     initial?.metronomeEnabled ?? true,
   );
+
+  const settingsLoaded = useSettingsStore((s) => s.loaded);
+  const settingsDefaultMode = useSettingsStore(
+    (s) => s.settings.defaultPracticeMode,
+  );
+  const settingsLoad = useSettingsStore((s) => s.load);
+  const isEditing = initial?.practiceMode !== undefined;
+  const [practiceMode, setPracticeMode] = useState<PracticeMode>(
+    initial?.practiceMode ?? "smart",
+  );
+  const [practiceModeTouched, setPracticeModeTouched] = useState(false);
+  const [includeWarmupBlock, setIncludeWarmupBlock] = useState<boolean>(
+    initial?.includeWarmupBlock ?? DEFAULT_INCLUDE_WARMUP,
+  );
+  useEffect(() => {
+    if (!settingsLoaded) void settingsLoad();
+  }, [settingsLoaded, settingsLoad]);
+  useEffect(() => {
+    if (isEditing || practiceModeTouched) return;
+    if (!settingsLoaded) return;
+    setPracticeMode(settingsDefaultMode);
+  }, [isEditing, practiceModeTouched, settingsLoaded, settingsDefaultMode]);
+
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
@@ -96,6 +126,8 @@ export function ExerciseForm({
       sessionMinutes: safeMinutes,
       openEnded,
       metronomeEnabled,
+      practiceMode,
+      includeWarmupBlock,
     };
   };
 
@@ -218,6 +250,54 @@ export function ExerciseForm({
           onChange={(v) => setMetronomeEnabled(!v)}
           label="Disable metronome for this exercise"
           hint="When on, the session runs without the click. Saved on this exercise so transcribing-style drills don't need to re-toggle every session."
+        />
+      </div>
+
+      <div
+        className={`space-y-4 rounded-lg border border-bg-border bg-bg/40 p-4 transition ${
+          openEnded ? "pointer-events-none opacity-50" : ""
+        }`}
+        aria-disabled={openEnded}
+      >
+        <div>
+          <div className="text-sm font-semibold text-neutral-100">
+            Practice mode
+          </div>
+          <div className="mt-1 text-xs text-neutral-500">
+            Smart runs Build → Burst → Cool Down with promotion. Simple plays a steady BPM at your working tempo for the whole session — like a regular metronome with a stop timer.
+            {openEnded && " Ignored while Open-ended is on."}
+          </div>
+          <div className="mt-3 inline-flex overflow-hidden rounded-lg border border-bg-border bg-bg">
+            {(["smart", "simple"] as const).map((m) => {
+              const active = practiceMode === m;
+              return (
+                <button
+                  key={m}
+                  type="button"
+                  role="radio"
+                  aria-checked={active}
+                  onClick={() => {
+                    setPracticeMode(m);
+                    setPracticeModeTouched(true);
+                  }}
+                  className={`px-4 py-1.5 text-sm font-semibold capitalize transition ${
+                    active
+                      ? "bg-accent text-black"
+                      : "text-neutral-300 hover:bg-bg-elevated"
+                  }`}
+                >
+                  {m}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        <Checkbox
+          checked={includeWarmupBlock}
+          onChange={setIncludeWarmupBlock}
+          label="Include slow Conscious Practice warm-up block"
+          hint="When on, the session starts with the unbounded slow warm-up — you advance with N when ready. Turn off to jump straight into the body."
         />
       </div>
 

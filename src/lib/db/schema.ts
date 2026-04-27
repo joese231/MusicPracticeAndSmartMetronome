@@ -112,6 +112,40 @@ export class AppDB extends Dexie {
             }
           });
       });
+    this.version(8)
+      .stores({
+        songs: "id, title, updatedAt, sortIndex",
+        settings: "id",
+        exercises: "id, name, updatedAt, sortIndex",
+      })
+      .upgrade(async (tx) => {
+        await tx
+          .table<Song, string>("songs")
+          .toCollection()
+          .modify((row) => {
+            if (row.practiceMode !== "simple") row.practiceMode = "smart";
+            if (typeof row.includeWarmupBlock !== "boolean") {
+              row.includeWarmupBlock = true;
+            }
+          });
+        await tx
+          .table<Exercise, string>("exercises")
+          .toCollection()
+          .modify((row) => {
+            if (row.practiceMode !== "simple") row.practiceMode = "smart";
+            if (typeof row.includeWarmupBlock !== "boolean") {
+              row.includeWarmupBlock = true;
+            }
+          });
+        await tx
+          .table<SettingsRow, string>("settings")
+          .toCollection()
+          .modify((row) => {
+            if (row.defaultPracticeMode !== "simple") {
+              row.defaultPracticeMode = "smart";
+            }
+          });
+      });
   }
 }
 

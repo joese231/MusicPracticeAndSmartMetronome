@@ -1,7 +1,12 @@
 "use client";
-import { useState, type FormEvent } from "react";
-import { DEFAULT_STEP_PERCENT, MAX_TROUBLE_SPOTS } from "@/types/song";
-import type { TroubleSpot } from "@/types/song";
+import { useEffect, useState, type FormEvent } from "react";
+import {
+  DEFAULT_INCLUDE_WARMUP,
+  DEFAULT_STEP_PERCENT,
+  MAX_TROUBLE_SPOTS,
+} from "@/types/song";
+import type { PracticeMode, TroubleSpot } from "@/types/song";
+import { useSettingsStore } from "@/lib/store/useSettingsStore";
 
 export type SongFormValues = {
   title: string;
@@ -10,6 +15,8 @@ export type SongFormValues = {
   troubleSpots: TroubleSpot[];
   originalBpm: number | null;
   stepPercent: number;
+  practiceMode: PracticeMode;
+  includeWarmupBlock: boolean;
 };
 
 type Props = {
@@ -38,6 +45,35 @@ export function SongForm({ initial, submitLabel, onSubmit, onCancel }: Props) {
   const [stepPercent, setStepPercent] = useState<string>(
     String(initial?.stepPercent ?? DEFAULT_STEP_PERCENT),
   );
+
+  // Practice mode + warm-up block toggle.
+  // For new songs (no `initial.practiceMode`), seed from the global setting
+  // once it's loaded; for edits, take whatever the song already has. The
+  // user can override it freely with the buttons below either way.
+  const settingsLoaded = useSettingsStore((s) => s.loaded);
+  const settingsDefaultMode = useSettingsStore(
+    (s) => s.settings.defaultPracticeMode,
+  );
+  const settingsLoad = useSettingsStore((s) => s.load);
+  const isEditing = initial?.practiceMode !== undefined;
+  const [practiceMode, setPracticeMode] = useState<PracticeMode>(
+    initial?.practiceMode ?? "smart",
+  );
+  const [practiceModeTouched, setPracticeModeTouched] = useState(false);
+  const [includeWarmupBlock, setIncludeWarmupBlock] = useState<boolean>(
+    initial?.includeWarmupBlock ?? DEFAULT_INCLUDE_WARMUP,
+  );
+  useEffect(() => {
+    if (!settingsLoaded) void settingsLoad();
+  }, [settingsLoaded, settingsLoad]);
+  // Once settings finish loading, adopt the global default for new songs
+  // unless the user has already picked a mode in this session.
+  useEffect(() => {
+    if (isEditing || practiceModeTouched) return;
+    if (!settingsLoaded) return;
+    setPracticeMode(settingsDefaultMode);
+  }, [isEditing, practiceModeTouched, settingsLoaded, settingsDefaultMode]);
+
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
@@ -109,6 +145,8 @@ export function SongForm({ initial, submitLabel, onSubmit, onCancel }: Props) {
         troubleSpots: spots,
         originalBpm: o,
         stepPercent: sp,
+        practiceMode,
+        includeWarmupBlock,
       });
     } finally {
       setBusy(false);
@@ -179,7 +217,64 @@ export function SongForm({ initial, submitLabel, onSubmit, onCancel }: Props) {
         </Field>
       </div>
 
+      <section className="space-y-4 rounded-lg border border-bg-border bg-bg/40 p-5">
+        <div>
+          <div className="text-sm font-semibold text-neutral-100">
+            Practice mode
+          </div>
+          <div className="mt-1 text-xs text-neutral-500">
+            Smart runs the three-tempo ladder with trouble-spot blocks. Simple plays a steady BPM at your working tempo for the whole session — like a regular metronome with a stop timer.
+          </div>
+          <div className="mt-3 inline-flex overflow-hidden rounded-lg border border-bg-border bg-bg">
+            {(["smart", "simple"] as const).map((m) => {
+              const active = practiceMode === m;
+              return (
+                <button
+                  key={m}
+                  type="button"
+                  role="radio"
+                  aria-checked={active}
+                  onClick={() => {
+                    setPracticeMode(m);
+                    setPracticeModeTouched(true);
+                  }}
+                  className={`px-4 py-1.5 text-sm font-semibold capitalize transition ${
+                    active
+                      ? "bg-accent text-black"
+                      : "text-neutral-300 hover:bg-bg-elevated"
+                  }`}
+                >
+                  {m}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        <label className="flex cursor-pointer items-start gap-3">
+          <input
+            type="checkbox"
+            checked={includeWarmupBlock}
+            onChange={(e) => setIncludeWarmupBlock(e.target.checked)}
+            className="mt-1 h-4 w-4 cursor-pointer accent-amber-500"
+          />
+          <div>
+            <div className="text-sm font-medium text-neutral-200">
+              Include slow Conscious Practice warm-up block
+            </div>
+            <div className="mt-0.5 text-xs text-neutral-500">
+              When on, the session starts with the unbounded slow warm-up — you advance with N when ready. Turn off to jump straight into the body.
+            </div>
+          </div>
+        </label>
+      </section>
+
       <section className="rounded-lg border-2 border-accent/40 bg-bg-elevated p-5">
+        {practiceMode === "simple" && (
+          <div className="mb-3 rounded border border-bg-border bg-bg/40 px-3 py-2 text-xs text-neutral-400">
+            Trouble spots are saved but not used in Simple mode. Switch to Smart to drill them.
+          </div>
+        )}
         <div className="flex items-center justify-between gap-3">
           <div>
             <div className="text-base font-semibold text-accent">

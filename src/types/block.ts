@@ -11,6 +11,7 @@ export type BlockKind =
   | "exerciseBuild"
   | "exerciseCoolDown"
   | "openEnded"
+  | "simpleMetronome"
   | "freePlay";
 
 export type BlockPromotion =

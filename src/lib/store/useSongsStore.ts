@@ -1,8 +1,13 @@
 import { create } from "zustand";
-import type { Song, TroubleSpot } from "@/types/song";
-import { DEFAULT_STEP_PERCENT } from "@/types/song";
+import type { PracticeMode, Song, TroubleSpot } from "@/types/song";
+import {
+  DEFAULT_INCLUDE_WARMUP,
+  DEFAULT_PRACTICE_MODE,
+  DEFAULT_STEP_PERCENT,
+} from "@/types/song";
 import { getRepository } from "@/lib/db/localRepository";
 import { nowIso } from "@/lib/session/tempo";
+import { useSettingsStore } from "./useSettingsStore";
 
 type NewSongInput = {
   title: string;
@@ -11,6 +16,8 @@ type NewSongInput = {
   troubleSpots: TroubleSpot[];
   originalBpm: number | null;
   stepPercent?: number;
+  practiceMode?: PracticeMode;
+  includeWarmupBlock?: boolean;
 };
 
 type SongsState = {
@@ -70,6 +77,9 @@ export const useSongsStore = create<SongsState>((set, get) => ({
       existing.length === 0
         ? 0
         : Math.max(...existing.map((s) => s.sortIndex)) + 1;
+    const settingsDefault =
+      useSettingsStore.getState().settings.defaultPracticeMode ??
+      DEFAULT_PRACTICE_MODE;
     const song: Song = {
       id: genId(),
       title: input.title.trim(),
@@ -79,6 +89,8 @@ export const useSongsStore = create<SongsState>((set, get) => ({
       troubleSpots: input.troubleSpots,
       originalBpm: input.originalBpm,
       stepPercent: input.stepPercent ?? DEFAULT_STEP_PERCENT,
+      practiceMode: input.practiceMode ?? settingsDefault,
+      includeWarmupBlock: input.includeWarmupBlock ?? DEFAULT_INCLUDE_WARMUP,
       totalPracticeSec: 0,
       sortIndex: nextSortIndex,
       createdAt: now,
