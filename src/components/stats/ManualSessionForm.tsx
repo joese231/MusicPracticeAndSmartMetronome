@@ -194,7 +194,7 @@ export function ManualSessionForm() {
         {/* Duration */}
         <div>
           <label className="block text-sm font-medium text-neutral-300">
-            Duration (e.g., "25m", "25m 30s", or "1500s")
+            Duration (e.g., &quot;25m&quot;, &quot;25m 30s&quot;, or &quot;1500s&quot;)
           </label>
           <input
             type="text"

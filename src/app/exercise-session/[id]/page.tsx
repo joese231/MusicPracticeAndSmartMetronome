@@ -406,6 +406,7 @@ export default function ExerciseSessionPage() {
     started,
     blocks,
     metronomeMode,
+    metronomeOff,
     settings.metronomeVolume,
     settings.recordingEnabled,
     settings.accentsEnabled,
@@ -434,7 +435,7 @@ export default function ExerciseSessionPage() {
       return Math.max(20, Math.floor(warmupBpmFor(s) / 2));
     }
     return currentBlock.tempoFn(s);
-  }, [currentBlock, exercise, consciousSlowMode]);
+  }, [currentBlock, consciousSlowMode]);
 
   // Push tempoBpm to the live metronome while in the warm-up block. Mirrors
   // the song session: warm-up BPM changes via the saved warmupBpm field or
@@ -487,7 +488,7 @@ export default function ExerciseSessionPage() {
         : `This block plays at ${playedBpm} BPM.`,
       initialBpm: songNow.workingBpm,
     };
-  }, [currentBlock, exercise]);
+  }, [currentBlock]);
 
   const handleEarned = useCallback(async () => {
     if (!snap || snap.phase !== "playing") return;
