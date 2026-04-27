@@ -8,6 +8,7 @@ import { CalendarHeatmap } from "@/components/stats/CalendarHeatmap";
 import { PracticeMinutesChart } from "@/components/stats/PracticeMinutesChart";
 import { PromotionVelocityTable } from "@/components/stats/PromotionVelocityTable";
 import { RecentSessionsList } from "@/components/stats/RecentSessionsList";
+import { ManualSessionForm } from "@/components/stats/ManualSessionForm";
 import {
   totalPracticeMinutes,
   currentStreakDays,
@@ -69,6 +70,9 @@ export default function StatsPage() {
           </Link>
         </nav>
       </header>
+
+      {/* Manual session logging form */}
+      {allLoaded && <ManualSessionForm />}
 
       {!allLoaded ? (
         <p className="text-neutral-500">Loading…</p>

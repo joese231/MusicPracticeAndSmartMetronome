@@ -44,18 +44,20 @@ export function bpmTimeline(
   const out: BpmTimelinePoint[] = [];
   for (let i = 0; i < filtered.length; i++) {
     const r = filtered[i];
-    if (i === 0) {
+    if (i === 0 && r.startWorkingBpm !== undefined) {
       out.push({
         at: r.startedAt,
         workingBpm: r.startWorkingBpm,
         troubleBpms: r.startTroubleBpms,
       });
     }
-    out.push({
-      at: r.endedAt,
-      workingBpm: r.endWorkingBpm,
-      troubleBpms: r.endTroubleBpms,
-    });
+    if (r.endWorkingBpm !== undefined) {
+      out.push({
+        at: r.endedAt,
+        workingBpm: r.endWorkingBpm,
+        troubleBpms: r.endTroubleBpms,
+      });
+    }
   }
   return out;
 }
