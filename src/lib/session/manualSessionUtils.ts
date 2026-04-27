@@ -5,6 +5,9 @@ import { SessionRecord, PromotionEvent } from "@/types/sessionRecord";
 // Numbers >= 360 are interpreted as seconds instead. 360 = 6 hours.
 const BARE_NUMBER_MINUTE_THRESHOLD = 360;
 
+// ID for free-form manual sessions (those without an exercise or song)
+const FREE_FORM_SESSION_ID = "__manual__";
+
 export function parseDurationToSeconds(input: string): number {
   if (!input || !input.trim()) {
     throw new Error("Duration cannot be empty");
@@ -46,6 +49,32 @@ export function parseDurationToSeconds(input: string): number {
   );
 }
 
+/**
+ * Parameters for manually creating a SessionRecord.
+ *
+ * Exactly one of exerciseId, songId, or sessionTitle should be provided:
+ * - exerciseId: creates a record for an exercise
+ * - songId: creates a record for a song
+ * - sessionTitle: creates a free-form record (e.g., jam session)
+ *
+ * Precedence: exerciseId > songId > sessionTitle (if multiple are provided, exerciseId wins)
+ *
+ * @example
+ * // Exercise session
+ * createManualSessionRecord({
+ *   exerciseId: "ex1",
+ *   exerciseTitle: "Banjo Warm-up",
+ *   startedAt: "2026-04-27T14:30:00",
+ *   durationSec: 1500,
+ * });
+ *
+ * // Free-form session
+ * createManualSessionRecord({
+ *   sessionTitle: "Jam session",
+ *   startedAt: "2026-04-27T14:30:00",
+ *   durationSec: 3600,
+ * });
+ */
 interface CreateManualSessionParams {
   exerciseId?: string;
   exerciseTitle?: string;
@@ -56,8 +85,8 @@ interface CreateManualSessionParams {
   durationSec: number;
   startWorkingBpm?: number;
   endWorkingBpm?: number;
-  startTroubleBpms?: (number | null)[];
-  endTroubleBpms?: (number | null)[];
+  startTroubleBpms?: (number | null)[]; // Must match song.troubleSpots.length
+  endTroubleBpms?: (number | null)[]; // Must match song.troubleSpots.length
   promotions?: PromotionEvent[];
 }
 
@@ -94,15 +123,15 @@ export function createManualSessionRecord(
     itemTitle = songTitle || "Unnamed Song";
   } else {
     // Free-form session
-    itemId = "__manual__";
+    itemId = FREE_FORM_SESSION_ID;
     itemKind = "song"; // Default to song for free-form
     itemTitle = sessionTitle || "Manual Session";
   }
 
-  // Calculate endedAt from startedAt + durationSec
-  // Parse the ISO string and add duration while preserving format
-  const hasZSuffix = startedAt.endsWith("Z");
-  const baseString = hasZSuffix
+  // Calculate endedAt from startedAt + durationSec while preserving input format.
+  // Preserve the input format (with or without 'Z' suffix) to maintain data consistency.
+  const hadZSuffix = startedAt.endsWith("Z");
+  const baseString = hadZSuffix
     ? startedAt
     : startedAt + "Z"; // Add Z for parsing if not present
 
@@ -110,9 +139,11 @@ export function createManualSessionRecord(
   const endDate = new Date(startDate.getTime() + durationSec * 1000);
 
   // Format endedAt to match the input format
-  const endedAt = hasZSuffix
-    ? endDate.toISOString()
-    : endDate.toISOString().replace(/\.000Z$/, "");
+  let endedAt = endDate.toISOString();
+  if (!hadZSuffix) {
+    // Input didn't have 'Z', so remove it and milliseconds from output
+    endedAt = endedAt.replace(/\.000Z$/, "");
+  }
 
   const record: SessionRecord = {
     id: uuidv4(),
@@ -123,7 +154,7 @@ export function createManualSessionRecord(
     endedAt,
     durationSec,
     endedReason: "manual",
-    plannedMinutes: Math.round(durationSec / 60),
+    plannedMinutes: Math.round(durationSec / 60), // Round to nearest minute
     startWorkingBpm,
     endWorkingBpm,
     startTroubleBpms,

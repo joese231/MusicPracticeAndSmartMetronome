@@ -1,6 +1,9 @@
 import { describe, it, expect } from "vitest";
 import { parseDurationToSeconds, createManualSessionRecord } from "./manualSessionUtils";
 
+// FREE_FORM_SESSION_ID is not exported, but we know the test expects "__manual__"
+const FREE_FORM_SESSION_ID = "__manual__";
+
 describe("parseDurationToSeconds", () => {
   it("parses minutes only", () => {
     expect(parseDurationToSeconds("25")).toBe(1500);
@@ -88,7 +91,7 @@ describe("createManualSessionRecord", () => {
       sessionTitle: "Jam session",
     });
 
-    expect(record.itemId).toBe("__manual__");
+    expect(record.itemId).toBe(FREE_FORM_SESSION_ID);
     expect(record.itemTitle).toBe("Jam session");
     expect(record.itemKind).toBe("song"); // Default to song for free-form
     expect(record.startWorkingBpm).toBeUndefined();
