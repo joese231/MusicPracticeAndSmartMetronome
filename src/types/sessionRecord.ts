@@ -15,10 +15,10 @@ export type SessionRecord = {
   startedAt: string;
   endedAt: string;
   durationSec: number;
-  endedReason: "complete" | "abort";
+  endedReason: "complete" | "abort" | "manual";
   plannedMinutes: number;
-  startWorkingBpm: number;
-  endWorkingBpm: number;
+  startWorkingBpm?: number;
+  endWorkingBpm?: number;
   startTroubleBpms: (number | null)[];
   endTroubleBpms: (number | null)[];
   promotions: PromotionEvent[];
