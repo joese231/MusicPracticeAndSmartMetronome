@@ -183,8 +183,8 @@ describe("buildBlocks — simple practice mode", () => {
     expect(blocks[1].durationSec).toBe(600);
     expect(blocks[1].unbounded).not.toBe(true);
     expect(blocks[1].tempoFn(song)).toBe(song.workingBpm);
-    expect(blocks[1].showEarnedButton).toBe(false);
-    expect(blocks[1].promotes).toBeNull();
+    expect(blocks[1].showEarnedButton).toBe(true);
+    expect(blocks[1].promotes).toEqual({ kind: "working" });
   });
 
   it("ignores trouble spots in simple mode", () => {

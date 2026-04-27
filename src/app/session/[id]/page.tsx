@@ -1074,7 +1074,7 @@ function SessionPage() {
             hint={
               showEarnedButton
                 ? undefined
-                : "Only active during Ceiling Work and Trouble Spot blocks"
+                : "Not available during this block"
             }
           />
         )}

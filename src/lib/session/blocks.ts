@@ -100,8 +100,8 @@ export const buildSimpleMetronomeBlock = (durationSec: number): BlockDef => ({
   label: "Steady BPM",
   durationSec,
   tempoFn: (s: Song) => s.workingBpm,
-  showEarnedButton: false,
-  promotes: null,
+  showEarnedButton: true,
+  promotes: { kind: "working" },
   instructions: INSTRUCTIONS.simpleMetronome,
 });
 

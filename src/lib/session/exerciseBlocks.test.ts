@@ -130,8 +130,8 @@ describe("buildExerciseBlocks", () => {
       expect(blocks[0].kind).toBe("consciousPractice");
       expect(blocks[1].kind).toBe("simpleMetronome");
       expect(blocks[1].durationSec).toBe(600);
-      expect(blocks[1].showEarnedButton).toBe(false);
-      expect(blocks[1].promotes).toBeNull();
+      expect(blocks[1].showEarnedButton).toBe(true);
+      expect(blocks[1].promotes).toEqual({ kind: "working" });
     });
 
     it("Steady block plays at workingBpm", () => {
