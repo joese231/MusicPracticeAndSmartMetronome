@@ -5,6 +5,12 @@ import { useSongsStore } from "@/lib/store/useSongsStore";
 import { useExercisesStore } from "@/lib/store/useExercisesStore";
 import { useSessionHistoryStore } from "@/lib/store/useSessionHistoryStore";
 import { parseDurationToSeconds, createManualSessionRecord } from "@/lib/session/manualSessionUtils";
+import type { Song } from "@/types/song";
+import type { Exercise } from "@/types/exercise";
+
+// Styling constants to avoid duplication
+const INPUT_CLASS = "mt-1 w-full rounded bg-neutral-800 px-3 py-2 text-neutral-100";
+const SELECT_CLASS = "rounded bg-neutral-800 px-3 py-2 text-neutral-100";
 
 export function ManualSessionForm() {
   const songs = useSongsStore((s) => s.songs);
@@ -42,7 +48,7 @@ export function ManualSessionForm() {
     setSuccess(false);
 
     try {
-      // Validate
+      // Validate date and time
       if (!date || !time) {
         throw new Error("Date and time are required");
       }
@@ -61,6 +67,23 @@ export function ManualSessionForm() {
         throw new Error("Duration must be greater than 0");
       }
 
+      // Validate BPM fields
+      if (startBpm) {
+        const startBpmNum = parseInt(startBpm, 10);
+        if (isNaN(startBpmNum) || startBpmNum < 1) {
+          throw new Error("Starting BPM must be a positive number");
+        }
+        if (endBpm) {
+          const endBpmNum = parseInt(endBpm, 10);
+          if (isNaN(endBpmNum) || endBpmNum < 1) {
+            throw new Error("Ending BPM must be a positive number");
+          }
+          if (endBpmNum < startBpmNum) {
+            throw new Error("Ending BPM must be greater than or equal to Starting BPM");
+          }
+        }
+      }
+
       // Combine date and time
       const startedAt = new Date(`${date}T${time}`).toISOString();
       const now = new Date();
@@ -68,25 +91,25 @@ export function ManualSessionForm() {
         throw new Error("Session cannot be in the future");
       }
 
-      // Create the session record
+      // Create the session record with proper type narrowing
       let params: Parameters<typeof createManualSessionRecord>[0];
 
       if (selectedItem) {
         if (selectedItemKind === "exercise") {
-          const exerciseItem = selectedItem as any;
+          const exercise = selectedItem as Exercise;
           params = {
-            exerciseId: exerciseItem.id,
-            exerciseTitle: exerciseItem.name,
+            exerciseId: exercise.id,
+            exerciseTitle: exercise.name,
             startedAt,
             durationSec,
             ...(startBpm && { startWorkingBpm: parseInt(startBpm, 10) }),
             ...(endBpm && { endWorkingBpm: parseInt(endBpm, 10) }),
           };
         } else {
-          const songItem = selectedItem as any;
+          const song = selectedItem as Song;
           params = {
-            songId: songItem.id,
-            songTitle: songItem.title,
+            songId: song.id,
+            songTitle: song.title,
             startedAt,
             durationSec,
             ...(startBpm && { startWorkingBpm: parseInt(startBpm, 10) }),
@@ -117,7 +140,6 @@ export function ManualSessionForm() {
       setSessionTitle("");
       setStartBpm("");
       setEndBpm("");
-      setShowAdvanced(false);
 
       // Clear success message after 3 seconds
       setTimeout(() => setSuccess(false), 3000);
@@ -131,18 +153,18 @@ export function ManualSessionForm() {
       <h2 className="mb-6 text-xl font-bold">Log Manual Session</h2>
 
       {error && (
-        <div className="mb-4 rounded bg-red-900 p-3 text-red-100">
+        <div className="mb-4 rounded bg-red-900 p-3 text-red-100" role="alert">
           {error}
         </div>
       )}
 
       {success && (
-        <div className="mb-4 rounded bg-green-900 p-3 text-green-100">
+        <div className="mb-4 rounded bg-green-900 p-3 text-green-100" role="alert">
           Session logged successfully!
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-4" role="form">
         {/* Date */}
         <div>
           <label className="block text-sm font-medium text-neutral-300">
@@ -152,7 +174,7 @@ export function ManualSessionForm() {
             type="date"
             value={date}
             onChange={(e) => setDate(e.target.value)}
-            className="mt-1 w-full rounded bg-neutral-800 px-3 py-2 text-neutral-100"
+            className={INPUT_CLASS}
           />
         </div>
 
@@ -165,7 +187,7 @@ export function ManualSessionForm() {
             type="time"
             value={time}
             onChange={(e) => setTime(e.target.value)}
-            className="mt-1 w-full rounded bg-neutral-800 px-3 py-2 text-neutral-100"
+            className={INPUT_CLASS}
           />
         </div>
 
@@ -178,7 +200,7 @@ export function ManualSessionForm() {
             type="text"
             value={duration}
             onChange={(e) => setDuration(e.target.value)}
-            className="mt-1 w-full rounded bg-neutral-800 px-3 py-2 text-neutral-100"
+            className={INPUT_CLASS}
             placeholder="25m"
           />
         </div>
@@ -195,7 +217,7 @@ export function ManualSessionForm() {
                 setSelectedItemKind(e.target.value as "song" | "exercise");
                 setSelectedItemId("");
               }}
-              className="rounded bg-neutral-800 px-3 py-2 text-neutral-100"
+              className={SELECT_CLASS}
             >
               <option value="exercise">Exercise</option>
               <option value="song">Song</option>
@@ -203,7 +225,7 @@ export function ManualSessionForm() {
             <select
               value={selectedItemId}
               onChange={(e) => setSelectedItemId(e.target.value)}
-              className="flex-1 rounded bg-neutral-800 px-3 py-2 text-neutral-100"
+              className={`flex-1 ${SELECT_CLASS}`}
             >
               <option value="">— None (free-form) —</option>
               {selectedItemKind === "exercise"
@@ -231,7 +253,7 @@ export function ManualSessionForm() {
               type="text"
               value={sessionTitle}
               onChange={(e) => setSessionTitle(e.target.value)}
-              className="mt-1 w-full rounded bg-neutral-800 px-3 py-2 text-neutral-100"
+              className={INPUT_CLASS}
               placeholder="e.g., Jam session, Transcription practice"
             />
           </div>
@@ -248,8 +270,8 @@ export function ManualSessionForm() {
                 type="number"
                 value={startBpm}
                 onChange={(e) => setStartBpm(e.target.value)}
-                className="mt-1 w-full rounded bg-neutral-800 px-3 py-2 text-neutral-100"
-                min="0"
+                className={INPUT_CLASS}
+                min="1"
                 placeholder="100"
               />
             </div>
@@ -261,8 +283,8 @@ export function ManualSessionForm() {
                 type="number"
                 value={endBpm}
                 onChange={(e) => setEndBpm(e.target.value)}
-                className="mt-1 w-full rounded bg-neutral-800 px-3 py-2 text-neutral-100"
-                min="0"
+                className={INPUT_CLASS}
+                min="1"
                 placeholder="120"
               />
             </div>
