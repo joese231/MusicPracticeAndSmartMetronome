@@ -30,4 +30,12 @@ describe("parseDurationToSeconds", () => {
     expect(() => parseDurationToSeconds("invalid")).toThrow();
     expect(() => parseDurationToSeconds("")).toThrow();
   });
+
+  it("parses '359' as 21540 (under threshold, minutes)", () => {
+    expect(parseDurationToSeconds("359")).toBe(21540);
+  });
+
+  it("parses '360' as 360 (at threshold, seconds)", () => {
+    expect(parseDurationToSeconds("360")).toBe(360);
+  });
 });

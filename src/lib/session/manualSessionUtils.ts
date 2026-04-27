@@ -1,3 +1,7 @@
+// Threshold for interpreting bare numbers as minutes (e.g., "25" = 25 minutes).
+// Numbers >= 360 are interpreted as seconds instead. 360 = 6 hours.
+const BARE_NUMBER_MINUTE_THRESHOLD = 360;
+
 export function parseDurationToSeconds(input: string): number {
   if (!input || !input.trim()) {
     throw new Error("Duration cannot be empty");
@@ -6,7 +10,7 @@ export function parseDurationToSeconds(input: string): number {
   const trimmed = input.trim();
 
   // Try parsing as "25m 30s" format
-  const mAndSRegex = /^(\d+)m\s*(\d+)s?$/;
+  const mAndSRegex = /^(\d+)m\s*(\d+)s$/;
   const mAndSMatch = trimmed.match(mAndSRegex);
   if (mAndSMatch) {
     const minutes = parseInt(mAndSMatch[1], 10);
@@ -18,13 +22,13 @@ export function parseDurationToSeconds(input: string): number {
   const mOnlyRegex = /^(\d+)m?$/;
   const mOnlyMatch = trimmed.match(mOnlyRegex);
   if (mOnlyMatch) {
-    // If it has 'm', treat as minutes. Otherwise, if it's a number < 360 (6 hours), treat as minutes; else seconds.
+    // If it has 'm', treat as minutes. Otherwise, if it's a number < BARE_NUMBER_MINUTE_THRESHOLD, treat as minutes; else seconds.
     if (trimmed.includes("m")) {
       return parseInt(mOnlyMatch[1], 10) * 60;
     }
-    // Ambiguous: a bare number. Assume minutes if < 360, else seconds.
+    // Ambiguous: a bare number. Assume minutes if < threshold, else seconds.
     const num = parseInt(mOnlyMatch[1], 10);
-    return num < 360 ? num * 60 : num;
+    return num < BARE_NUMBER_MINUTE_THRESHOLD ? num * 60 : num;
   }
 
   // Try parsing as "90s" format
@@ -34,5 +38,7 @@ export function parseDurationToSeconds(input: string): number {
     return parseInt(sOnlyMatch[1], 10);
   }
 
-  throw new Error(`Invalid duration format: "${input}". Use formats like "25", "25m", "25m 30s", or "90s"`);
+  throw new Error(
+    `Invalid duration format: "${input}". Use formats like "25" (${BARE_NUMBER_MINUTE_THRESHOLD}+ = seconds), "25m", "25m 30s", or "90s"`
+  );
 }
