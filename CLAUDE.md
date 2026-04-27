@@ -135,6 +135,12 @@ Don't invoke for its `scripts/` (assume Prisma/Postgres). This project's convent
 - In-app method: `/method` (`src/app/method/page.tsx`)
 - Full design record: [swirling-swimming-owl.md](C:/Users/Yosi/.claude/plans/swirling-swimming-owl.md)
 
+## Quality assurance
+
+- **Linting**: ESLint config (`.eslintrc.json`) uses Next.js core-web-vitals preset.
+- **Testing**: Vitest suite covers 174 tests across 9 test files (tempo math, session state, manual logging, stats aggregates, form validation).
+- **Build**: Next.js production build tested and passing, all routes compile cleanly.
+
 ## Pointers for future work
 
 - **Cloud sync**: implement `src/lib/db/cloudRepository.ts` behind `Repository`, swap in `getRepository()`. Nothing else changes.
