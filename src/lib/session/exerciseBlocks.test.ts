@@ -7,6 +7,10 @@ import {
   MIN_EXERCISE_MINUTES,
 } from "./exerciseBlocks";
 import { exerciseAsSong } from "./exerciseAdapter";
+import {
+  cloneExerciseTemplate,
+  DEFAULT_EXERCISE_BLOCK_TEMPLATE,
+} from "@/types/song";
 import type { Exercise } from "@/types/exercise";
 
 const makeExercise = (
@@ -33,7 +37,7 @@ const makeExercise = (
   ...overrides,
 });
 
-describe("buildExerciseTimedBlocks", () => {
+describe("buildExerciseTimedBlocks (default template)", () => {
   it("default 5 min: Build 180s, Burst 90s, Cool Down 30s — totals 300s", () => {
     const b = buildExerciseTimedBlocks(5);
     expect(b).toHaveLength(3);
@@ -47,21 +51,15 @@ describe("buildExerciseTimedBlocks", () => {
   });
 
   it.each([
-    [5, 180],
-    [10, 480],
-    [20, 1080],
-    [30, 1680],
-    [60, 3480],
-  ])(
-    "%i min total → Build %i s, Burst always 90, Cool Down always 30",
-    (minutes, buildSec) => {
-      const b = buildExerciseTimedBlocks(minutes);
-      expect(b[0].durationSec).toBe(buildSec);
-      expect(b[1].durationSec).toBe(90);
-      expect(b[2].durationSec).toBe(30);
-      expect(b.reduce((a, x) => a + x.durationSec, 0)).toBe(minutes * 60);
-    },
-  );
+    [5, 300],
+    [10, 600],
+    [20, 1200],
+    [30, 1800],
+    [60, 3600],
+  ])("%i min total → blocks sum to %i s", (minutes, totalSec) => {
+    const b = buildExerciseTimedBlocks(minutes);
+    expect(b.reduce((a, x) => a + x.durationSec, 0)).toBe(totalSec);
+  });
 
   it("clamps below the floor up to MIN_EXERCISE_MINUTES", () => {
     const b = buildExerciseTimedBlocks(1);
@@ -87,12 +85,12 @@ describe("buildExerciseTimedBlocks", () => {
     expect(b[2].promotes).toBeNull();
   });
 
-  it("computes block tempos from working BPM (100) regardless of length", () => {
+  it("computes block tempos from working BPM (100)", () => {
     const song = exerciseAsSong(makeExercise(100, 30));
     const b = buildExerciseTimedBlocks(30);
     expect(b[0].tempoFn(song)).toBe(100); // Build = working
     expect(b[1].tempoFn(song)).toBe(106); // Burst = step(step(100)) = 106
-    expect(b[2].tempoFn(song)).toBe(77); // Cool Down = round(100 * 0.77)
+    expect(b[2].tempoFn(song)).toBe(80); // Cool Down = round(100 * 0.80)
   });
 
   it("Cool Down ends below working tempo for any working BPM", () => {
@@ -111,7 +109,7 @@ describe("buildExerciseBlocks", () => {
     expect(blocks[0].unbounded).toBe(true);
   });
 
-  it("produces 4 blocks total (warm-up + 3 timed)", () => {
+  it("produces 4 blocks total (warm-up + 3 timed) with default template", () => {
     expect(buildExerciseBlocks(makeExercise(100, 5))).toHaveLength(4);
     expect(buildExerciseBlocks(makeExercise(100, 20))).toHaveLength(4);
   });
@@ -120,6 +118,18 @@ describe("buildExerciseBlocks", () => {
     const blocks = buildExerciseBlocks(makeExercise(120));
     expect(blocks[0].tempoFn(exerciseAsSong(makeExercise(120)))).toBe(40);
     expect(blocks[0].tempoFn(exerciseAsSong(makeExercise(30)))).toBe(20);
+  });
+
+  describe("custom templates", () => {
+    it("disabling Cool Down drops it and redistributes time", () => {
+      const template = cloneExerciseTemplate(DEFAULT_EXERCISE_BLOCK_TEMPLATE);
+      template.find((e) => e.kind === "exerciseCoolDown")!.enabled = false;
+      const blocks = buildExerciseBlocks(
+        makeExercise(100, 5, { blockTemplate: template, includeWarmupBlock: false }),
+      );
+      expect(blocks.some((b) => b.kind === "exerciseCoolDown")).toBe(false);
+      expect(blocks.reduce((a, b) => a + b.durationSec, 0)).toBe(300);
+    });
   });
 
   describe("simple practice mode", () => {
@@ -148,7 +158,7 @@ describe("buildExerciseBlocks", () => {
         makeExercise(100, 10, { includeWarmupBlock: false }),
       );
       expect(blocks.some((b) => b.kind === "consciousPractice")).toBe(false);
-      expect(blocks).toHaveLength(3); // Build + Burst + Cool Down
+      expect(blocks).toHaveLength(3);
     });
 
     it("simple mode: only the Steady BPM block", () => {

@@ -1,6 +1,13 @@
 import Dexie, { type Table } from "dexie";
 import type { Song, Settings } from "@/types/song";
 import type { Exercise } from "@/types/exercise";
+import {
+  cloneExerciseTemplate,
+  cloneSongTemplate,
+  DEFAULT_EXERCISE_BLOCK_TEMPLATE,
+  DEFAULT_SONG_BLOCK_TEMPLATE,
+  migrateSongTemplate,
+} from "@/types/song";
 
 export type SettingsRow = Settings & { id: "singleton" };
 
@@ -144,6 +151,75 @@ export class AppDB extends Dexie {
             if (row.defaultPracticeMode !== "simple") {
               row.defaultPracticeMode = "smart";
             }
+          });
+      });
+    this.version(9)
+      .stores({
+        songs: "id, title, updatedAt, sortIndex",
+        settings: "id",
+        exercises: "id, name, updatedAt, sortIndex",
+      })
+      .upgrade(async (tx) => {
+        await tx
+          .table<Song, string>("songs")
+          .toCollection()
+          .modify((row) => {
+            if (!Array.isArray(row.blockTemplate) || row.blockTemplate.length === 0) {
+              row.blockTemplate = cloneSongTemplate(DEFAULT_SONG_BLOCK_TEMPLATE);
+            }
+          });
+        await tx
+          .table<Exercise, string>("exercises")
+          .toCollection()
+          .modify((row) => {
+            if (!Array.isArray(row.blockTemplate) || row.blockTemplate.length === 0) {
+              row.blockTemplate = cloneExerciseTemplate(
+                DEFAULT_EXERCISE_BLOCK_TEMPLATE,
+              );
+            }
+          });
+        await tx
+          .table<SettingsRow, string>("settings")
+          .toCollection()
+          .modify((row) => {
+            if (
+              !Array.isArray(row.defaultSongBlockTemplate) ||
+              row.defaultSongBlockTemplate.length === 0
+            ) {
+              row.defaultSongBlockTemplate = cloneSongTemplate(
+                DEFAULT_SONG_BLOCK_TEMPLATE,
+              );
+            }
+            if (
+              !Array.isArray(row.defaultExerciseBlockTemplate) ||
+              row.defaultExerciseBlockTemplate.length === 0
+            ) {
+              row.defaultExerciseBlockTemplate = cloneExerciseTemplate(
+                DEFAULT_EXERCISE_BLOCK_TEMPLATE,
+              );
+            }
+          });
+      });
+    this.version(10)
+      .stores({
+        songs: "id, title, updatedAt, sortIndex",
+        settings: "id",
+        exercises: "id, name, updatedAt, sortIndex",
+      })
+      .upgrade(async (tx) => {
+        await tx
+          .table<Song, string>("songs")
+          .toCollection()
+          .modify((row) => {
+            row.blockTemplate = migrateSongTemplate(row.blockTemplate);
+          });
+        await tx
+          .table<SettingsRow, string>("settings")
+          .toCollection()
+          .modify((row) => {
+            row.defaultSongBlockTemplate = migrateSongTemplate(
+              row.defaultSongBlockTemplate,
+            );
           });
       });
   }

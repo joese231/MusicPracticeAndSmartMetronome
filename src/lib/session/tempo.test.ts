@@ -4,7 +4,7 @@ import {
   targetBpm,
   overspeedBpm,
   slowReferenceBpm,
-  slowMusicalBpm,
+  consolidationBpm,
   troubleBlockBpmFor,
   promoteWorking,
   promoteTroubleAt,
@@ -53,12 +53,12 @@ describe("derived tempos", () => {
     expect(overspeedBpm(baseSong())).toBe(232);
   });
 
-  it("slowReferenceBpm is 77% of working", () => {
-    expect(slowReferenceBpm(baseSong())).toBe(Math.round(220 * 0.77));
+  it("slowReferenceBpm is 80% of working", () => {
+    expect(slowReferenceBpm(baseSong())).toBe(Math.round(220 * 0.8));
   });
 
-  it("slowMusicalBpm is 72% of working", () => {
-    expect(slowMusicalBpm(baseSong())).toBe(Math.round(220 * 0.72));
+  it("consolidationBpm is 70% of working", () => {
+    expect(consolidationBpm(baseSong())).toBe(Math.round(220 * 0.7));
   });
 });
 
@@ -72,12 +72,12 @@ describe("troubleBlockBpmFor", () => {
 
   it("falls back to slowReferenceBpm when the spot BPM is null", () => {
     const s = baseSong({ troubleSpots: [{ bpm: null }] });
-    expect(troubleBlockBpmFor(s, 0)).toBe(Math.round(220 * 0.77));
+    expect(troubleBlockBpmFor(s, 0)).toBe(Math.round(220 * 0.8));
   });
 
   it("falls back to slowReferenceBpm for out-of-range indices", () => {
     const s = baseSong({ troubleSpots: [{ bpm: 150 }] });
-    expect(troubleBlockBpmFor(s, 5)).toBe(Math.round(220 * 0.77));
+    expect(troubleBlockBpmFor(s, 5)).toBe(Math.round(220 * 0.8));
   });
 });
 

@@ -1,9 +1,17 @@
 import type { BlockDef } from "@/types/block";
-import type { Song } from "@/types/song";
+import type {
+  Song,
+  SongBlockKind,
+  SongBlockTemplate,
+  SongBlockTemplateEntry,
+} from "@/types/song";
 import {
-  fiveMinSlowReferenceBpm,
+  DEFAULT_SONG_BLOCK_TEMPLATE,
+  cloneSongTemplate,
+} from "@/types/song";
+import {
+  consolidationBpm,
   overspeedBpm,
-  slowMusicalBpm,
   slowReferenceBpm,
   targetBpm,
   troubleBlockBpmFor,
@@ -38,14 +46,9 @@ export const INSTRUCTIONS: Record<string, string[]> = {
     "Don't try to earn anything here — just push.",
   ],
   consolidation: [
-    "One or two deliberate, relaxed reps at your working tempo.",
-    "This is the version your brain rehearses overnight — make it clean.",
+    "One or two deliberate, relaxed reps at ~70% of working tempo.",
+    "Lean into the music — phrasing, swing, let open strings ring.",
     "End on a clean rep. Always.",
-  ],
-  slowMusical: [
-    "One full pass, played musically.",
-    "Lean into swing, breathe between phrases, let open strings ring.",
-    "Remember this is a tune, not a metronome drill.",
   ],
   exerciseBuild: [
     "Working tempo — internalize the motion cleanly.",
@@ -76,8 +79,6 @@ export const INSTRUCTIONS: Record<string, string[]> = {
  * of length. `unbounded: true` means the driver never auto-advances off it;
  * the player presses N / Next when they're ready. Metronome plays at the
  * song's saved `warmupBpm` if set, else ⅓ × workingBpm (floored at 20).
- * The session page offers an in-session 2× slower toggle that is not
- * persisted; the explicit "Set BPM…" value persists on the song.
  */
 export const CONSCIOUS_PRACTICE_BLOCK: BlockDef = {
   kind: "consciousPractice",
@@ -93,7 +94,6 @@ export const CONSCIOUS_PRACTICE_BLOCK: BlockDef = {
 /**
  * Single steady-BPM block at the song/exercise's working BPM. Used by
  * "simple" practice mode to mimic a regular metronome with a stop timer.
- * Timed (not unbounded) — ends automatically when `durationSec` elapses.
  */
 export const buildSimpleMetronomeBlock = (durationSec: number): BlockDef => ({
   kind: "simpleMetronome",
@@ -105,106 +105,57 @@ export const buildSimpleMetronomeBlock = (durationSec: number): BlockDef => ({
   instructions: INSTRUCTIONS.simpleMetronome,
 });
 
-// Canonical 10-minute template with exactly one Trouble Spot block.
-// Longer sessions scale every block proportionally; `buildBlocks` then
-// replicates the trouble block once per song trouble spot.
-export const BASE_TEN_MIN_BLOCKS: BlockDef[] = [
-  {
+/** Per-kind block factory: turns a kind + duration into a full BlockDef. */
+export const SONG_BLOCK_FACTORIES: Record<
+  SongBlockKind,
+  (durationSec: number) => BlockDef
+> = {
+  slowReference: (durationSec) => ({
     kind: "slowReference",
     label: "Slow Reference",
-    durationSec: 90,
+    durationSec,
     tempoFn: slowReferenceBpm,
     showEarnedButton: false,
     promotes: null,
     instructions: INSTRUCTIONS.slowReference,
-  },
-  {
+  }),
+  troubleSpot: (durationSec) => ({
     kind: "troubleSpot",
     label: "Trouble Spot",
-    durationSec: 120,
+    durationSec,
     tempoFn: (s) => troubleBlockBpmFor(s, 0),
     showEarnedButton: true,
     promotes: { kind: "trouble", index: 0 },
     instructions: INSTRUCTIONS.troubleSpot,
-  },
-  {
+  }),
+  ceilingWork: (durationSec) => ({
     kind: "ceilingWork",
     label: "Ceiling Work",
-    durationSec: 180,
+    durationSec,
     tempoFn: targetBpm,
     showEarnedButton: true,
     promotes: { kind: "working" },
     instructions: INSTRUCTIONS.ceilingWork,
-  },
-  {
+  }),
+  overspeed: (durationSec) => ({
     kind: "overspeed",
     label: "Overspeed",
-    durationSec: 60,
+    durationSec,
     tempoFn: overspeedBpm,
     showEarnedButton: false,
     promotes: null,
     instructions: INSTRUCTIONS.overspeed,
-  },
-  {
+  }),
+  consolidation: (durationSec) => ({
     kind: "consolidation",
     label: "Consolidation",
-    durationSec: 90,
-    tempoFn: (s) => s.workingBpm,
+    durationSec,
+    tempoFn: consolidationBpm,
     showEarnedButton: false,
     promotes: null,
     instructions: INSTRUCTIONS.consolidation,
-  },
-  {
-    kind: "slowMusical",
-    label: "Slow Musical",
-    durationSec: 60,
-    tempoFn: slowMusicalBpm,
-    showEarnedButton: false,
-    promotes: null,
-    instructions: INSTRUCTIONS.slowMusical,
-  },
-];
-
-// Compact 5-minute form. Has no trouble-spot block by design — trouble-spot
-// isolation belongs to the longer session shapes.
-export const FIVE_MIN_BLOCKS: BlockDef[] = [
-  {
-    kind: "slowReference",
-    label: "Slow Reference",
-    durationSec: 60,
-    tempoFn: fiveMinSlowReferenceBpm,
-    showEarnedButton: false,
-    promotes: null,
-    instructions: INSTRUCTIONS.slowReference,
-  },
-  {
-    kind: "ceilingWork",
-    label: "Ceiling Work",
-    durationSec: 150,
-    tempoFn: targetBpm,
-    showEarnedButton: true,
-    promotes: { kind: "working" },
-    instructions: INSTRUCTIONS.ceilingWork,
-  },
-  {
-    kind: "overspeed",
-    label: "Overspeed",
-    durationSec: 45,
-    tempoFn: overspeedBpm,
-    showEarnedButton: false,
-    promotes: null,
-    instructions: INSTRUCTIONS.overspeed,
-  },
-  {
-    kind: "consolidation",
-    label: "Consolidation",
-    durationSec: 45,
-    tempoFn: (s) => s.workingBpm,
-    showEarnedButton: false,
-    promotes: null,
-    instructions: INSTRUCTIONS.consolidation,
-  },
-];
+  }),
+};
 
 export const MIN_SESSION_MINUTES = 5;
 export const MAX_SESSION_MINUTES = 60;
@@ -217,44 +168,50 @@ export const clampSessionMinutes = (n: number): number => {
   return rounded;
 };
 
-/**
- * Total scheduled playing time in seconds for a given base minutes + song.
- * Mirrors the logic inside `buildBlocks` without instantiating the blocks.
- * Note: this is only the metronome-on time. The session now waits for the
- * user to press Space between blocks, so the actual wall-clock duration is
- * always longer than this — and the waiting time still counts toward the
- * song's `totalPracticeSec`.
- */
-export const sessionLengthSec = (minutes: number, song: Song): number => {
-  if (song.practiceMode === "simple") return minutes * 60;
-  if (minutes === 5) {
-    return FIVE_MIN_BLOCKS.reduce((a, b) => a + b.durationSec, 0);
-  }
-  const scale = minutes / 10;
-  const scaledTroubleSec = Math.round(120 * scale);
-  const count = song.troubleSpots.length;
-  if (count === 0) return minutes * 60 - scaledTroubleSec;
-  return minutes * 60 + (count - 1) * scaledTroubleSec;
-};
-
-/**
- * True iff the song wants the slow Conscious Practice warm-up block prepended
- * to its session. Defaults to true on legacy rows that predate the field.
- */
 const wantsWarmup = (song: Song): boolean =>
   song.includeWarmupBlock !== false;
 
+/** Resolve the song's template, falling back to default for legacy rows. */
+export const songTemplate = (song: Song): SongBlockTemplate => {
+  if (Array.isArray(song.blockTemplate) && song.blockTemplate.length > 0) {
+    return song.blockTemplate;
+  }
+  return cloneSongTemplate(DEFAULT_SONG_BLOCK_TEMPLATE);
+};
+
+/** Filter to entries that should appear in the session. */
+const activeEntries = (
+  template: SongBlockTemplate,
+  troubleCount: number,
+): SongBlockTemplateEntry[] =>
+  template.filter(
+    (e) =>
+      e.enabled &&
+      e.weight > 0 &&
+      (e.kind !== "troubleSpot" || troubleCount > 0),
+  );
+
 /**
- * Build the block list for a session of `minutes` base minutes against a
- * specific song. Branches on `song.practiceMode`:
- *  - `simple` → optional Conscious Practice + a single steady-BPM block at
- *    workingBpm for the entire session length.
- *  - `smart`  → optional Conscious Practice + the scaled three-tempo ladder.
+ * Smart-mode body length: total seconds across all timed blocks (excludes
+ * the unbounded Conscious Practice prefix). Always exactly `minutes * 60`
+ * when the template has at least one active row.
+ */
+export const sessionLengthSec = (minutes: number, song: Song): number => {
+  if (song.practiceMode === "simple") return minutes * 60;
+  const entries = activeEntries(songTemplate(song), song.troubleSpots.length);
+  if (entries.length === 0) return 0;
+  return minutes * 60;
+};
+
+/**
+ * Build the block list for a session of `minutes` minutes against a song.
  *
- * In smart mode the canonical 10-minute template is scaled proportionally and
- * the single trouble-spot block is replicated once per song trouble spot.
- * Rounding residual is absorbed into the Ceiling Work block so smart-mode
- * totals land exactly on `sessionLengthSec`.
+ * - `simple` → optional Conscious Practice + a single steady-BPM block.
+ * - `smart`  → optional Conscious Practice + the song's template, allocated
+ *   proportionally so that the timed blocks sum exactly to `minutes * 60`.
+ *   Trouble-spot rows replicate per spot, sharing the row's allocated time.
+ *   Empty / all-disabled templates yield no body blocks (caller should
+ *   prevent saving such a config from the form).
  */
 export const buildBlocks = (minutes: number, song: Song): BlockDef[] => {
   const result: BlockDef[] = [];
@@ -265,57 +222,48 @@ export const buildBlocks = (minutes: number, song: Song): BlockDef[] => {
     return result;
   }
 
-  if (minutes === 5) {
-    result.push(...FIVE_MIN_BLOCKS);
-    return result;
-  }
+  const template = songTemplate(song);
+  const troubleCount = song.troubleSpots.length;
+  const entries = activeEntries(template, troubleCount);
+  if (entries.length === 0) return result;
 
-  const scale = minutes / 10;
-  const count = song.troubleSpots.length;
+  const totalSec = minutes * 60;
+  const totalWeight = entries.reduce((a, e) => a + e.weight, 0);
 
-  const scaled = BASE_TEN_MIN_BLOCKS.map((b) => ({
-    ...b,
-    durationSec: Math.round(b.durationSec * scale),
+  // Allocate seconds per entry by floor; absorb residual into ceilingWork
+  // (or first entry if ceilingWork isn't enabled).
+  const allocs = entries.map((e) => ({
+    entry: e,
+    secs: Math.floor((e.weight / totalWeight) * totalSec),
   }));
-
-  const scaledTroubleSec = Math.round(120 * scale);
-
-  for (const b of scaled) {
-    if (b.kind !== "troubleSpot") {
-      result.push(b);
-      continue;
-    }
-    for (let i = 0; i < count; i++) {
-      result.push({
-        kind: "troubleSpot",
-        label: count > 1 ? `Trouble Spot ${i + 1}` : "Trouble Spot",
-        durationSec: scaledTroubleSec,
-        tempoFn: (s: Song) => troubleBlockBpmFor(s, i),
-        showEarnedButton: true,
-        promotes: { kind: "trouble", index: i },
-        instructions: INSTRUCTIONS.troubleSpot,
-      });
-    }
-    // count === 0 → skip entirely, no trouble block added
+  const allocatedSum = allocs.reduce((a, x) => a + x.secs, 0);
+  let residual = totalSec - allocatedSum;
+  if (residual !== 0) {
+    const ceilingIdx = allocs.findIndex((a) => a.entry.kind === "ceilingWork");
+    const idx = ceilingIdx >= 0 ? ceilingIdx : 0;
+    allocs[idx].secs += residual;
+    residual = 0;
   }
 
-  // sessionLengthSec covers only the body; subtract any non-body (warm-up)
-  // blocks from the actual sum before computing the residual.
-  const target = sessionLengthSec(minutes, song);
-  const bodyActual = result
-    .filter((b) => b.kind !== "consciousPractice")
-    .reduce((a, b) => a + b.durationSec, 0);
-  const residual = target - bodyActual;
-  if (residual !== 0) {
-    const ceilingIdx = result.findIndex((b) => b.kind === "ceilingWork");
-    if (ceilingIdx >= 0) {
-      result[ceilingIdx] = {
-        ...result[ceilingIdx],
-        durationSec: result[ceilingIdx].durationSec + residual,
-      };
+  for (const { entry, secs } of allocs) {
+    if (entry.kind === "troubleSpot") {
+      const per = Math.floor(secs / troubleCount);
+      const spotResidual = secs - per * troubleCount;
+      for (let i = 0; i < troubleCount; i++) {
+        result.push({
+          kind: "troubleSpot",
+          label: troubleCount > 1 ? `Trouble Spot ${i + 1}` : "Trouble Spot",
+          durationSec: per + (i === 0 ? spotResidual : 0),
+          tempoFn: (s: Song) => troubleBlockBpmFor(s, i),
+          showEarnedButton: true,
+          promotes: { kind: "trouble", index: i },
+          instructions: INSTRUCTIONS.troubleSpot,
+        });
+      }
+    } else {
+      result.push(SONG_BLOCK_FACTORIES[entry.kind](secs));
     }
   }
 
   return result;
 };
-

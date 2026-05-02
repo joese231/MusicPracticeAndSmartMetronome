@@ -1,7 +1,12 @@
 import type { Song, Settings } from "@/types/song";
 import type { Exercise } from "@/types/exercise";
 import type { SessionRecord } from "@/types/sessionRecord";
-import { DEFAULT_SETTINGS } from "@/types/song";
+import {
+  cloneExerciseTemplate,
+  DEFAULT_EXERCISE_BLOCK_TEMPLATE,
+  DEFAULT_SETTINGS,
+  migrateSongTemplate,
+} from "@/types/song";
 import type { Repository } from "./repository";
 
 const SONGS_URL = "/api/songs";
@@ -47,6 +52,7 @@ function normalizeSong(row: Song): Song {
   if (typeof next.includeWarmupBlock !== "boolean") {
     next.includeWarmupBlock = true;
   }
+  next.blockTemplate = migrateSongTemplate(next.blockTemplate);
   return next;
 }
 
@@ -58,7 +64,26 @@ function normalizeExercise(row: Exercise): Exercise {
   if (typeof next.includeWarmupBlock !== "boolean") {
     next.includeWarmupBlock = true;
   }
+  if (!Array.isArray(next.blockTemplate) || next.blockTemplate.length === 0) {
+    next.blockTemplate = cloneExerciseTemplate(DEFAULT_EXERCISE_BLOCK_TEMPLATE);
+  }
   return next;
+}
+
+function normalizeSettings(row: Partial<Settings>): Settings {
+  const merged: Settings = { ...DEFAULT_SETTINGS, ...row };
+  merged.defaultSongBlockTemplate = migrateSongTemplate(
+    merged.defaultSongBlockTemplate,
+  );
+  if (
+    !Array.isArray(merged.defaultExerciseBlockTemplate) ||
+    merged.defaultExerciseBlockTemplate.length === 0
+  ) {
+    merged.defaultExerciseBlockTemplate = cloneExerciseTemplate(
+      DEFAULT_EXERCISE_BLOCK_TEMPLATE,
+    );
+  }
+  return merged;
 }
 
 export class FileRepository implements Repository {
@@ -175,7 +200,7 @@ export class FileRepository implements Repository {
 
   async getSettings(): Promise<Settings> {
     const stored = await getJson<Partial<Settings>>(SETTINGS_URL);
-    return { ...DEFAULT_SETTINGS, ...stored };
+    return normalizeSettings(stored);
   }
 
   saveSettings(s: Settings): Promise<void> {

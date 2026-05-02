@@ -7,7 +7,7 @@ import {
   timeLeftInPlayingSec,
   totalPlayingSec,
 } from "./driver";
-import { buildBlocks, FIVE_MIN_BLOCKS } from "./blocks";
+import { buildBlocks } from "./blocks";
 import type { Song, TroubleSpot } from "@/types/song";
 import type { DriverSnapshot } from "@/types/block";
 
@@ -36,7 +36,8 @@ describe("totalPlayingSec", () => {
   });
 
   it("5-min blocks total 300s of playing time", () => {
-    expect(totalPlayingSec(FIVE_MIN_BLOCKS)).toBe(300);
+    const blocks = buildBlocks(5, makeSong({ troubleSpots: [] }));
+    expect(totalPlayingSec(blocks)).toBe(300);
   });
 });
 

@@ -11,8 +11,8 @@ import { RecentSessionsList } from "@/components/stats/RecentSessionsList";
 import { formatPracticeTime } from "@/lib/format";
 import { unlockSharedAudioContext } from "@/lib/metronome/scheduler";
 import {
+  consolidationBpm,
   overspeedBpm,
-  slowMusicalBpm,
   slowReferenceBpm,
   targetBpm,
   troubleBlockBpmFor,
@@ -100,7 +100,7 @@ export default function SongDetailPage() {
   const target = targetBpm(song);
   const overspeed = overspeedBpm(song);
   const slowRef = slowReferenceBpm(song);
-  const slowMus = slowMusicalBpm(song);
+  const consolidation = consolidationBpm(song);
 
   const handlePickPreset = (m: number) => {
     setSelectedMinutes(m);
@@ -178,7 +178,7 @@ export default function SongDetailPage() {
               <Stat label="Original" value={`${song.originalBpm} BPM`} />
             )}
             <Stat label="Slow ref" value={`${slowRef} BPM`} />
-            <Stat label="Slow musical" value={`${slowMus} BPM`} />
+            <Stat label="Consolidation" value={`${consolidation} BPM`} />
             <Stat label="Step" value={`${song.stepPercent}%`} />
             <Stat label="Total practice" value={formatPracticeTime(song.totalPracticeSec)} />
           </div>
@@ -266,6 +266,7 @@ export default function SongDetailPage() {
                   stepPercent: song.stepPercent,
                   practiceMode: song.practiceMode,
                   includeWarmupBlock: song.includeWarmupBlock,
+                  blockTemplate: song.blockTemplate,
                 }}
                 onSubmit={async (values) => {
                   await updateSong({

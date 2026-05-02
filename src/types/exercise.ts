@@ -1,4 +1,4 @@
-import type { PracticeMode } from "./song";
+import type { ExerciseBlockTemplate, PracticeMode } from "./song";
 
 export type Exercise = {
   id: string;
@@ -30,6 +30,9 @@ export type Exercise = {
   /** When false, the slow Conscious Practice warm-up block is skipped.
    * Ignored when `openEnded` is true. */
   includeWarmupBlock: boolean;
+  /** Per-exercise timed-block sequence. Ignored in simple mode and when
+   * `openEnded` is true. Backfilled to the default on read for legacy rows. */
+  blockTemplate?: ExerciseBlockTemplate;
   totalPracticeSec: number;
   /** User-controlled order in the exercise list. Lower = higher in the list. */
   sortIndex: number;

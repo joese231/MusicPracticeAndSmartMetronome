@@ -1,8 +1,15 @@
 import { create } from "zustand";
-import type { PracticeMode, Song, TroubleSpot } from "@/types/song";
+import type {
+  PracticeMode,
+  Song,
+  SongBlockTemplate,
+  TroubleSpot,
+} from "@/types/song";
 import {
+  cloneSongTemplate,
   DEFAULT_INCLUDE_WARMUP,
   DEFAULT_PRACTICE_MODE,
+  DEFAULT_SONG_BLOCK_TEMPLATE,
   DEFAULT_STEP_PERCENT,
 } from "@/types/song";
 import { getRepository } from "@/lib/db/localRepository";
@@ -18,6 +25,7 @@ type NewSongInput = {
   stepPercent?: number;
   practiceMode?: PracticeMode;
   includeWarmupBlock?: boolean;
+  blockTemplate?: SongBlockTemplate;
 };
 
 type SongsState = {
@@ -77,9 +85,14 @@ export const useSongsStore = create<SongsState>((set, get) => ({
       existing.length === 0
         ? 0
         : Math.max(...existing.map((s) => s.sortIndex)) + 1;
+    const globalSettings = useSettingsStore.getState().settings;
     const settingsDefault =
-      useSettingsStore.getState().settings.defaultPracticeMode ??
-      DEFAULT_PRACTICE_MODE;
+      globalSettings.defaultPracticeMode ?? DEFAULT_PRACTICE_MODE;
+    const settingsTemplate =
+      globalSettings.defaultSongBlockTemplate &&
+      globalSettings.defaultSongBlockTemplate.length > 0
+        ? cloneSongTemplate(globalSettings.defaultSongBlockTemplate)
+        : cloneSongTemplate(DEFAULT_SONG_BLOCK_TEMPLATE);
     const song: Song = {
       id: genId(),
       title: input.title.trim(),
@@ -91,6 +104,9 @@ export const useSongsStore = create<SongsState>((set, get) => ({
       stepPercent: input.stepPercent ?? DEFAULT_STEP_PERCENT,
       practiceMode: input.practiceMode ?? settingsDefault,
       includeWarmupBlock: input.includeWarmupBlock ?? DEFAULT_INCLUDE_WARMUP,
+      blockTemplate: input.blockTemplate
+        ? cloneSongTemplate(input.blockTemplate)
+        : settingsTemplate,
       totalPracticeSec: 0,
       sortIndex: nextSortIndex,
       createdAt: now,

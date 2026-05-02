@@ -8,6 +8,13 @@ import { useSessionHistoryStore } from "@/lib/store/useSessionHistoryStore";
 import { useSessionStore } from "@/lib/store/useSessionStore";
 import { getRepository } from "@/lib/db/localRepository";
 import { Metronome } from "@/lib/metronome/scheduler";
+import { BlockTemplateEditor } from "@/components/session/BlockTemplateEditor";
+import {
+  cloneExerciseTemplate,
+  cloneSongTemplate,
+  DEFAULT_EXERCISE_BLOCK_TEMPLATE,
+  DEFAULT_SONG_BLOCK_TEMPLATE,
+} from "@/types/song";
 
 export default function SettingsPage() {
   const settings = useSettingsStore((s) => s.settings);
@@ -165,6 +172,65 @@ export default function SettingsPage() {
               </span>
             </div>
           </Row>
+
+          <section className="rounded-lg border border-bg-border bg-bg-elevated p-5">
+            <div>
+              <div className="font-semibold text-neutral-100">
+                Default song block sequence
+              </div>
+              <div className="mt-1 text-sm text-neutral-500">
+                Seeds the block sequence on new songs. Existing songs keep whatever you saved on them.
+              </div>
+            </div>
+            <div className="mt-4">
+              <BlockTemplateEditor
+                variant="song"
+                template={settings.defaultSongBlockTemplate}
+                onChange={(t) =>
+                  update({ defaultSongBlockTemplate: cloneSongTemplate(t) })
+                }
+                previewMinutes={10}
+                troubleSpotCount={1}
+                onReset={() =>
+                  update({
+                    defaultSongBlockTemplate: cloneSongTemplate(
+                      DEFAULT_SONG_BLOCK_TEMPLATE,
+                    ),
+                  })
+                }
+              />
+            </div>
+          </section>
+
+          <section className="rounded-lg border border-bg-border bg-bg-elevated p-5">
+            <div>
+              <div className="font-semibold text-neutral-100">
+                Default exercise block sequence
+              </div>
+              <div className="mt-1 text-sm text-neutral-500">
+                Seeds the block sequence on new exercises. Existing exercises keep whatever you saved on them.
+              </div>
+            </div>
+            <div className="mt-4">
+              <BlockTemplateEditor
+                variant="exercise"
+                template={settings.defaultExerciseBlockTemplate}
+                onChange={(t) =>
+                  update({
+                    defaultExerciseBlockTemplate: cloneExerciseTemplate(t),
+                  })
+                }
+                previewMinutes={5}
+                onReset={() =>
+                  update({
+                    defaultExerciseBlockTemplate: cloneExerciseTemplate(
+                      DEFAULT_EXERCISE_BLOCK_TEMPLATE,
+                    ),
+                  })
+                }
+              />
+            </div>
+          </section>
 
           <Row
             label="Metronome volume"

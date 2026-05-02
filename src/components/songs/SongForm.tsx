@@ -1,12 +1,22 @@
 "use client";
 import { useEffect, useState, type FormEvent } from "react";
 import {
+  cloneSongTemplate,
   DEFAULT_INCLUDE_WARMUP,
+  DEFAULT_SONG_BLOCK_TEMPLATE,
   DEFAULT_STEP_PERCENT,
   MAX_TROUBLE_SPOTS,
 } from "@/types/song";
-import type { PracticeMode, TroubleSpot } from "@/types/song";
+import type {
+  PracticeMode,
+  SongBlockTemplate,
+  TroubleSpot,
+} from "@/types/song";
 import { useSettingsStore } from "@/lib/store/useSettingsStore";
+import {
+  BlockTemplateEditor,
+  isTemplateValid,
+} from "@/components/session/BlockTemplateEditor";
 
 export type SongFormValues = {
   title: string;
@@ -17,6 +27,7 @@ export type SongFormValues = {
   stepPercent: number;
   practiceMode: PracticeMode;
   includeWarmupBlock: boolean;
+  blockTemplate: SongBlockTemplate;
 };
 
 type Props = {
@@ -54,6 +65,9 @@ export function SongForm({ initial, submitLabel, onSubmit, onCancel }: Props) {
   const settingsDefaultMode = useSettingsStore(
     (s) => s.settings.defaultPracticeMode,
   );
+  const settingsDefaultTemplate = useSettingsStore(
+    (s) => s.settings.defaultSongBlockTemplate,
+  );
   const settingsLoad = useSettingsStore((s) => s.load);
   const isEditing = initial?.practiceMode !== undefined;
   const [practiceMode, setPracticeMode] = useState<PracticeMode>(
@@ -63,16 +77,27 @@ export function SongForm({ initial, submitLabel, onSubmit, onCancel }: Props) {
   const [includeWarmupBlock, setIncludeWarmupBlock] = useState<boolean>(
     initial?.includeWarmupBlock ?? DEFAULT_INCLUDE_WARMUP,
   );
+  const [blockTemplate, setBlockTemplate] = useState<SongBlockTemplate>(
+    initial?.blockTemplate
+      ? cloneSongTemplate(initial.blockTemplate)
+      : cloneSongTemplate(DEFAULT_SONG_BLOCK_TEMPLATE),
+  );
+  const [blockTemplateTouched, setBlockTemplateTouched] = useState(false);
   useEffect(() => {
     if (!settingsLoaded) void settingsLoad();
   }, [settingsLoaded, settingsLoad]);
-  // Once settings finish loading, adopt the global default for new songs
-  // unless the user has already picked a mode in this session.
   useEffect(() => {
     if (isEditing || practiceModeTouched) return;
     if (!settingsLoaded) return;
     setPracticeMode(settingsDefaultMode);
   }, [isEditing, practiceModeTouched, settingsLoaded, settingsDefaultMode]);
+  useEffect(() => {
+    if (isEditing || blockTemplateTouched) return;
+    if (!settingsLoaded) return;
+    if (settingsDefaultTemplate && settingsDefaultTemplate.length > 0) {
+      setBlockTemplate(cloneSongTemplate(settingsDefaultTemplate));
+    }
+  }, [isEditing, blockTemplateTouched, settingsLoaded, settingsDefaultTemplate]);
 
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -135,6 +160,10 @@ export function SongForm({ initial, submitLabel, onSubmit, onCancel }: Props) {
       setError("Step % must be between 0.5 and 10.");
       return;
     }
+    if (practiceMode === "smart" && !isTemplateValid(blockTemplate)) {
+      setError("Enable at least one block in the block sequence.");
+      return;
+    }
 
     setBusy(true);
     try {
@@ -147,6 +176,7 @@ export function SongForm({ initial, submitLabel, onSubmit, onCancel }: Props) {
         stepPercent: sp,
         practiceMode,
         includeWarmupBlock,
+        blockTemplate,
       });
     } finally {
       setBusy(false);
@@ -267,6 +297,37 @@ export function SongForm({ initial, submitLabel, onSubmit, onCancel }: Props) {
             </div>
           </div>
         </label>
+
+        {practiceMode === "smart" && (
+          <div className="space-y-2 border-t border-bg-border pt-4">
+            <div>
+              <div className="text-sm font-semibold text-neutral-100">
+                Block sequence
+              </div>
+              <div className="mt-1 text-xs text-neutral-500">
+                Toggle blocks on or off, reorder them, and adjust their relative size. Time is split proportionally to fill the chosen session length.
+              </div>
+            </div>
+            <BlockTemplateEditor
+              variant="song"
+              template={blockTemplate}
+              onChange={(t) => {
+                setBlockTemplate(t);
+                setBlockTemplateTouched(true);
+              }}
+              previewMinutes={10}
+              troubleSpotCount={troubleCount}
+              onReset={
+                settingsDefaultTemplate && settingsDefaultTemplate.length > 0
+                  ? () => {
+                      setBlockTemplate(cloneSongTemplate(settingsDefaultTemplate));
+                      setBlockTemplateTouched(true);
+                    }
+                  : undefined
+              }
+            />
+          </div>
+        )}
       </section>
 
       <section className="rounded-lg border-2 border-accent/40 bg-bg-elevated p-5">

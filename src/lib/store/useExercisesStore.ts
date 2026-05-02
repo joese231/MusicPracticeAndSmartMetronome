@@ -1,7 +1,9 @@
 import { create } from "zustand";
 import type { Exercise } from "@/types/exercise";
-import type { PracticeMode } from "@/types/song";
+import type { ExerciseBlockTemplate, PracticeMode } from "@/types/song";
 import {
+  cloneExerciseTemplate,
+  DEFAULT_EXERCISE_BLOCK_TEMPLATE,
   DEFAULT_INCLUDE_WARMUP,
   DEFAULT_PRACTICE_MODE,
   DEFAULT_STEP_PERCENT,
@@ -22,6 +24,7 @@ type NewExerciseInput = {
   metronomeEnabled?: boolean;
   practiceMode?: PracticeMode;
   includeWarmupBlock?: boolean;
+  blockTemplate?: ExerciseBlockTemplate;
 };
 
 type ExercisesState = {
@@ -65,9 +68,14 @@ export const useExercisesStore = create<ExercisesState>((set, get) => ({
       existing.length === 0
         ? 0
         : Math.max(...existing.map((e) => e.sortIndex)) + 1;
+    const globalSettings = useSettingsStore.getState().settings;
     const settingsDefault =
-      useSettingsStore.getState().settings.defaultPracticeMode ??
-      DEFAULT_PRACTICE_MODE;
+      globalSettings.defaultPracticeMode ?? DEFAULT_PRACTICE_MODE;
+    const settingsTemplate =
+      globalSettings.defaultExerciseBlockTemplate &&
+      globalSettings.defaultExerciseBlockTemplate.length > 0
+        ? cloneExerciseTemplate(globalSettings.defaultExerciseBlockTemplate)
+        : cloneExerciseTemplate(DEFAULT_EXERCISE_BLOCK_TEMPLATE);
     const exercise: Exercise = {
       id: genId(),
       name: input.name.trim(),
@@ -81,6 +89,9 @@ export const useExercisesStore = create<ExercisesState>((set, get) => ({
       metronomeEnabled: input.metronomeEnabled ?? true,
       practiceMode: input.practiceMode ?? settingsDefault,
       includeWarmupBlock: input.includeWarmupBlock ?? DEFAULT_INCLUDE_WARMUP,
+      blockTemplate: input.blockTemplate
+        ? cloneExerciseTemplate(input.blockTemplate)
+        : settingsTemplate,
       totalPracticeSec: 0,
       sortIndex: nextSortIndex,
       createdAt: now,

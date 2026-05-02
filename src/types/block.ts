@@ -7,7 +7,6 @@ export type BlockKind =
   | "ceilingWork"
   | "overspeed"
   | "consolidation"
-  | "slowMusical"
   | "exerciseBuild"
   | "exerciseCoolDown"
   | "openEnded"

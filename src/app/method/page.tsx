@@ -110,35 +110,32 @@ export default function MethodPage() {
       </section>
 
       <section className="mt-10 space-y-4">
-        <h2 className="text-2xl font-semibold">6. The 10-minute structure</h2>
-        <p>The 10-min session is the canonical one — six blocks, each with a short on-screen instruction panel while it runs.</p>
+        <h2 className="text-2xl font-semibold">6. The session structure</h2>
+        <p>Every session runs five timed blocks, each with a short on-screen instruction panel. The table below shows the proportions at 10 minutes — every block scales to fill whatever session length you pick.</p>
         <div className="overflow-x-auto">
           <table className="w-full border-collapse text-left text-sm">
             <thead>
               <tr className="border-b border-bg-border text-neutral-400">
                 <th className="py-2 pr-4">Block</th>
-                <th className="py-2 pr-4">Duration</th>
+                <th className="py-2 pr-4">Duration (10 min)</th>
                 <th className="py-2 pr-4">Tempo</th>
                 <th className="py-2">Purpose</th>
               </tr>
             </thead>
             <tbody className="text-neutral-200">
-              <Row block="Slow Reference" duration="1:30" tempo="77% of working" purpose="Warm up the tune with a full relaxed pass." />
-              <Row block="Trouble Spot" duration="2:00" tempo="Your hard-part BPM" purpose="Loop the hardest 1–2 bars until clean; promote separately." />
-              <Row block="Ceiling Work" duration="3:00" tempo="Target (step above working)" purpose="Full-tune push. Three clean reps earns the new working tempo." />
-              <Row block="Overspeed" duration="1:00" tempo="Two steps above working" purpose="A couple of messy fast bursts to make the target feel slow." />
-              <Row block="Consolidation" duration="1:30" tempo="Your (possibly new) working" purpose="Deliberate, relaxed reps. The version your brain keeps." />
-              <Row block="Slow Musical" duration="1:00" tempo="72% of working" purpose="One musical pass. Remember it&rsquo;s a tune, not a drill." />
+              <Row block="Slow Reference" duration="1:40" tempo="80% of working" purpose="Warm up the tune with a full relaxed pass." />
+              <Row block="Trouble Spot" duration="2:13" tempo="Your hard-part BPM" purpose="Loop the hardest 1–2 bars until clean; promote separately." />
+              <Row block="Ceiling Work" duration="3:20" tempo="Target (step above working)" purpose="Full-tune push. Three clean reps earns the new working tempo." />
+              <Row block="Overspeed" duration="1:06" tempo="Two steps above working" purpose="A couple of messy fast bursts to make the target feel slow." />
+              <Row block="Consolidation" duration="1:40" tempo="70% of working" purpose="Deliberate, relaxed musical pass. The version your brain keeps." />
             </tbody>
           </table>
         </div>
         <p className="text-neutral-400">
-          Longer sessions (15, 20, 30 min, or a custom length up to an hour)
-          reuse this exact breakdown with every block proportionally larger.
-          A 20-minute session is just a 10-minute session where each block is
-          twice as long — Ceiling Work becomes 6 minutes, Overspeed becomes 2.
-          Useful when the default 10-min blocks are too short to play the tune
-          through even once.
+          All session lengths — 5, 10, 15, 20, 30 min, or any custom length up to an hour —
+          use this same five-block shape scaled to fit. A 20-minute session is just a
+          10-minute session where each block is twice as long. Useful when the blocks are
+          too short to play the tune through even once.
         </p>
         <p className="text-neutral-400">
           If your tune has more than one hard passage, the Trouble Spot block
@@ -149,36 +146,7 @@ export default function MethodPage() {
       </section>
 
       <section className="mt-10 space-y-4">
-        <h2 className="text-2xl font-semibold">7. The 5-minute structure</h2>
-        <p>
-          A compact version for days you only have a few minutes. Skips the
-          trouble-spot isolation block and the closing slow musical pass
-          entirely — it&rsquo;s a different structural shape, not a shrunken
-          10-minute session. If you need trouble-spot work, use 10 minutes or
-          longer.
-        </p>
-        <div className="overflow-x-auto">
-          <table className="w-full border-collapse text-left text-sm">
-            <thead>
-              <tr className="border-b border-bg-border text-neutral-400">
-                <th className="py-2 pr-4">Block</th>
-                <th className="py-2 pr-4">Duration</th>
-                <th className="py-2 pr-4">Tempo</th>
-                <th className="py-2">Purpose</th>
-              </tr>
-            </thead>
-            <tbody className="text-neutral-200">
-              <Row block="Slow Reference" duration="1:00" tempo="80% of working" purpose="Warm-up." />
-              <Row block="Ceiling Work" duration="2:30" tempo="Target" purpose="Three clean reps earns promotion." />
-              <Row block="Overspeed" duration="0:45" tempo="Two steps above" purpose="Short burst." />
-              <Row block="Consolidation" duration="0:45" tempo="Working" purpose="End clean." />
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      <section className="mt-10 space-y-4">
-        <h2 className="text-2xl font-semibold">8. Trouble-spot isolation</h2>
+        <h2 className="text-2xl font-semibold">7. Trouble-spot isolation</h2>
         <p>
           Most tunes have 1–2 bars that lag the rest. If you practice only the full tune,
           the whole ladder gets pinned at the speed of the worst bar. The Trouble Spot block
@@ -202,7 +170,7 @@ export default function MethodPage() {
       </section>
 
       <section className="mt-10 space-y-4">
-        <h2 className="text-2xl font-semibold">9. Worked example — Blackberry Blossom</h2>
+        <h2 className="text-2xl font-semibold">8. Worked example — Blackberry Blossom</h2>
         <p className="text-neutral-400">
           Say you&rsquo;ve been playing Blackberry Blossom for a month. You can get through
           the full tune cleanly at <strong className="text-neutral-200">220 BPM</strong>.
@@ -224,19 +192,19 @@ export default function MethodPage() {
         <ul className="ml-6 list-disc space-y-1 text-neutral-300">
           <li>Target: <strong className="text-neutral-100">226</strong> BPM (one step above working)</li>
           <li>Overspeed: <strong className="text-neutral-100">232</strong> BPM (two steps above working)</li>
-          <li>Slow reference: <strong className="text-neutral-100">169</strong> BPM</li>
-          <li>Slow musical: <strong className="text-neutral-100">158</strong> BPM</li>
+          <li>Slow reference: <strong className="text-neutral-100">176</strong> BPM (80% of working)</li>
+          <li>Consolidation: <strong className="text-neutral-100">154</strong> BPM (70% of working)</li>
         </ul>
 
         <h3 className="mt-6 text-xl font-semibold text-neutral-100">10-minute session walkthrough</h3>
         <ol className="ml-6 list-decimal space-y-3 text-neutral-300">
           <li>
-            <strong className="text-neutral-100">Slow Reference (1:30 @ 169 BPM).</strong>{" "}
+            <strong className="text-neutral-100">Slow Reference (1:40 @ 176 BPM).</strong>{" "}
             One full easy pass. You notice your right-hand pick angle is a bit steep today,
             loosen it up, play through to the end. No pressure.
           </li>
           <li>
-            <strong className="text-neutral-100">Trouble Spot (2:00 @ 150 BPM).</strong>{" "}
+            <strong className="text-neutral-100">Trouble Spot (2:13 @ 150 BPM).</strong>{" "}
             You loop the last two bars of the B part. First rep clean, second rep clean,
             third rep tense — reset. Clean, clean, clean — tap{" "}
             <span className="font-semibold text-accent">I earned it</span>. The toast reads
@@ -244,7 +212,7 @@ export default function MethodPage() {
             looping for the rest of the block at the new tempo.
           </li>
           <li>
-            <strong className="text-neutral-100">Ceiling Work (3:00 @ 226 BPM).</strong>{" "}
+            <strong className="text-neutral-100">Ceiling Work (3:20 @ 226 BPM).</strong>{" "}
             You play the full tune at the target. First pass hangs on but the B part
             wobbles. Second pass you just barely hold it. Third pass is clean, fourth is
             clean, fifth is clean — tap{" "}
@@ -253,19 +221,15 @@ export default function MethodPage() {
             (the new target) and you keep going.
           </li>
           <li>
-            <strong className="text-neutral-100">Overspeed (1:00 @ 238 BPM).</strong>{" "}
+            <strong className="text-neutral-100">Overspeed (1:06 @ 238 BPM).</strong>{" "}
             Two fast messy bursts through the A part only. You flub both. That&rsquo;s
             fine — you&rsquo;re not trying to earn anything here.
           </li>
           <li>
-            <strong className="text-neutral-100">Consolidation (1:30 @ 226 BPM).</strong>{" "}
-            The new working tempo. You play two relaxed full passes. Both clean. This is
-            the version your brain rehearses tonight.
-          </li>
-          <li>
-            <strong className="text-neutral-100">Slow Musical (1:00 @ 163 BPM).</strong>{" "}
-            One last pass, played musically. You lean into the swing and let the open
-            strings ring on the A-part phrases. Session ends on a clean note.
+            <strong className="text-neutral-100">Consolidation (1:40 @ 158 BPM).</strong>{" "}
+            70% of your new working tempo (226 × 0.7 = 158). You play two relaxed,
+            musical passes — lean into the swing, let open strings ring. End on a clean
+            rep. This is the version your brain rehearses tonight.
           </li>
         </ol>
 
@@ -279,7 +243,7 @@ export default function MethodPage() {
       <section className="mt-12 border-t border-bg-border pt-6 text-sm text-neutral-500">
         <p>
           That&rsquo;s the whole method. The rest of the app is just plumbing for these
-          six blocks, a metronome, and an &ldquo;I earned it&rdquo; button.
+          five blocks, a metronome, and an &ldquo;I earned it&rdquo; button.
         </p>
       </section>
     </main>

@@ -22,9 +22,9 @@ export const overspeedBpm = (s: Song): number => step(targetBpm(s), s.stepPercen
 export const warmupBpmFor = (s: Song): number =>
   s.warmupBpm ?? Math.max(20, Math.round(s.workingBpm / 3));
 
-export const slowReferenceBpm = (s: Song): number => Math.round(s.workingBpm * 0.77);
+export const slowReferenceBpm = (s: Song): number => Math.round(s.workingBpm * 0.8);
 
-export const slowMusicalBpm = (s: Song): number => Math.round(s.workingBpm * 0.72);
+export const consolidationBpm = (s: Song): number => Math.round(s.workingBpm * 0.7);
 
 export const fiveMinSlowReferenceBpm = (s: Song): number =>
   Math.round(s.workingBpm * 0.8);

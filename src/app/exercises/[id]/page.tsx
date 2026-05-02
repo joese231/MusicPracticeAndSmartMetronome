@@ -180,6 +180,7 @@ export default function ExerciseDetailPage() {
                   metronomeEnabled: exercise.metronomeEnabled,
                   practiceMode: exercise.practiceMode,
                   includeWarmupBlock: exercise.includeWarmupBlock,
+                  blockTemplate: exercise.blockTemplate,
                 }}
                 onSubmit={async (values) => {
                   await updateExercise({

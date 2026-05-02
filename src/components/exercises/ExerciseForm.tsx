@@ -1,16 +1,22 @@
 "use client";
 import { useEffect, useState, type FormEvent } from "react";
 import {
+  cloneExerciseTemplate,
+  DEFAULT_EXERCISE_BLOCK_TEMPLATE,
   DEFAULT_INCLUDE_WARMUP,
   DEFAULT_STEP_PERCENT,
 } from "@/types/song";
-import type { PracticeMode } from "@/types/song";
+import type { ExerciseBlockTemplate, PracticeMode } from "@/types/song";
 import {
   DEFAULT_EXERCISE_MINUTES,
   MAX_EXERCISE_MINUTES,
   MIN_EXERCISE_MINUTES,
 } from "@/lib/session/exerciseBlocks";
 import { useSettingsStore } from "@/lib/store/useSettingsStore";
+import {
+  BlockTemplateEditor,
+  isTemplateValid,
+} from "@/components/session/BlockTemplateEditor";
 
 export type ExerciseFormValues = {
   name: string;
@@ -23,6 +29,7 @@ export type ExerciseFormValues = {
   metronomeEnabled: boolean;
   practiceMode: PracticeMode;
   includeWarmupBlock: boolean;
+  blockTemplate: ExerciseBlockTemplate;
 };
 
 type Props = {
@@ -64,6 +71,9 @@ export function ExerciseForm({
   const settingsDefaultMode = useSettingsStore(
     (s) => s.settings.defaultPracticeMode,
   );
+  const settingsDefaultTemplate = useSettingsStore(
+    (s) => s.settings.defaultExerciseBlockTemplate,
+  );
   const settingsLoad = useSettingsStore((s) => s.load);
   const isEditing = initial?.practiceMode !== undefined;
   const [practiceMode, setPracticeMode] = useState<PracticeMode>(
@@ -73,6 +83,12 @@ export function ExerciseForm({
   const [includeWarmupBlock, setIncludeWarmupBlock] = useState<boolean>(
     initial?.includeWarmupBlock ?? DEFAULT_INCLUDE_WARMUP,
   );
+  const [blockTemplate, setBlockTemplate] = useState<ExerciseBlockTemplate>(
+    initial?.blockTemplate
+      ? cloneExerciseTemplate(initial.blockTemplate)
+      : cloneExerciseTemplate(DEFAULT_EXERCISE_BLOCK_TEMPLATE),
+  );
+  const [blockTemplateTouched, setBlockTemplateTouched] = useState(false);
   useEffect(() => {
     if (!settingsLoaded) void settingsLoad();
   }, [settingsLoaded, settingsLoad]);
@@ -81,6 +97,13 @@ export function ExerciseForm({
     if (!settingsLoaded) return;
     setPracticeMode(settingsDefaultMode);
   }, [isEditing, practiceModeTouched, settingsLoaded, settingsDefaultMode]);
+  useEffect(() => {
+    if (isEditing || blockTemplateTouched) return;
+    if (!settingsLoaded) return;
+    if (settingsDefaultTemplate && settingsDefaultTemplate.length > 0) {
+      setBlockTemplate(cloneExerciseTemplate(settingsDefaultTemplate));
+    }
+  }, [isEditing, blockTemplateTouched, settingsLoaded, settingsDefaultTemplate]);
 
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -117,6 +140,14 @@ export function ExerciseForm({
     const safeMinutes = Number.isFinite(sm)
       ? Math.max(MIN_EXERCISE_MINUTES, Math.min(MAX_EXERCISE_MINUTES, sm))
       : DEFAULT_EXERCISE_MINUTES;
+    if (
+      !openEnded &&
+      practiceMode === "smart" &&
+      !isTemplateValid(blockTemplate)
+    ) {
+      setError("Enable at least one block in the block sequence.");
+      return null;
+    }
     return {
       name: name.trim(),
       link: link.trim() ? link.trim() : null,
@@ -128,6 +159,7 @@ export function ExerciseForm({
       metronomeEnabled,
       practiceMode,
       includeWarmupBlock,
+      blockTemplate,
     };
   };
 
@@ -299,6 +331,43 @@ export function ExerciseForm({
           label="Include slow Conscious Practice warm-up block"
           hint="When on, the session starts with the unbounded slow warm-up — you advance with N when ready. Turn off to jump straight into the body."
         />
+
+        {practiceMode === "smart" && (
+          <div className="space-y-2 border-t border-bg-border pt-4">
+            <div>
+              <div className="text-sm font-semibold text-neutral-100">
+                Block sequence
+              </div>
+              <div className="mt-1 text-xs text-neutral-500">
+                Toggle blocks on or off, reorder them, and adjust their relative size. Time is split proportionally to fill the chosen session length.
+              </div>
+            </div>
+            <BlockTemplateEditor
+              variant="exercise"
+              template={blockTemplate}
+              onChange={(t) => {
+                setBlockTemplate(t);
+                setBlockTemplateTouched(true);
+              }}
+              previewMinutes={(() => {
+                const sm = parseInt(sessionMinutes, 10);
+                return Number.isFinite(sm)
+                  ? Math.max(MIN_EXERCISE_MINUTES, Math.min(MAX_EXERCISE_MINUTES, sm))
+                  : DEFAULT_EXERCISE_MINUTES;
+              })()}
+              onReset={
+                settingsDefaultTemplate && settingsDefaultTemplate.length > 0
+                  ? () => {
+                      setBlockTemplate(
+                        cloneExerciseTemplate(settingsDefaultTemplate),
+                      );
+                      setBlockTemplateTouched(true);
+                    }
+                  : undefined
+              }
+            />
+          </div>
+        )}
       </div>
 
       {error && (
