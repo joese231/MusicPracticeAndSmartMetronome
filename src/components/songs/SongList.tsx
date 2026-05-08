@@ -5,7 +5,13 @@ import type { Song } from "@/types/song";
 import { formatPracticeTime } from "@/lib/format";
 import { useSongsStore } from "@/lib/store/useSongsStore";
 
-export function SongList({ songs }: { songs: Song[] }) {
+export function SongList({
+  songs,
+  lastPlayedId,
+}: {
+  songs: Song[];
+  lastPlayedId?: string | null;
+}) {
   const reorderSongs = useSongsStore((s) => s.reorderSongs);
   const [draggingId, setDraggingId] = useState<string | null>(null);
   const [overId, setOverId] = useState<string | null>(null);
@@ -56,6 +62,8 @@ export function SongList({ songs }: { songs: Song[] }) {
       {songs.map((song) => {
         const isDragging = draggingId === song.id;
         const isOver = overId === song.id && draggingId && draggingId !== song.id;
+        const isLastPlayed =
+          !!lastPlayedId && song.id === lastPlayedId && !isOver && !isDragging;
         return (
           <li
             key={song.id}
@@ -68,7 +76,9 @@ export function SongList({ songs }: { songs: Song[] }) {
             className={`group relative rounded-lg border bg-bg-elevated transition ${
               isOver
                 ? "border-accent ring-2 ring-accent/40"
-                : "border-bg-border hover:border-accent/60 hover:bg-bg-elevated/80"
+                : isLastPlayed
+                  ? "border-accent/40 ring-1 ring-accent/40 hover:border-accent/60 hover:bg-bg-elevated/80"
+                  : "border-bg-border hover:border-accent/60 hover:bg-bg-elevated/80"
             } ${isDragging ? "opacity-40" : ""}`}
           >
             <div className="flex items-center gap-3 px-3 py-4">

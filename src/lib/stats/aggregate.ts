@@ -142,3 +142,21 @@ function formatDay(d: Date): string {
   const dd = d.getDate().toString().padStart(2, "0");
   return `${yyyy}-${mm}-${dd}`;
 }
+
+
+/**
+ * Most recently started session itemId for a given kind. Excludes free-play
+ * (`__freeplay__`) so the home highlight tracks real songs/exercises only.
+ */
+export function lastPlayedItemId(
+  records: SessionRecord[],
+  kind: "song" | "exercise",
+): string | null {
+  let best: SessionRecord | null = null;
+  for (const r of records) {
+    if (r.itemKind !== kind) continue;
+    if (r.itemId === "__freeplay__") continue;
+    if (!best || r.startedAt > best.startedAt) best = r;
+  }
+  return best?.itemId ?? null;
+}

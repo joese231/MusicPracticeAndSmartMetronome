@@ -22,6 +22,7 @@ import {
   advanceSnapshot,
   elapsedInPlayingSec,
   initialSnapshot,
+  repeatCurrentBlockSnapshot,
   rewindSnapshot,
   tickSnapshot,
   timeLeftInPlayingSec,
@@ -628,6 +629,14 @@ function SessionPage() {
     advance();
   }, [snap, advance]);
 
+  const handleRepeatBlock = useCallback(() => {
+    if (!snap) return;
+    if (pausedRef.current) return;
+    setSnap((prev) =>
+      prev ? repeatCurrentBlockSnapshot(prev, blocks, Date.now()) : prev,
+    );
+  }, [snap, blocks]);
+
   // Previous block button: step back to the prior block and restart it.
   const handlePrevious = useCallback(() => {
     if (!snap || snap.phase === "ended") return;
@@ -1052,13 +1061,31 @@ function SessionPage() {
         )}
 
         {awaiting ? (
-          <button
-            onClick={advance}
-            className="rounded-xl bg-accent px-10 py-5 text-2xl font-bold text-black shadow-lg transition hover:bg-accent-strong"
-          >
-            Continue → {nextBlock ? nextBlock.label : "Finish"}
-            <span className="ml-3 text-sm font-normal opacity-70">(Space)</span>
-          </button>
+          !nextBlock ? (
+            <div className="flex items-center gap-3">
+              <button
+                onClick={handleRepeatBlock}
+                className="rounded-xl border border-bg-border bg-bg-elevated px-8 py-5 text-xl font-semibold text-neutral-100 transition hover:bg-bg-elevated/80"
+              >
+                Repeat block
+              </button>
+              <button
+                onClick={advance}
+                className="rounded-xl bg-accent px-10 py-5 text-2xl font-bold text-black shadow-lg transition hover:bg-accent-strong"
+              >
+                Finish
+                <span className="ml-3 text-sm font-normal opacity-70">(Space)</span>
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={advance}
+              className="rounded-xl bg-accent px-10 py-5 text-2xl font-bold text-black shadow-lg transition hover:bg-accent-strong"
+            >
+              Continue → {nextBlock.label}
+              <span className="ml-3 text-sm font-normal opacity-70">(Space)</span>
+            </button>
+          )
         ) : isUnbounded ? (
           <button
             onClick={advance}

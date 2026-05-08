@@ -2,6 +2,7 @@ import { describe, it, expect } from "vitest";
 import {
   advanceSnapshot,
   initialSnapshot,
+  repeatCurrentBlockSnapshot,
   rewindSnapshot,
   tickSnapshot,
   timeLeftInPlayingSec,
@@ -274,5 +275,48 @@ describe("rewindSnapshot", () => {
     };
     const next = rewindSnapshot(snap, blocks, 1000);
     expect(next).toBe(snap);
+  });
+});
+
+describe("repeatCurrentBlockSnapshot", () => {
+  it("restarts the current block from awaiting with a fresh blockStartMs", () => {
+    const blocks = buildBlocks(10, makeSong());
+    const lastIdx = blocks.length - 1;
+    const snap: DriverSnapshot = {
+      blockIndex: lastIdx,
+      phase: "awaiting",
+      blockStartMs: 1000,
+    };
+    const next = repeatCurrentBlockSnapshot(snap, blocks, 9999);
+    expect(next.blockIndex).toBe(lastIdx);
+    expect(next.phase).toBe("playing");
+    expect(next.blockStartMs).toBe(9999);
+  });
+
+  it("works mid-playing too", () => {
+    const blocks = buildBlocks(10, makeSong());
+    const snap: DriverSnapshot = {
+      blockIndex: 2,
+      phase: "playing",
+      blockStartMs: 1000,
+    };
+    const next = repeatCurrentBlockSnapshot(snap, blocks, 5000);
+    expect(next.blockIndex).toBe(2);
+    expect(next.phase).toBe("playing");
+    expect(next.blockStartMs).toBe(5000);
+  });
+
+  it("restarts from ended phase (used by inter-exercise overlay)", () => {
+    const blocks = buildBlocks(10, makeSong());
+    const lastIdx = blocks.length - 1;
+    const snap: DriverSnapshot = {
+      blockIndex: lastIdx,
+      phase: "ended",
+      blockStartMs: 0,
+    };
+    const next = repeatCurrentBlockSnapshot(snap, blocks, 1000);
+    expect(next.blockIndex).toBe(lastIdx);
+    expect(next.phase).toBe("playing");
+    expect(next.blockStartMs).toBe(1000);
   });
 });

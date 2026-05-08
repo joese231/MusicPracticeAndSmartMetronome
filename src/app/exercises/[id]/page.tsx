@@ -12,6 +12,7 @@ import { formatPracticeTime } from "@/lib/format";
 import { unlockSharedAudioContext } from "@/lib/metronome/scheduler";
 import { overspeedBpm, slowReferenceBpm } from "@/lib/session/tempo";
 import { exerciseAsSong } from "@/lib/session/exerciseAdapter";
+import { setActiveHomeTab } from "@/lib/ui/activeTab";
 
 export default function ExerciseDetailPage() {
   const params = useParams<{ id: string }>();
@@ -50,7 +51,11 @@ export default function ExerciseDetailPage() {
   if (!exercise) {
     return (
       <main className="mx-auto max-w-3xl px-6 py-10">
-        <Link href="/" className="text-sm text-neutral-400 transition hover:text-neutral-100">
+        <Link
+          href="/"
+          onClick={() => setActiveHomeTab("exercises")}
+          className="text-sm text-neutral-400 transition hover:text-neutral-100"
+        >
           ← Back
         </Link>
         <h1 className="mt-4 text-2xl font-bold">Exercise not found</h1>
@@ -69,7 +74,11 @@ export default function ExerciseDetailPage() {
 
   return (
     <main className="mx-auto max-w-3xl px-6 py-10">
-      <Link href="/" className="text-sm text-neutral-400 transition hover:text-neutral-100">
+      <Link
+        href="/"
+        onClick={() => setActiveHomeTab("exercises")}
+        className="text-sm text-neutral-400 transition hover:text-neutral-100"
+      >
         ← Back
       </Link>
 
@@ -209,6 +218,7 @@ export default function ExerciseDetailPage() {
               <button
                 onClick={async () => {
                   await deleteExercise(exercise.id);
+                  setActiveHomeTab("exercises");
                   router.push("/");
                 }}
                 className="rounded bg-red-700 px-3 py-1 font-semibold text-white hover:bg-red-600"

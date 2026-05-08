@@ -13,6 +13,7 @@ export function BetweenItemsOverlay({
   onSkip,
   onCancel,
   onPauseToggle,
+  onRepeatLastBlock,
 }: {
   nextItemTitle: string;
   remainingSec: number;
@@ -20,6 +21,7 @@ export function BetweenItemsOverlay({
   onSkip: () => void;
   onCancel: () => void;
   onPauseToggle: () => void;
+  onRepeatLastBlock?: () => void;
 }) {
   return (
     <main className="flex h-screen flex-col items-center justify-center px-6 py-10">
@@ -56,6 +58,15 @@ export function BetweenItemsOverlay({
           {paused ? "Resume" : "Pause"}
           <span className="ml-3 text-xs font-normal opacity-70">(P)</span>
         </button>
+        {onRepeatLastBlock && (
+          <button
+            type="button"
+            onClick={onRepeatLastBlock}
+            className="rounded-xl border border-bg-border px-6 py-4 text-sm text-neutral-300 transition hover:border-accent/60 hover:text-neutral-100"
+          >
+            ← Repeat last block
+          </button>
+        )}
         <button
           type="button"
           onClick={onCancel}

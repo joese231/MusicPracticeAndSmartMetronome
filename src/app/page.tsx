@@ -1,13 +1,15 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useSongsStore } from "@/lib/store/useSongsStore";
 import { useExercisesStore } from "@/lib/store/useExercisesStore";
 import { SongList } from "@/components/songs/SongList";
 import { ExerciseList } from "@/components/exercises/ExerciseList";
+import { ACTIVE_TAB_STORAGE_KEY, type HomeTab } from "@/lib/ui/activeTab";
+import { useSessionHistoryStore } from "@/lib/store/useSessionHistoryStore";
+import { lastPlayedItemId } from "@/lib/stats/aggregate";
 
-type Tab = "songs" | "exercises";
-const TAB_STORAGE_KEY = "practice.activeTab";
+type Tab = HomeTab;
 
 export default function HomePage() {
   const songs = useSongsStore((s) => s.songs);
@@ -18,25 +20,53 @@ export default function HomePage() {
   const exercisesLoaded = useExercisesStore((s) => s.loaded);
   const loadExercises = useExercisesStore((s) => s.load);
 
+  const records = useSessionHistoryStore((s) => s.records);
+  const sessionsLoaded = useSessionHistoryStore((s) => s.loaded);
+  const loadSessions = useSessionHistoryStore((s) => s.load);
+
+  const lastSongId = useMemo(
+    () => lastPlayedItemId(records, "song"),
+    [records],
+  );
+  const lastExerciseId = useMemo(
+    () => lastPlayedItemId(records, "exercise"),
+    [records],
+  );
+
   const [tab, setTab] = useState<Tab>("songs");
+  const tabSyncedRef = useRef(false);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const stored = window.localStorage.getItem(TAB_STORAGE_KEY);
+      const stored = window.localStorage.getItem(ACTIVE_TAB_STORAGE_KEY);
       if (stored === "songs" || stored === "exercises") setTab(stored);
     }
   }, []);
 
   useEffect(() => {
+    // Skip the initial-mount write so we don't overwrite a value set by
+    // setActiveHomeTab (called before navigation) before Effect A can read it.
+    if (!tabSyncedRef.current) {
+      tabSyncedRef.current = true;
+      return;
+    }
     if (typeof window !== "undefined") {
-      window.localStorage.setItem(TAB_STORAGE_KEY, tab);
+      window.localStorage.setItem(ACTIVE_TAB_STORAGE_KEY, tab);
     }
   }, [tab]);
 
   useEffect(() => {
     if (!songsLoaded) void loadSongs();
     if (!exercisesLoaded) void loadExercises();
-  }, [songsLoaded, loadSongs, exercisesLoaded, loadExercises]);
+    if (!sessionsLoaded) void loadSessions();
+  }, [
+    songsLoaded,
+    loadSongs,
+    exercisesLoaded,
+    loadExercises,
+    sessionsLoaded,
+    loadSessions,
+  ]);
 
   return (
     <main className="mx-auto max-w-3xl px-6 py-10">
@@ -68,9 +98,17 @@ export default function HomePage() {
       </div>
 
       {tab === "songs" ? (
-        <SongsPanel songs={songs} loaded={songsLoaded} />
+        <SongsPanel
+          songs={songs}
+          loaded={songsLoaded}
+          lastPlayedId={lastSongId}
+        />
       ) : (
-        <ExercisesPanel exercises={exercises} loaded={exercisesLoaded} />
+        <ExercisesPanel
+          exercises={exercises}
+          loaded={exercisesLoaded}
+          lastPlayedId={lastExerciseId}
+        />
       )}
     </main>
   );
@@ -103,9 +141,11 @@ function TabButton({
 function SongsPanel({
   songs,
   loaded,
+  lastPlayedId,
 }: {
   songs: ReturnType<typeof useSongsStore.getState>["songs"];
   loaded: boolean;
+  lastPlayedId: string | null;
 }) {
   return (
     <>
@@ -128,7 +168,7 @@ function SongsPanel({
           <p className="mb-3 text-xs text-neutral-500">
             Drag the ⋮⋮ handle to reorder. Your order is saved and stays put across sessions.
           </p>
-          <SongList songs={songs} />
+          <SongList songs={songs} lastPlayedId={lastPlayedId} />
         </>
       )}
     </>
@@ -138,9 +178,11 @@ function SongsPanel({
 function ExercisesPanel({
   exercises,
   loaded,
+  lastPlayedId,
 }: {
   exercises: ReturnType<typeof useExercisesStore.getState>["exercises"];
   loaded: boolean;
+  lastPlayedId: string | null;
 }) {
   return (
     <>
@@ -172,7 +214,7 @@ function ExercisesPanel({
           <p className="mb-3 text-xs text-neutral-500">
             Drag the ⋮⋮ handle to reorder. Tap an exercise to edit or run it.
           </p>
-          <ExerciseList exercises={exercises} />
+          <ExerciseList exercises={exercises} lastPlayedId={lastPlayedId} />
         </>
       )}
     </>

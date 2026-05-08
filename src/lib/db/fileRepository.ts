@@ -2,9 +2,8 @@ import type { Song, Settings } from "@/types/song";
 import type { Exercise } from "@/types/exercise";
 import type { SessionRecord } from "@/types/sessionRecord";
 import {
-  cloneExerciseTemplate,
-  DEFAULT_EXERCISE_BLOCK_TEMPLATE,
   DEFAULT_SETTINGS,
+  migrateExerciseTemplate,
   migrateSongTemplate,
 } from "@/types/song";
 import type { Repository } from "./repository";
@@ -64,9 +63,7 @@ function normalizeExercise(row: Exercise): Exercise {
   if (typeof next.includeWarmupBlock !== "boolean") {
     next.includeWarmupBlock = true;
   }
-  if (!Array.isArray(next.blockTemplate) || next.blockTemplate.length === 0) {
-    next.blockTemplate = cloneExerciseTemplate(DEFAULT_EXERCISE_BLOCK_TEMPLATE);
-  }
+  next.blockTemplate = migrateExerciseTemplate(next.blockTemplate);
   return next;
 }
 
@@ -75,14 +72,9 @@ function normalizeSettings(row: Partial<Settings>): Settings {
   merged.defaultSongBlockTemplate = migrateSongTemplate(
     merged.defaultSongBlockTemplate,
   );
-  if (
-    !Array.isArray(merged.defaultExerciseBlockTemplate) ||
-    merged.defaultExerciseBlockTemplate.length === 0
-  ) {
-    merged.defaultExerciseBlockTemplate = cloneExerciseTemplate(
-      DEFAULT_EXERCISE_BLOCK_TEMPLATE,
-    );
-  }
+  merged.defaultExerciseBlockTemplate = migrateExerciseTemplate(
+    merged.defaultExerciseBlockTemplate,
+  );
   return merged;
 }
 

@@ -22,6 +22,7 @@ import {
   advanceSnapshot,
   elapsedInPlayingSec,
   initialSnapshot,
+  repeatCurrentBlockSnapshot,
   rewindSnapshot,
   tickSnapshot,
   timeLeftInPlayingSec,
@@ -29,6 +30,7 @@ import {
 import { buildExerciseBlocks } from "@/lib/session/exerciseBlocks";
 import { exerciseAsSong } from "@/lib/session/exerciseAdapter";
 import { nowIso, promoteWorking, warmupBpmFor } from "@/lib/session/tempo";
+import { setActiveHomeTab } from "@/lib/ui/activeTab";
 import type { Exercise } from "@/types/exercise";
 import type { Song } from "@/types/song";
 import type { BlockDef, DriverSnapshot } from "@/types/block";
@@ -276,6 +278,7 @@ export default function ExerciseSessionPage() {
         }
       }
 
+      setActiveHomeTab("exercises");
       if (exId) router.push(`/exercises/${exId}`);
       else router.push("/");
     },
@@ -435,7 +438,12 @@ export default function ExerciseSessionPage() {
       return Math.max(20, Math.floor(warmupBpmFor(s) / 2));
     }
     return currentBlock.tempoFn(s);
-  }, [currentBlock, consciousSlowMode]);
+    // `exercise` is intentionally listed: when the store-derived exercise
+    // updates after a promotion, we need to recompute `tempoBpm` even though
+    // the body reads `runtimeSongRef.current` (the ref is refreshed by the
+    // useEffect at lines 140–145 when `exercise` changes).
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentBlock, consciousSlowMode, exercise]);
 
   // Push tempoBpm to the live metronome while in the warm-up block. Mirrors
   // the song session: warm-up BPM changes via the saved warmupBpm field or
@@ -525,6 +533,14 @@ export default function ExerciseSessionPage() {
     advance();
   }, [snap, advance]);
 
+  const handleRepeatBlock = useCallback(() => {
+    if (!snap) return;
+    if (pausedRef.current) return;
+    setSnap((prev) =>
+      prev ? repeatCurrentBlockSnapshot(prev, blocks, Date.now()) : prev,
+    );
+  }, [snap, blocks]);
+
   const handlePrevious = useCallback(() => {
     if (!snap || snap.phase === "ended") return;
     if (pausedRef.current) return;
@@ -598,8 +614,21 @@ export default function ExerciseSessionPage() {
 
   const handleBetweenItemsCancel = useCallback(() => {
     if (!betweenItemsRef.current) return;
+    setActiveHomeTab("exercises");
     router.push("/");
   }, [router]);
+
+  const handleRepeatLastBlockFromBetween = useCallback(() => {
+    // Reset the session-ended guards so endSession can fire again when the
+    // repeated block finishes, and so the snap-watching useEffect resumes
+    // handling phase transitions (metronome restart, chime, etc.).
+    endedRef.current = false;
+    prevPhaseKeyRef.current = "";
+    setBetweenItems(null);
+    setSnap((prev) =>
+      prev ? repeatCurrentBlockSnapshot(prev, blocks, Date.now()) : prev,
+    );
+  }, [blocks]);
 
   // Pause / resume the inter-item countdown. Mirrors the block-pause shape.
   const handleBetweenItemsPauseToggle = useCallback(() => {
@@ -744,7 +773,10 @@ export default function ExerciseSessionPage() {
       <main className="mx-auto max-w-xl px-6 py-10">
         <h1 className="text-2xl font-bold">Exercise not found</h1>
         <button
-          onClick={() => router.push("/")}
+          onClick={() => {
+            setActiveHomeTab("exercises");
+            router.push("/");
+          }}
           className="mt-4 text-sm text-accent hover:underline"
         >
           Back to home
@@ -778,6 +810,7 @@ export default function ExerciseSessionPage() {
         onSkip={handleBetweenItemsSkip}
         onCancel={handleBetweenItemsCancel}
         onPauseToggle={handleBetweenItemsPauseToggle}
+        onRepeatLastBlock={handleRepeatLastBlockFromBetween}
       />
     );
   }
@@ -916,13 +949,31 @@ export default function ExerciseSessionPage() {
         )}
 
         {awaiting ? (
-          <button
-            onClick={advance}
-            className="rounded-xl bg-accent px-10 py-5 text-2xl font-bold text-black shadow-lg transition hover:bg-accent-strong"
-          >
-            Continue → {nextBlock ? nextBlock.label : "Finish"}
-            <span className="ml-3 text-sm font-normal opacity-70">(Space)</span>
-          </button>
+          !nextBlock ? (
+            <div className="flex items-center gap-3">
+              <button
+                onClick={handleRepeatBlock}
+                className="rounded-xl border border-bg-border bg-bg-elevated px-8 py-5 text-xl font-semibold text-neutral-100 transition hover:bg-bg-elevated/80"
+              >
+                Repeat block
+              </button>
+              <button
+                onClick={advance}
+                className="rounded-xl bg-accent px-10 py-5 text-2xl font-bold text-black shadow-lg transition hover:bg-accent-strong"
+              >
+                Finish
+                <span className="ml-3 text-sm font-normal opacity-70">(Space)</span>
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={advance}
+              className="rounded-xl bg-accent px-10 py-5 text-2xl font-bold text-black shadow-lg transition hover:bg-accent-strong"
+            >
+              Continue → {nextBlock.label}
+              <span className="ml-3 text-sm font-normal opacity-70">(Space)</span>
+            </button>
+          )
         ) : isUnbounded ? (
           <button
             onClick={() =>

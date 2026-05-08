@@ -5,7 +5,13 @@ import type { Exercise } from "@/types/exercise";
 import { formatPracticeTime } from "@/lib/format";
 import { useExercisesStore } from "@/lib/store/useExercisesStore";
 
-export function ExerciseList({ exercises }: { exercises: Exercise[] }) {
+export function ExerciseList({
+  exercises,
+  lastPlayedId,
+}: {
+  exercises: Exercise[];
+  lastPlayedId?: string | null;
+}) {
   const reorderExercises = useExercisesStore((s) => s.reorderExercises);
   const [draggingId, setDraggingId] = useState<string | null>(null);
   const [overId, setOverId] = useState<string | null>(null);
@@ -52,6 +58,8 @@ export function ExerciseList({ exercises }: { exercises: Exercise[] }) {
       {exercises.map((ex) => {
         const isDragging = draggingId === ex.id;
         const isOver = overId === ex.id && draggingId && draggingId !== ex.id;
+        const isLastPlayed =
+          !!lastPlayedId && ex.id === lastPlayedId && !isOver && !isDragging;
         return (
           <li
             key={ex.id}
@@ -64,7 +72,9 @@ export function ExerciseList({ exercises }: { exercises: Exercise[] }) {
             className={`group relative rounded-lg border bg-bg-elevated transition ${
               isOver
                 ? "border-accent ring-2 ring-accent/40"
-                : "border-bg-border hover:border-accent/60 hover:bg-bg-elevated/80"
+                : isLastPlayed
+                  ? "border-accent/40 ring-1 ring-accent/40 hover:border-accent/60 hover:bg-bg-elevated/80"
+                  : "border-bg-border hover:border-accent/60 hover:bg-bg-elevated/80"
             } ${isDragging ? "opacity-40" : ""}`}
           >
             <div className="flex items-center gap-3 px-3 py-4">

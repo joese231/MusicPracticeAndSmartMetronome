@@ -169,16 +169,33 @@ export type ExerciseBlockTemplateEntry = {
 
 export type ExerciseBlockTemplate = ExerciseBlockTemplateEntry[];
 
-/** Reproduces today's 5-min default: Build 180s, Burst 90s, Cool Down 30s. */
+/** 5-min default: Build 210s, Burst 60s, Cool Down 30s — sums to 300s. */
 export const DEFAULT_EXERCISE_BLOCK_TEMPLATE: ExerciseBlockTemplate = [
-  { kind: "exerciseBuild", enabled: true, weight: 180 },
-  { kind: "exerciseBurst", enabled: true, weight: 90 },
+  { kind: "exerciseBuild", enabled: true, weight: 210 },
+  { kind: "exerciseBurst", enabled: true, weight: 60 },
   { kind: "exerciseCoolDown", enabled: true, weight: 30 },
 ];
 
 export const cloneExerciseTemplate = (
   t: ExerciseBlockTemplate,
 ): ExerciseBlockTemplate => t.map((e) => ({ ...e }));
+
+/**
+ * Normalize a stored exercise template. Currently rewrites legacy `exerciseBurst`
+ * weight 90 (old default) to 60 (new default). User-customized weights (any
+ * value other than 90) are preserved. Idempotent. An empty / missing template
+ * returns a clone of the default.
+ */
+export function migrateExerciseTemplate(
+  t: ExerciseBlockTemplate | undefined | null,
+): ExerciseBlockTemplate {
+  if (!Array.isArray(t) || t.length === 0) {
+    return cloneExerciseTemplate(DEFAULT_EXERCISE_BLOCK_TEMPLATE);
+  }
+  return t.map((e) =>
+    e.kind === "exerciseBurst" && e.weight === 90 ? { ...e, weight: 60 } : { ...e },
+  );
+}
 
 export const EXERCISE_BLOCK_LABELS: Record<ExerciseBlockKind, string> = {
   exerciseBuild: "Build",

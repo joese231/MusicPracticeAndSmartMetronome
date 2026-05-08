@@ -92,6 +92,21 @@ export const rewindSnapshot = (
   return { blockIndex: prev, phase: "playing", blockStartMs: nowMs };
 };
 
+/**
+ * Restart the current block from the top. Used by "Repeat block" on the
+ * awaiting screen and "← Repeat last block" on the inter-exercise overlay.
+ * Works in any phase — including `ended` (the blockIndex still points to
+ * the last block and can safely be restarted).
+ */
+export const repeatCurrentBlockSnapshot = (
+  snap: DriverSnapshot,
+  blocks: BlockDef[],
+  nowMs: number,
+): DriverSnapshot => {
+  if (!blocks[snap.blockIndex]) return snap;
+  return { blockIndex: snap.blockIndex, phase: "playing", blockStartMs: nowMs };
+};
+
 /** Total seconds of scheduled playing time — excludes any awaiting gaps. */
 export const totalPlayingSec = (blocks: BlockDef[]): number =>
   blocks.reduce((a, b) => a + b.durationSec, 0);

@@ -6,6 +6,7 @@ import {
   cloneSongTemplate,
   DEFAULT_EXERCISE_BLOCK_TEMPLATE,
   DEFAULT_SONG_BLOCK_TEMPLATE,
+  migrateExerciseTemplate,
   migrateSongTemplate,
 } from "@/types/song";
 
@@ -219,6 +220,28 @@ export class AppDB extends Dexie {
           .modify((row) => {
             row.defaultSongBlockTemplate = migrateSongTemplate(
               row.defaultSongBlockTemplate,
+            );
+          });
+      });
+    this.version(11)
+      .stores({
+        songs: "id, title, updatedAt, sortIndex",
+        settings: "id",
+        exercises: "id, name, updatedAt, sortIndex",
+      })
+      .upgrade(async (tx) => {
+        await tx
+          .table<Exercise, string>("exercises")
+          .toCollection()
+          .modify((row) => {
+            row.blockTemplate = migrateExerciseTemplate(row.blockTemplate);
+          });
+        await tx
+          .table<SettingsRow, string>("settings")
+          .toCollection()
+          .modify((row) => {
+            row.defaultExerciseBlockTemplate = migrateExerciseTemplate(
+              row.defaultExerciseBlockTemplate,
             );
           });
       });

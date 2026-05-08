@@ -38,13 +38,13 @@ const makeExercise = (
 });
 
 describe("buildExerciseTimedBlocks (default template)", () => {
-  it("default 5 min: Build 180s, Burst 90s, Cool Down 30s — totals 300s", () => {
+  it("default 5 min: Build 210s, Burst 60s, Cool Down 30s — totals 300s", () => {
     const b = buildExerciseTimedBlocks(5);
     expect(b).toHaveLength(3);
     expect(b[0].label).toBe("Build");
-    expect(b[0].durationSec).toBe(180);
+    expect(b[0].durationSec).toBe(210);
     expect(b[1].label).toBe("Burst");
-    expect(b[1].durationSec).toBe(90);
+    expect(b[1].durationSec).toBe(60);
     expect(b[2].label).toBe("Cool Down");
     expect(b[2].durationSec).toBe(30);
     expect(b.reduce((a, x) => a + x.durationSec, 0)).toBe(300);
