@@ -1,0 +1,3741 @@
+[
+  {
+    "id": "214bbbb8-78cb-436a-97e6-7c9a09281e89",
+    "itemId": "66a868d0-750b-4fb5-82f3-6422ec05ca24",
+    "itemKind": "exercise",
+    "itemTitle": "Fast Strum",
+    "startedAt": "2026-04-26T13:17:21.327Z",
+    "endedAt": "2026-04-26T13:23:48.186Z",
+    "durationSec": 387,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 175,
+    "endWorkingBpm": 175,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "2183e603-105b-4b80-ba08-bac82c525c1b",
+    "itemId": "de7b70c2-3c07-4e13-ae2b-6028a94269e7",
+    "itemKind": "song",
+    "itemTitle": "Salt Creek [Capo2]",
+    "startedAt": "2026-04-26T17:50:02.052Z",
+    "endedAt": "2026-04-26T18:11:25.054Z",
+    "durationSec": 1185,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 170,
+    "endWorkingBpm": 174,
+    "startTroubleBpms": [
+      132
+    ],
+    "endTroubleBpms": [
+      138
+    ],
+    "promotions": [
+      {
+        "at": "2026-04-26T18:00:39.681Z",
+        "kind": "trouble",
+        "troubleIndex": 0,
+        "fromBpm": 132,
+        "toBpm": 135,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-04-26T18:01:52.425Z",
+        "kind": "trouble",
+        "troubleIndex": 0,
+        "fromBpm": 135,
+        "toBpm": 138,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-04-26T18:03:44.264Z",
+        "kind": "working",
+        "fromBpm": 170,
+        "toBpm": 174,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "c5cd680c-5f59-4681-8742-1e5ca1755554",
+    "itemId": "f3b56365-1b75-4130-ad3c-a3e33cbd58be",
+    "itemKind": "song",
+    "itemTitle": "Wildwood flower",
+    "startedAt": "2026-04-26T18:13:03.407Z",
+    "endedAt": "2026-04-26T18:25:50.491Z",
+    "durationSec": 767,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 150,
+    "endWorkingBpm": 154,
+    "startTroubleBpms": [
+      140
+    ],
+    "endTroubleBpms": [
+      148
+    ],
+    "promotions": [
+      {
+        "at": "2026-04-26T18:17:32.103Z",
+        "kind": "trouble",
+        "troubleIndex": 0,
+        "fromBpm": 140,
+        "toBpm": 144,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-04-26T18:18:07.685Z",
+        "kind": "trouble",
+        "troubleIndex": 0,
+        "fromBpm": 144,
+        "toBpm": 148,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-04-26T18:20:18.573Z",
+        "kind": "working",
+        "fromBpm": 150,
+        "toBpm": 154,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "cf49744c-1f25-4dae-954b-8f4935ea9e66",
+    "itemId": "ecbb5882-094b-4ee9-9856-13a5ab0c625f",
+    "itemKind": "song",
+    "itemTitle": "Beamont Rag",
+    "startedAt": "2026-04-26T18:26:10.756Z",
+    "endedAt": "2026-04-26T18:46:28.308Z",
+    "durationSec": 1068,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 165,
+    "endWorkingBpm": 165,
+    "startTroubleBpms": [
+      163
+    ],
+    "endTroubleBpms": [
+      167
+    ],
+    "promotions": [
+      {
+        "at": "2026-04-26T18:39:01.894Z",
+        "kind": "trouble",
+        "troubleIndex": 0,
+        "fromBpm": 163,
+        "toBpm": 167,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "af8efe9d-8cce-423c-9552-d8ff9f6a622f",
+    "itemId": "dc69fcf9-0d9a-46cd-837a-b7a10b887071",
+    "itemKind": "song",
+    "itemTitle": "Arkansas Traveler Whole song",
+    "startedAt": "2026-04-26T18:49:58.108Z",
+    "endedAt": "2026-04-26T19:00:25.489Z",
+    "durationSec": 627,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 185,
+    "endWorkingBpm": 190,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-04-26T18:57:07.563Z",
+        "kind": "working",
+        "fromBpm": 185,
+        "toBpm": 190,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "c2ade117-c0f8-4da7-9e97-d53f4e1ed0bf",
+    "itemId": "59d69a12-2dce-41c7-9ebe-0325d5b9a277",
+    "itemKind": "song",
+    "itemTitle": "Seney stretch [Capo1]",
+    "startedAt": "2026-04-26T19:00:45.721Z",
+    "endedAt": "2026-04-26T19:07:03.048Z",
+    "durationSec": 377,
+    "endedReason": "abort",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 195,
+    "endWorkingBpm": 195,
+    "startTroubleBpms": [
+      190
+    ],
+    "endTroubleBpms": [
+      195
+    ],
+    "promotions": [
+      {
+        "at": "2026-04-26T19:06:59.963Z",
+        "kind": "trouble",
+        "troubleIndex": 0,
+        "fromBpm": 190,
+        "toBpm": 195,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "62ebf1f5-58b5-44e8-8706-ba3509221918",
+    "itemId": "59d69a12-2dce-41c7-9ebe-0325d5b9a277",
+    "itemKind": "song",
+    "itemTitle": "Seney stretch [Capo1]",
+    "startedAt": "2026-04-26T19:07:12.874Z",
+    "endedAt": "2026-04-26T19:13:58.158Z",
+    "durationSec": 405,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 195,
+    "endWorkingBpm": 195,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "3161c132-4106-489c-b362-f7f734f4337b",
+    "itemId": "cd5bdc97-4e73-41f8-81eb-aa8907e9ec2a",
+    "itemKind": "song",
+    "itemTitle": "Escabana",
+    "startedAt": "2026-04-26T19:14:18.360Z",
+    "endedAt": "2026-04-26T19:28:46.082Z",
+    "durationSec": 868,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 92,
+    "endWorkingBpm": 96,
+    "startTroubleBpms": [
+      87,
+      71
+    ],
+    "endTroubleBpms": [
+      89,
+      77
+    ],
+    "promotions": [
+      {
+        "at": "2026-04-26T19:20:17.788Z",
+        "kind": "trouble",
+        "troubleIndex": 0,
+        "fromBpm": 87,
+        "toBpm": 89,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-04-26T19:21:32.132Z",
+        "kind": "trouble",
+        "troubleIndex": 1,
+        "fromBpm": 71,
+        "toBpm": 73,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-04-26T19:22:07.595Z",
+        "kind": "trouble",
+        "troubleIndex": 1,
+        "fromBpm": 73,
+        "toBpm": 75,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-04-26T19:22:50.027Z",
+        "kind": "trouble",
+        "troubleIndex": 1,
+        "fromBpm": 75,
+        "toBpm": 77,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-04-26T19:24:29.861Z",
+        "kind": "working",
+        "fromBpm": 92,
+        "toBpm": 94,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-04-26T19:25:52.370Z",
+        "kind": "working",
+        "fromBpm": 94,
+        "toBpm": 96,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "2029c666-7aea-41fa-85a5-03f62e889bd8",
+    "itemId": "de7b70c2-3c07-4e13-ae2b-6028a94269e7",
+    "itemKind": "song",
+    "itemTitle": "Salt Creek [Capo2]",
+    "startedAt": "2026-04-27T12:55:00.344Z",
+    "endedAt": "2026-04-27T13:16:19.062Z",
+    "durationSec": 1279,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 174,
+    "endWorkingBpm": 174,
+    "startTroubleBpms": [
+      138
+    ],
+    "endTroubleBpms": [
+      138
+    ],
+    "promotions": []
+  },
+  {
+    "id": "f18a1cf0-6d11-4240-9020-70a31c9c0016",
+    "itemId": "f3b56365-1b75-4130-ad3c-a3e33cbd58be",
+    "itemKind": "song",
+    "itemTitle": "Wildwood flower",
+    "startedAt": "2026-04-27T13:26:37.255Z",
+    "endedAt": "2026-04-27T13:41:57.168Z",
+    "durationSec": 856,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 154,
+    "endWorkingBpm": 154,
+    "startTroubleBpms": [
+      148
+    ],
+    "endTroubleBpms": [
+      148
+    ],
+    "promotions": []
+  },
+  {
+    "id": "1fb2fc48-77fc-4a0e-8810-e2116ea8826d",
+    "itemId": "dc275ae4-6f34-45b0-a041-3a04783d7427",
+    "itemKind": "song",
+    "itemTitle": "One - Depapepe",
+    "startedAt": "2026-04-27T14:00:00.000Z",
+    "endedAt": "2026-04-27T14:10:00.000Z",
+    "durationSec": 600,
+    "endedReason": "manual",
+    "plannedMinutes": 10,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "7ed58b00-5427-4a48-9d4c-f595ece31a5a",
+    "itemId": "ecbb5882-094b-4ee9-9856-13a5ab0c625f",
+    "itemKind": "song",
+    "itemTitle": "Beamont Rag",
+    "startedAt": "2026-04-27T16:40:37.470Z",
+    "endedAt": "2026-04-27T16:59:09.029Z",
+    "durationSec": 1112,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 165,
+    "endWorkingBpm": 165,
+    "startTroubleBpms": [
+      167
+    ],
+    "endTroubleBpms": [
+      171
+    ],
+    "promotions": [
+      {
+        "at": "2026-04-27T16:49:43.710Z",
+        "kind": "trouble",
+        "troubleIndex": 0,
+        "fromBpm": 167,
+        "toBpm": 171,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "a9b8ce20-efd7-4249-983c-e345d6feecd7",
+    "itemId": "dc69fcf9-0d9a-46cd-837a-b7a10b887071",
+    "itemKind": "song",
+    "itemTitle": "Arkansas Traveler Whole song",
+    "startedAt": "2026-04-27T16:59:29.298Z",
+    "endedAt": "2026-04-27T17:02:04.687Z",
+    "durationSec": 155,
+    "endedReason": "abort",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 190,
+    "endWorkingBpm": 190,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "6025e14b-424a-4de4-9e49-b84f05c0f263",
+    "itemId": "dc69fcf9-0d9a-46cd-837a-b7a10b887071",
+    "itemKind": "song",
+    "itemTitle": "Arkansas Traveler Whole song",
+    "startedAt": "2026-04-27T17:03:18.262Z",
+    "endedAt": "2026-04-27T17:13:02.137Z",
+    "durationSec": 531,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 190,
+    "endWorkingBpm": 190,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "7448632d-22c7-47e8-afa4-937183ab7b22",
+    "itemId": "59d69a12-2dce-41c7-9ebe-0325d5b9a277",
+    "itemKind": "song",
+    "itemTitle": "Seney stretch [Capo1]",
+    "startedAt": "2026-04-27T17:20:10.433Z",
+    "endedAt": "2026-04-27T18:15:49.880Z",
+    "durationSec": 754,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 195,
+    "endWorkingBpm": 195,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "ac1b3045-cf08-4ce3-926b-bbc3b3444c6d",
+    "itemId": "cd5bdc97-4e73-41f8-81eb-aa8907e9ec2a",
+    "itemKind": "song",
+    "itemTitle": "Escabana",
+    "startedAt": "2026-04-27T18:16:10.264Z",
+    "endedAt": "2026-04-27T18:34:26.820Z",
+    "durationSec": 1097,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 96,
+    "endWorkingBpm": 98,
+    "startTroubleBpms": [
+      89,
+      77
+    ],
+    "endTroubleBpms": [
+      91,
+      79
+    ],
+    "promotions": [
+      {
+        "at": "2026-04-27T18:23:55.293Z",
+        "kind": "trouble",
+        "troubleIndex": 0,
+        "fromBpm": 89,
+        "toBpm": 91,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-04-27T18:25:16.087Z",
+        "kind": "trouble",
+        "troubleIndex": 1,
+        "fromBpm": 77,
+        "toBpm": 79,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-04-27T18:27:43.084Z",
+        "kind": "working",
+        "fromBpm": 96,
+        "toBpm": 98,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "7b71a88f-0b16-4277-b8a1-d5b2f8dedec6",
+    "itemId": "66a868d0-750b-4fb5-82f3-6422ec05ca24",
+    "itemKind": "exercise",
+    "itemTitle": "Fast Strum",
+    "startedAt": "2026-04-27T19:02:21.779Z",
+    "endedAt": "2026-04-27T19:09:19.154Z",
+    "durationSec": 417,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 175,
+    "endWorkingBpm": 175,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "0024a9cc-0e3c-4a41-8911-cd0426cc2176",
+    "itemId": "82e3d795-4936-4446-8a45-a7bfc8f1c520",
+    "itemKind": "exercise",
+    "itemTitle": "Arkansas Traveler B part Ascending Descending",
+    "startedAt": "2026-04-27T19:09:22.597Z",
+    "endedAt": "2026-04-27T19:15:59.664Z",
+    "durationSec": 397,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 190,
+    "endWorkingBpm": 190,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "f3d8b2d4-259f-4309-bea8-e52851e3741d",
+    "itemId": "57eb655a-5cbd-417b-b943-9ae948ca20fd",
+    "itemKind": "exercise",
+    "itemTitle": "Cross picking ascending and descending 8ths alternating",
+    "startedAt": "2026-04-28T22:24:25.710Z",
+    "endedAt": "2026-04-28T22:30:20.227Z",
+    "durationSec": 355,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 139,
+    "endWorkingBpm": 139,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "07935d72-a9d4-4a1a-b34f-fa147cdb8794",
+    "itemId": "92da9674-2ed2-45ba-9534-252603464f31",
+    "itemKind": "exercise",
+    "itemTitle": "Cross picking banjo  G C D triads on strings 4 3 2 triplets down down up",
+    "startedAt": "2026-04-28T22:30:22.996Z",
+    "endedAt": "2026-04-28T22:37:39.088Z",
+    "durationSec": 436,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 90,
+    "endWorkingBpm": 90,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "64d2ad97-aece-494e-a545-d3666f0908ad",
+    "itemId": "1be58b6b-6aeb-4dd7-b0d0-86ea7c6464e1",
+    "itemKind": "exercise",
+    "itemTitle": "Hard part from one depapepe (16 sliding close to 12th fret)",
+    "startedAt": "2026-04-28T22:37:44.441Z",
+    "endedAt": "2026-04-28T22:44:38.351Z",
+    "durationSec": 414,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 138,
+    "endWorkingBpm": 141,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-04-28T22:39:52.648Z",
+        "kind": "working",
+        "fromBpm": 138,
+        "toBpm": 141,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "1a8cc3fc-8cff-4eba-8c67-f68c1006ac22",
+    "itemId": "aa7b696f-cb0a-4eff-bc35-a0207c717a5c",
+    "itemKind": "exercise",
+    "itemTitle": "Wildwood Flower: slide and 4 triplets alternate picking",
+    "startedAt": "2026-04-28T22:44:41.329Z",
+    "endedAt": "2026-04-28T22:50:43.287Z",
+    "durationSec": 362,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 78,
+    "endWorkingBpm": 80,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-04-28T22:46:35.167Z",
+        "kind": "working",
+        "fromBpm": 78,
+        "toBpm": 80,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "0984ae28-02b7-4b10-8f24-0b29a96fc9c8",
+    "itemId": "dc275ae4-6f34-45b0-a041-3a04783d7427",
+    "itemKind": "song",
+    "itemTitle": "One - Depapepe Rythm Part",
+    "startedAt": "2026-04-29T12:14:49.751Z",
+    "endedAt": "2026-04-29T12:41:38.990Z",
+    "durationSec": 1564,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 170,
+    "endWorkingBpm": 174,
+    "startTroubleBpms": [
+      140
+    ],
+    "endTroubleBpms": [
+      140
+    ],
+    "promotions": [
+      {
+        "at": "2026-04-29T12:36:05.320Z",
+        "kind": "working",
+        "fromBpm": 170,
+        "toBpm": 174,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "5100e4ef-888a-4291-8899-00dcf3d58100",
+    "itemId": "ccc5bda1-f0e0-418f-a73c-c2855b575ad8",
+    "itemKind": "song",
+    "itemTitle": "One - Depapepe Melodic Part",
+    "startedAt": "2026-04-29T12:41:43.566Z",
+    "endedAt": "2026-04-29T12:57:33.091Z",
+    "durationSec": 950,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 170,
+    "endWorkingBpm": 174,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-04-29T12:56:50.668Z",
+        "kind": "working",
+        "fromBpm": 170,
+        "toBpm": 174,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "30d07580-ad47-4b77-9d91-6767ebd164c1",
+    "itemId": "de7b70c2-3c07-4e13-ae2b-6028a94269e7",
+    "itemKind": "song",
+    "itemTitle": "Salt Creek [Capo2]",
+    "startedAt": "2026-04-29T12:59:27.536Z",
+    "endedAt": "2026-04-29T13:28:42.186Z",
+    "durationSec": 1345,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 174,
+    "endWorkingBpm": 174,
+    "startTroubleBpms": [
+      138
+    ],
+    "endTroubleBpms": [
+      138
+    ],
+    "promotions": []
+  },
+  {
+    "id": "9959fec9-4919-4604-a8c3-2384bd529214",
+    "itemId": "f3b56365-1b75-4130-ad3c-a3e33cbd58be",
+    "itemKind": "song",
+    "itemTitle": "Wildwood flower",
+    "startedAt": "2026-04-29T17:17:50.072Z",
+    "endedAt": "2026-04-29T17:58:30.163Z",
+    "durationSec": 871,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 154,
+    "endWorkingBpm": 154,
+    "startTroubleBpms": [
+      148
+    ],
+    "endTroubleBpms": [
+      148
+    ],
+    "promotions": []
+  },
+  {
+    "id": "4c25e857-83eb-4fd7-b760-a8ce7364e5f6",
+    "itemId": "ecbb5882-094b-4ee9-9856-13a5ab0c625f",
+    "itemKind": "song",
+    "itemTitle": "Beamont Rag",
+    "startedAt": "2026-04-29T17:58:33.226Z",
+    "endedAt": "2026-04-30T21:07:58.836Z",
+    "durationSec": 427,
+    "endedReason": "abort",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 165,
+    "endWorkingBpm": 165,
+    "startTroubleBpms": [
+      171
+    ],
+    "endTroubleBpms": [
+      171
+    ],
+    "promotions": []
+  },
+  {
+    "id": "ff1c4b1d-9db1-49c7-af70-1661a9b8a0e7",
+    "itemId": "dc275ae4-6f34-45b0-a041-3a04783d7427",
+    "itemKind": "song",
+    "itemTitle": "One - Depapepe Rythm Part",
+    "startedAt": "2026-04-30T21:08:28.503Z",
+    "endedAt": "2026-04-30T21:34:45.545Z",
+    "durationSec": 1577,
+    "endedReason": "abort",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 174,
+    "endWorkingBpm": 182,
+    "startTroubleBpms": [
+      140
+    ],
+    "endTroubleBpms": [
+      140
+    ],
+    "promotions": [
+      {
+        "at": "2026-04-30T21:30:41.661Z",
+        "kind": "working",
+        "fromBpm": 174,
+        "toBpm": 178,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-04-30T21:34:27.357Z",
+        "kind": "working",
+        "fromBpm": 178,
+        "toBpm": 182,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "ae5cb3cc-7f71-4bcb-a574-07c8ee737a46",
+    "itemId": "ccc5bda1-f0e0-418f-a73c-c2855b575ad8",
+    "itemKind": "song",
+    "itemTitle": "One - Depapepe Melodic Part",
+    "startedAt": "2026-04-30T21:37:08.343Z",
+    "endedAt": "2026-04-30T21:55:01.927Z",
+    "durationSec": 1074,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 174,
+    "endWorkingBpm": 182,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-04-30T21:51:07.761Z",
+        "kind": "working",
+        "fromBpm": 174,
+        "toBpm": 178,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-04-30T21:52:35.192Z",
+        "kind": "working",
+        "fromBpm": 178,
+        "toBpm": 182,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "b9a04cc1-2f5e-4479-ab2d-e0f5de5a11b1",
+    "itemId": "de7b70c2-3c07-4e13-ae2b-6028a94269e7",
+    "itemKind": "song",
+    "itemTitle": "Salt Creek [Capo2]",
+    "startedAt": "2026-04-30T21:55:22.156Z",
+    "endedAt": "2026-04-30T22:06:53.187Z",
+    "durationSec": 691,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 174,
+    "endWorkingBpm": 174,
+    "startTroubleBpms": [
+      138
+    ],
+    "endTroubleBpms": [
+      138
+    ],
+    "promotions": []
+  },
+  {
+    "id": "69c6db82-393f-49ea-b4d3-afbc73f912cd",
+    "itemId": "dc275ae4-6f34-45b0-a041-3a04783d7427",
+    "itemKind": "song",
+    "itemTitle": "One - Depapepe Rythm Part",
+    "startedAt": "2026-05-02T13:26:00.562Z",
+    "endedAt": "2026-05-02T13:26:19.533Z",
+    "durationSec": 19,
+    "endedReason": "abort",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 182,
+    "endWorkingBpm": 182,
+    "startTroubleBpms": [
+      140
+    ],
+    "endTroubleBpms": [
+      140
+    ],
+    "promotions": []
+  },
+  {
+    "id": "6b324b13-8a77-4c0d-b7a9-31377df8b942",
+    "itemId": "dc275ae4-6f34-45b0-a041-3a04783d7427",
+    "itemKind": "song",
+    "itemTitle": "One - Depapepe Rythm Part",
+    "startedAt": "2026-05-02T13:42:00.676Z",
+    "endedAt": "2026-05-02T13:44:08.725Z",
+    "durationSec": 128,
+    "endedReason": "abort",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 182,
+    "endWorkingBpm": 182,
+    "startTroubleBpms": [
+      140
+    ],
+    "endTroubleBpms": [
+      140
+    ],
+    "promotions": []
+  },
+  {
+    "id": "7ab6b00a-4d00-4d65-90fe-8fdc42bca25b",
+    "itemId": "dc275ae4-6f34-45b0-a041-3a04783d7427",
+    "itemKind": "song",
+    "itemTitle": "One - Depapepe Rythm Part",
+    "startedAt": "2026-05-02T15:19:47.858Z",
+    "endedAt": "2026-05-02T15:19:54.768Z",
+    "durationSec": 7,
+    "endedReason": "abort",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 182,
+    "endWorkingBpm": 182,
+    "startTroubleBpms": [
+      140
+    ],
+    "endTroubleBpms": [
+      140
+    ],
+    "promotions": []
+  },
+  {
+    "id": "d3f31b54-5123-4ba8-b4bc-ca930190f94c",
+    "itemId": "de7b70c2-3c07-4e13-ae2b-6028a94269e7",
+    "itemKind": "song",
+    "itemTitle": "Salt Creek [Capo2]",
+    "startedAt": "2026-05-02T15:51:49.197Z",
+    "endedAt": "2026-05-02T16:11:25.562Z",
+    "durationSec": 1176,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 174,
+    "endWorkingBpm": 174,
+    "startTroubleBpms": [
+      138
+    ],
+    "endTroubleBpms": [
+      138
+    ],
+    "promotions": []
+  },
+  {
+    "id": "582ced30-764d-48d2-8036-07492420fa32",
+    "itemId": "f3b56365-1b75-4130-ad3c-a3e33cbd58be",
+    "itemKind": "song",
+    "itemTitle": "Wildwood flower",
+    "startedAt": "2026-05-02T16:28:09.060Z",
+    "endedAt": "2026-05-02T16:42:57.314Z",
+    "durationSec": 888,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 154,
+    "endWorkingBpm": 154,
+    "startTroubleBpms": [
+      148
+    ],
+    "endTroubleBpms": [
+      152
+    ],
+    "promotions": [
+      {
+        "at": "2026-05-02T16:34:13.668Z",
+        "kind": "trouble",
+        "troubleIndex": 0,
+        "fromBpm": 148,
+        "toBpm": 152,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "8ae9affd-3b14-412e-af5d-75f26e16e4c4",
+    "itemId": "ecbb5882-094b-4ee9-9856-13a5ab0c625f",
+    "itemKind": "song",
+    "itemTitle": "Beamont Rag",
+    "startedAt": "2026-05-02T17:58:10.645Z",
+    "endedAt": "2026-05-02T18:06:59.550Z",
+    "durationSec": 529,
+    "endedReason": "abort",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 165,
+    "endWorkingBpm": 165,
+    "startTroubleBpms": [
+      171
+    ],
+    "endTroubleBpms": [
+      171
+    ],
+    "promotions": []
+  },
+  {
+    "id": "ecd738d1-5916-436e-88e4-8a4f6e28dee5",
+    "itemId": "ecbb5882-094b-4ee9-9856-13a5ab0c625f",
+    "itemKind": "song",
+    "itemTitle": "Beamont Rag",
+    "startedAt": "2026-05-02T18:07:15.299Z",
+    "endedAt": "2026-05-02T18:16:44.657Z",
+    "durationSec": 569,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 165,
+    "endWorkingBpm": 165,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "af98e56a-a34b-4cb2-bb8a-eee644ecbaa3",
+    "itemId": "dc69fcf9-0d9a-46cd-837a-b7a10b887071",
+    "itemKind": "song",
+    "itemTitle": "Arkansas Traveler Whole song",
+    "startedAt": "2026-05-02T18:30:20.325Z",
+    "endedAt": "2026-05-02T18:43:49.280Z",
+    "durationSec": 604,
+    "endedReason": "abort",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 190,
+    "endWorkingBpm": 190,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "3c1d64df-d17e-4b5e-98b4-0ff9d40d24c7",
+    "itemId": "dc69fcf9-0d9a-46cd-837a-b7a10b887071",
+    "itemKind": "song",
+    "itemTitle": "Arkansas Traveler Whole song",
+    "startedAt": "2026-05-02T18:43:59.419Z",
+    "endedAt": "2026-05-02T18:44:13.877Z",
+    "durationSec": 14,
+    "endedReason": "abort",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 190,
+    "endWorkingBpm": 190,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "90e9910f-b239-4d70-b6cd-a0d65891e547",
+    "itemId": "dc69fcf9-0d9a-46cd-837a-b7a10b887071",
+    "itemKind": "song",
+    "itemTitle": "Arkansas Traveler Whole song",
+    "startedAt": "2026-05-02T18:44:39.462Z",
+    "endedAt": "2026-05-02T18:45:27.667Z",
+    "durationSec": 48,
+    "endedReason": "abort",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 190,
+    "endWorkingBpm": 190,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "14bac0bd-dec5-47df-ad6e-cb03cc427ff5",
+    "itemId": "59d69a12-2dce-41c7-9ebe-0325d5b9a277",
+    "itemKind": "song",
+    "itemTitle": "Seney stretch [Capo1]",
+    "startedAt": "2026-05-02T18:49:32.896Z",
+    "endedAt": "2026-05-02T19:06:00.660Z",
+    "durationSec": 988,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 195,
+    "endWorkingBpm": 195,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "28332a90-e630-4060-81e5-1859c9e6ad8c",
+    "itemId": "cd5bdc97-4e73-41f8-81eb-aa8907e9ec2a",
+    "itemKind": "song",
+    "itemTitle": "Escabana",
+    "startedAt": "2026-05-02T19:06:05.487Z",
+    "endedAt": "2026-05-02T19:27:02.312Z",
+    "durationSec": 874,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 98,
+    "endWorkingBpm": 100,
+    "startTroubleBpms": [
+      91,
+      79
+    ],
+    "endTroubleBpms": [
+      91,
+      81
+    ],
+    "promotions": [
+      {
+        "at": "2026-05-02T19:13:20.689Z",
+        "kind": "trouble",
+        "troubleIndex": 1,
+        "fromBpm": 79,
+        "toBpm": 81,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-05-02T19:16:26.642Z",
+        "kind": "working",
+        "fromBpm": 98,
+        "toBpm": 100,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "5bef3792-6c77-459f-918b-9a74812125cd",
+    "itemId": "dc275ae4-6f34-45b0-a041-3a04783d7427",
+    "itemKind": "song",
+    "itemTitle": "One - Depapepe Rythm Part",
+    "startedAt": "2026-05-03T16:11:38.874Z",
+    "endedAt": "2026-05-03T16:25:59.251Z",
+    "durationSec": 828,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 182,
+    "endWorkingBpm": 182,
+    "startTroubleBpms": [
+      140
+    ],
+    "endTroubleBpms": [
+      140
+    ],
+    "promotions": []
+  },
+  {
+    "id": "33189dde-6b81-446c-975e-fc891ee77db2",
+    "itemId": "dc275ae4-6f34-45b0-a041-3a04783d7427",
+    "itemKind": "song",
+    "itemTitle": "One - Depapepe Rythm Part",
+    "startedAt": "2026-05-03T16:26:10.907Z",
+    "endedAt": "2026-05-03T16:30:43.666Z",
+    "durationSec": 273,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 182,
+    "endWorkingBpm": 187,
+    "startTroubleBpms": [
+      140
+    ],
+    "endTroubleBpms": [
+      140
+    ],
+    "promotions": [
+      {
+        "at": "2026-05-03T16:26:14.313Z",
+        "kind": "working",
+        "fromBpm": 182,
+        "toBpm": 187,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "839a9a4d-fd3a-4610-8432-bafc09e48a1a",
+    "itemId": "ccc5bda1-f0e0-418f-a73c-c2855b575ad8",
+    "itemKind": "song",
+    "itemTitle": "One - Depapepe Melodic Part",
+    "startedAt": "2026-05-03T17:09:32.992Z",
+    "endedAt": "2026-05-03T17:17:14.298Z",
+    "durationSec": 461,
+    "endedReason": "abort",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 182,
+    "endWorkingBpm": 182,
+    "startTroubleBpms": [
+      140
+    ],
+    "endTroubleBpms": [
+      140
+    ],
+    "promotions": []
+  },
+  {
+    "id": "628d8f75-e5d1-44da-a5c6-277a407b22bf",
+    "itemId": "ccc5bda1-f0e0-418f-a73c-c2855b575ad8",
+    "itemKind": "song",
+    "itemTitle": "One - Depapepe Melodic Part",
+    "startedAt": "2026-05-03T17:17:56.749Z",
+    "endedAt": "2026-05-03T17:24:16.236Z",
+    "durationSec": 379,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 182,
+    "endWorkingBpm": 182,
+    "startTroubleBpms": [
+      140
+    ],
+    "endTroubleBpms": [
+      156
+    ],
+    "promotions": [
+      {
+        "at": "2026-05-03T17:18:13.391Z",
+        "kind": "trouble",
+        "troubleIndex": 0,
+        "fromBpm": 140,
+        "toBpm": 144,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-05-03T17:18:35.748Z",
+        "kind": "trouble",
+        "troubleIndex": 0,
+        "fromBpm": 144,
+        "toBpm": 148,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-05-03T17:18:45.387Z",
+        "kind": "trouble",
+        "troubleIndex": 0,
+        "fromBpm": 148,
+        "toBpm": 152,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-05-03T17:18:45.628Z",
+        "kind": "trouble",
+        "troubleIndex": 0,
+        "fromBpm": 152,
+        "toBpm": 156,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "1df343da-7134-4b6e-83c5-3cb5cb288d29",
+    "itemId": "ccc5bda1-f0e0-418f-a73c-c2855b575ad8",
+    "itemKind": "song",
+    "itemTitle": "One - Depapepe Melodic Part",
+    "startedAt": "2026-05-03T17:24:24.674Z",
+    "endedAt": "2026-05-03T17:25:32.397Z",
+    "durationSec": 10,
+    "endedReason": "abort",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 182,
+    "endWorkingBpm": 187,
+    "startTroubleBpms": [
+      156
+    ],
+    "endTroubleBpms": [
+      156
+    ],
+    "promotions": [
+      {
+        "at": "2026-05-03T17:24:28.996Z",
+        "kind": "working",
+        "fromBpm": 182,
+        "toBpm": 187,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "8657c8df-16e6-4250-92e9-6093d3bad821",
+    "itemId": "66a868d0-750b-4fb5-82f3-6422ec05ca24",
+    "itemKind": "exercise",
+    "itemTitle": "Fast Strum",
+    "startedAt": "2026-05-03T17:29:38.039Z",
+    "endedAt": "2026-05-03T17:33:17.696Z",
+    "durationSec": 220,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 179,
+    "endWorkingBpm": 179,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "e24ef088-935d-4572-bbbf-260a3f58f6b9",
+    "itemId": "82e3d795-4936-4446-8a45-a7bfc8f1c520",
+    "itemKind": "exercise",
+    "itemTitle": "Arkansas Traveler B part Ascending Descending",
+    "startedAt": "2026-05-03T17:34:42.784Z",
+    "endedAt": "2026-05-03T17:41:52.814Z",
+    "durationSec": 430,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 190,
+    "endWorkingBpm": 190,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "63affc16-b1db-43a5-a931-e5a36e363d23",
+    "itemId": "57eb655a-5cbd-417b-b943-9ae948ca20fd",
+    "itemKind": "exercise",
+    "itemTitle": "Cross picking ascending and descending 8ths alternating",
+    "startedAt": "2026-05-03T17:41:57.346Z",
+    "endedAt": "2026-05-03T17:49:00.685Z",
+    "durationSec": 423,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 139,
+    "endWorkingBpm": 139,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "ddc7a0d0-cd0b-4ef6-9dc9-ab856b7b5df5",
+    "itemId": "92da9674-2ed2-45ba-9534-252603464f31",
+    "itemKind": "exercise",
+    "itemTitle": "Cross picking banjo  G C D triads on strings 4 3 2 triplets down down up",
+    "startedAt": "2026-05-03T17:49:14.585Z",
+    "endedAt": "2026-05-03T17:56:00.146Z",
+    "durationSec": 406,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 90,
+    "endWorkingBpm": 90,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "4595bf84-9e58-4d08-8323-415ad502fbec",
+    "itemId": "1be58b6b-6aeb-4dd7-b0d0-86ea7c6464e1",
+    "itemKind": "exercise",
+    "itemTitle": "Hard part from one depapepe (16 sliding close to 12th fret)",
+    "startedAt": "2026-05-03T17:56:06.122Z",
+    "endedAt": "2026-05-03T18:03:54.217Z",
+    "durationSec": 468,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 141,
+    "endWorkingBpm": 149,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-05-03T17:58:47.725Z",
+        "kind": "working",
+        "fromBpm": 141,
+        "toBpm": 145,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-05-03T18:01:58.531Z",
+        "kind": "working",
+        "fromBpm": 145,
+        "toBpm": 149,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "02d50603-9883-4d05-81c4-1c1098db52d0",
+    "itemId": "aa7b696f-cb0a-4eff-bc35-a0207c717a5c",
+    "itemKind": "exercise",
+    "itemTitle": "Wildwood Flower: slide and 4 triplets alternate picking",
+    "startedAt": "2026-05-03T18:03:59.329Z",
+    "endedAt": "2026-05-03T18:09:23.542Z",
+    "durationSec": 324,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 80,
+    "endWorkingBpm": 82,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-05-03T18:06:15.504Z",
+        "kind": "working",
+        "fromBpm": 80,
+        "toBpm": 82,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "0e9f3031-5c36-419b-b9b5-924703b8a553",
+    "itemId": "__manual__",
+    "itemKind": "song",
+    "itemTitle": "Improv",
+    "startedAt": "2026-05-03T18:05:00.000Z",
+    "endedAt": "2026-05-03T18:35:00.000Z",
+    "durationSec": 1800,
+    "endedReason": "manual",
+    "plannedMinutes": 30,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "38515240-be8f-4a45-a953-b8e05a1ddc58",
+    "itemId": "dc275ae4-6f34-45b0-a041-3a04783d7427",
+    "itemKind": "song",
+    "itemTitle": "One - Depapepe Rythm Part",
+    "startedAt": "2026-05-05T10:14:12.667Z",
+    "endedAt": "2026-05-05T10:26:48.298Z",
+    "durationSec": 756,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 187,
+    "endWorkingBpm": 187,
+    "startTroubleBpms": [
+      140
+    ],
+    "endTroubleBpms": [
+      144
+    ],
+    "promotions": [
+      {
+        "at": "2026-05-05T10:21:33.682Z",
+        "kind": "trouble",
+        "troubleIndex": 0,
+        "fromBpm": 140,
+        "toBpm": 144,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "6e4cf2f5-e133-417c-a06e-075b1ca5b346",
+    "itemId": "ccc5bda1-f0e0-418f-a73c-c2855b575ad8",
+    "itemKind": "song",
+    "itemTitle": "One - Depapepe Melodic Part",
+    "startedAt": "2026-05-05T10:26:50.343Z",
+    "endedAt": "2026-05-05T10:38:11.182Z",
+    "durationSec": 681,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 187,
+    "endWorkingBpm": 187,
+    "startTroubleBpms": [
+      156
+    ],
+    "endTroubleBpms": [
+      160
+    ],
+    "promotions": [
+      {
+        "at": "2026-05-05T10:33:39.838Z",
+        "kind": "trouble",
+        "troubleIndex": 0,
+        "fromBpm": 156,
+        "toBpm": 160,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "3142ef7f-36d1-45ea-b2bd-85c752891d4b",
+    "itemId": "de7b70c2-3c07-4e13-ae2b-6028a94269e7",
+    "itemKind": "song",
+    "itemTitle": "Salt Creek [Capo2]",
+    "startedAt": "2026-05-05T10:38:30.868Z",
+    "endedAt": "2026-05-05T10:53:20.633Z",
+    "durationSec": 890,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 174,
+    "endWorkingBpm": 174,
+    "startTroubleBpms": [
+      138
+    ],
+    "endTroubleBpms": [
+      141
+    ],
+    "promotions": [
+      {
+        "at": "2026-05-05T10:48:04.546Z",
+        "kind": "trouble",
+        "troubleIndex": 0,
+        "fromBpm": 138,
+        "toBpm": 141,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "8f04f457-0e63-4580-a9c7-b944eea06d52",
+    "itemId": "f3b56365-1b75-4130-ad3c-a3e33cbd58be",
+    "itemKind": "song",
+    "itemTitle": "Wildwood flower",
+    "startedAt": "2026-05-06T10:28:19.375Z",
+    "endedAt": "2026-05-06T10:43:08.133Z",
+    "durationSec": 883,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 154,
+    "endWorkingBpm": 154,
+    "startTroubleBpms": [
+      152
+    ],
+    "endTroubleBpms": [
+      152
+    ],
+    "promotions": []
+  },
+  {
+    "id": "253b4dc6-bdf4-4614-ba27-7e0f5aaccaec",
+    "itemId": "ecbb5882-094b-4ee9-9856-13a5ab0c625f",
+    "itemKind": "song",
+    "itemTitle": "Beamont Rag",
+    "startedAt": "2026-05-06T10:43:11.137Z",
+    "endedAt": "2026-05-06T11:01:30.423Z",
+    "durationSec": 1099,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 165,
+    "endWorkingBpm": 165,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "92a5c221-4ba8-4694-b9c1-1e7979b1ee2c",
+    "itemId": "dc69fcf9-0d9a-46cd-837a-b7a10b887071",
+    "itemKind": "song",
+    "itemTitle": "Arkansas Traveler Whole song",
+    "startedAt": "2026-05-06T11:02:16.559Z",
+    "endedAt": "2026-05-07T09:43:39.623Z",
+    "durationSec": 270,
+    "endedReason": "abort",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 190,
+    "endWorkingBpm": 190,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "986d47fb-cb45-4dc4-b1ad-69811f6d1695",
+    "itemId": "dc69fcf9-0d9a-46cd-837a-b7a10b887071",
+    "itemKind": "song",
+    "itemTitle": "Arkansas Traveler Whole song",
+    "startedAt": "2026-05-07T09:43:55.577Z",
+    "endedAt": "2026-05-07T09:58:27.267Z",
+    "durationSec": 872,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 190,
+    "endWorkingBpm": 180,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "6ffcab8e-0bfd-4bca-ad13-9cb06fc83f70",
+    "itemId": "59d69a12-2dce-41c7-9ebe-0325d5b9a277",
+    "itemKind": "song",
+    "itemTitle": "Seney stretch [Capo1]",
+    "startedAt": "2026-05-07T09:58:39.130Z",
+    "endedAt": "2026-05-07T10:14:30.790Z",
+    "durationSec": 952,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 195,
+    "endWorkingBpm": 195,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "4c9cc372-6194-47d3-9443-d4756d99d4f5",
+    "itemId": "cd5bdc97-4e73-41f8-81eb-aa8907e9ec2a",
+    "itemKind": "song",
+    "itemTitle": "Escabana",
+    "startedAt": "2026-05-07T10:14:42.384Z",
+    "endedAt": "2026-05-07T10:29:46.682Z",
+    "durationSec": 904,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 100,
+    "endWorkingBpm": 100,
+    "startTroubleBpms": [
+      91,
+      81
+    ],
+    "endTroubleBpms": [
+      91,
+      81
+    ],
+    "promotions": []
+  },
+  {
+    "id": "7bb05082-7f3a-40bf-9738-14b575be4f25",
+    "itemId": "66a868d0-750b-4fb5-82f3-6422ec05ca24",
+    "itemKind": "exercise",
+    "itemTitle": "Fast Strum",
+    "startedAt": "2026-05-07T10:45:08.854Z",
+    "endedAt": "2026-05-07T10:54:25.984Z",
+    "durationSec": 557,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 179,
+    "endWorkingBpm": 183,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-05-07T10:51:37.928Z",
+        "kind": "working",
+        "fromBpm": 179,
+        "toBpm": 183,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "262de935-20cc-432f-9153-696c9f52bfcd",
+    "itemId": "82e3d795-4936-4446-8a45-a7bfc8f1c520",
+    "itemKind": "exercise",
+    "itemTitle": "Arkansas Traveler B part Ascending Descending",
+    "startedAt": "2026-05-07T10:54:30.127Z",
+    "endedAt": "2026-05-07T11:01:28.574Z",
+    "durationSec": 418,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 190,
+    "endWorkingBpm": 190,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "15cdc40a-0e84-47a0-9f69-c061146024c4",
+    "itemId": "57eb655a-5cbd-417b-b943-9ae948ca20fd",
+    "itemKind": "exercise",
+    "itemTitle": "Cross picking ascending and descending 8ths alternating",
+    "startedAt": "2026-05-08T10:46:42.766Z",
+    "endedAt": "2026-05-08T10:55:06.952Z",
+    "durationSec": 504,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 139,
+    "endWorkingBpm": 139,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "bce43219-c261-410c-97f7-7aed90fc02e2",
+    "itemId": "92da9674-2ed2-45ba-9534-252603464f31",
+    "itemKind": "exercise",
+    "itemTitle": "Cross picking banjo  G C D triads on strings 4 3 2 triplets down down up",
+    "startedAt": "2026-05-08T10:55:11.098Z",
+    "endedAt": "2026-05-08T11:03:58.614Z",
+    "durationSec": 518,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 90,
+    "endWorkingBpm": 90,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "f7f46e2b-6c8c-43db-94d0-bc334c6161f2",
+    "itemId": "9bfca165-4105-4c0f-ac85-78d4a061625d",
+    "itemKind": "exercise",
+    "itemTitle": "Test",
+    "startedAt": "2026-05-08T11:50:07.581Z",
+    "endedAt": "2026-05-08T11:50:51.980Z",
+    "durationSec": 37,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 139,
+    "endWorkingBpm": 142,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-05-08T11:50:23.766Z",
+        "kind": "working",
+        "fromBpm": 139,
+        "toBpm": 142,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "092d5a9c-3731-45b8-a89f-93c5e72cf213",
+    "itemId": "1be58b6b-6aeb-4dd7-b0d0-86ea7c6464e1",
+    "itemKind": "exercise",
+    "itemTitle": "Hard part from one depapepe (16 sliding close to 12th fret)",
+    "startedAt": "2026-05-09T12:13:18.606Z",
+    "endedAt": "2026-05-09T12:21:54.855Z",
+    "durationSec": 516,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 149,
+    "endWorkingBpm": 157,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-05-09T12:16:25.607Z",
+        "kind": "working",
+        "fromBpm": 149,
+        "toBpm": 153,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-05-09T12:17:45.672Z",
+        "kind": "working",
+        "fromBpm": 153,
+        "toBpm": 157,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "cfdf363b-ab86-438b-b9cc-1d12b8041790",
+    "itemId": "aa7b696f-cb0a-4eff-bc35-a0207c717a5c",
+    "itemKind": "exercise",
+    "itemTitle": "Wildwood Flower: slide and 4 triplets alternate picking",
+    "startedAt": "2026-05-09T12:21:59.568Z",
+    "endedAt": "2026-05-09T12:29:30.765Z",
+    "durationSec": 451,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 82,
+    "endWorkingBpm": 82,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "a82360c0-acdd-4f50-883f-0d7b886fdfe9",
+    "itemId": "dc275ae4-6f34-45b0-a041-3a04783d7427",
+    "itemKind": "song",
+    "itemTitle": "One - Depapepe Rythm Part",
+    "startedAt": "2026-05-09T12:29:42.470Z",
+    "endedAt": "2026-05-09T12:45:17.179Z",
+    "durationSec": 935,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 187,
+    "endWorkingBpm": 187,
+    "startTroubleBpms": [
+      144
+    ],
+    "endTroubleBpms": [
+      152
+    ],
+    "promotions": [
+      {
+        "at": "2026-05-09T12:38:28.619Z",
+        "kind": "trouble",
+        "troubleIndex": 0,
+        "fromBpm": 144,
+        "toBpm": 148,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-05-09T12:38:46.482Z",
+        "kind": "trouble",
+        "troubleIndex": 0,
+        "fromBpm": 148,
+        "toBpm": 152,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "2b8b96ae-e5d5-4089-a3e3-7a1ee8f8d40b",
+    "itemId": "ccc5bda1-f0e0-418f-a73c-c2855b575ad8",
+    "itemKind": "song",
+    "itemTitle": "One - Depapepe Melodic Part",
+    "startedAt": "2026-05-09T12:45:20.216Z",
+    "endedAt": "2026-05-09T12:57:53.240Z",
+    "durationSec": 753,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 187,
+    "endWorkingBpm": 187,
+    "startTroubleBpms": [
+      160
+    ],
+    "endTroubleBpms": [
+      168
+    ],
+    "promotions": [
+      {
+        "at": "2026-05-09T12:52:04.815Z",
+        "kind": "trouble",
+        "troubleIndex": 0,
+        "fromBpm": 160,
+        "toBpm": 164,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-05-09T12:52:29.686Z",
+        "kind": "trouble",
+        "troubleIndex": 0,
+        "fromBpm": 164,
+        "toBpm": 168,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "97946047-7b4d-4a52-a34b-de6fd6ecb165",
+    "itemId": "de7b70c2-3c07-4e13-ae2b-6028a94269e7",
+    "itemKind": "song",
+    "itemTitle": "Salt Creek [Capo2]",
+    "startedAt": "2026-05-09T12:58:09.259Z",
+    "endedAt": "2026-05-09T13:23:32.769Z",
+    "durationSec": 1136,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 174,
+    "endWorkingBpm": 174,
+    "startTroubleBpms": [
+      141
+    ],
+    "endTroubleBpms": [
+      145
+    ],
+    "promotions": [
+      {
+        "at": "2026-05-09T13:15:13.660Z",
+        "kind": "trouble",
+        "troubleIndex": 0,
+        "fromBpm": 141,
+        "toBpm": 145,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "d96aaa25-48d8-47fc-adfd-99ec0d5b04ac",
+    "itemId": "f3b56365-1b75-4130-ad3c-a3e33cbd58be",
+    "itemKind": "song",
+    "itemTitle": "Wildwood flower",
+    "startedAt": "2026-05-09T13:23:37.344Z",
+    "endedAt": "2026-05-09T13:36:08.422Z",
+    "durationSec": 751,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 154,
+    "endWorkingBpm": 154,
+    "startTroubleBpms": [
+      152
+    ],
+    "endTroubleBpms": [
+      156
+    ],
+    "promotions": [
+      {
+        "at": "2026-05-09T13:29:45.903Z",
+        "kind": "trouble",
+        "troubleIndex": 0,
+        "fromBpm": 152,
+        "toBpm": 156,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "227f7ec7-1e71-4bc1-83f5-0547f8b973c0",
+    "itemId": "f3b56365-1b75-4130-ad3c-a3e33cbd58be",
+    "itemKind": "song",
+    "itemTitle": "Wildwood flower",
+    "startedAt": "2026-05-09T13:36:33.198Z",
+    "endedAt": "2026-05-09T13:36:39.565Z",
+    "durationSec": 6,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 154,
+    "endWorkingBpm": 154,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "30e6ad3a-f0b7-4052-85c4-89e2489ef3b0",
+    "itemId": "ecbb5882-094b-4ee9-9856-13a5ab0c625f",
+    "itemKind": "song",
+    "itemTitle": "Beamont Rag",
+    "startedAt": "2026-05-09T13:36:43.073Z",
+    "endedAt": "2026-05-09T13:50:59.338Z",
+    "durationSec": 856,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 165,
+    "endWorkingBpm": 169,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-05-09T13:45:00.722Z",
+        "kind": "working",
+        "fromBpm": 165,
+        "toBpm": 169,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "c8b05e09-2bdc-42d0-84fc-96945ce3c300",
+    "itemId": "dc69fcf9-0d9a-46cd-837a-b7a10b887071",
+    "itemKind": "song",
+    "itemTitle": "Arkansas Traveler Whole song",
+    "startedAt": "2026-05-09T13:51:03.513Z",
+    "endedAt": "2026-05-10T11:30:09.730Z",
+    "durationSec": 225,
+    "endedReason": "abort",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 180,
+    "endWorkingBpm": 180,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "ee3056df-947a-491f-977b-1bec0e057bc3",
+    "itemId": "dc69fcf9-0d9a-46cd-837a-b7a10b887071",
+    "itemKind": "song",
+    "itemTitle": "Arkansas Traveler Whole song",
+    "startedAt": "2026-05-10T13:59:42.834Z",
+    "endedAt": "2026-05-10T14:14:04.310Z",
+    "durationSec": 861,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 180,
+    "endWorkingBpm": 180,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "2faacc79-82c7-4244-b1b5-3719d2e1be8e",
+    "itemId": "59d69a12-2dce-41c7-9ebe-0325d5b9a277",
+    "itemKind": "song",
+    "itemTitle": "Seney stretch [Capo1]",
+    "startedAt": "2026-05-10T14:14:24.606Z",
+    "endedAt": "2026-05-10T14:28:48.842Z",
+    "durationSec": 864,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 195,
+    "endWorkingBpm": 195,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "bf59d0f0-591b-4b90-95eb-dca470c0f887",
+    "itemId": "cd5bdc97-4e73-41f8-81eb-aa8907e9ec2a",
+    "itemKind": "song",
+    "itemTitle": "Escabana",
+    "startedAt": "2026-05-10T14:28:51.857Z",
+    "endedAt": "2026-05-10T14:44:45.959Z",
+    "durationSec": 954,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 100,
+    "endWorkingBpm": 100,
+    "startTroubleBpms": [
+      91,
+      81
+    ],
+    "endTroubleBpms": [
+      91,
+      83
+    ],
+    "promotions": [
+      {
+        "at": "2026-05-10T14:38:02.934Z",
+        "kind": "trouble",
+        "troubleIndex": 1,
+        "fromBpm": 81,
+        "toBpm": 83,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "5ee40023-69a9-4ddb-8b6c-57074bbd8fee",
+    "itemId": "66a868d0-750b-4fb5-82f3-6422ec05ca24",
+    "itemKind": "exercise",
+    "itemTitle": "Fast Strum",
+    "startedAt": "2026-05-10T14:46:03.046Z",
+    "endedAt": "2026-05-10T14:53:57.339Z",
+    "durationSec": 474,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 183,
+    "endWorkingBpm": 193,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-05-10T14:49:50.115Z",
+        "kind": "working",
+        "fromBpm": 183,
+        "toBpm": 188,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-05-10T14:53:02.082Z",
+        "kind": "working",
+        "fromBpm": 188,
+        "toBpm": 193,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "e12c1c3b-ea39-4b64-bf33-53842c816c8e",
+    "itemId": "82e3d795-4936-4446-8a45-a7bfc8f1c520",
+    "itemKind": "exercise",
+    "itemTitle": "Arkansas Traveler B part Ascending Descending",
+    "startedAt": "2026-05-10T14:54:02.834Z",
+    "endedAt": "2026-05-10T15:00:37.794Z",
+    "durationSec": 395,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 190,
+    "endWorkingBpm": 195,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-05-10T14:56:41.745Z",
+        "kind": "working",
+        "fromBpm": 190,
+        "toBpm": 195,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "424a2068-1605-47db-8808-61894e5bd4f6",
+    "itemId": "57eb655a-5cbd-417b-b943-9ae948ca20fd",
+    "itemKind": "exercise",
+    "itemTitle": "Cross picking ascending and descending 8ths alternating",
+    "startedAt": "2026-05-11T10:19:14.611Z",
+    "endedAt": "2026-05-11T10:27:32.465Z",
+    "durationSec": 498,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 139,
+    "endWorkingBpm": 130,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "8fb7f521-1b97-4554-a803-9c7db75526ec",
+    "itemId": "92da9674-2ed2-45ba-9534-252603464f31",
+    "itemKind": "exercise",
+    "itemTitle": "Cross picking banjo  G C D triads on strings 4 3 2 triplets down down up",
+    "startedAt": "2026-05-11T10:27:35.950Z",
+    "endedAt": "2026-05-11T10:36:26.206Z",
+    "durationSec": 530,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 90,
+    "endWorkingBpm": 90,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "cefc6657-37f5-4c8f-9351-5471adf2e41a",
+    "itemId": "1be58b6b-6aeb-4dd7-b0d0-86ea7c6464e1",
+    "itemKind": "exercise",
+    "itemTitle": "Hard part from one depapepe (16 sliding close to 12th fret)",
+    "startedAt": "2026-05-11T10:36:29.565Z",
+    "endedAt": "2026-05-11T10:42:36.765Z",
+    "durationSec": 367,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 157,
+    "endWorkingBpm": 165,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-05-11T10:38:12.053Z",
+        "kind": "working",
+        "fromBpm": 157,
+        "toBpm": 161,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-05-11T10:40:41.509Z",
+        "kind": "working",
+        "fromBpm": 161,
+        "toBpm": 165,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "64b256ae-384f-402a-96a1-6b1b5876065a",
+    "itemId": "aa7b696f-cb0a-4eff-bc35-a0207c717a5c",
+    "itemKind": "exercise",
+    "itemTitle": "Wildwood Flower: slide and 4 triplets alternate picking",
+    "startedAt": "2026-05-11T10:42:39.784Z",
+    "endedAt": "2026-05-11T10:50:23.156Z",
+    "durationSec": 463,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 82,
+    "endWorkingBpm": 84,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-05-11T10:48:22.163Z",
+        "kind": "working",
+        "fromBpm": 82,
+        "toBpm": 84,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "185ebcd0-4012-443b-aeae-0d96a6c3b352",
+    "itemId": "dc275ae4-6f34-45b0-a041-3a04783d7427",
+    "itemKind": "song",
+    "itemTitle": "One - Depapepe Rythm Part",
+    "startedAt": "2026-05-11T10:50:35.636Z",
+    "endedAt": "2026-05-11T11:02:45.993Z",
+    "durationSec": 730,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 187,
+    "endWorkingBpm": 187,
+    "startTroubleBpms": [
+      152
+    ],
+    "endTroubleBpms": [
+      152
+    ],
+    "promotions": []
+  },
+  {
+    "id": "86a8b88b-67a8-4dbf-810f-0d2b6db7462b",
+    "itemId": "ccc5bda1-f0e0-418f-a73c-c2855b575ad8",
+    "itemKind": "song",
+    "itemTitle": "One - Depapepe Melodic Part",
+    "startedAt": "2026-05-12T10:19:11.772Z",
+    "endedAt": "2026-05-12T10:30:12.947Z",
+    "durationSec": 661,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 187,
+    "endWorkingBpm": 187,
+    "startTroubleBpms": [
+      168
+    ],
+    "endTroubleBpms": [
+      172
+    ],
+    "promotions": [
+      {
+        "at": "2026-05-12T10:25:12.114Z",
+        "kind": "trouble",
+        "troubleIndex": 0,
+        "fromBpm": 168,
+        "toBpm": 172,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "65d6009c-82b5-49aa-91f0-c0b154baf4b2",
+    "itemId": "de7b70c2-3c07-4e13-ae2b-6028a94269e7",
+    "itemKind": "song",
+    "itemTitle": "Salt Creek [Capo2]",
+    "startedAt": "2026-05-12T10:30:33.207Z",
+    "endedAt": "2026-05-12T10:37:58.031Z",
+    "durationSec": 425,
+    "endedReason": "abort",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 174,
+    "endWorkingBpm": 174,
+    "startTroubleBpms": [
+      145
+    ],
+    "endTroubleBpms": [
+      145
+    ],
+    "promotions": []
+  },
+  {
+    "id": "11554bf1-b89a-4791-a323-7a40701d2755",
+    "itemId": "de7b70c2-3c07-4e13-ae2b-6028a94269e7",
+    "itemKind": "song",
+    "itemTitle": "Salt Creek [Capo2]",
+    "startedAt": "2026-05-12T10:38:13.163Z",
+    "endedAt": "2026-05-12T10:55:08.522Z",
+    "durationSec": 883,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 174,
+    "endWorkingBpm": 178,
+    "startTroubleBpms": [
+      145
+    ],
+    "endTroubleBpms": [
+      149
+    ],
+    "promotions": [
+      {
+        "at": "2026-05-12T10:45:53.828Z",
+        "kind": "trouble",
+        "troubleIndex": 0,
+        "fromBpm": 145,
+        "toBpm": 149,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-05-12T10:53:08.266Z",
+        "kind": "working",
+        "fromBpm": 174,
+        "toBpm": 178,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "3c91a56a-0b63-4b9a-ae83-c955c6f275bf",
+    "itemId": "f3b56365-1b75-4130-ad3c-a3e33cbd58be",
+    "itemKind": "song",
+    "itemTitle": "Wildwood flower",
+    "startedAt": "2026-05-12T10:55:10.437Z",
+    "endedAt": "2026-05-12T11:07:09.199Z",
+    "durationSec": 719,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 154,
+    "endWorkingBpm": 158,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-05-12T11:02:38.664Z",
+        "kind": "working",
+        "fromBpm": 154,
+        "toBpm": 158,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "02e49cef-0b69-446c-91a1-f34bc63372dc",
+    "itemId": "ecbb5882-094b-4ee9-9856-13a5ab0c625f",
+    "itemKind": "song",
+    "itemTitle": "Beamont Rag",
+    "startedAt": "2026-05-13T10:28:32.061Z",
+    "endedAt": "2026-05-13T10:43:41.242Z",
+    "durationSec": 909,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 169,
+    "endWorkingBpm": 169,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "56128b77-1c1a-4094-a0a7-6f4c57a44b30",
+    "itemId": "dc69fcf9-0d9a-46cd-837a-b7a10b887071",
+    "itemKind": "song",
+    "itemTitle": "Arkansas Traveler Whole song",
+    "startedAt": "2026-05-13T10:44:01.502Z",
+    "endedAt": "2026-05-13T10:56:59.116Z",
+    "durationSec": 778,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 180,
+    "endWorkingBpm": 180,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "ddae9326-6c55-49d6-8a92-d6539b9d76f5",
+    "itemId": "59d69a12-2dce-41c7-9ebe-0325d5b9a277",
+    "itemKind": "song",
+    "itemTitle": "Seney stretch [Capo1]",
+    "startedAt": "2026-05-13T10:57:06.067Z",
+    "endedAt": "2026-05-13T11:11:42.953Z",
+    "durationSec": 877,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 195,
+    "endWorkingBpm": 195,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "f1549550-c2ee-4f5d-9066-51812a928d70",
+    "itemId": "ccc5bda1-f0e0-418f-a73c-c2855b575ad8",
+    "itemKind": "song",
+    "itemTitle": "One - Depapepe Melodic Part",
+    "startedAt": "2026-05-13T23:36:41.947Z",
+    "endedAt": "2026-05-13T23:36:48.607Z",
+    "durationSec": 7,
+    "endedReason": "abort",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 187,
+    "endWorkingBpm": 187,
+    "startTroubleBpms": [
+      172
+    ],
+    "endTroubleBpms": [
+      172
+    ],
+    "promotions": []
+  },
+  {
+    "id": "30af7de9-216b-440f-ab2a-9f54862f8579",
+    "itemId": "cd5bdc97-4e73-41f8-81eb-aa8907e9ec2a",
+    "itemKind": "song",
+    "itemTitle": "Escabana",
+    "startedAt": "2026-05-13T23:36:55.195Z",
+    "endedAt": "2026-05-13T23:51:42.289Z",
+    "durationSec": 887,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 100,
+    "endWorkingBpm": 100,
+    "startTroubleBpms": [
+      91,
+      83
+    ],
+    "endTroubleBpms": [
+      93,
+      85
+    ],
+    "promotions": [
+      {
+        "at": "2026-05-13T23:43:33.163Z",
+        "kind": "trouble",
+        "troubleIndex": 0,
+        "fromBpm": 91,
+        "toBpm": 93,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-05-13T23:44:27.538Z",
+        "kind": "trouble",
+        "troubleIndex": 1,
+        "fromBpm": 83,
+        "toBpm": 85,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "1ea76658-0fd3-44b8-9d7a-305a3fd4d61b",
+    "itemId": "dc275ae4-6f34-45b0-a041-3a04783d7427",
+    "itemKind": "song",
+    "itemTitle": "One - Depapepe Rythm Part",
+    "startedAt": "2026-05-14T10:21:05.512Z",
+    "endedAt": "2026-05-14T10:32:58.360Z",
+    "durationSec": 713,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 187,
+    "endWorkingBpm": 187,
+    "startTroubleBpms": [
+      152
+    ],
+    "endTroubleBpms": [
+      152
+    ],
+    "promotions": []
+  },
+  {
+    "id": "cd4e0c8c-5eb0-4dcf-88c5-912a7eefcd1b",
+    "itemId": "ccc5bda1-f0e0-418f-a73c-c2855b575ad8",
+    "itemKind": "song",
+    "itemTitle": "One - Depapepe Melodic Part",
+    "startedAt": "2026-05-14T10:33:03.912Z",
+    "endedAt": "2026-05-14T10:45:15.286Z",
+    "durationSec": 731,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 187,
+    "endWorkingBpm": 187,
+    "startTroubleBpms": [
+      172
+    ],
+    "endTroubleBpms": [
+      180
+    ],
+    "promotions": [
+      {
+        "at": "2026-05-14T10:38:33.022Z",
+        "kind": "trouble",
+        "troubleIndex": 0,
+        "fromBpm": 172,
+        "toBpm": 176,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-05-14T10:38:55.773Z",
+        "kind": "trouble",
+        "troubleIndex": 0,
+        "fromBpm": 176,
+        "toBpm": 180,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "bf2149c5-3787-4fd1-aa5c-a862965fd0d8",
+    "itemId": "66a868d0-750b-4fb5-82f3-6422ec05ca24",
+    "itemKind": "exercise",
+    "itemTitle": "Fast Strum",
+    "startedAt": "2026-05-14T10:45:26.874Z",
+    "endedAt": "2026-05-14T10:53:04.139Z",
+    "durationSec": 457,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 193,
+    "endWorkingBpm": 203,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-05-14T10:48:33.547Z",
+        "kind": "working",
+        "fromBpm": 193,
+        "toBpm": 198,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-05-14T10:50:26.163Z",
+        "kind": "working",
+        "fromBpm": 198,
+        "toBpm": 203,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "a3c01f0a-ffe7-496e-9701-eff4d41b311b",
+    "itemId": "82e3d795-4936-4446-8a45-a7bfc8f1c520",
+    "itemKind": "exercise",
+    "itemTitle": "Arkansas Traveler B part Ascending Descending",
+    "startedAt": "2026-05-14T10:53:08.906Z",
+    "endedAt": "2026-05-14T10:59:38.818Z",
+    "durationSec": 390,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 195,
+    "endWorkingBpm": 195,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "222b65ce-53e8-43d2-b592-f9f757ec248c",
+    "itemId": "57eb655a-5cbd-417b-b943-9ae948ca20fd",
+    "itemKind": "exercise",
+    "itemTitle": "Cross picking ascending and descending 8ths alternating",
+    "startedAt": "2026-05-14T10:59:43.761Z",
+    "endedAt": "2026-05-14T11:08:44.663Z",
+    "durationSec": 391,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 130,
+    "endWorkingBpm": 133,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-05-14T11:06:41.462Z",
+        "kind": "working",
+        "fromBpm": 130,
+        "toBpm": 133,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "5f647e2f-6882-45d7-8f7b-02614b40750b",
+    "itemId": "92da9674-2ed2-45ba-9534-252603464f31",
+    "itemKind": "exercise",
+    "itemTitle": "Cross picking banjo  G C D triads on strings 4 3 2 triplets down down up",
+    "startedAt": "2026-05-15T10:46:05.120Z",
+    "endedAt": "2026-05-15T10:53:58.991Z",
+    "durationSec": 474,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 90,
+    "endWorkingBpm": 90,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "5979f71d-532e-4f1c-b31d-a0ed56961771",
+    "itemId": "1be58b6b-6aeb-4dd7-b0d0-86ea7c6464e1",
+    "itemKind": "exercise",
+    "itemTitle": "Hard part from one depapepe (16 sliding close to 12th fret)",
+    "startedAt": "2026-05-15T10:54:01.269Z",
+    "endedAt": "2026-05-15T11:00:26.365Z",
+    "durationSec": 385,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 165,
+    "endWorkingBpm": 169,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-05-15T10:56:21.855Z",
+        "kind": "working",
+        "fromBpm": 165,
+        "toBpm": 169,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "80abc25f-62ce-46dd-b19b-99265bed7345",
+    "itemId": "aa7b696f-cb0a-4eff-bc35-a0207c717a5c",
+    "itemKind": "exercise",
+    "itemTitle": "Wildwood Flower: slide and 4 triplets alternate picking",
+    "startedAt": "2026-05-15T11:00:28.817Z",
+    "endedAt": "2026-05-15T11:08:08.044Z",
+    "durationSec": 347,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 84,
+    "endWorkingBpm": 86,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-05-15T11:06:52.643Z",
+        "kind": "working",
+        "fromBpm": 84,
+        "toBpm": 86,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "53ceb3ef-7d2a-401a-a92c-58f6ac5f9ed1",
+    "itemId": "dc275ae4-6f34-45b0-a041-3a04783d7427",
+    "itemKind": "song",
+    "itemTitle": "One - Depapepe Rythm Part",
+    "startedAt": "2026-05-16T13:34:06.529Z",
+    "endedAt": "2026-05-16T13:46:40.207Z",
+    "durationSec": 754,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 187,
+    "endWorkingBpm": 187,
+    "startTroubleBpms": [
+      152
+    ],
+    "endTroubleBpms": [
+      152
+    ],
+    "promotions": []
+  },
+  {
+    "id": "0d1b3833-8302-41d4-a240-0d8a296672eb",
+    "itemId": "ccc5bda1-f0e0-418f-a73c-c2855b575ad8",
+    "itemKind": "song",
+    "itemTitle": "One - Depapepe Melodic Part",
+    "startedAt": "2026-05-16T14:53:12.185Z",
+    "endedAt": "2026-05-16T15:04:27.307Z",
+    "durationSec": 675,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 187,
+    "endWorkingBpm": 187,
+    "startTroubleBpms": [
+      180
+    ],
+    "endTroubleBpms": [
+      185
+    ],
+    "promotions": [
+      {
+        "at": "2026-05-16T14:59:19.059Z",
+        "kind": "trouble",
+        "troubleIndex": 0,
+        "fromBpm": 180,
+        "toBpm": 185,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "b61e165d-18bb-4166-a3de-1c119eaad5f8",
+    "itemId": "de7b70c2-3c07-4e13-ae2b-6028a94269e7",
+    "itemKind": "song",
+    "itemTitle": "Salt Creek [Capo2]",
+    "startedAt": "2026-05-16T15:04:30.404Z",
+    "endedAt": "2026-05-16T15:04:31.699Z",
+    "durationSec": 1,
+    "endedReason": "abort",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 178,
+    "endWorkingBpm": 178,
+    "startTroubleBpms": [
+      149
+    ],
+    "endTroubleBpms": [
+      149
+    ],
+    "promotions": []
+  },
+  {
+    "id": "9c477094-0bdc-4048-bfed-1bfe0749ee59",
+    "itemId": "ccc5bda1-f0e0-418f-a73c-c2855b575ad8",
+    "itemKind": "song",
+    "itemTitle": "One - Depapepe Melodic Part",
+    "startedAt": "2026-05-16T15:04:37.482Z",
+    "endedAt": "2026-05-16T15:04:41.266Z",
+    "durationSec": 4,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 187,
+    "endWorkingBpm": 192,
+    "startTroubleBpms": [
+      185
+    ],
+    "endTroubleBpms": [
+      185
+    ],
+    "promotions": [
+      {
+        "at": "2026-05-16T15:04:40.437Z",
+        "kind": "working",
+        "fromBpm": 187,
+        "toBpm": 192,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "dc0e7720-a20c-40fe-8cae-e43c165bc5bd",
+    "itemId": "de7b70c2-3c07-4e13-ae2b-6028a94269e7",
+    "itemKind": "song",
+    "itemTitle": "Salt Creek [Capo2]",
+    "startedAt": "2026-05-16T15:04:55.996Z",
+    "endedAt": "2026-05-16T15:22:42.613Z",
+    "durationSec": 1067,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 178,
+    "endWorkingBpm": 178,
+    "startTroubleBpms": [
+      149
+    ],
+    "endTroubleBpms": [
+      161
+    ],
+    "promotions": [
+      {
+        "at": "2026-05-16T15:13:45.113Z",
+        "kind": "trouble",
+        "troubleIndex": 0,
+        "fromBpm": 149,
+        "toBpm": 153,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-05-16T15:14:29.041Z",
+        "kind": "trouble",
+        "troubleIndex": 0,
+        "fromBpm": 153,
+        "toBpm": 157,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-05-16T15:14:46.562Z",
+        "kind": "trouble",
+        "troubleIndex": 0,
+        "fromBpm": 157,
+        "toBpm": 161,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "20e0d736-2fd9-4927-a2f3-855ca1e9ac60",
+    "itemId": "f3b56365-1b75-4130-ad3c-a3e33cbd58be",
+    "itemKind": "song",
+    "itemTitle": "Wildwood flower",
+    "startedAt": "2026-05-16T15:23:02.834Z",
+    "endedAt": "2026-05-16T15:33:49.686Z",
+    "durationSec": 647,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 158,
+    "endWorkingBpm": 158,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "d889082d-38ec-4244-8b07-3ee6ffca9b24",
+    "itemId": "ecbb5882-094b-4ee9-9856-13a5ab0c625f",
+    "itemKind": "song",
+    "itemTitle": "Beamont Rag",
+    "startedAt": "2026-05-16T15:36:05.674Z",
+    "endedAt": "2026-05-16T15:52:55.531Z",
+    "durationSec": 1010,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 169,
+    "endWorkingBpm": 169,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "5ec8a328-0317-40ab-9bf9-650b34612fb7",
+    "itemId": "dc69fcf9-0d9a-46cd-837a-b7a10b887071",
+    "itemKind": "song",
+    "itemTitle": "Arkansas Traveler Whole song",
+    "startedAt": "2026-05-16T15:53:15.783Z",
+    "endedAt": "2026-05-16T16:00:11.434Z",
+    "durationSec": 416,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 180,
+    "endWorkingBpm": 180,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "b2b0549f-0763-412a-a59a-df23873897c7",
+    "itemId": "dc69fcf9-0d9a-46cd-837a-b7a10b887071",
+    "itemKind": "song",
+    "itemTitle": "Arkansas Traveler Whole song",
+    "startedAt": "2026-05-17T15:13:09.908Z",
+    "endedAt": "2026-05-17T15:26:07.038Z",
+    "durationSec": 777,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 180,
+    "endWorkingBpm": 180,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "8436b81e-aea7-4d3a-a35f-55a52558aaa1",
+    "itemId": "59d69a12-2dce-41c7-9ebe-0325d5b9a277",
+    "itemKind": "song",
+    "itemTitle": "Seney stretch [Capo1]",
+    "startedAt": "2026-05-17T15:32:22.148Z",
+    "endedAt": "2026-05-17T15:46:53.973Z",
+    "durationSec": 872,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 195,
+    "endWorkingBpm": 195,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "5f67b02e-9c70-40c1-bcc9-c3cb0ef08a7d",
+    "itemId": "cd5bdc97-4e73-41f8-81eb-aa8907e9ec2a",
+    "itemKind": "song",
+    "itemTitle": "Escabana",
+    "startedAt": "2026-05-17T15:46:57.632Z",
+    "endedAt": "2026-05-17T16:05:28.002Z",
+    "durationSec": 1110,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 100,
+    "endWorkingBpm": 100,
+    "startTroubleBpms": [
+      93,
+      85
+    ],
+    "endTroubleBpms": [
+      93,
+      85
+    ],
+    "promotions": []
+  },
+  {
+    "id": "ec25b336-13a0-42b2-a4eb-55fac1423ce3",
+    "itemId": "66a868d0-750b-4fb5-82f3-6422ec05ca24",
+    "itemKind": "exercise",
+    "itemTitle": "Fast Strum",
+    "startedAt": "2026-05-19T10:51:08.488Z",
+    "endedAt": "2026-05-19T10:58:42.863Z",
+    "durationSec": 454,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 203,
+    "endWorkingBpm": 213,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-05-19T10:55:08.612Z",
+        "kind": "working",
+        "fromBpm": 203,
+        "toBpm": 208,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-05-19T10:56:07.733Z",
+        "kind": "working",
+        "fromBpm": 208,
+        "toBpm": 213,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "db5d6d7e-8903-4508-be8d-4d17873fbeaf",
+    "itemId": "82e3d795-4936-4446-8a45-a7bfc8f1c520",
+    "itemKind": "exercise",
+    "itemTitle": "Arkansas Traveler B part Ascending Descending",
+    "startedAt": "2026-05-19T10:59:03.127Z",
+    "endedAt": "2026-05-19T11:05:33.036Z",
+    "durationSec": 390,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 195,
+    "endWorkingBpm": 195,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "dbf0dd49-0ecb-4478-a31f-23e1021dc67e",
+    "itemId": "57eb655a-5cbd-417b-b943-9ae948ca20fd",
+    "itemKind": "exercise",
+    "itemTitle": "Cross picking ascending and descending 8ths alternating",
+    "startedAt": "2026-05-19T11:05:39.144Z",
+    "endedAt": "2026-05-19T11:11:53.546Z",
+    "durationSec": 374,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 133,
+    "endWorkingBpm": 133,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "fbeb664b-1171-4ef3-8ca0-12342f9a4980",
+    "itemId": "92da9674-2ed2-45ba-9534-252603464f31",
+    "itemKind": "exercise",
+    "itemTitle": "Cross picking banjo  G C D triads on strings 4 3 2 triplets down down up",
+    "startedAt": "2026-05-19T11:12:13.734Z",
+    "endedAt": "2026-05-19T11:16:46.875Z",
+    "durationSec": 273,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 90,
+    "endWorkingBpm": 90,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "ffff3406-f9b9-4f44-a312-4dc3ed0b7494",
+    "itemId": "1be58b6b-6aeb-4dd7-b0d0-86ea7c6464e1",
+    "itemKind": "exercise",
+    "itemTitle": "Hard part from one depapepe (16 sliding close to 12th fret)",
+    "startedAt": "2026-05-20T10:45:32.052Z",
+    "endedAt": "2026-05-20T10:51:44.688Z",
+    "durationSec": 373,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 169,
+    "endWorkingBpm": 169,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "e07eda21-da55-4e7b-a13c-985b7adf3495",
+    "itemId": "aa7b696f-cb0a-4eff-bc35-a0207c717a5c",
+    "itemKind": "exercise",
+    "itemTitle": "Wildwood Flower: slide and 4 triplets alternate picking",
+    "startedAt": "2026-05-20T10:51:46.726Z",
+    "endedAt": "2026-05-20T11:04:18.339Z",
+    "durationSec": 752,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 86,
+    "endWorkingBpm": 86,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "4f27da1b-9ed9-4544-8ba1-5adfc4e70f26",
+    "itemId": "4523008d-7d39-4da5-8c7e-5a91d8f84a5e",
+    "itemKind": "exercise",
+    "itemTitle": "Transcribing",
+    "startedAt": "2026-05-20T11:04:21.584Z",
+    "endedAt": "2026-05-20T11:04:22.295Z",
+    "durationSec": 1,
+    "endedReason": "abort",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 80,
+    "endWorkingBpm": 80,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "09787a11-facc-4ba4-9eb2-73294197b988",
+    "itemId": "dc275ae4-6f34-45b0-a041-3a04783d7427",
+    "itemKind": "song",
+    "itemTitle": "One - Depapepe Rythm Part",
+    "startedAt": "2026-05-20T11:04:29.735Z",
+    "endedAt": "2026-05-20T11:16:38.801Z",
+    "durationSec": 729,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 187,
+    "endWorkingBpm": 187,
+    "startTroubleBpms": [
+      152
+    ],
+    "endTroubleBpms": [
+      152
+    ],
+    "promotions": []
+  },
+  {
+    "id": "182d724d-f67c-4ca2-a7bd-6b39cb5dc8ae",
+    "itemId": "ccc5bda1-f0e0-418f-a73c-c2855b575ad8",
+    "itemKind": "song",
+    "itemTitle": "One - Depapepe Melodic Part",
+    "startedAt": "2026-05-20T11:16:43.287Z",
+    "endedAt": "2026-05-20T11:17:03.207Z",
+    "durationSec": 20,
+    "endedReason": "abort",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 192,
+    "endWorkingBpm": 192,
+    "startTroubleBpms": [
+      185
+    ],
+    "endTroubleBpms": [
+      185
+    ],
+    "promotions": []
+  },
+  {
+    "id": "5da20392-87a3-4479-a694-2e2536d2476b",
+    "itemId": "ccc5bda1-f0e0-418f-a73c-c2855b575ad8",
+    "itemKind": "song",
+    "itemTitle": "One - Depapepe Melodic Part",
+    "startedAt": "2026-05-21T10:48:48.063Z",
+    "endedAt": "2026-05-21T10:59:55.214Z",
+    "durationSec": 667,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 192,
+    "endWorkingBpm": 192,
+    "startTroubleBpms": [
+      185
+    ],
+    "endTroubleBpms": [
+      185
+    ],
+    "promotions": []
+  },
+  {
+    "id": "99499b54-87c5-4287-9e71-c2760818c98a",
+    "itemId": "de7b70c2-3c07-4e13-ae2b-6028a94269e7",
+    "itemKind": "song",
+    "itemTitle": "Salt Creek [Capo2]",
+    "startedAt": "2026-05-21T11:00:15.458Z",
+    "endedAt": "2026-05-21T11:15:12.044Z",
+    "durationSec": 897,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 178,
+    "endWorkingBpm": 178,
+    "startTroubleBpms": [
+      161
+    ],
+    "endTroubleBpms": [
+      169
+    ],
+    "promotions": [
+      {
+        "at": "2026-05-21T11:07:57.011Z",
+        "kind": "trouble",
+        "troubleIndex": 0,
+        "fromBpm": 161,
+        "toBpm": 165,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-05-21T11:08:29.287Z",
+        "kind": "trouble",
+        "troubleIndex": 0,
+        "fromBpm": 165,
+        "toBpm": 169,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "609ad53e-8855-4c79-878f-6cc384d48e3b",
+    "itemId": "f3b56365-1b75-4130-ad3c-a3e33cbd58be",
+    "itemKind": "song",
+    "itemTitle": "Wildwood flower",
+    "startedAt": "2026-05-21T11:15:32.296Z",
+    "endedAt": "2026-05-21T11:26:25.607Z",
+    "durationSec": 653,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 158,
+    "endWorkingBpm": 158,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "d38e5a12-0dfe-4082-9fa8-8328c3bc93c1",
+    "itemId": "dc275ae4-6f34-45b0-a041-3a04783d7427",
+    "itemKind": "song",
+    "itemTitle": "One - Depapepe Rythm Part",
+    "startedAt": "2026-05-27T10:56:00.373Z",
+    "endedAt": "2026-05-27T11:07:35.067Z",
+    "durationSec": 695,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 187,
+    "endWorkingBpm": 187,
+    "startTroubleBpms": [
+      152
+    ],
+    "endTroubleBpms": [
+      152
+    ],
+    "promotions": []
+  },
+  {
+    "id": "add2a127-1c7a-469d-8fce-69ebd44e281b",
+    "itemId": "ccc5bda1-f0e0-418f-a73c-c2855b575ad8",
+    "itemKind": "song",
+    "itemTitle": "One - Depapepe Melodic Part",
+    "startedAt": "2026-05-27T11:07:37.801Z",
+    "endedAt": "2026-05-27T23:47:03.774Z",
+    "durationSec": 1168,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 192,
+    "endWorkingBpm": 192,
+    "startTroubleBpms": [
+      185
+    ],
+    "endTroubleBpms": [
+      185
+    ],
+    "promotions": []
+  },
+  {
+    "id": "d02b91aa-fd2a-447b-b684-ac384c44bb23",
+    "itemId": "de7b70c2-3c07-4e13-ae2b-6028a94269e7",
+    "itemKind": "song",
+    "itemTitle": "Salt Creek [Capo2]",
+    "startedAt": "2026-05-27T23:47:16.002Z",
+    "endedAt": "2026-05-28T00:05:20.511Z",
+    "durationSec": 1085,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 178,
+    "endWorkingBpm": 178,
+    "startTroubleBpms": [
+      169
+    ],
+    "endTroubleBpms": [
+      177
+    ],
+    "promotions": [
+      {
+        "at": "2026-05-27T23:57:20.057Z",
+        "kind": "trouble",
+        "troubleIndex": 0,
+        "fromBpm": 169,
+        "toBpm": 173,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-05-27T23:57:43.210Z",
+        "kind": "trouble",
+        "troubleIndex": 0,
+        "fromBpm": 173,
+        "toBpm": 177,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "7eed51e1-666a-41af-9948-05d8733b3f3f",
+    "itemId": "f3b56365-1b75-4130-ad3c-a3e33cbd58be",
+    "itemKind": "song",
+    "itemTitle": "Wildwood flower",
+    "startedAt": "2026-05-28T00:05:40.762Z",
+    "endedAt": "2026-05-28T00:18:02.530Z",
+    "durationSec": 742,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 158,
+    "endWorkingBpm": 158,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "0028931d-403d-414e-af14-a48ce903be7c",
+    "itemId": "ecbb5882-094b-4ee9-9856-13a5ab0c625f",
+    "itemKind": "song",
+    "itemTitle": "Beamont Rag",
+    "startedAt": "2026-05-28T00:18:07.321Z",
+    "endedAt": "2026-05-28T00:32:08.749Z",
+    "durationSec": 841,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 169,
+    "endWorkingBpm": 169,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "60d545d4-582f-42c9-88b7-e18196212ad8",
+    "itemId": "ecbb5882-094b-4ee9-9856-13a5ab0c625f",
+    "itemKind": "song",
+    "itemTitle": "Beamont Rag",
+    "startedAt": "2026-05-29T11:06:46.381Z",
+    "endedAt": "2026-05-29T11:16:56.781Z",
+    "durationSec": 610,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 169,
+    "endWorkingBpm": 169,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "57c4f1f4-1dff-4a41-80d0-359ed7537d7b",
+    "itemId": "ecbb5882-094b-4ee9-9856-13a5ab0c625f",
+    "itemKind": "song",
+    "itemTitle": "Beamont Rag",
+    "startedAt": "2026-05-30T15:35:39.773Z",
+    "endedAt": "2026-05-30T15:49:25.065Z",
+    "durationSec": 825,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 169,
+    "endWorkingBpm": 169,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "cfcfc101-1d8b-4116-83c7-dbd1d37226cb",
+    "itemId": "dc69fcf9-0d9a-46cd-837a-b7a10b887071",
+    "itemKind": "song",
+    "itemTitle": "Arkansas Traveler Whole song",
+    "startedAt": "2026-05-30T15:49:32.802Z",
+    "endedAt": "2026-05-30T16:01:44.963Z",
+    "durationSec": 732,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 180,
+    "endWorkingBpm": 180,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "d1b9e3ab-0dd7-44c7-9a76-bc9756d0b373",
+    "itemId": "59d69a12-2dce-41c7-9ebe-0325d5b9a277",
+    "itemKind": "song",
+    "itemTitle": "Seney stretch [Capo1]",
+    "startedAt": "2026-05-30T18:55:12.311Z",
+    "endedAt": "2026-05-30T19:11:06.006Z",
+    "durationSec": 954,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 195,
+    "endWorkingBpm": 195,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "de3ad20e-b75e-4f2b-a254-10f806d8b057",
+    "itemId": "cd5bdc97-4e73-41f8-81eb-aa8907e9ec2a",
+    "itemKind": "song",
+    "itemTitle": "Escabana",
+    "startedAt": "2026-05-30T19:11:14.810Z",
+    "endedAt": "2026-05-30T19:25:17.866Z",
+    "durationSec": 843,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 100,
+    "endWorkingBpm": 100,
+    "startTroubleBpms": [
+      93,
+      85
+    ],
+    "endTroubleBpms": [
+      93,
+      89
+    ],
+    "promotions": [
+      {
+        "at": "2026-05-30T19:17:47.310Z",
+        "kind": "trouble",
+        "troubleIndex": 1,
+        "fromBpm": 85,
+        "toBpm": 87,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-05-30T19:18:30.465Z",
+        "kind": "trouble",
+        "troubleIndex": 1,
+        "fromBpm": 87,
+        "toBpm": 89,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "37b15004-e50f-4de0-9814-ba57e97e43be",
+    "itemId": "dc275ae4-6f34-45b0-a041-3a04783d7427",
+    "itemKind": "song",
+    "itemTitle": "One - Depapepe Rythm Part",
+    "startedAt": "2026-06-02T01:08:46.335Z",
+    "endedAt": "2026-06-02T01:22:12.984Z",
+    "durationSec": 807,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 187,
+    "endWorkingBpm": 187,
+    "startTroubleBpms": [
+      152
+    ],
+    "endTroubleBpms": [
+      152
+    ],
+    "promotions": []
+  },
+  {
+    "id": "d8677fb9-827c-4baf-ab28-33992c4b434c",
+    "itemId": "ccc5bda1-f0e0-418f-a73c-c2855b575ad8",
+    "itemKind": "song",
+    "itemTitle": "One - Depapepe Melodic Part",
+    "startedAt": "2026-06-02T01:22:14.943Z",
+    "endedAt": "2026-06-02T01:34:19.137Z",
+    "durationSec": 724,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 192,
+    "endWorkingBpm": 192,
+    "startTroubleBpms": [
+      185
+    ],
+    "endTroubleBpms": [
+      190
+    ],
+    "promotions": [
+      {
+        "at": "2026-06-02T01:28:38.835Z",
+        "kind": "trouble",
+        "troubleIndex": 0,
+        "fromBpm": 185,
+        "toBpm": 190,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "1c4ca97c-c2b9-42a3-b996-5bd24d54c66d",
+    "itemId": "dc275ae4-6f34-45b0-a041-3a04783d7427",
+    "itemKind": "song",
+    "itemTitle": "One - Depapepe Rythm Part",
+    "startedAt": "2026-06-05T13:17:09.674Z",
+    "endedAt": "2026-06-05T13:31:26.367Z",
+    "durationSec": 857,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 187,
+    "endWorkingBpm": 187,
+    "startTroubleBpms": [
+      152
+    ],
+    "endTroubleBpms": [
+      152
+    ],
+    "promotions": []
+  },
+  {
+    "id": "7f0e76b1-6760-4094-a456-ddfcc572607c",
+    "itemId": "ccc5bda1-f0e0-418f-a73c-c2855b575ad8",
+    "itemKind": "song",
+    "itemTitle": "One - Depapepe Melodic Part",
+    "startedAt": "2026-06-05T13:31:46.598Z",
+    "endedAt": "2026-06-05T13:46:21.159Z",
+    "durationSec": 875,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 192,
+    "endWorkingBpm": 192,
+    "startTroubleBpms": [
+      190
+    ],
+    "endTroubleBpms": [
+      190
+    ],
+    "promotions": []
+  },
+  {
+    "id": "6a73bdd3-99af-4544-9ba3-a338585c1b0e",
+    "itemId": "de7b70c2-3c07-4e13-ae2b-6028a94269e7",
+    "itemKind": "song",
+    "itemTitle": "Salt Creek [Capo2]",
+    "startedAt": "2026-06-05T14:16:29.359Z",
+    "endedAt": "2026-06-05T14:34:56.801Z",
+    "durationSec": 1107,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 178,
+    "endWorkingBpm": 178,
+    "startTroubleBpms": [
+      177
+    ],
+    "endTroubleBpms": [
+      177
+    ],
+    "promotions": []
+  },
+  {
+    "id": "e0857272-f4ba-4741-91f9-632858bcc48b",
+    "itemId": "f3b56365-1b75-4130-ad3c-a3e33cbd58be",
+    "itemKind": "song",
+    "itemTitle": "Wildwood flower",
+    "startedAt": "2026-06-05T14:35:07.531Z",
+    "endedAt": "2026-06-05T14:47:08.620Z",
+    "durationSec": 721,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 158,
+    "endWorkingBpm": 158,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "ffb3635d-ae67-4862-bec0-eed63b241622",
+    "itemId": "ecbb5882-094b-4ee9-9856-13a5ab0c625f",
+    "itemKind": "song",
+    "itemTitle": "Beamont Rag",
+    "startedAt": "2026-06-05T14:47:10.360Z",
+    "endedAt": "2026-06-05T15:05:28.533Z",
+    "durationSec": 1098,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 169,
+    "endWorkingBpm": 169,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "0fbfdb96-f70e-4454-9e05-d96940db0240",
+    "itemId": "dc69fcf9-0d9a-46cd-837a-b7a10b887071",
+    "itemKind": "song",
+    "itemTitle": "Arkansas Traveler Whole song",
+    "startedAt": "2026-06-05T15:05:35.152Z",
+    "endedAt": "2026-06-05T15:16:42.774Z",
+    "durationSec": 668,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 180,
+    "endWorkingBpm": 180,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "7ff99625-411b-429b-abb3-bfb99089c307",
+    "itemId": "59d69a12-2dce-41c7-9ebe-0325d5b9a277",
+    "itemKind": "song",
+    "itemTitle": "Seney stretch [Capo1]",
+    "startedAt": "2026-06-05T15:16:56.033Z",
+    "endedAt": "2026-06-05T15:30:51.479Z",
+    "durationSec": 835,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 195,
+    "endWorkingBpm": 195,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "264811ec-1493-4fe1-b4fc-26d70bf84f3b",
+    "itemId": "cd5bdc97-4e73-41f8-81eb-aa8907e9ec2a",
+    "itemKind": "song",
+    "itemTitle": "Escabana",
+    "startedAt": "2026-06-05T15:31:11.716Z",
+    "endedAt": "2026-06-05T15:43:54.393Z",
+    "durationSec": 706,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 100,
+    "endWorkingBpm": 100,
+    "startTroubleBpms": [
+      93,
+      89
+    ],
+    "endTroubleBpms": [
+      93,
+      91
+    ],
+    "promotions": [
+      {
+        "at": "2026-06-05T15:38:37.515Z",
+        "kind": "trouble",
+        "troubleIndex": 1,
+        "fromBpm": 89,
+        "toBpm": 91,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "4f64f755-6d98-4808-ba27-49aa9e5984bd",
+    "itemId": "dc275ae4-6f34-45b0-a041-3a04783d7427",
+    "itemKind": "song",
+    "itemTitle": "One - Depapepe Rythm Part",
+    "startedAt": "2026-06-08T13:55:00.632Z",
+    "endedAt": "2026-06-08T14:11:52.808Z",
+    "durationSec": 1006,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 187,
+    "endWorkingBpm": 187,
+    "startTroubleBpms": [
+      152
+    ],
+    "endTroubleBpms": [
+      164
+    ],
+    "promotions": [
+      {
+        "at": "2026-06-08T14:03:00.272Z",
+        "kind": "trouble",
+        "troubleIndex": 0,
+        "fromBpm": 152,
+        "toBpm": 156,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-06-08T14:06:06.434Z",
+        "kind": "trouble",
+        "troubleIndex": 0,
+        "fromBpm": 156,
+        "toBpm": 160,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-06-08T14:07:26.952Z",
+        "kind": "trouble",
+        "troubleIndex": 0,
+        "fromBpm": 160,
+        "toBpm": 164,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "35b2b362-9014-4c18-af34-47fd05395012",
+    "itemId": "ccc5bda1-f0e0-418f-a73c-c2855b575ad8",
+    "itemKind": "song",
+    "itemTitle": "One - Depapepe Melodic Part",
+    "startedAt": "2026-06-08T14:11:54.493Z",
+    "endedAt": "2026-06-08T14:23:14.280Z",
+    "durationSec": 680,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 192,
+    "endWorkingBpm": 192,
+    "startTroubleBpms": [
+      190
+    ],
+    "endTroubleBpms": [
+      195
+    ],
+    "promotions": [
+      {
+        "at": "2026-06-08T14:18:23.025Z",
+        "kind": "trouble",
+        "troubleIndex": 0,
+        "fromBpm": 190,
+        "toBpm": 195,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "6fefca34-1c92-42b1-b2de-f75c19ddc591",
+    "itemId": "66a868d0-750b-4fb5-82f3-6422ec05ca24",
+    "itemKind": "exercise",
+    "itemTitle": "Fast Strum",
+    "startedAt": "2026-06-08T14:41:56.297Z",
+    "endedAt": "2026-06-08T14:48:36.882Z",
+    "durationSec": 401,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 213,
+    "endWorkingBpm": 213,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "80bd4119-e20e-4c0f-b6ca-706c096865e6",
+    "itemId": "82e3d795-4936-4446-8a45-a7bfc8f1c520",
+    "itemKind": "exercise",
+    "itemTitle": "Arkansas Traveler B part Ascending Descending",
+    "startedAt": "2026-06-08T14:48:40.082Z",
+    "endedAt": "2026-06-08T14:55:38.900Z",
+    "durationSec": 419,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 195,
+    "endWorkingBpm": 195,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "6e925423-b813-48c5-b93a-78d5ed1f1d2a",
+    "itemId": "57eb655a-5cbd-417b-b943-9ae948ca20fd",
+    "itemKind": "exercise",
+    "itemTitle": "Cross picking ascending and descending 8ths alternating",
+    "startedAt": "2026-06-08T14:55:59.106Z",
+    "endedAt": "2026-06-08T15:02:24.198Z",
+    "durationSec": 385,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 133,
+    "endWorkingBpm": 133,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "573e7f2e-bd51-4640-be21-19febeea6a5a",
+    "itemId": "92da9674-2ed2-45ba-9534-252603464f31",
+    "itemKind": "exercise",
+    "itemTitle": "Cross picking banjo  G C D triads on strings 4 3 2 triplets down down up",
+    "startedAt": "2026-06-08T15:02:26.280Z",
+    "endedAt": "2026-06-08T15:09:47.857Z",
+    "durationSec": 442,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 90,
+    "endWorkingBpm": 90,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "a217ae17-ee34-4be4-840e-138800fa973e",
+    "itemId": "1be58b6b-6aeb-4dd7-b0d0-86ea7c6464e1",
+    "itemKind": "exercise",
+    "itemTitle": "Hard part from one depapepe (16 sliding close to 12th fret)",
+    "startedAt": "2026-06-08T15:09:50.443Z",
+    "endedAt": "2026-06-08T15:15:47.364Z",
+    "durationSec": 357,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 169,
+    "endWorkingBpm": 177,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-06-08T15:10:46.492Z",
+        "kind": "working",
+        "fromBpm": 169,
+        "toBpm": 173,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-06-08T15:11:30.992Z",
+        "kind": "working",
+        "fromBpm": 173,
+        "toBpm": 177,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "89b293fc-377b-416f-a73b-7104cbb8aefe",
+    "itemId": "aa7b696f-cb0a-4eff-bc35-a0207c717a5c",
+    "itemKind": "exercise",
+    "itemTitle": "Wildwood Flower: slide and 4 triplets alternate picking",
+    "startedAt": "2026-06-08T15:15:51.323Z",
+    "endedAt": "2026-06-08T15:25:44.278Z",
+    "durationSec": 593,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 86,
+    "endWorkingBpm": 90,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-06-08T15:17:46.226Z",
+        "kind": "working",
+        "fromBpm": 86,
+        "toBpm": 88,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-06-08T15:18:23.162Z",
+        "kind": "working",
+        "fromBpm": 88,
+        "toBpm": 90,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "649911d3-7f00-4b45-a905-1a7242f5ce38",
+    "itemId": "de7b70c2-3c07-4e13-ae2b-6028a94269e7",
+    "itemKind": "song",
+    "itemTitle": "Salt Creek [Capo2]",
+    "startedAt": "2026-06-08T15:26:07.551Z",
+    "endedAt": "2026-06-08T15:35:54.402Z",
+    "durationSec": 587,
+    "endedReason": "abort",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 178,
+    "endWorkingBpm": 178,
+    "startTroubleBpms": [
+      177
+    ],
+    "endTroubleBpms": [
+      181
+    ],
+    "promotions": [
+      {
+        "at": "2026-06-08T15:34:05.286Z",
+        "kind": "trouble",
+        "troubleIndex": 0,
+        "fromBpm": 177,
+        "toBpm": 181,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "9dd0e93f-8b13-4b36-8a82-b6886e25b3d1",
+    "itemId": "de7b70c2-3c07-4e13-ae2b-6028a94269e7",
+    "itemKind": "song",
+    "itemTitle": "Salt Creek [Capo2]",
+    "startedAt": "2026-06-08T15:36:08.671Z",
+    "endedAt": "2026-06-08T15:44:16.115Z",
+    "durationSec": 487,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 178,
+    "endWorkingBpm": 182,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-06-08T15:39:29.356Z",
+        "kind": "working",
+        "fromBpm": 178,
+        "toBpm": 182,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "65edea65-e942-45f6-9dae-9269278e95a0",
+    "itemId": "f3b56365-1b75-4130-ad3c-a3e33cbd58be",
+    "itemKind": "song",
+    "itemTitle": "Wildwood flower",
+    "startedAt": "2026-06-08T15:44:19.698Z",
+    "endedAt": "2026-06-08T15:54:44.329Z",
+    "durationSec": 625,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 158,
+    "endWorkingBpm": 166,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-06-08T15:50:25.214Z",
+        "kind": "working",
+        "fromBpm": 158,
+        "toBpm": 162,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-06-08T15:52:17.265Z",
+        "kind": "working",
+        "fromBpm": 162,
+        "toBpm": 166,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "e72c02fe-724c-4d51-adef-6d86165cd159",
+    "itemId": "__freeplay__",
+    "itemKind": "exercise",
+    "itemTitle": "Free Play",
+    "startedAt": "2026-06-09T13:59:20.727Z",
+    "endedAt": "2026-06-09T14:21:25.282Z",
+    "durationSec": 1325,
+    "endedReason": "complete",
+    "plannedMinutes": 0,
+    "startWorkingBpm": 90,
+    "endWorkingBpm": 90,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "8b20ac02-093e-404b-85d6-c4f227d30ee7",
+    "itemId": "ecbb5882-094b-4ee9-9856-13a5ab0c625f",
+    "itemKind": "song",
+    "itemTitle": "Beamont Rag",
+    "startedAt": "2026-06-09T14:21:56.726Z",
+    "endedAt": "2026-06-09T14:38:14.420Z",
+    "durationSec": 978,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 169,
+    "endWorkingBpm": 169,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "097e5f45-d960-4f16-9407-6a9e9685152c",
+    "itemId": "dc69fcf9-0d9a-46cd-837a-b7a10b887071",
+    "itemKind": "song",
+    "itemTitle": "Arkansas Traveler Whole song",
+    "startedAt": "2026-06-09T14:38:28.302Z",
+    "endedAt": "2026-06-09T14:52:16.205Z",
+    "durationSec": 828,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 180,
+    "endWorkingBpm": 180,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "cf1cc725-ae23-41fc-9557-31390bb64c08",
+    "itemId": "59d69a12-2dce-41c7-9ebe-0325d5b9a277",
+    "itemKind": "song",
+    "itemTitle": "Seney stretch [Capo1]",
+    "startedAt": "2026-06-09T14:52:36.407Z",
+    "endedAt": "2026-06-09T15:16:31.940Z",
+    "durationSec": 929,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 195,
+    "endWorkingBpm": 195,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "b49af4f9-26cb-47d5-96e1-48381fd2fb80",
+    "itemId": "cd5bdc97-4e73-41f8-81eb-aa8907e9ec2a",
+    "itemKind": "song",
+    "itemTitle": "Escabana",
+    "startedAt": "2026-06-09T15:17:43.917Z",
+    "endedAt": "2026-06-09T15:31:42.242Z",
+    "durationSec": 838,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 100,
+    "endWorkingBpm": 100,
+    "startTroubleBpms": [
+      93,
+      91
+    ],
+    "endTroubleBpms": [
+      95,
+      95
+    ],
+    "promotions": [
+      {
+        "at": "2026-06-09T15:22:59.855Z",
+        "kind": "trouble",
+        "troubleIndex": 0,
+        "fromBpm": 93,
+        "toBpm": 95,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-06-09T15:23:24.921Z",
+        "kind": "trouble",
+        "troubleIndex": 1,
+        "fromBpm": 91,
+        "toBpm": 93,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-06-09T15:25:12.428Z",
+        "kind": "trouble",
+        "troubleIndex": 1,
+        "fromBpm": 93,
+        "toBpm": 95,
+        "stepPercent": 2.5
+      }
+    ]
+  }
+]

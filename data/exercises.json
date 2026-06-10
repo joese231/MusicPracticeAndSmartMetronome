@@ -1,0 +1,282 @@
+[
+  {
+    "id": "66a868d0-750b-4fb5-82f3-6422ec05ca24",
+    "name": "Fast Strum",
+    "link": null,
+    "notes": "Emil's",
+    "workingBpm": 213,
+    "stepPercent": 2.5,
+    "totalPracticeSec": 2980,
+    "sortIndex": 0,
+    "createdAt": "2026-04-25T12:50:42.141Z",
+    "updatedAt": "2026-06-08T14:48:36.882Z",
+    "sessionMinutes": 5,
+    "warmupBpm": 70,
+    "openEnded": false,
+    "metronomeEnabled": true,
+    "practiceMode": "smart",
+    "includeWarmupBlock": true,
+    "blockTemplate": [
+      {
+        "kind": "exerciseBuild",
+        "enabled": true,
+        "weight": 180
+      },
+      {
+        "kind": "exerciseBurst",
+        "enabled": true,
+        "weight": 60
+      },
+      {
+        "kind": "exerciseCoolDown",
+        "enabled": true,
+        "weight": 30
+      }
+    ]
+  },
+  {
+    "id": "82e3d795-4936-4446-8a45-a7bfc8f1c520",
+    "name": "Arkansas Traveler B part Ascending Descending",
+    "link": null,
+    "notes": null,
+    "workingBpm": 195,
+    "warmupBpm": null,
+    "stepPercent": 2.5,
+    "sessionMinutes": 5,
+    "openEnded": false,
+    "metronomeEnabled": true,
+    "practiceMode": "smart",
+    "includeWarmupBlock": true,
+    "totalPracticeSec": 2839,
+    "sortIndex": 1,
+    "createdAt": "2026-04-27T17:02:58.069Z",
+    "updatedAt": "2026-06-08T14:55:38.900Z",
+    "blockTemplate": [
+      {
+        "kind": "exerciseBuild",
+        "enabled": true,
+        "weight": 180
+      },
+      {
+        "kind": "exerciseBurst",
+        "enabled": true,
+        "weight": 60
+      },
+      {
+        "kind": "exerciseCoolDown",
+        "enabled": true,
+        "weight": 30
+      }
+    ]
+  },
+  {
+    "id": "57eb655a-5cbd-417b-b943-9ae948ca20fd",
+    "name": "Cross picking ascending and descending 8ths alternating",
+    "link": null,
+    "notes": null,
+    "workingBpm": 133,
+    "stepPercent": 2.5,
+    "sessionMinutes": 5,
+    "totalPracticeSec": 2930,
+    "sortIndex": 2,
+    "createdAt": "2026-04-25T13:10:47.389Z",
+    "updatedAt": "2026-06-08T15:02:24.198Z",
+    "warmupBpm": null,
+    "openEnded": false,
+    "metronomeEnabled": true,
+    "practiceMode": "smart",
+    "includeWarmupBlock": true,
+    "blockTemplate": [
+      {
+        "kind": "exerciseBuild",
+        "enabled": true,
+        "weight": 180
+      },
+      {
+        "kind": "exerciseBurst",
+        "enabled": true,
+        "weight": 60
+      },
+      {
+        "kind": "exerciseCoolDown",
+        "enabled": true,
+        "weight": 30
+      }
+    ]
+  },
+  {
+    "id": "92da9674-2ed2-45ba-9534-252603464f31",
+    "name": "Cross picking banjo  G C D triads on strings 4 3 2 triplets down down up",
+    "link": null,
+    "notes": null,
+    "workingBpm": 90,
+    "stepPercent": 2.5,
+    "sessionMinutes": 5,
+    "totalPracticeSec": 3079,
+    "sortIndex": 3,
+    "createdAt": "2026-04-25T13:11:25.810Z",
+    "updatedAt": "2026-06-08T15:09:47.857Z",
+    "warmupBpm": null,
+    "openEnded": false,
+    "metronomeEnabled": true,
+    "practiceMode": "smart",
+    "includeWarmupBlock": true,
+    "blockTemplate": [
+      {
+        "kind": "exerciseBuild",
+        "enabled": true,
+        "weight": 180
+      },
+      {
+        "kind": "exerciseBurst",
+        "enabled": true,
+        "weight": 60
+      },
+      {
+        "kind": "exerciseCoolDown",
+        "enabled": true,
+        "weight": 30
+      }
+    ]
+  },
+  {
+    "id": "1be58b6b-6aeb-4dd7-b0d0-86ea7c6464e1",
+    "name": "Hard part from one depapepe (16 sliding close to 12th fret)",
+    "link": null,
+    "notes": null,
+    "workingBpm": 177,
+    "stepPercent": 2.5,
+    "sessionMinutes": 5,
+    "totalPracticeSec": 2880,
+    "sortIndex": 4,
+    "createdAt": "2026-04-25T13:13:02.366Z",
+    "updatedAt": "2026-06-08T15:15:47.364Z",
+    "warmupBpm": null,
+    "openEnded": false,
+    "metronomeEnabled": true,
+    "practiceMode": "smart",
+    "includeWarmupBlock": true,
+    "blockTemplate": [
+      {
+        "kind": "exerciseBuild",
+        "enabled": true,
+        "weight": 180
+      },
+      {
+        "kind": "exerciseBurst",
+        "enabled": true,
+        "weight": 60
+      },
+      {
+        "kind": "exerciseCoolDown",
+        "enabled": true,
+        "weight": 30
+      }
+    ]
+  },
+  {
+    "id": "aa7b696f-cb0a-4eff-bc35-a0207c717a5c",
+    "name": "Wildwood Flower: slide and 4 triplets alternate picking",
+    "link": null,
+    "notes": null,
+    "workingBpm": 90,
+    "stepPercent": 2.5,
+    "sessionMinutes": 5,
+    "totalPracticeSec": 3292,
+    "sortIndex": 5,
+    "createdAt": "2026-04-25T13:15:48.662Z",
+    "updatedAt": "2026-06-08T15:25:44.278Z",
+    "warmupBpm": 40,
+    "openEnded": false,
+    "metronomeEnabled": true,
+    "practiceMode": "smart",
+    "includeWarmupBlock": true,
+    "blockTemplate": [
+      {
+        "kind": "exerciseBuild",
+        "enabled": true,
+        "weight": 180
+      },
+      {
+        "kind": "exerciseBurst",
+        "enabled": true,
+        "weight": 60
+      },
+      {
+        "kind": "exerciseCoolDown",
+        "enabled": true,
+        "weight": 30
+      }
+    ]
+  },
+  {
+    "id": "4523008d-7d39-4da5-8c7e-5a91d8f84a5e",
+    "name": "Transcribing",
+    "link": null,
+    "notes": null,
+    "workingBpm": 80,
+    "warmupBpm": null,
+    "stepPercent": 2.5,
+    "sessionMinutes": 5,
+    "openEnded": true,
+    "metronomeEnabled": false,
+    "totalPracticeSec": 1,
+    "sortIndex": 6,
+    "createdAt": "2026-04-27T11:17:38.941Z",
+    "updatedAt": "2026-05-20T11:04:22.295Z",
+    "practiceMode": "smart",
+    "includeWarmupBlock": true,
+    "blockTemplate": [
+      {
+        "kind": "exerciseBuild",
+        "enabled": true,
+        "weight": 210
+      },
+      {
+        "kind": "exerciseBurst",
+        "enabled": true,
+        "weight": 60
+      },
+      {
+        "kind": "exerciseCoolDown",
+        "enabled": true,
+        "weight": 30
+      }
+    ]
+  },
+  {
+    "id": "9bfca165-4105-4c0f-ac85-78d4a061625d",
+    "name": "Test",
+    "link": null,
+    "notes": null,
+    "workingBpm": 142,
+    "warmupBpm": null,
+    "stepPercent": 2.5,
+    "sessionMinutes": 5,
+    "openEnded": false,
+    "metronomeEnabled": true,
+    "practiceMode": "smart",
+    "includeWarmupBlock": true,
+    "blockTemplate": [
+      {
+        "kind": "exerciseBuild",
+        "enabled": true,
+        "weight": 180
+      },
+      {
+        "kind": "exerciseBurst",
+        "enabled": true,
+        "weight": 60
+      },
+      {
+        "kind": "exerciseCoolDown",
+        "enabled": true,
+        "weight": 30
+      }
+    ],
+    "totalPracticeSec": 37,
+    "sortIndex": 7,
+    "createdAt": "2026-05-08T11:49:57.309Z",
+    "updatedAt": "2026-05-08T11:50:51.980Z"
+  }
+]

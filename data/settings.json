@@ -1,0 +1,52 @@
+{
+  "recordingEnabled": true,
+  "metronomeVolume": 1,
+  "accentsEnabled": false,
+  "autoAdvanceBlocks": false,
+  "interSongPauseSec": 20,
+  "defaultPracticeMode": "smart",
+  "defaultSongBlockTemplate": [
+    {
+      "kind": "slowReference",
+      "enabled": true,
+      "weight": 90
+    },
+    {
+      "kind": "troubleSpot",
+      "enabled": true,
+      "weight": 120
+    },
+    {
+      "kind": "ceilingWork",
+      "enabled": true,
+      "weight": 180
+    },
+    {
+      "kind": "overspeed",
+      "enabled": true,
+      "weight": 60
+    },
+    {
+      "kind": "consolidation",
+      "enabled": true,
+      "weight": 90
+    }
+  ],
+  "defaultExerciseBlockTemplate": [
+    {
+      "kind": "exerciseBuild",
+      "enabled": true,
+      "weight": 180
+    },
+    {
+      "kind": "exerciseBurst",
+      "enabled": true,
+      "weight": 60
+    },
+    {
+      "kind": "exerciseCoolDown",
+      "enabled": true,
+      "weight": 30
+    }
+  ]
+}

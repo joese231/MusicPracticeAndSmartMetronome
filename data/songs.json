@@ -1,0 +1,361 @@
+[
+  {
+    "id": "dc275ae4-6f34-45b0-a041-3a04783d7427",
+    "title": "One - Depapepe Rythm Part",
+    "link": "https://www.youtube.com/watch?v=Hpa4nTozXBw&list=RDHpa4nTozXBw",
+    "workingBpm": 187,
+    "warmupBpm": null,
+    "troubleSpots": [
+      {
+        "bpm": 164
+      }
+    ],
+    "originalBpm": 200,
+    "stepPercent": 2.5,
+    "practiceMode": "smart",
+    "includeWarmupBlock": false,
+    "totalPracticeSec": 12378,
+    "sortIndex": 0,
+    "createdAt": "2026-04-27T15:29:18.877Z",
+    "updatedAt": "2026-06-08T14:11:52.808Z",
+    "blockTemplate": [
+      {
+        "kind": "slowReference",
+        "enabled": true,
+        "weight": 6
+      },
+      {
+        "kind": "troubleSpot",
+        "enabled": true,
+        "weight": 2
+      },
+      {
+        "kind": "ceilingWork",
+        "enabled": true,
+        "weight": 6
+      },
+      {
+        "kind": "overspeed",
+        "enabled": false,
+        "weight": 60
+      },
+      {
+        "kind": "consolidation",
+        "enabled": false,
+        "weight": 150
+      }
+    ]
+  },
+  {
+    "id": "ccc5bda1-f0e0-418f-a73c-c2855b575ad8",
+    "title": "One - Depapepe Melodic Part",
+    "link": null,
+    "workingBpm": 192,
+    "warmupBpm": 120,
+    "troubleSpots": [
+      {
+        "bpm": 195
+      }
+    ],
+    "originalBpm": 200,
+    "stepPercent": 2.5,
+    "practiceMode": "smart",
+    "includeWarmupBlock": false,
+    "totalPracticeSec": 10520,
+    "sortIndex": 1,
+    "createdAt": "2026-04-29T12:14:24.205Z",
+    "updatedAt": "2026-06-08T14:23:14.280Z",
+    "blockTemplate": [
+      {
+        "kind": "slowReference",
+        "enabled": true,
+        "weight": 4
+      },
+      {
+        "kind": "troubleSpot",
+        "enabled": true,
+        "weight": 1
+      },
+      {
+        "kind": "ceilingWork",
+        "enabled": true,
+        "weight": 4
+      },
+      {
+        "kind": "overspeed",
+        "enabled": false,
+        "weight": 60
+      },
+      {
+        "kind": "consolidation",
+        "enabled": false,
+        "weight": 150
+      }
+    ]
+  },
+  {
+    "id": "de7b70c2-3c07-4e13-ae2b-6028a94269e7",
+    "title": "Salt Creek [Capo2]",
+    "link": "https://truefire.com/bluegrass-guitar-lessons/bluegrass-blaze/salt-creek/v97811",
+    "workingBpm": 182,
+    "originalBpm": 271,
+    "stepPercent": 2.5,
+    "totalPracticeSec": 14241,
+    "createdAt": "2026-04-13T21:21:14.941Z",
+    "updatedAt": "2026-06-08T15:44:16.114Z",
+    "troubleSpots": [],
+    "sortIndex": 2,
+    "warmupBpm": null,
+    "practiceMode": "smart",
+    "includeWarmupBlock": true,
+    "blockTemplate": [
+      {
+        "kind": "slowReference",
+        "enabled": true,
+        "weight": 90
+      },
+      {
+        "kind": "troubleSpot",
+        "enabled": true,
+        "weight": 120
+      },
+      {
+        "kind": "ceilingWork",
+        "enabled": true,
+        "weight": 180
+      },
+      {
+        "kind": "overspeed",
+        "enabled": true,
+        "weight": 60
+      },
+      {
+        "kind": "consolidation",
+        "enabled": true,
+        "weight": 150
+      }
+    ]
+  },
+  {
+    "id": "f3b56365-1b75-4130-ad3c-a3e33cbd58be",
+    "title": "Wildwood flower",
+    "link": "https://truefire.com/bluegrass-guitar-lessons/bluegrass-blaze/wildwood-flower/v97807",
+    "workingBpm": 166,
+    "troubleSpots": [],
+    "originalBpm": 186,
+    "stepPercent": 2.5,
+    "totalPracticeSec": 9129,
+    "createdAt": "2026-04-13T22:43:56.394Z",
+    "updatedAt": "2026-06-08T15:54:44.329Z",
+    "sortIndex": 3,
+    "warmupBpm": null,
+    "practiceMode": "smart",
+    "includeWarmupBlock": true,
+    "blockTemplate": [
+      {
+        "kind": "slowReference",
+        "enabled": true,
+        "weight": 90
+      },
+      {
+        "kind": "troubleSpot",
+        "enabled": true,
+        "weight": 120
+      },
+      {
+        "kind": "ceilingWork",
+        "enabled": true,
+        "weight": 180
+      },
+      {
+        "kind": "overspeed",
+        "enabled": true,
+        "weight": 60
+      },
+      {
+        "kind": "consolidation",
+        "enabled": true,
+        "weight": 150
+      }
+    ]
+  },
+  {
+    "id": "ecbb5882-094b-4ee9-9856-13a5ab0c625f",
+    "title": "Beamont Rag",
+    "link": "https://truefire.com/bluegrass-guitar-lessons/bluegrass-blaze/beamont-rag/v97803",
+    "workingBpm": 169,
+    "troubleSpots": [],
+    "originalBpm": 261,
+    "stepPercent": 2.5,
+    "totalPracticeSec": 11978,
+    "createdAt": "2026-04-13T22:46:44.165Z",
+    "updatedAt": "2026-06-09T14:38:14.420Z",
+    "sortIndex": 4,
+    "warmupBpm": null,
+    "practiceMode": "smart",
+    "includeWarmupBlock": true,
+    "blockTemplate": [
+      {
+        "kind": "slowReference",
+        "enabled": true,
+        "weight": 90
+      },
+      {
+        "kind": "troubleSpot",
+        "enabled": false,
+        "weight": 120
+      },
+      {
+        "kind": "ceilingWork",
+        "enabled": true,
+        "weight": 180
+      },
+      {
+        "kind": "overspeed",
+        "enabled": true,
+        "weight": 60
+      },
+      {
+        "kind": "consolidation",
+        "enabled": true,
+        "weight": 150
+      }
+    ]
+  },
+  {
+    "id": "dc69fcf9-0d9a-46cd-837a-b7a10b887071",
+    "title": "Arkansas Traveler Whole song",
+    "link": "https://truefire.com/bluegrass-guitar-lessons/bluegrass-blaze/arkansas-traveler/v97799",
+    "workingBpm": 180,
+    "troubleSpots": [],
+    "originalBpm": 248,
+    "stepPercent": 2.5,
+    "totalPracticeSec": 8406,
+    "createdAt": "2026-04-13T22:48:00.779Z",
+    "updatedAt": "2026-06-09T14:52:16.205Z",
+    "sortIndex": 5,
+    "warmupBpm": null,
+    "practiceMode": "smart",
+    "includeWarmupBlock": true,
+    "blockTemplate": [
+      {
+        "kind": "slowReference",
+        "enabled": true,
+        "weight": 90
+      },
+      {
+        "kind": "troubleSpot",
+        "enabled": true,
+        "weight": 120
+      },
+      {
+        "kind": "ceilingWork",
+        "enabled": true,
+        "weight": 180
+      },
+      {
+        "kind": "overspeed",
+        "enabled": true,
+        "weight": 60
+      },
+      {
+        "kind": "consolidation",
+        "enabled": true,
+        "weight": 90
+      }
+    ]
+  },
+  {
+    "id": "59d69a12-2dce-41c7-9ebe-0325d5b9a277",
+    "title": "Seney stretch [Capo1]",
+    "link": "https://www.youtube.com/watch?v=q8_rCRymt88&list=RDq8_rCRymt88&start_radio=1&t=7s",
+    "workingBpm": 195,
+    "troubleSpots": [],
+    "originalBpm": 210,
+    "stepPercent": 2.5,
+    "totalPracticeSec": 8807,
+    "createdAt": "2026-04-13T22:49:52.792Z",
+    "updatedAt": "2026-06-09T15:16:31.940Z",
+    "sortIndex": 6,
+    "warmupBpm": null,
+    "practiceMode": "smart",
+    "includeWarmupBlock": true,
+    "blockTemplate": [
+      {
+        "kind": "slowReference",
+        "enabled": true,
+        "weight": 90
+      },
+      {
+        "kind": "troubleSpot",
+        "enabled": true,
+        "weight": 120
+      },
+      {
+        "kind": "ceilingWork",
+        "enabled": true,
+        "weight": 180
+      },
+      {
+        "kind": "overspeed",
+        "enabled": true,
+        "weight": 60
+      },
+      {
+        "kind": "consolidation",
+        "enabled": true,
+        "weight": 90
+      }
+    ]
+  },
+  {
+    "id": "cd5bdc97-4e73-41f8-81eb-aa8907e9ec2a",
+    "title": "Escabana",
+    "link": "https://www.youtube.com/watch?v=gRTh_N8jG40&list=RDgRTh_N8jG40&start_radio=1",
+    "workingBpm": 100,
+    "troubleSpots": [
+      {
+        "bpm": 95
+      },
+      {
+        "bpm": 95
+      }
+    ],
+    "originalBpm": 125,
+    "stepPercent": 2.5,
+    "totalPracticeSec": 9081,
+    "createdAt": "2026-04-13T22:50:50.703Z",
+    "updatedAt": "2026-06-09T15:31:42.241Z",
+    "sortIndex": 7,
+    "warmupBpm": 40,
+    "practiceMode": "smart",
+    "includeWarmupBlock": true,
+    "blockTemplate": [
+      {
+        "kind": "slowReference",
+        "enabled": true,
+        "weight": 90
+      },
+      {
+        "kind": "troubleSpot",
+        "enabled": true,
+        "weight": 120
+      },
+      {
+        "kind": "ceilingWork",
+        "enabled": true,
+        "weight": 180
+      },
+      {
+        "kind": "overspeed",
+        "enabled": true,
+        "weight": 60
+      },
+      {
+        "kind": "consolidation",
+        "enabled": true,
+        "weight": 90
+      }
+    ]
+  }
+]
