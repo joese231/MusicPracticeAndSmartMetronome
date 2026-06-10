@@ -164,37 +164,41 @@ export function BlockTemplateEditor({
               </div>
             </div>
 
-            <div className="grid gap-2 md:grid-cols-4">
-              <DurationEditor
-                value={entry.duration}
-                onChange={(duration) => update(idx, { duration })}
-                disabled={!entry.enabled}
-                maxFixedMinutes={Math.max(
-                  0.25,
-                  roundMinutes(
-                    (entry.role === "troubleSpot" && variant === "song"
-                      ? totalSec
-                      : totalSec -
-                        template.reduce((sum, other, otherIdx) => {
-                          if (otherIdx === idx || !other.enabled) return sum;
-                          if (
-                            variant === "song" &&
-                            other.role === "troubleSpot"
-                          ) {
-                            return sum;
-                          }
-                          if (other.duration.kind !== "fixed") return sum;
-                          return sum + Math.max(0, other.duration.seconds);
-                        }, 0)) / 60,
-                  ),
-                )}
-              />
-              <TempoRuleEditor
-                value={entry.tempoRule}
-                onChange={(tempoRule) => update(idx, { tempoRule })}
-                disabled={!entry.enabled}
-              />
-              <label className="text-xs text-neutral-400">
+            <div className="flex flex-wrap items-start gap-2">
+              <div className="min-w-[12rem] flex-[1_1_12rem]">
+                <DurationEditor
+                  value={entry.duration}
+                  onChange={(duration) => update(idx, { duration })}
+                  disabled={!entry.enabled}
+                  maxFixedMinutes={Math.max(
+                    0.25,
+                    roundMinutes(
+                      (entry.role === "troubleSpot" && variant === "song"
+                        ? totalSec
+                        : totalSec -
+                          template.reduce((sum, other, otherIdx) => {
+                            if (otherIdx === idx || !other.enabled) return sum;
+                            if (
+                              variant === "song" &&
+                              other.role === "troubleSpot"
+                            ) {
+                              return sum;
+                            }
+                            if (other.duration.kind !== "fixed") return sum;
+                            return sum + Math.max(0, other.duration.seconds);
+                          }, 0)) / 60,
+                    ),
+                  )}
+                />
+              </div>
+              <div className="min-w-[15rem] flex-[1_1_15rem]">
+                <TempoRuleEditor
+                  value={entry.tempoRule}
+                  onChange={(tempoRule) => update(idx, { tempoRule })}
+                  disabled={!entry.enabled}
+                />
+              </div>
+              <label className="min-w-[10rem] flex-[1_1_10rem] text-xs text-neutral-400">
                 Progression
                 <select
                   value={entry.progression.kind}
@@ -213,7 +217,7 @@ export function BlockTemplateEditor({
                   )}
                 </select>
               </label>
-              <label className="flex items-center gap-2 pt-6 text-xs text-neutral-300">
+              <label className="flex min-w-[8rem] flex-[0_1_8rem] items-center gap-2 pt-6 text-xs text-neutral-300">
                 <input
                   type="checkbox"
                   checked={entry.metronomeEnabled}
