@@ -10,4 +10,5 @@ coverage/
 next-env.d.ts
 tsconfig.tsbuildinfo
 .claude/
+.superpowers/
 docs/superpowers/
