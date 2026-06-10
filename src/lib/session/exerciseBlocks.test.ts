@@ -52,27 +52,25 @@ describe("buildExerciseTimedBlocks (default template)", () => {
 
   it.each([
     [5, 300],
-    [10, 600],
-    [20, 1200],
-    [30, 1800],
-    [60, 3600],
-  ])("%i min total → blocks sum to %i s", (minutes, totalSec) => {
+    [10, 300],
+    [20, 300],
+    [30, 300],
+    [60, 300],
+  ])("%i min with fixed defaults → blocks sum to %i s", (minutes, totalSec) => {
     const b = buildExerciseTimedBlocks(minutes);
     expect(b.reduce((a, x) => a + x.durationSec, 0)).toBe(totalSec);
   });
 
   it("clamps below the floor up to MIN_EXERCISE_MINUTES", () => {
     const b = buildExerciseTimedBlocks(1);
-    expect(b.reduce((a, x) => a + x.durationSec, 0)).toBe(
-      MIN_EXERCISE_MINUTES * 60,
-    );
+    expect(MIN_EXERCISE_MINUTES).toBe(5);
+    expect(b.reduce((a, x) => a + x.durationSec, 0)).toBe(300);
   });
 
   it("clamps above the ceiling down to MAX_EXERCISE_MINUTES", () => {
     const b = buildExerciseTimedBlocks(999);
-    expect(b.reduce((a, x) => a + x.durationSec, 0)).toBe(
-      MAX_EXERCISE_MINUTES * 60,
-    );
+    expect(MAX_EXERCISE_MINUTES).toBe(60);
+    expect(b.reduce((a, x) => a + x.durationSec, 0)).toBe(300);
   });
 
   it("only the Build block has the earn button", () => {
@@ -85,10 +83,10 @@ describe("buildExerciseTimedBlocks (default template)", () => {
     expect(b[2].promotes).toBeNull();
   });
 
-  it("computes block tempos from working BPM (100)", () => {
+  it("computes block tempos from target and overspeed rules (100)", () => {
     const song = exerciseAsSong(makeExercise(100, 30));
     const b = buildExerciseTimedBlocks(30);
-    expect(b[0].tempoFn(song)).toBe(100); // Build = working
+    expect(b[0].tempoFn(song)).toBe(103); // Build = target
     expect(b[1].tempoFn(song)).toBe(106); // Burst = step(step(100)) = 106
     expect(b[2].tempoFn(song)).toBe(80); // Cool Down = round(100 * 0.80)
   });
@@ -121,14 +119,14 @@ describe("buildExerciseBlocks", () => {
   });
 
   describe("custom templates", () => {
-    it("disabling Cool Down drops it and redistributes time", () => {
+    it("disabling Cool Down drops it without changing fixed durations", () => {
       const template = cloneExerciseTemplate(DEFAULT_EXERCISE_BLOCK_TEMPLATE);
       template.find((e) => e.role === "exerciseCoolDown")!.enabled = false;
       const blocks = buildExerciseBlocks(
         makeExercise(100, 5, { blockTemplate: template, includeWarmupBlock: false }),
       );
       expect(blocks.some((b) => b.kind === "exerciseCoolDown")).toBe(false);
-      expect(blocks.reduce((a, b) => a + b.durationSec, 0)).toBe(300);
+      expect(blocks.reduce((a, b) => a + b.durationSec, 0)).toBe(270);
     });
 
     it("supports fixed plus percent durations", () => {

@@ -51,7 +51,7 @@ describe("default song template", () => {
     expect(DEFAULT_SONG_BLOCK_TEMPLATE.every((e) => e.enabled)).toBe(true);
   });
 
-  it("duration percents preserve the legacy 540 total share", () => {
+  it("default durations use fixed base blocks and additive trouble time", () => {
     const byRole = new Map(DEFAULT_SONG_BLOCK_TEMPLATE.map((e) => [e.role, e]));
     expect(byRole.get("slowReference")?.duration).toEqual({
       kind: "fixed",
@@ -62,16 +62,16 @@ describe("default song template", () => {
       seconds: 120,
     });
     expect(byRole.get("ceilingWork")?.duration).toEqual({
-      kind: "percent",
-      percent: 44.12,
+      kind: "fixed",
+      seconds: 300,
     });
     expect(byRole.get("overspeed")?.duration).toEqual({
-      kind: "percent",
-      percent: 14.71,
+      kind: "fixed",
+      seconds: 120,
     });
     expect(byRole.get("consolidation")?.duration).toEqual({
-      kind: "percent",
-      percent: 41.17,
+      kind: "fixed",
+      seconds: 90,
     });
   });
 
@@ -209,25 +209,27 @@ describe("buildBlocks — default template totals", () => {
   });
 });
 
-describe("buildBlocks — scaling to longer durations", () => {
-  it("15 min with 1 spot sums to 15 min plus one 2-min trouble block", () => {
+describe("buildBlocks — fixed default durations", () => {
+  it("15 min with 1 spot keeps the fixed 10-min base plus one 2-min trouble block", () => {
     const blocks = buildBlocks(15, makeSong([{ bpm: 150 }]));
-    expect(sumDur(blocks)).toBe(1020);
+    expect(sumDur(blocks)).toBe(720);
   });
 
-  it("20 min with 2 spots sums to 20 min plus two 2-min trouble blocks", () => {
+  it("20 min with 2 spots keeps the fixed 10-min base plus two 2-min trouble blocks", () => {
     const blocks = buildBlocks(20, makeSong([{ bpm: 150 }, { bpm: 160 }]));
-    expect(sumDur(blocks)).toBe(1440);
+    expect(sumDur(blocks)).toBe(840);
   });
 
-  it("30 min with 1 spot sums to 30 min plus one 2-min trouble block", () => {
+  it("30 min with 1 spot keeps the fixed 10-min base plus one 2-min trouble block", () => {
     const blocks = buildBlocks(30, makeSong([{ bpm: 150 }]));
-    expect(sumDur(blocks)).toBe(1920);
+    expect(sumDur(blocks)).toBe(720);
   });
 
-  it("5 min with 1 spot sums to 5 min plus one 2-min trouble block", () => {
+  it("5 min with 1 spot cannot fit the fixed 10-min base and returns only the warm-up", () => {
     const blocks = buildBlocks(5, makeSong([{ bpm: 150 }]));
-    expect(sumDur(blocks)).toBe(420);
+    expect(blocks).toHaveLength(1);
+    expect(blocks[0].kind).toBe("consciousPractice");
+    expect(sumDur(blocks)).toBe(0);
   });
 });
 
@@ -247,7 +249,7 @@ describe("buildBlocks — custom templates", () => {
     );
   });
 
-  it("disabling a row drops it and redistributes time", () => {
+  it("disabling a fixed row drops it without redistributing its time", () => {
     const template: SongBlockTemplate = cloneSongTemplate(
       DEFAULT_SONG_BLOCK_TEMPLATE,
     );
@@ -255,7 +257,7 @@ describe("buildBlocks — custom templates", () => {
     template[idx].enabled = false;
     const blocks = buildBlocks(10, makeSong([{ bpm: 150 }], { blockTemplate: template }));
     expect(blocks.some((b) => b.kind === "overspeed")).toBe(false);
-    expect(sumDur(blocks)).toBe(720);
+    expect(sumDur(blocks)).toBe(600);
   });
 
   it("reordering changes the body order in output", () => {

@@ -165,7 +165,7 @@ export const EXERCISE_BLOCK_LABELS: Record<ExerciseBlockKind, string> = {
 };
 
 export const EXERCISE_BLOCK_TEMPO_HINT: Record<ExerciseBlockKind, string> = {
-  exerciseBuild: "@ working BPM",
+  exerciseBuild: "@ target BPM (working + 1 step)",
   exerciseBurst: "@ overspeed (working + 2 steps)",
   exerciseCoolDown: "@ 80% working",
 };
@@ -195,7 +195,7 @@ const DEFAULT_SONG_INSTRUCTIONS: Record<SongBlockKind, string[]> = {
 
 const DEFAULT_EXERCISE_INSTRUCTIONS: Record<ExerciseBlockKind, string[]> = {
   exerciseBuild: [
-    "Working tempo - internalize the motion cleanly.",
+    "Target tempo - internalize the motion cleanly.",
     "Three clean-and-relaxed reps earns a new working tempo.",
   ],
   exerciseBurst: [
@@ -226,7 +226,7 @@ const songRecipe = (
   progression,
 });
 
-/** Default 10-min base: 1:30 slow, 3:45 ceiling, 1:15 overspeed, 3:30 consolidation.
+/** Default 10-min base: 1:30 slow, 5:00 ceiling, 2:00 overspeed, 1:30 consolidation.
  * Trouble spots are additive: each spot adds a fixed 2-minute block. */
 export const DEFAULT_SONG_BLOCK_TEMPLATE: SongBlockTemplate = [
   songRecipe(
@@ -251,15 +251,15 @@ export const DEFAULT_SONG_BLOCK_TEMPLATE: SongBlockTemplate = [
   ),
   songRecipe(
     "ceilingWork",
-    { kind: "percent", percent: 44.12 },
+    { kind: "fixed", seconds: 300 },
     { source: "working", adjustment: { kind: "steps", value: 1 } },
     { kind: "working" },
   ),
-  songRecipe("overspeed", { kind: "percent", percent: 14.71 }, {
+  songRecipe("overspeed", { kind: "fixed", seconds: 120 }, {
     source: "working",
     adjustment: { kind: "steps", value: 2 },
   }),
-  songRecipe("consolidation", { kind: "percent", percent: 41.17 }, {
+  songRecipe("consolidation", { kind: "fixed", seconds: 90 }, {
     source: "working",
     adjustment: { kind: "percent", value: 70 },
   }),
@@ -414,7 +414,7 @@ function recipeFromLegacyExerciseEntry(
 ): SmartBlockRecipe {
   const template = exerciseRecipe(
     kind,
-    Math.max(0, weight),
+    { kind: "percent", percent: Math.max(0, weight) },
     defaultExerciseTempoRule(kind),
     kind === "exerciseBuild" ? { kind: "working" } : { kind: "none" },
   );
@@ -424,7 +424,7 @@ function recipeFromLegacyExerciseEntry(
 function defaultExerciseTempoRule(kind: ExerciseBlockKind): TempoRule {
   switch (kind) {
     case "exerciseBuild":
-      return { source: "working" };
+      return { source: "working", adjustment: { kind: "steps", value: 1 } };
     case "exerciseBurst":
       return { source: "working", adjustment: { kind: "steps", value: 2 } };
     case "exerciseCoolDown":
@@ -477,7 +477,8 @@ export function migrateDefaultSongTemplate(
   t: SongBlockTemplate | LegacySongBlockTemplate | undefined | null,
 ): SongBlockTemplate {
   const migrated = migrateSongTemplate(t);
-  return isLegacyCanonicalDefaultSongTemplate(migrated)
+  return isLegacyCanonicalDefaultSongTemplate(migrated) ||
+    isPreviousAdditiveDefaultSongTemplate(migrated)
     ? cloneSongTemplate(DEFAULT_SONG_BLOCK_TEMPLATE)
     : migrated;
 }
@@ -489,6 +490,25 @@ function isLegacyCanonicalDefaultSongTemplate(t: SongBlockTemplate): boolean {
     ["ceilingWork", { kind: "percent", percent: 180 }],
     ["overspeed", { kind: "percent", percent: 60 }],
     ["consolidation", { kind: "percent", percent: 90 }],
+  ];
+  if (t.length !== expected.length) return false;
+  return expected.every(([role, duration], index) => {
+    const entry = t[index];
+    return (
+      entry?.role === role &&
+      entry.enabled === true &&
+      durationsEqual(entry.duration, duration)
+    );
+  });
+}
+
+function isPreviousAdditiveDefaultSongTemplate(t: SongBlockTemplate): boolean {
+  const expected: Array<[SmartBlockRole, BlockDurationRule]> = [
+    ["slowReference", { kind: "fixed", seconds: 90 }],
+    ["troubleSpot", { kind: "fixed", seconds: 120 }],
+    ["ceilingWork", { kind: "percent", percent: 44.12 }],
+    ["overspeed", { kind: "percent", percent: 14.71 }],
+    ["consolidation", { kind: "percent", percent: 41.17 }],
   ];
   if (t.length !== expected.length) return false;
   return expected.every(([role, duration], index) => {
@@ -514,7 +534,7 @@ export type ExerciseBlockTemplate = SmartBlockRecipe[];
 
 const exerciseRecipe = (
   role: ExerciseBlockKind,
-  durationPercent: number,
+  duration: BlockDurationRule,
   tempoRule: TempoRule,
   progression: ProgressionRule = { kind: "none" },
 ): SmartBlockRecipe => ({
@@ -524,7 +544,7 @@ const exerciseRecipe = (
   purpose: EXERCISE_BLOCK_TEMPO_HINT[role],
   instructions: DEFAULT_EXERCISE_INSTRUCTIONS[role],
   enabled: true,
-  duration: { kind: "percent", percent: durationPercent },
+  duration,
   tempoRule,
   metronomeEnabled: true,
   progression,
@@ -534,15 +554,15 @@ const exerciseRecipe = (
 export const DEFAULT_EXERCISE_BLOCK_TEMPLATE: ExerciseBlockTemplate = [
   exerciseRecipe(
     "exerciseBuild",
-    210,
-    { source: "working" },
+    { kind: "fixed", seconds: 210 },
+    { source: "working", adjustment: { kind: "steps", value: 1 } },
     { kind: "working" },
   ),
-  exerciseRecipe("exerciseBurst", 60, {
+  exerciseRecipe("exerciseBurst", { kind: "fixed", seconds: 60 }, {
     source: "working",
     adjustment: { kind: "steps", value: 2 },
   }),
-  exerciseRecipe("exerciseCoolDown", 30, {
+  exerciseRecipe("exerciseCoolDown", { kind: "fixed", seconds: 30 }, {
     source: "working",
     adjustment: { kind: "percent", value: 80 },
   }),
@@ -570,6 +590,54 @@ export function migrateExerciseTemplate(
   return t.map((e) => {
     const weight = e.kind === "exerciseBurst" && e.weight === 90 ? 60 : e.weight;
     return recipeFromLegacyExerciseEntry(e.kind, e.enabled, weight);
+  });
+}
+
+export function migrateDefaultExerciseTemplate(
+  t: ExerciseBlockTemplate | LegacyExerciseBlockTemplate | undefined | null,
+): ExerciseBlockTemplate {
+  const migrated = migrateExerciseTemplate(t);
+  return isLegacyCanonicalDefaultExerciseTemplate(migrated) ||
+    isPreviousCustomizedDefaultExerciseTemplate(migrated)
+    ? cloneExerciseTemplate(DEFAULT_EXERCISE_BLOCK_TEMPLATE)
+    : migrated;
+}
+
+function isLegacyCanonicalDefaultExerciseTemplate(
+  t: ExerciseBlockTemplate,
+): boolean {
+  const expected: Array<[SmartBlockRole, BlockDurationRule]> = [
+    ["exerciseBuild", { kind: "percent", percent: 210 }],
+    ["exerciseBurst", { kind: "percent", percent: 60 }],
+    ["exerciseCoolDown", { kind: "percent", percent: 30 }],
+  ];
+  if (t.length !== expected.length) return false;
+  return expected.every(([role, duration], index) => {
+    const entry = t[index];
+    return (
+      entry?.role === role &&
+      entry.enabled === true &&
+      durationsEqual(entry.duration, duration)
+    );
+  });
+}
+
+function isPreviousCustomizedDefaultExerciseTemplate(
+  t: ExerciseBlockTemplate,
+): boolean {
+  const expected: Array<[SmartBlockRole, BlockDurationRule]> = [
+    ["exerciseBuild", { kind: "percent", percent: 179 }],
+    ["exerciseBurst", { kind: "percent", percent: 60 }],
+    ["exerciseCoolDown", { kind: "percent", percent: 30 }],
+  ];
+  if (t.length !== expected.length) return false;
+  return expected.every(([role, duration], index) => {
+    const entry = t[index];
+    return (
+      entry?.role === role &&
+      entry.enabled === true &&
+      durationsEqual(entry.duration, duration)
+    );
   });
 }
 

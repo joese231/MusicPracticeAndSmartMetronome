@@ -38,9 +38,9 @@ describe("totalPlayingSec", () => {
     expect(totalPlayingSec(blocks)).toBe(720);
   });
 
-  it("5-min blocks total 300s of playing time", () => {
-    const blocks = buildBlocks(5, makeSong({ troubleSpots: [] }));
-    expect(totalPlayingSec(blocks)).toBe(300);
+  it("10-min blocks without trouble spots total 600s of playing time", () => {
+    const blocks = buildBlocks(10, makeSong({ troubleSpots: [] }));
+    expect(totalPlayingSec(blocks)).toBe(600);
   });
 });
 

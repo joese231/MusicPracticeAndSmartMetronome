@@ -8,6 +8,7 @@ import {
   DEFAULT_SETTINGS,
   DEFAULT_SONG_BLOCK_TEMPLATE,
   DEFAULT_SONG_SESSION_MINUTES,
+  migrateDefaultExerciseTemplate,
   migrateExerciseTemplate,
   migrateDefaultSongTemplate,
   migrateSongTemplate,
@@ -281,7 +282,7 @@ export class AppDB extends Dexie {
             row.defaultSongBlockTemplate = migrateDefaultSongTemplate(
               row.defaultSongBlockTemplate,
             );
-            row.defaultExerciseBlockTemplate = migrateExerciseTemplate(
+            row.defaultExerciseBlockTemplate = migrateDefaultExerciseTemplate(
               row.defaultExerciseBlockTemplate,
             );
             if (typeof row.defaultSongSessionMinutes !== "number") {
@@ -307,6 +308,28 @@ export class AppDB extends Dexie {
           .modify((row) => {
             row.defaultSongBlockTemplate = migrateDefaultSongTemplate(
               row.defaultSongBlockTemplate,
+            );
+            row.defaultExerciseBlockTemplate = migrateDefaultExerciseTemplate(
+              row.defaultExerciseBlockTemplate,
+            );
+          });
+      });
+    this.version(14)
+      .stores({
+        songs: "id, title, updatedAt, sortIndex",
+        settings: "id",
+        exercises: "id, name, updatedAt, sortIndex",
+      })
+      .upgrade(async (tx) => {
+        await tx
+          .table<SettingsRow, string>("settings")
+          .toCollection()
+          .modify((row) => {
+            row.defaultSongBlockTemplate = migrateDefaultSongTemplate(
+              row.defaultSongBlockTemplate,
+            );
+            row.defaultExerciseBlockTemplate = migrateDefaultExerciseTemplate(
+              row.defaultExerciseBlockTemplate,
             );
           });
       });

@@ -19,8 +19,9 @@ import { evaluateTempoRule } from "./tempoRules";
 export const INSTRUCTIONS: Record<string, string[]> = {
   consciousPractice: [
     "Very slow, very conscious — one click, one note.",
-    "Feel every motion of each hand. Land exactly on the click.",
-    "Timer counts up — end the block when you feel warmed up.",
+    "Perfect the little movements: make them precise, efficient, and relaxed.",
+    "Feel every motion of each hand. Release unnecessary tension before moving on.",
+    "Timer counts up — end the block when the motion feels clean and settled.",
   ],
   slowReference: [
     "Play the full tune, slowly and relaxed.",
@@ -49,7 +50,7 @@ export const INSTRUCTIONS: Record<string, string[]> = {
     "End on a clean rep. Always.",
   ],
   exerciseBuild: [
-    "Working tempo — internalize the motion cleanly.",
+    "Target tempo — internalize the motion cleanly.",
     "Three consecutive clean-and-relaxed reps earns a new working tempo — tap +.",
     "If three tense reps stack, drop the tempo and reset the feel.",
   ],

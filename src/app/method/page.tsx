@@ -111,7 +111,7 @@ export default function MethodPage() {
 
       <section className="mt-10 space-y-4">
         <h2 className="text-2xl font-semibold">6. The session structure</h2>
-        <p>Smart Practice starts from five timed blocks, each with a short on-screen instruction panel. The table below shows the default shape for a 10-minute base session. Trouble Spot time is additive: each saved trouble spot adds its own block outside the 10-minute base.</p>
+        <p>Smart Practice starts with an optional count-up Conscious Practice block, followed by the timed blocks below. The table shows the default shape for a 10-minute base session. Trouble Spot time is additive: each saved trouble spot adds its own block outside the 10-minute base.</p>
         <div className="overflow-x-auto">
           <table className="w-full border-collapse text-left text-sm">
             <thead>
@@ -123,11 +123,12 @@ export default function MethodPage() {
               </tr>
             </thead>
             <tbody className="text-neutral-200">
+              <Row block="Conscious Practice" duration="Count up" tempo="Very slow" purpose="Perfect the little movements: precise, efficient, relaxed." />
               <Row block="Slow Reference" duration="1:30" tempo="80% of working" purpose="Stay until one clean-enough repetition of the song." />
               <Row block="Trouble Spot" duration="+2:00 per spot" tempo="Your hard-part BPM" purpose="Loop the hardest 1–2 bars until clean; promote separately." />
-              <Row block="Ceiling Work" duration="3:45" tempo="Target (step above working)" purpose="Full-tune push. Three clean reps earns the new working tempo." />
-              <Row block="Overspeed" duration="1:15" tempo="Two steps above working" purpose="At least one repetition, even if messy, to make the target feel slow." />
-              <Row block="Consolidation" duration="3:30" tempo="70% of working" purpose="Stay until one very relaxed musical pass." />
+              <Row block="Ceiling Work" duration="5:00" tempo="Target (step above working)" purpose="Full-tune push. Three clean reps earns the new working tempo." />
+              <Row block="Overspeed" duration="2:00" tempo="Two steps above working" purpose="At least one repetition, even if messy, to make the target feel slow." />
+              <Row block="Consolidation" duration="1:30" tempo="70% of working" purpose="Stay until one very relaxed musical pass." />
             </tbody>
           </table>
         </div>
@@ -198,6 +199,12 @@ export default function MethodPage() {
         <h3 className="mt-6 text-xl font-semibold text-neutral-100">10-minute session walkthrough</h3>
         <ol className="ml-6 list-decimal space-y-3 text-neutral-300">
           <li>
+            <strong className="text-neutral-100">Conscious Practice (count up, very slow).</strong>{" "}
+            Before the timed work starts, move very slowly and deliberately. Perfect the
+            little movements, make each hand motion precise and efficient, and release
+            tension before moving on.
+          </li>
+          <li>
             <strong className="text-neutral-100">Slow Reference (1:30 @ 176 BPM).</strong>{" "}
             Stay here until you can play one clean-enough repetition of the song. You notice
             your right-hand pick angle is a bit steep today, loosen it up, and play through.
@@ -211,7 +218,7 @@ export default function MethodPage() {
             looping for the rest of the block at the new tempo.
           </li>
           <li>
-            <strong className="text-neutral-100">Ceiling Work (3:45 @ 226 BPM).</strong>{" "}
+            <strong className="text-neutral-100">Ceiling Work (5:00 @ 226 BPM).</strong>{" "}
             You play the full tune at the target. First pass hangs on but the B part
             wobbles. Second pass you just barely hold it. Third pass is clean, fourth is
             clean, fifth is clean — tap{" "}
@@ -220,12 +227,12 @@ export default function MethodPage() {
             (the new target) and you keep going.
           </li>
           <li>
-            <strong className="text-neutral-100">Overspeed (1:15 @ 238 BPM).</strong>{" "}
+            <strong className="text-neutral-100">Overspeed (2:00 @ 238 BPM).</strong>{" "}
             At least one fast repetition, even if it is messy. That&rsquo;s fine —
             you&rsquo;re not trying to earn anything here.
           </li>
           <li>
-            <strong className="text-neutral-100">Consolidation (3:30 @ 158 BPM).</strong>{" "}
+            <strong className="text-neutral-100">Consolidation (1:30 @ 158 BPM).</strong>{" "}
             70% of your new working tempo (226 × 0.7 = 158). Stay here until you can
             play one very relaxed musical pass — lean into the swing, let open strings ring.
             This is the version your brain rehearses tonight.
@@ -235,14 +242,15 @@ export default function MethodPage() {
         <p className="mt-4">
           Session results: working BPM promoted 220 → 226. Trouble BPM promoted 150 → 154.
           The saved base session was 10 minutes, and the one trouble spot added 2 minutes,
-          so total practice time on this song has gone up by 12 minutes. Tomorrow you pick it up from here.
+          so the timed practice added 12 minutes to this song. The count-up Conscious
+          Practice block adds whatever extra time you actually spend there. Tomorrow you pick it up from here.
         </p>
       </section>
 
       <section className="mt-12 border-t border-bg-border pt-6 text-sm text-neutral-500">
         <p>
-          That&rsquo;s the whole method. The rest of the app is just plumbing for these
-          five blocks, a metronome, and an &ldquo;I earned it&rdquo; button.
+          That&rsquo;s the whole method. The rest of the app is just plumbing for Conscious
+          Practice, the five timed blocks, a metronome, and an &ldquo;I earned it&rdquo; button.
         </p>
       </section>
     </main>

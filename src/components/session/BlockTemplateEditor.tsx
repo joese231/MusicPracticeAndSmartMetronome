@@ -170,8 +170,8 @@ export function BlockTemplateEditor({
                 onChange={(duration) => update(idx, { duration })}
                 disabled={!entry.enabled}
                 maxFixedMinutes={Math.max(
-                  1,
-                  Math.floor(
+                  0.25,
+                  roundMinutes(
                     (entry.role === "troubleSpot" && variant === "song"
                       ? totalSec
                       : totalSec -
@@ -320,7 +320,7 @@ function DurationEditor({
   maxFixedMinutes: number;
 }) {
   const amount =
-    value.kind === "fixed" ? Math.round(value.seconds / 60) : value.percent;
+    value.kind === "fixed" ? roundMinutes(value.seconds / 60) : value.percent;
   const max = value.kind === "fixed" ? maxFixedMinutes : 100;
   return (
     <label className="text-xs text-neutral-400">
@@ -331,7 +331,13 @@ function DurationEditor({
           onChange={(e) =>
             onChange(
               e.target.value === "fixed"
-                ? { kind: "fixed", seconds: Math.max(1, Math.round(amount)) * 60 }
+                ? {
+                    kind: "fixed",
+                    seconds: Math.round(
+                      Math.min(maxFixedMinutes, Math.max(0.25, Number(amount))) *
+                      60,
+                    ),
+                  }
                 : {
                     kind: "percent",
                     percent: Math.max(1, Math.min(100, Math.round(amount))),
@@ -346,20 +352,27 @@ function DurationEditor({
         </select>
         <input
           type="number"
-          min={1}
+          min={value.kind === "fixed" ? 0.25 : 1}
           max={max}
+          step={value.kind === "fixed" ? 0.25 : 1}
           value={amount}
           onChange={(e) => {
-            const raw = parseInt(e.target.value, 10) || 1;
-            const n = Math.max(1, Math.min(max, raw));
+            const raw =
+              value.kind === "fixed"
+                ? parseFloat(e.target.value)
+                : parseInt(e.target.value, 10);
+            const n = Math.max(
+              value.kind === "fixed" ? 0.25 : 1,
+              Math.min(max, Number.isFinite(raw) ? raw : 1),
+            );
             onChange(
               value.kind === "fixed"
-                ? { kind: "fixed", seconds: n * 60 }
+                ? { kind: "fixed", seconds: Math.round(n * 60) }
                 : { kind: "percent", percent: n },
             );
           }}
           disabled={disabled}
-          className="min-w-0 flex-1 rounded border border-bg-border bg-bg px-2 py-1.5 text-right text-sm text-neutral-100 outline-none focus:border-accent disabled:opacity-50"
+          className="w-20 rounded border border-bg-border bg-bg px-2 py-1.5 text-right text-sm text-neutral-100 outline-none focus:border-accent disabled:opacity-50"
         />
       </div>
       <div className="mt-0.5 text-[10px] text-neutral-500">
@@ -367,6 +380,10 @@ function DurationEditor({
       </div>
     </label>
   );
+}
+
+function roundMinutes(value: number): number {
+  return Math.round(value * 100) / 100;
 }
 
 function TempoRuleEditor({
