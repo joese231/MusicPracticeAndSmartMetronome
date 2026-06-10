@@ -3,6 +3,7 @@ import {
   buildBlocks,
   INSTRUCTIONS,
   sessionLengthSec,
+  songBlockStructureKey,
 } from "./blocks";
 import {
   cloneSongTemplate,
@@ -217,6 +218,21 @@ describe("buildBlocks — scaling to longer durations", () => {
 });
 
 describe("buildBlocks — custom templates", () => {
+  it("structure key changes when only a block duration changes", () => {
+    const firstTemplate = cloneSongTemplate(DEFAULT_SONG_BLOCK_TEMPLATE);
+    const secondTemplate = cloneSongTemplate(DEFAULT_SONG_BLOCK_TEMPLATE);
+    secondTemplate[0] = {
+      ...secondTemplate[0],
+      duration: { kind: "fixed", seconds: 120 },
+    };
+
+    expect(
+      songBlockStructureKey(makeSong([], { blockTemplate: firstTemplate })),
+    ).not.toBe(
+      songBlockStructureKey(makeSong([], { blockTemplate: secondTemplate })),
+    );
+  });
+
   it("disabling a row drops it and redistributes time", () => {
     const template: SongBlockTemplate = cloneSongTemplate(
       DEFAULT_SONG_BLOCK_TEMPLATE,

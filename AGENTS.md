@@ -159,7 +159,7 @@ Don't invoke for its `scripts/` (assume Prisma/Postgres). This project's convent
 ## Quality assurance
 
 - **Linting**: ESLint config (`.eslintrc.json`) uses Next.js core-web-vitals preset.
-- **Testing**: Vitest suite covers 203 tests across 11 test files (tempo math, session state, duration allocation, tempo rules, manual logging, stats aggregates, form validation).
+- **Testing**: Vitest suite covers 204 tests across 11 test files (tempo math, session state, duration allocation, tempo rules, manual logging, stats aggregates, form validation).
 - **Build**: Next.js production build tested and passing, all routes compile cleanly.
 
 ## Pointers for future work

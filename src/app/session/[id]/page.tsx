@@ -27,7 +27,11 @@ import {
   tickSnapshot,
   timeLeftInPlayingSec,
 } from "@/lib/session/driver";
-import { buildBlocks, clampSessionMinutes } from "@/lib/session/blocks";
+import {
+  buildBlocks,
+  clampSessionMinutes,
+  songBlockStructureKey,
+} from "@/lib/session/blocks";
 import {
   nowIso,
   promoteWorking,
@@ -169,12 +173,15 @@ function SessionPage() {
     if (song) songRuntimeRef.current = song;
   }, [song]);
 
+  const blockStructureKey = song ? songBlockStructureKey(song) : "";
   const blocks = useMemo<BlockDef[]>(
     () => (song ? buildBlocks(durationMinutes, song) : []),
     // Blocks are captured once per session start. tempoFns close over the
-    // runtime song ref so mid-session promotions still flow through.
+    // runtime song ref so mid-session promotions still flow through. The
+    // structure key intentionally captures template/mode changes without
+    // rebuilding on every BPM-only song update.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [durationMinutes, song?.id, song?.troubleSpots.length],
+    [durationMinutes, song?.id, blockStructureKey],
   );
 
   const addToast = useCallback((text: string) => {

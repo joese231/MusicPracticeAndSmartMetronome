@@ -188,6 +188,15 @@ export const sessionLengthSec = (minutes: number, song: Song): number => {
   return [...allocation.durations.values()].reduce((a, b) => a + b, 0);
 };
 
+export const songBlockStructureKey = (song: Song): string =>
+  JSON.stringify({
+    practiceMode: song.practiceMode,
+    includeWarmupBlock: song.includeWarmupBlock,
+    metronomeEnabled: song.metronomeEnabled,
+    troubleSpotCount: song.troubleSpots.length,
+    blockTemplate: songTemplate(song),
+  });
+
 /**
  * Build the block list for a session of `minutes` minutes against a song.
  *
