@@ -57,18 +57,14 @@ export default function SongDetailPage() {
     const count = song.troubleSpots.length;
     const tail =
       " A Conscious Practice warm-up runs first — you end it when ready. Blocks pause between each other so you can finish your current pass — actual wall-clock length will be a bit longer.";
-    if (selectedMinutes === 5) {
-      return "5-min compact session — skips trouble-spot blocks by design." + tail;
-    }
     if (count === 0) {
       return `${selectedMinutes} min base, no trouble spots → ${lengthMin} min of playing.` + tail;
     }
     if (count === 1) {
       return `${selectedMinutes} min base, 1 trouble spot → ${lengthMin} min of playing.` + tail;
     }
-    const extra = count - 1;
     return (
-      `${selectedMinutes} min base + ${extra} extra trouble spot${extra > 1 ? "s" : ""} → ${lengthMin} min of playing.` +
+      `${selectedMinutes} min base, ${count} trouble spots → ${lengthMin} min of playing.` +
       tail
     );
   }, [song]);

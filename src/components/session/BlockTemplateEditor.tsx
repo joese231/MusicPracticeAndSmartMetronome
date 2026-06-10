@@ -71,6 +71,16 @@ export function BlockTemplateEditor({
 
   const totalSec = Math.max(0, Math.round(previewMinutes * 60));
   const active = activeTemplateEntries(template, variant, troubleSpotCount);
+  const allocationEntries = allocationTemplateEntries(
+    template,
+    variant,
+    troubleSpotCount,
+  );
+  const additiveEntries = additiveTemplateEntries(
+    template,
+    variant,
+    troubleSpotCount,
+  );
   const validation = validateTemplateForSession(
     template,
     previewMinutes,
@@ -79,18 +89,20 @@ export function BlockTemplateEditor({
   );
   const allocation = allocateBlockDurations(
     totalSec,
-    active.map((entry) => ({ id: entry.id, duration: entry.duration })),
+    allocationEntries.map((entry) => ({ id: entry.id, duration: entry.duration })),
   );
   const previewItems =
     allocation.ok
-      ? active.map((e) => {
+      ? [
+          ...allocationEntries.map((e) => {
           const secs = allocation.durations.get(e.id) ?? 0;
-          if (variant === "song" && e.role === "troubleSpot" && troubleSpotCount > 0) {
-            const per = Math.floor(secs / troubleSpotCount);
-            return `${e.name} ${fmtSecs(per)} x ${troubleSpotCount}`;
-          }
           return `${e.name} ${fmtSecs(secs)}`;
-        })
+          }),
+          ...additiveEntries.map((e) => {
+            const secs = additiveEntryDurationSec(e, totalSec);
+            return `${e.name} +${fmtSecs(secs)} x ${troubleSpotCount}`;
+          }),
+        ]
       : [];
 
   return (
@@ -160,13 +172,20 @@ export function BlockTemplateEditor({
                 maxFixedMinutes={Math.max(
                   1,
                   Math.floor(
-                    (totalSec -
-                      template.reduce((sum, other, otherIdx) => {
-                        if (otherIdx === idx || !other.enabled) return sum;
-                        if (other.duration.kind !== "fixed") return sum;
-                        return sum + Math.max(0, other.duration.seconds);
-                      }, 0)) /
-                      60,
+                    (entry.role === "troubleSpot" && variant === "song"
+                      ? totalSec
+                      : totalSec -
+                        template.reduce((sum, other, otherIdx) => {
+                          if (otherIdx === idx || !other.enabled) return sum;
+                          if (
+                            variant === "song" &&
+                            other.role === "troubleSpot"
+                          ) {
+                            return sum;
+                          }
+                          if (other.duration.kind !== "fixed") return sum;
+                          return sum + Math.max(0, other.duration.seconds);
+                        }, 0)) / 60,
                   ),
                 )}
               />
@@ -270,6 +289,11 @@ export function BlockTemplateEditor({
             {allocation.fixedSec > 0 && (
               <span className="mr-1 text-neutral-500">
                 {fmtSecs(allocation.remainingSec)} remains for percentage blocks.
+              </span>
+            )}
+            {additiveEntries.length > 0 && (
+              <span className="mr-1 text-neutral-500">
+                Trouble spot time is added outside the base session.
               </span>
             )}
             {previewItems.join(" · ")}
@@ -467,13 +491,44 @@ function activeTemplateEntries(
   );
 }
 
+function allocationTemplateEntries(
+  template: SmartBlockRecipe[],
+  variant: "song" | "exercise",
+  troubleSpotCount = 0,
+): SmartBlockRecipe[] {
+  return activeTemplateEntries(template, variant, troubleSpotCount).filter(
+    (e) => !(variant === "song" && e.role === "troubleSpot"),
+  );
+}
+
+function additiveTemplateEntries(
+  template: SmartBlockRecipe[],
+  variant: "song" | "exercise",
+  troubleSpotCount = 0,
+): SmartBlockRecipe[] {
+  if (variant !== "song" || troubleSpotCount <= 0) return [];
+  return activeTemplateEntries(template, variant, troubleSpotCount).filter(
+    (e) => e.role === "troubleSpot",
+  );
+}
+
+function additiveEntryDurationSec(
+  entry: SmartBlockRecipe,
+  baseTotalSec: number,
+): number {
+  if (entry.duration.kind === "fixed") {
+    return Math.max(0, Math.round(entry.duration.seconds));
+  }
+  return Math.max(0, Math.round((entry.duration.percent / 100) * baseTotalSec));
+}
+
 export function validateTemplateForSession(
   template: SmartBlockRecipe[],
   previewMinutes: number,
   variant: "song" | "exercise" = "song",
   troubleSpotCount = 0,
 ): { ok: true } | { ok: false; message: string } {
-  const active = activeTemplateEntries(template, variant, troubleSpotCount);
+  const active = allocationTemplateEntries(template, variant, troubleSpotCount);
   if (active.length === 0) {
     return { ok: false, message: "Enable at least one block in the block sequence." };
   }

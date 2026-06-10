@@ -172,8 +172,8 @@ export const EXERCISE_BLOCK_TEMPO_HINT: Record<ExerciseBlockKind, string> = {
 
 const DEFAULT_SONG_INSTRUCTIONS: Record<SongBlockKind, string[]> = {
   slowReference: [
-    "Play the full tune, slowly and relaxed.",
-    "Listen for tone, timing, and any tension.",
+    "Play the full tune slowly and relaxed.",
+    "Stay here until you can play one clean-enough repetition of the song.",
   ],
   troubleSpot: [
     "Loop just the hardest 1-2 bars of the tune.",
@@ -184,12 +184,12 @@ const DEFAULT_SONG_INSTRUCTIONS: Record<SongBlockKind, string[]> = {
     "Three clean-and-relaxed reps earns a new working tempo.",
   ],
   overspeed: [
-    "Play short bursts above your target tempo.",
+    "Play at least one repetition above your target tempo.",
     "Messy is OK; the goal is to make target feel slower.",
   ],
   consolidation: [
     "Play relaxed reps below working tempo.",
-    "End on a clean musical pass.",
+    "Stay here until you can play one very relaxed musical pass.",
   ],
 };
 
@@ -210,7 +210,7 @@ const DEFAULT_EXERCISE_INSTRUCTIONS: Record<ExerciseBlockKind, string[]> = {
 
 const songRecipe = (
   role: SongBlockKind,
-  durationPercent: number,
+  duration: BlockDurationRule,
   tempoRule: TempoRule,
   progression: ProgressionRule = { kind: "none" },
 ): SmartBlockRecipe => ({
@@ -220,21 +220,26 @@ const songRecipe = (
   purpose: SONG_BLOCK_TEMPO_HINT[role],
   instructions: DEFAULT_SONG_INSTRUCTIONS[role],
   enabled: true,
-  duration: { kind: "percent", percent: durationPercent },
+  duration,
   tempoRule,
   metronomeEnabled: true,
   progression,
 });
 
-/** Reference template that reproduces today's BASE_TEN_MIN_BLOCKS at 10 min. */
+/** Default 10-min base: 1:30 slow, 3:45 ceiling, 1:15 overspeed, 3:30 consolidation.
+ * Trouble spots are additive: each spot adds a fixed 2-minute block. */
 export const DEFAULT_SONG_BLOCK_TEMPLATE: SongBlockTemplate = [
-  songRecipe("slowReference", 90, {
-    source: "working",
-    adjustment: { kind: "percent", value: 80 },
-  }),
+  songRecipe(
+    "slowReference",
+    { kind: "fixed", seconds: 90 },
+    {
+      source: "working",
+      adjustment: { kind: "percent", value: 80 },
+    },
+  ),
   songRecipe(
     "troubleSpot",
-    120,
+    { kind: "fixed", seconds: 120 },
     {
       source: "trouble",
       fallback: {
@@ -246,15 +251,15 @@ export const DEFAULT_SONG_BLOCK_TEMPLATE: SongBlockTemplate = [
   ),
   songRecipe(
     "ceilingWork",
-    180,
+    { kind: "percent", percent: 44.12 },
     { source: "working", adjustment: { kind: "steps", value: 1 } },
     { kind: "working" },
   ),
-  songRecipe("overspeed", 60, {
+  songRecipe("overspeed", { kind: "percent", percent: 14.71 }, {
     source: "working",
     adjustment: { kind: "steps", value: 2 },
   }),
-  songRecipe("consolidation", 90, {
+  songRecipe("consolidation", { kind: "percent", percent: 41.17 }, {
     source: "working",
     adjustment: { kind: "percent", value: 70 },
   }),
@@ -368,7 +373,7 @@ function recipeFromLegacySongEntry(
 ): SmartBlockRecipe {
   const template = songRecipe(
     kind,
-    Math.max(0, weight),
+    { kind: "percent", percent: Math.max(0, weight) },
     defaultSongTempoRule(kind),
     defaultSongProgression(kind),
   );
@@ -466,6 +471,43 @@ export function migrateSongTemplate(
     out.push(recipe);
   }
   return out;
+}
+
+export function migrateDefaultSongTemplate(
+  t: SongBlockTemplate | LegacySongBlockTemplate | undefined | null,
+): SongBlockTemplate {
+  const migrated = migrateSongTemplate(t);
+  return isLegacyCanonicalDefaultSongTemplate(migrated)
+    ? cloneSongTemplate(DEFAULT_SONG_BLOCK_TEMPLATE)
+    : migrated;
+}
+
+function isLegacyCanonicalDefaultSongTemplate(t: SongBlockTemplate): boolean {
+  const expected: Array<[SmartBlockRole, BlockDurationRule]> = [
+    ["slowReference", { kind: "percent", percent: 90 }],
+    ["troubleSpot", { kind: "percent", percent: 120 }],
+    ["ceilingWork", { kind: "percent", percent: 180 }],
+    ["overspeed", { kind: "percent", percent: 60 }],
+    ["consolidation", { kind: "percent", percent: 90 }],
+  ];
+  if (t.length !== expected.length) return false;
+  return expected.every(([role, duration], index) => {
+    const entry = t[index];
+    return (
+      entry?.role === role &&
+      entry.enabled === true &&
+      durationsEqual(entry.duration, duration)
+    );
+  });
+}
+
+function durationsEqual(a: BlockDurationRule, b: BlockDurationRule): boolean {
+  if (a.kind !== b.kind) return false;
+  if (a.kind === "fixed" && b.kind === "fixed") return a.seconds === b.seconds;
+  if (a.kind === "percent" && b.kind === "percent") {
+    return a.percent === b.percent;
+  }
+  return false;
 }
 
 export type ExerciseBlockTemplate = SmartBlockRecipe[];

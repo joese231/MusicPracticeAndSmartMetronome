@@ -4,6 +4,7 @@ import type { SessionRecord } from "@/types/sessionRecord";
 import {
   DEFAULT_SETTINGS,
   DEFAULT_SONG_SESSION_MINUTES,
+  migrateDefaultSongTemplate,
   migrateExerciseTemplate,
   migrateSongTemplate,
 } from "@/types/song";
@@ -90,7 +91,7 @@ function normalizeExercise(row: Exercise): Exercise {
 
 function normalizeSettings(row: Partial<Settings>): Settings {
   const merged: Settings = { ...DEFAULT_SETTINGS, ...row };
-  merged.defaultSongBlockTemplate = migrateSongTemplate(
+  merged.defaultSongBlockTemplate = migrateDefaultSongTemplate(
     merged.defaultSongBlockTemplate,
   );
   merged.defaultExerciseBlockTemplate = migrateExerciseTemplate(

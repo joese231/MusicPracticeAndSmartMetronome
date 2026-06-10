@@ -168,8 +168,30 @@ const activeEntries = (
       (e.role !== "troubleSpot" || troubleCount > 0),
   );
 
+const baseEntries = (
+  template: SongBlockTemplate,
+  troubleCount: number,
+): SmartBlockRecipe[] =>
+  activeEntries(template, troubleCount).filter((e) => e.role !== "troubleSpot");
+
+const additiveTroubleEntries = (
+  template: SongBlockTemplate,
+  troubleCount: number,
+): SmartBlockRecipe[] =>
+  troubleCount > 0
+    ? activeEntries(template, troubleCount).filter((e) => e.role === "troubleSpot")
+    : [];
+
 const durationIsPositive = (e: SmartBlockRecipe): boolean =>
   e.duration.kind === "fixed" ? e.duration.seconds > 0 : e.duration.percent > 0;
+
+const additiveDurationSec = (
+  entry: SmartBlockRecipe,
+  baseTotalSec: number,
+): number =>
+  entry.duration.kind === "fixed"
+    ? Math.max(0, Math.round(entry.duration.seconds))
+    : Math.max(0, Math.round((entry.duration.percent / 100) * baseTotalSec));
 
 /**
  * Smart-mode body length: total seconds across all timed blocks (excludes
@@ -181,11 +203,19 @@ export const sessionLengthSec = (minutes: number, song: Song): number => {
   if (song.practiceMode === "simple" || song.practiceMode === "timed") {
     return minutes * 60;
   }
-  const entries = activeEntries(songTemplate(song), song.troubleSpots.length);
+  const template = songTemplate(song);
+  const troubleCount = song.troubleSpots.length;
+  const entries = baseEntries(template, troubleCount);
   if (entries.length === 0) return 0;
-  const allocation = allocateRecipeDurations(minutes * 60, entries);
+  const totalSec = minutes * 60;
+  const allocation = allocateRecipeDurations(totalSec, entries);
   if (!allocation.ok) return 0;
-  return [...allocation.durations.values()].reduce((a, b) => a + b, 0);
+  const baseTotal = [...allocation.durations.values()].reduce((a, b) => a + b, 0);
+  const additiveTotal = additiveTroubleEntries(template, troubleCount).reduce(
+    (sum, entry) => sum + additiveDurationSec(entry, totalSec) * troubleCount,
+    0,
+  );
+  return baseTotal + additiveTotal;
 };
 
 export const songBlockStructureKey = (song: Song): string =>
@@ -231,19 +261,20 @@ export const buildBlocks = (minutes: number, song: Song): BlockDef[] => {
   const entries = activeEntries(template, troubleCount);
   if (entries.length === 0) return result;
 
-  const allocation = allocateRecipeDurations(minutes * 60, entries);
-  if (!allocation.ok) return result;
+  const totalSec = minutes * 60;
+  const timedEntries = baseEntries(template, troubleCount);
+  const allocation =
+    timedEntries.length > 0 ? allocateRecipeDurations(totalSec, timedEntries) : null;
+  if (allocation && !allocation.ok) return result;
 
   for (const entry of entries) {
-    const secs = allocation.durations.get(entry.id) ?? 0;
     if (entry.role === "troubleSpot") {
-      const per = Math.floor(secs / troubleCount);
-      const spotResidual = secs - per * troubleCount;
+      const secs = additiveDurationSec(entry, totalSec);
       for (let i = 0; i < troubleCount; i++) {
         result.push({
           kind: "troubleSpot",
           label: troubleCount > 1 ? `${entry.name} ${i + 1}` : entry.name,
-          durationSec: per + (i === 0 ? spotResidual : 0),
+          durationSec: secs,
           tempoFn: (s: Song) =>
             evaluateTempoRule(entry.tempoRule, s, { troubleIndex: i }),
           showEarnedButton: true,
@@ -253,6 +284,7 @@ export const buildBlocks = (minutes: number, song: Song): BlockDef[] => {
         });
       }
     } else {
+      const secs = allocation?.durations.get(entry.id) ?? 0;
       result.push(recipeToBlock(entry, secs));
     }
   }

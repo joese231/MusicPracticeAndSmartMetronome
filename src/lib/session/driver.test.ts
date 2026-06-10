@@ -33,9 +33,9 @@ const makeSong = (overrides: Partial<Song> = {}): Song => ({
 });
 
 describe("totalPlayingSec", () => {
-  it("10-min blocks total 600s of playing time (Conscious Practice contributes 0)", () => {
+  it("10-min blocks with one trouble spot total 720s of playing time", () => {
     const blocks = buildBlocks(10, makeSong());
-    expect(totalPlayingSec(blocks)).toBe(600);
+    expect(totalPlayingSec(blocks)).toBe(720);
   });
 
   it("5-min blocks total 300s of playing time", () => {

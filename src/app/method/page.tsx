@@ -111,7 +111,7 @@ export default function MethodPage() {
 
       <section className="mt-10 space-y-4">
         <h2 className="text-2xl font-semibold">6. The session structure</h2>
-        <p>Smart Practice starts from five timed blocks, each with a short on-screen instruction panel. The table below shows the default proportions at 10 minutes. You can customize the block names, instructions, tempo rules, and durations per song or from Settings.</p>
+        <p>Smart Practice starts from five timed blocks, each with a short on-screen instruction panel. The table below shows the default shape for a 10-minute base session. Trouble Spot time is additive: each saved trouble spot adds its own block outside the 10-minute base.</p>
         <div className="overflow-x-auto">
           <table className="w-full border-collapse text-left text-sm">
             <thead>
@@ -123,24 +123,24 @@ export default function MethodPage() {
               </tr>
             </thead>
             <tbody className="text-neutral-200">
-              <Row block="Slow Reference" duration="1:40" tempo="80% of working" purpose="Warm up the tune with a full relaxed pass." />
-              <Row block="Trouble Spot" duration="2:13" tempo="Your hard-part BPM" purpose="Loop the hardest 1–2 bars until clean; promote separately." />
-              <Row block="Ceiling Work" duration="3:20" tempo="Target (step above working)" purpose="Full-tune push. Three clean reps earns the new working tempo." />
-              <Row block="Overspeed" duration="1:06" tempo="Two steps above working" purpose="A couple of messy fast bursts to make the target feel slow." />
-              <Row block="Consolidation" duration="1:40" tempo="70% of working" purpose="Deliberate, relaxed musical pass. The version your brain keeps." />
+              <Row block="Slow Reference" duration="1:30" tempo="80% of working" purpose="Stay until one clean-enough repetition of the song." />
+              <Row block="Trouble Spot" duration="+2:00 per spot" tempo="Your hard-part BPM" purpose="Loop the hardest 1–2 bars until clean; promote separately." />
+              <Row block="Ceiling Work" duration="3:45" tempo="Target (step above working)" purpose="Full-tune push. Three clean reps earns the new working tempo." />
+              <Row block="Overspeed" duration="1:15" tempo="Two steps above working" purpose="At least one repetition, even if messy, to make the target feel slow." />
+              <Row block="Consolidation" duration="3:30" tempo="70% of working" purpose="Stay until one very relaxed musical pass." />
             </tbody>
           </table>
         </div>
         <p className="text-neutral-400">
-          Percentage blocks divide the time left after any fixed-minute blocks.
+          Percentage blocks divide the time left after any fixed-minute base blocks.
           This lets you reserve a flat amount of time for one block and let the
           rest of the session scale around it.
         </p>
         <p className="text-neutral-400">
           If your tune has more than one hard passage, the Trouble Spot block
           is replicated once per spot, with its own tempo and its own
-          promotion ladder. The trouble-spot recipe&apos;s allocated time is split
-          evenly across those spots.
+          promotion ladder. Each spot adds its own time on top of the saved
+          base session length.
         </p>
       </section>
 
@@ -198,12 +198,12 @@ export default function MethodPage() {
         <h3 className="mt-6 text-xl font-semibold text-neutral-100">10-minute session walkthrough</h3>
         <ol className="ml-6 list-decimal space-y-3 text-neutral-300">
           <li>
-            <strong className="text-neutral-100">Slow Reference (1:40 @ 176 BPM).</strong>{" "}
-            One full easy pass. You notice your right-hand pick angle is a bit steep today,
-            loosen it up, play through to the end. No pressure.
+            <strong className="text-neutral-100">Slow Reference (1:30 @ 176 BPM).</strong>{" "}
+            Stay here until you can play one clean-enough repetition of the song. You notice
+            your right-hand pick angle is a bit steep today, loosen it up, and play through.
           </li>
           <li>
-            <strong className="text-neutral-100">Trouble Spot (2:13 @ 150 BPM).</strong>{" "}
+            <strong className="text-neutral-100">Trouble Spot (+2:00 @ 150 BPM).</strong>{" "}
             You loop the last two bars of the B part. First rep clean, second rep clean,
             third rep tense — reset. Clean, clean, clean — tap{" "}
             <span className="font-semibold text-accent">I earned it</span>. The toast reads
@@ -211,7 +211,7 @@ export default function MethodPage() {
             looping for the rest of the block at the new tempo.
           </li>
           <li>
-            <strong className="text-neutral-100">Ceiling Work (3:20 @ 226 BPM).</strong>{" "}
+            <strong className="text-neutral-100">Ceiling Work (3:45 @ 226 BPM).</strong>{" "}
             You play the full tune at the target. First pass hangs on but the B part
             wobbles. Second pass you just barely hold it. Third pass is clean, fourth is
             clean, fifth is clean — tap{" "}
@@ -220,22 +220,22 @@ export default function MethodPage() {
             (the new target) and you keep going.
           </li>
           <li>
-            <strong className="text-neutral-100">Overspeed (1:06 @ 238 BPM).</strong>{" "}
-            Two fast messy bursts through the A part only. You flub both. That&rsquo;s
-            fine — you&rsquo;re not trying to earn anything here.
+            <strong className="text-neutral-100">Overspeed (1:15 @ 238 BPM).</strong>{" "}
+            At least one fast repetition, even if it is messy. That&rsquo;s fine —
+            you&rsquo;re not trying to earn anything here.
           </li>
           <li>
-            <strong className="text-neutral-100">Consolidation (1:40 @ 158 BPM).</strong>{" "}
-            70% of your new working tempo (226 × 0.7 = 158). You play two relaxed,
-            musical passes — lean into the swing, let open strings ring. End on a clean
-            rep. This is the version your brain rehearses tonight.
+            <strong className="text-neutral-100">Consolidation (3:30 @ 158 BPM).</strong>{" "}
+            70% of your new working tempo (226 × 0.7 = 158). Stay here until you can
+            play one very relaxed musical pass — lean into the swing, let open strings ring.
+            This is the version your brain rehearses tonight.
           </li>
         </ol>
 
         <p className="mt-4">
           Session results: working BPM promoted 220 → 226. Trouble BPM promoted 150 → 154.
-          Total practice time on this song has gone up by 10 minutes. Tomorrow you pick
-          it up from here.
+          The saved base session was 10 minutes, and the one trouble spot added 2 minutes,
+          so total practice time on this song has gone up by 12 minutes. Tomorrow you pick it up from here.
         </p>
       </section>
 
