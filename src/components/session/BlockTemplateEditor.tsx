@@ -1,5 +1,8 @@
 "use client";
-import { allocateBlockDurations } from "@/lib/session/duration";
+import {
+  allocateBlockDurations,
+  validateBlockDurationPlan,
+} from "@/lib/session/duration";
 import type {
   BlockDurationRule,
   ExerciseBlockTemplate,
@@ -67,11 +70,12 @@ export function BlockTemplateEditor({
   const add = () => onChange([...template, defaultCustomBlock()]);
 
   const totalSec = Math.max(0, Math.round(previewMinutes * 60));
-  const active = template.filter(
-    (e) =>
-      e.enabled &&
-      durationIsPositive(e.duration) &&
-      (variant !== "song" || e.role !== "troubleSpot" || troubleSpotCount > 0),
+  const active = activeTemplateEntries(template, variant, troubleSpotCount);
+  const validation = validateTemplateForSession(
+    template,
+    previewMinutes,
+    variant,
+    troubleSpotCount,
   );
   const allocation = allocateBlockDurations(
     totalSec,
@@ -153,6 +157,18 @@ export function BlockTemplateEditor({
                 value={entry.duration}
                 onChange={(duration) => update(idx, { duration })}
                 disabled={!entry.enabled}
+                maxFixedMinutes={Math.max(
+                  1,
+                  Math.floor(
+                    (totalSec -
+                      template.reduce((sum, other, otherIdx) => {
+                        if (otherIdx === idx || !other.enabled) return sum;
+                        if (other.duration.kind !== "fixed") return sum;
+                        return sum + Math.max(0, other.duration.seconds);
+                      }, 0)) /
+                      60,
+                  ),
+                )}
               />
               <TempoRuleEditor
                 value={entry.tempoRule}
@@ -245,6 +261,10 @@ export function BlockTemplateEditor({
           <div className="mt-0.5 text-red-300">
             No blocks enabled. Enable at least one before saving.
           </div>
+        ) : !validation.ok ? (
+          <div className="mt-0.5 text-red-300">
+            {validation.message}
+          </div>
         ) : allocation.ok ? (
           <div className="mt-0.5 text-neutral-300">
             {allocation.fixedSec > 0 && (
@@ -268,13 +288,16 @@ function DurationEditor({
   value,
   onChange,
   disabled,
+  maxFixedMinutes,
 }: {
   value: BlockDurationRule;
   onChange: (value: BlockDurationRule) => void;
   disabled: boolean;
+  maxFixedMinutes: number;
 }) {
   const amount =
     value.kind === "fixed" ? Math.round(value.seconds / 60) : value.percent;
+  const max = value.kind === "fixed" ? maxFixedMinutes : 100;
   return (
     <label className="text-xs text-neutral-400">
       Duration
@@ -285,7 +308,10 @@ function DurationEditor({
             onChange(
               e.target.value === "fixed"
                 ? { kind: "fixed", seconds: Math.max(1, Math.round(amount)) * 60 }
-                : { kind: "percent", percent: Math.max(1, Math.round(amount)) },
+                : {
+                    kind: "percent",
+                    percent: Math.max(1, Math.min(100, Math.round(amount))),
+                  },
             )
           }
           disabled={disabled}
@@ -297,9 +323,11 @@ function DurationEditor({
         <input
           type="number"
           min={1}
+          max={max}
           value={amount}
           onChange={(e) => {
-            const n = Math.max(1, parseInt(e.target.value, 10) || 1);
+            const raw = parseInt(e.target.value, 10) || 1;
+            const n = Math.max(1, Math.min(max, raw));
             onChange(
               value.kind === "fixed"
                 ? { kind: "fixed", seconds: n * 60 }
@@ -426,7 +454,61 @@ function durationIsPositive(duration: BlockDurationRule): boolean {
   return duration.kind === "fixed" ? duration.seconds > 0 : duration.percent > 0;
 }
 
+function activeTemplateEntries(
+  template: SmartBlockRecipe[],
+  variant: "song" | "exercise",
+  troubleSpotCount = 0,
+): SmartBlockRecipe[] {
+  return template.filter(
+    (e) =>
+      e.enabled &&
+      durationIsPositive(e.duration) &&
+      (variant !== "song" || e.role !== "troubleSpot" || troubleSpotCount > 0),
+  );
+}
+
+export function validateTemplateForSession(
+  template: SmartBlockRecipe[],
+  previewMinutes: number,
+  variant: "song" | "exercise" = "song",
+  troubleSpotCount = 0,
+): { ok: true } | { ok: false; message: string } {
+  const active = activeTemplateEntries(template, variant, troubleSpotCount);
+  if (active.length === 0) {
+    return { ok: false, message: "Enable at least one block in the block sequence." };
+  }
+  const totalSec = Math.max(0, Math.round(previewMinutes * 60));
+  const validation = validateBlockDurationPlan(
+    totalSec,
+    active.map((entry) => ({ id: entry.id, duration: entry.duration })),
+  );
+  if (validation.ok) return { ok: true };
+  if (validation.reason === "fixed-exceeds-total") {
+    return {
+      ok: false,
+      message: "Fixed block time cannot exceed the selected session length.",
+    };
+  }
+  if (validation.reason === "fixed-underfills-total") {
+    return {
+      ok: false,
+      message:
+        "Fixed-only blocks must add up to the selected session length, or add a percentage block to use the remaining time.",
+    };
+  }
+  if (validation.reason === "percent-exceeds-100") {
+    return {
+      ok: false,
+      message: "Percentage blocks cannot be higher than 100%.",
+    };
+  }
+  return {
+    ok: false,
+    message: "Percentage blocks must have a positive value.",
+  };
+}
+
 export const isTemplateValid = (template: SmartBlockRecipe[]): boolean =>
-  template.some((e) => e.enabled && durationIsPositive(e.duration));
+  validateTemplateForSession(template, 1).ok;
 
 export type { SongBlockTemplate, ExerciseBlockTemplate };

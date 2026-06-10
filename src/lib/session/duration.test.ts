@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { allocateBlockDurations } from "./duration";
+import { allocateBlockDurations, validateBlockDurationPlan } from "./duration";
 import type { BlockDurationRule } from "@/types/song";
 
 type Row = { id: string; duration: BlockDurationRule };
@@ -137,6 +137,68 @@ describe("allocateBlockDurations", () => {
       reason: "no-positive-percent",
       fixedSec: 0,
       remainingSec: 60,
+    });
+  });
+});
+
+describe("validateBlockDurationPlan", () => {
+  it("rejects fixed blocks that exceed the session length", () => {
+    expect(
+      validateBlockDurationPlan(
+        12 * 60,
+        rows([
+          { id: "a", duration: { kind: "fixed", seconds: 10 * 60 } },
+          { id: "b", duration: { kind: "fixed", seconds: 3 * 60 } },
+        ]),
+      ),
+    ).toEqual({
+      ok: false,
+      reason: "fixed-exceeds-total",
+      fixedSec: 13 * 60,
+      totalSec: 12 * 60,
+    });
+  });
+
+  it("rejects fixed-only plans that do not fill the session length", () => {
+    expect(
+      validateBlockDurationPlan(
+        12 * 60,
+        rows([
+          { id: "a", duration: { kind: "fixed", seconds: 5 * 60 } },
+          { id: "b", duration: { kind: "fixed", seconds: 4 * 60 } },
+        ]),
+      ),
+    ).toEqual({
+      ok: false,
+      reason: "fixed-underfills-total",
+      fixedSec: 9 * 60,
+      totalSec: 12 * 60,
+    });
+  });
+
+  it("accepts fixed plus percent plans because percent blocks fill the remainder", () => {
+    expect(
+      validateBlockDurationPlan(
+        12 * 60,
+        rows([
+          { id: "fixed", duration: { kind: "fixed", seconds: 5 * 60 } },
+          { id: "percent", duration: { kind: "percent", percent: 100 } },
+        ]),
+      ),
+    ).toEqual({ ok: true });
+  });
+
+  it("rejects percent values above 100", () => {
+    expect(
+      validateBlockDurationPlan(
+        12 * 60,
+        rows([{ id: "a", duration: { kind: "percent", percent: 150 } }]),
+      ),
+    ).toEqual({
+      ok: false,
+      reason: "percent-exceeds-100",
+      id: "a",
+      percent: 150,
     });
   });
 });

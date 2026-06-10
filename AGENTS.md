@@ -97,7 +97,7 @@ type Settings = {
 
 Exercise type: `src/types/exercise.ts`. Key fields: `sessionMinutes` (5–60, default 5), legacy `openEnded: boolean` plus `practiceMode: "openEnded"` (either collapses to unbounded count-up at workingBpm), `metronomeEnabled: boolean`, `includeWarmupBlock`, and `blockTemplate` (same recipe semantics as on `Song`; ignored in simple/timed/openEnded). Exercise template roles: `exerciseBuild`, `exerciseBurst`, `exerciseCoolDown`, or `custom`.
 
-Trouble spots integrate into the smart ladder via any enabled recipe with `role: "troubleSpot"` — its allocated seconds are split evenly across all spots. Duration allocation is handled by `lib/session/duration.ts`: fixed-minute blocks take time first, then percent blocks divide the remaining time. The editor explains this as "percent of remaining time." If all enabled blocks are fixed, the timed body can be shorter than the saved session length; fixed overflow is invalid and produces no smart body blocks. Rounding residual seconds land on the first percent block.
+Trouble spots integrate into the smart ladder via any enabled recipe with `role: "troubleSpot"` — its allocated seconds are split evenly across all spots. Duration allocation is handled by `lib/session/duration.ts`: fixed-minute blocks take time first, then percent blocks divide the remaining time. The editor explains this as "percent of remaining time." Save validation rejects fixed block totals above the selected session length; if all enabled blocks are fixed, their total must exactly match the selected session length. Rounding residual seconds land on the first percent block.
 
 **Recordings are NOT persisted.** Latest blob lives in `useSessionStore.latestRecording`, dies on next session start or reload.
 
@@ -159,7 +159,7 @@ Don't invoke for its `scripts/` (assume Prisma/Postgres). This project's convent
 ## Quality assurance
 
 - **Linting**: ESLint config (`.eslintrc.json`) uses Next.js core-web-vitals preset.
-- **Testing**: Vitest suite covers 204 tests across 11 test files (tempo math, session state, duration allocation, tempo rules, manual logging, stats aggregates, form validation).
+- **Testing**: Vitest suite covers 208 tests across 11 test files (tempo math, session state, duration allocation, tempo rules, manual logging, stats aggregates, form validation).
 - **Build**: Next.js production build tested and passing, all routes compile cleanly.
 
 ## Pointers for future work

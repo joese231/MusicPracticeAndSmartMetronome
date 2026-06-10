@@ -25,6 +25,88 @@ export type DurationAllocationResult =
       remainingSec: number;
     };
 
+export type DurationPlanValidationResult =
+  | { ok: true }
+  | {
+      ok: false;
+      reason: "fixed-exceeds-total";
+      fixedSec: number;
+      totalSec: number;
+    }
+  | {
+      ok: false;
+      reason: "fixed-underfills-total";
+      fixedSec: number;
+      totalSec: number;
+    }
+  | {
+      ok: false;
+      reason: "percent-exceeds-100";
+      id: string;
+      percent: number;
+    }
+  | {
+      ok: false;
+      reason: "no-positive-percent";
+      fixedSec: number;
+      remainingSec: number;
+    };
+
+export function validateBlockDurationPlan(
+  totalSec: number,
+  rows: DurationRow[],
+): DurationPlanValidationResult {
+  const roundedTotal = Math.max(0, Math.round(totalSec));
+  let fixedSec = 0;
+  let hasPercent = false;
+
+  for (const row of rows) {
+    if (row.duration.kind === "fixed") {
+      fixedSec += Math.max(0, Math.round(row.duration.seconds));
+      continue;
+    }
+    const percent = Math.max(0, row.duration.percent);
+    if (percent > 100) {
+      return {
+        ok: false,
+        reason: "percent-exceeds-100",
+        id: row.id,
+        percent,
+      };
+    }
+    if (percent > 0) hasPercent = true;
+  }
+
+  if (fixedSec > roundedTotal) {
+    return {
+      ok: false,
+      reason: "fixed-exceeds-total",
+      fixedSec,
+      totalSec: roundedTotal,
+    };
+  }
+
+  const remainingSec = roundedTotal - fixedSec;
+  if (hasPercent) return { ok: true };
+  if (remainingSec === 0) return { ok: true };
+
+  if (rows.some((row) => row.duration.kind === "percent")) {
+    return {
+      ok: false,
+      reason: "no-positive-percent",
+      fixedSec,
+      remainingSec,
+    };
+  }
+
+  return {
+    ok: false,
+    reason: "fixed-underfills-total",
+    fixedSec,
+    totalSec: roundedTotal,
+  };
+}
+
 export function allocateBlockDurations(
   totalSec: number,
   rows: DurationRow[],

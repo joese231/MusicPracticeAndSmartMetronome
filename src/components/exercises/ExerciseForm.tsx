@@ -15,7 +15,7 @@ import {
 import { useSettingsStore } from "@/lib/store/useSettingsStore";
 import {
   BlockTemplateEditor,
-  isTemplateValid,
+  validateTemplateForSession,
 } from "@/components/session/BlockTemplateEditor";
 
 export type ExerciseFormValues = {
@@ -156,11 +156,17 @@ export function ExerciseForm({
       : DEFAULT_EXERCISE_MINUTES;
     if (
       !isOpenEnded &&
-      practiceMode === "smart" &&
-      !isTemplateValid(blockTemplate)
+      practiceMode === "smart"
     ) {
-      setError("Enable at least one block in the block sequence.");
-      return null;
+      const templateValidation = validateTemplateForSession(
+        blockTemplate,
+        safeMinutes,
+        "exercise",
+      );
+      if (!templateValidation.ok) {
+        setError(templateValidation.message);
+        return null;
+      }
     }
     return {
       name: name.trim(),

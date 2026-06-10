@@ -16,7 +16,7 @@ import type {
 import { useSettingsStore } from "@/lib/store/useSettingsStore";
 import {
   BlockTemplateEditor,
-  isTemplateValid,
+  validateTemplateForSession,
 } from "@/components/session/BlockTemplateEditor";
 
 export type SongFormValues = {
@@ -200,9 +200,17 @@ export function SongForm({ initial, submitLabel, onSubmit, onCancel }: Props) {
       setError("Step % must be between 0.5 and 10.");
       return;
     }
-    if (practiceMode === "smart" && !isTemplateValid(blockTemplate)) {
-      setError("Enable at least one block in the block sequence.");
-      return;
+    if (practiceMode === "smart") {
+      const templateValidation = validateTemplateForSession(
+        blockTemplate,
+        Number.isFinite(minutes) ? minutes : DEFAULT_SONG_SESSION_MINUTES,
+        "song",
+        troubleCount,
+      );
+      if (!templateValidation.ok) {
+        setError(templateValidation.message);
+        return;
+      }
     }
 
     setBusy(true);
