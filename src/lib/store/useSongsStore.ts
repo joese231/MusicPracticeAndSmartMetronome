@@ -19,13 +19,15 @@ import { useSettingsStore } from "./useSettingsStore";
 type NewSongInput = {
   title: string;
   link: string | null;
-  workingBpm: number;
+  workingBpm: number | null;
   troubleSpots: TroubleSpot[];
   originalBpm: number | null;
   stepPercent?: number;
   practiceMode?: PracticeMode;
   includeWarmupBlock?: boolean;
   blockTemplate?: SongBlockTemplate;
+  defaultSessionMinutes?: number;
+  metronomeEnabled?: boolean;
 };
 
 type SongsState = {
@@ -107,6 +109,11 @@ export const useSongsStore = create<SongsState>((set, get) => ({
       blockTemplate: input.blockTemplate
         ? cloneSongTemplate(input.blockTemplate)
         : settingsTemplate,
+      defaultSessionMinutes:
+        input.defaultSessionMinutes ??
+        globalSettings.defaultSongSessionMinutes ??
+        10,
+      metronomeEnabled: input.metronomeEnabled ?? true,
       totalPracticeSec: 0,
       sortIndex: nextSortIndex,
       createdAt: now,

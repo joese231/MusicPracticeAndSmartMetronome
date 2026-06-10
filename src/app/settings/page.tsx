@@ -14,7 +14,18 @@ import {
   cloneSongTemplate,
   DEFAULT_EXERCISE_BLOCK_TEMPLATE,
   DEFAULT_SONG_BLOCK_TEMPLATE,
+  DEFAULT_SONG_SESSION_MINUTES,
 } from "@/types/song";
+import type { PracticeMode } from "@/types/song";
+import {
+  DEFAULT_EXERCISE_MINUTES,
+  MAX_EXERCISE_MINUTES,
+  MIN_EXERCISE_MINUTES,
+} from "@/lib/session/exerciseBlocks";
+import {
+  MAX_SESSION_MINUTES,
+  MIN_SESSION_MINUTES,
+} from "@/lib/session/blocks";
 
 export default function SettingsPage() {
   const settings = useSettingsStore((s) => s.settings);
@@ -109,13 +120,39 @@ export default function SettingsPage() {
         <div className="mt-8 space-y-6">
           <Row
             label="Default practice mode for new items"
-            hint="Used as the starting choice when you create a new song or exercise. Smart runs the three-tempo ladder; Simple plays a steady BPM for the chosen length, like a regular metronome. You can still change it per-item afterwards."
+            hint="Used as the starting choice when you create a new song or exercise. You can still change it per item afterwards."
           >
-            <SegmentedTwo
-              value={settings.defaultPracticeMode === "simple" ? "simple" : "smart"}
+            <SegmentedPracticeMode
+              value={settings.defaultPracticeMode}
               onChange={(v) => update({ defaultPracticeMode: v })}
-              left={{ value: "smart", label: "Smart" }}
-              right={{ value: "simple", label: "Simple" }}
+            />
+          </Row>
+
+          <Row
+            label="Default song length"
+            hint="Saved onto newly created songs. You can change the saved length on each song later."
+          >
+            <NumberSetting
+              value={settings.defaultSongSessionMinutes}
+              min={MIN_SESSION_MINUTES}
+              max={MAX_SESSION_MINUTES}
+              fallback={DEFAULT_SONG_SESSION_MINUTES}
+              suffix="min"
+              onChange={(v) => update({ defaultSongSessionMinutes: v })}
+            />
+          </Row>
+
+          <Row
+            label="Default exercise length"
+            hint="Saved onto newly created exercises. Open-ended items keep this as the value to restore if you switch them back to timed practice."
+          >
+            <NumberSetting
+              value={settings.defaultExerciseSessionMinutes}
+              min={MIN_EXERCISE_MINUTES}
+              max={MAX_EXERCISE_MINUTES}
+              fallback={DEFAULT_EXERCISE_MINUTES}
+              suffix="min"
+              onChange={(v) => update({ defaultExerciseSessionMinutes: v })}
             />
           </Row>
 
@@ -189,7 +226,7 @@ export default function SettingsPage() {
                 onChange={(t) =>
                   update({ defaultSongBlockTemplate: cloneSongTemplate(t) })
                 }
-                previewMinutes={10}
+                previewMinutes={settings.defaultSongSessionMinutes}
                 troubleSpotCount={1}
                 onReset={() =>
                   update({
@@ -220,7 +257,7 @@ export default function SettingsPage() {
                     defaultExerciseBlockTemplate: cloneExerciseTemplate(t),
                   })
                 }
-                previewMinutes={5}
+                previewMinutes={settings.defaultExerciseSessionMinutes}
                 onReset={() =>
                   update({
                     defaultExerciseBlockTemplate: cloneExerciseTemplate(
@@ -425,6 +462,83 @@ function Toggle({
         }`}
       />
     </button>
+  );
+}
+
+function NumberSetting({
+  value,
+  min,
+  max,
+  fallback,
+  suffix,
+  onChange,
+}: {
+  value: number;
+  min: number;
+  max: number;
+  fallback: number;
+  suffix: string;
+  onChange: (v: number) => void;
+}) {
+  const clamp = (raw: number): number => {
+    if (!Number.isFinite(raw)) return fallback;
+    return Math.max(min, Math.min(max, Math.round(raw)));
+  };
+  return (
+    <div className="flex items-center gap-2">
+      <input
+        type="number"
+        inputMode="numeric"
+        min={min}
+        max={max}
+        step={1}
+        value={value}
+        onChange={(e) => onChange(clamp(parseInt(e.target.value, 10)))}
+        className="w-24 rounded-lg border border-bg-border bg-bg px-3 py-1.5 text-right text-sm text-neutral-100 outline-none focus:border-accent"
+      />
+      <span className="w-10 text-sm text-neutral-400">{suffix}</span>
+    </div>
+  );
+}
+
+function SegmentedPracticeMode({
+  value,
+  onChange,
+}: {
+  value: PracticeMode;
+  onChange: (v: PracticeMode) => void;
+}) {
+  const options: Array<{ value: PracticeMode; label: string }> = [
+    { value: "smart", label: "Smart" },
+    { value: "simple", label: "Simple" },
+    { value: "timed", label: "Timed" },
+    { value: "openEnded", label: "Open" },
+  ];
+  return (
+    <div
+      role="radiogroup"
+      className="inline-flex overflow-hidden rounded-lg border border-bg-border bg-bg"
+    >
+      {options.map((opt) => {
+        const active = value === opt.value;
+        return (
+          <button
+            key={opt.value}
+            type="button"
+            role="radio"
+            aria-checked={active}
+            onClick={() => onChange(opt.value)}
+            className={`px-3 py-1.5 text-sm font-semibold transition ${
+              active
+                ? "bg-accent text-black"
+                : "text-neutral-300 hover:bg-bg-elevated"
+            }`}
+          >
+            {opt.label}
+          </button>
+        );
+      })}
+    </div>
   );
 }
 

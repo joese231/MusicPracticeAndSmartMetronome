@@ -10,7 +10,9 @@ export const step = (bpm: number, stepPercent: number): number => {
   return Math.round((bpm * factor) / scale);
 };
 
-export const targetBpm = (s: Song): number => step(s.workingBpm, s.stepPercent);
+export const workingBpmForTempo = (s: Song): number => s.workingBpm ?? 0;
+
+export const targetBpm = (s: Song): number => step(workingBpmForTempo(s), s.stepPercent);
 
 export const overspeedBpm = (s: Song): number => step(targetBpm(s), s.stepPercent);
 
@@ -20,21 +22,21 @@ export const overspeedBpm = (s: Song): number => step(targetBpm(s), s.stepPercen
  * truth for both the tempoFn and any UI that needs the default value.
  */
 export const warmupBpmFor = (s: Song): number =>
-  s.warmupBpm ?? Math.max(20, Math.round(s.workingBpm / 3));
+  s.warmupBpm ?? Math.max(20, Math.round(workingBpmForTempo(s) / 3));
 
-export const slowReferenceBpm = (s: Song): number => Math.round(s.workingBpm * 0.8);
+export const slowReferenceBpm = (s: Song): number => Math.round(workingBpmForTempo(s) * 0.8);
 
-export const consolidationBpm = (s: Song): number => Math.round(s.workingBpm * 0.7);
+export const consolidationBpm = (s: Song): number => Math.round(workingBpmForTempo(s) * 0.7);
 
 export const fiveMinSlowReferenceBpm = (s: Song): number =>
-  Math.round(s.workingBpm * 0.8);
+  Math.round(workingBpmForTempo(s) * 0.8);
 
 export const troubleBlockBpmFor = (s: Song, index: number): number =>
   s.troubleSpots[index]?.bpm ?? slowReferenceBpm(s);
 
 export const promoteWorking = (s: Song): Song => ({
   ...s,
-  workingBpm: step(s.workingBpm, s.stepPercent),
+  workingBpm: step(workingBpmForTempo(s), s.stepPercent),
   updatedAt: nowIso(),
 });
 

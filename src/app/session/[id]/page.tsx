@@ -33,6 +33,7 @@ import {
   promoteWorking,
   promoteTroubleAt,
   warmupBpmFor,
+  workingBpmForTempo,
 } from "@/lib/session/tempo";
 import type { Song } from "@/types/song";
 import type { BlockDef, DriverSnapshot } from "@/types/block";
@@ -83,10 +84,6 @@ function SessionPage() {
   const search = useSearchParams();
   const router = useRouter();
   const id = params.id;
-  const minutesParam = search.get("minutes");
-  const durationMinutes = clampSessionMinutes(
-    minutesParam != null ? parseInt(minutesParam, 10) : 10,
-  );
   const debug = search.get("debug") === "1";
   useEffect(() => {
     enableMetronomeDebug(debug);
@@ -146,7 +143,7 @@ function SessionPage() {
 
   const sessionStartMsRef = useRef<number>(0);
   const sessionStartIsoRef = useRef<string>("");
-  const startWorkingBpmRef = useRef<number>(0);
+  const startWorkingBpmRef = useRef<number | null>(null);
   const startTroubleBpmsRef = useRef<(number | null)[]>([]);
   const promotionsRef = useRef<PromotionEvent[]>([]);
   const songRuntimeRef = useRef<Song | null>(null);
@@ -161,6 +158,7 @@ function SessionPage() {
   // session retroactively.
   const autoAdvanceRef = useRef(settings.autoAdvanceBlocks);
   autoAdvanceRef.current = settings.autoAdvanceBlocks;
+  const durationMinutes = clampSessionMinutes(song?.defaultSessionMinutes ?? 10);
 
   useEffect(() => {
     if (!loadedSongs) void loadSongs();
@@ -249,8 +247,8 @@ function SessionPage() {
           durationSec: Math.max(0, Math.round(elapsedSec)),
           endedReason: reason,
           plannedMinutes: durationMinutes,
-          startWorkingBpm: startWorkingBpmRef.current,
-          endWorkingBpm: songNow?.workingBpm ?? startWorkingBpmRef.current,
+          startWorkingBpm: startWorkingBpmRef.current ?? undefined,
+          endWorkingBpm: songNow?.workingBpm ?? startWorkingBpmRef.current ?? undefined,
           startTroubleBpms: startTroubleBpmsRef.current,
           endTroubleBpms: songNow ? songNow.troubleSpots.map((s) => s.bpm) : [],
           promotions: promotionsRef.current.slice(),
@@ -300,7 +298,7 @@ function SessionPage() {
             });
             return;
           }
-          router.push(`/session/${next.id}?minutes=${durationMinutes}`);
+          router.push(`/session/${next.id}`);
           return;
         }
       }
@@ -365,14 +363,19 @@ function SessionPage() {
       if (block.kind !== "consciousPractice") {
         setConsciousSlowMode(false);
       }
-      // Metronome is already running from startSession / the previous block;
-      // just switch tempo for the new block. Slow-mode / saved-warmup
-      // changes are pushed by the dedicated tempoBpm effect below.
-      m.setBpm(block.tempoFn(songNow));
-      // Align the accent pattern to the start of this block — otherwise
-      // beatIndex's continuous count from session start produces downbeats
-      // that land mid-bar relative to the block the player is focused on.
-      m.alignToDownbeat();
+      if (block.metronomeEnabled === false) {
+        m.pause();
+      } else {
+        m.resume();
+        // Metronome is already running from startSession / the previous block;
+        // just switch tempo for the new block. Slow-mode / saved-warmup
+        // changes are pushed by the dedicated tempoBpm effect below.
+        m.setBpm(block.tempoFn(songNow));
+        // Align the accent pattern to the start of this block — otherwise
+        // beatIndex's continuous count from session start produces downbeats
+        // that land mid-bar relative to the block the player is focused on.
+        m.alignToDownbeat();
+      }
     }
   }, [snap, started, blocks, advance, endSession]);
 
@@ -415,11 +418,16 @@ function SessionPage() {
     metronomeRef.current = m;
 
     const firstBlock = blocks[0];
-    const firstBpm = firstBlock.tempoFn(song);
-    try {
-      await m.start(firstBpm, metronomeMode);
-    } catch {
-      // swallow — next BPM change will retry
+    if (!firstBlock) return;
+    const anyMetronome = blocks.some((b) => b.metronomeEnabled !== false);
+    if (anyMetronome) {
+      const firstBpm = firstBlock.tempoFn(song);
+      try {
+        await m.start(firstBpm, metronomeMode);
+        if (firstBlock.metronomeEnabled === false) m.pause();
+      } catch {
+        // swallow — next BPM change will retry
+      }
     }
 
     if (settings.recordingEnabled) {
@@ -532,7 +540,7 @@ function SessionPage() {
   // Default = the ⅓ rule, ignoring any saved warmupBpm. Used as the
   // "Default (X)" chip label so the player can see what they'd revert to.
   const consciousDefaultBpm = song
-    ? Math.max(20, Math.round(song.workingBpm / 3))
+    ? Math.max(20, Math.round(workingBpmForTempo(song) / 3))
     : 0;
   // 2× slower of whatever the current saved warmup is (or the ⅓ fallback).
   const consciousSlowerBpm = song
@@ -562,6 +570,7 @@ function SessionPage() {
       };
     }
     const playedBpm = currentBlock.tempoFn(songNow);
+    if (songNow.workingBpm == null) return null;
     const isDerived = playedBpm !== songNow.workingBpm;
     return {
       title: "Edit Working BPM",
@@ -582,6 +591,7 @@ function SessionPage() {
     if (!promotes) return;
 
     if (promotes.kind === "working") {
+      if (songNow.workingBpm == null) return;
       const oldBpm = songNow.workingBpm;
       const promoted = promoteWorking(songNow);
       songRuntimeRef.current = promoted;
@@ -591,7 +601,7 @@ function SessionPage() {
         at: nowIso(),
         kind: "working",
         fromBpm: oldBpm,
-        toBpm: promoted.workingBpm,
+        toBpm: promoted.workingBpm ?? oldBpm,
         stepPercent: songNow.stepPercent,
       });
       addToast(`Working: ${oldBpm} → ${promoted.workingBpm}`);
@@ -694,6 +704,7 @@ function SessionPage() {
         label =
           songNow.troubleSpots.length > 1 ? `Trouble ${idx + 1}` : "Trouble";
       } else {
+        if (songNow.workingBpm == null) return;
         oldBpm = songNow.workingBpm;
         updated = { ...songNow, workingBpm: newBpm, updatedAt: nowIso() };
         label = "Working";
@@ -725,8 +736,8 @@ function SessionPage() {
   const handleBetweenSongsSkip = useCallback(() => {
     const b = betweenSongsRef.current;
     if (!b) return;
-    router.push(`/session/${b.nextSongId}?minutes=${durationMinutes}`);
-  }, [router, durationMinutes]);
+    router.push(`/session/${b.nextSongId}`);
+  }, [router]);
 
   // Cancel the inter-song countdown — drop back to the home screen.
   const handleBetweenSongsCancel = useCallback(() => {
@@ -765,9 +776,7 @@ function SessionPage() {
       betweenSongs.startedAtMs + betweenSongs.durationSec * 1000 - Date.now(),
     );
     const t = setTimeout(() => {
-      router.push(
-        `/session/${betweenSongs.nextSongId}?minutes=${durationMinutes}`,
-      );
+      router.push(`/session/${betweenSongs.nextSongId}`);
     }, remainingMs);
     return () => clearTimeout(t);
   }, [betweenSongs, betweenSongsPaused, router, durationMinutes]);
@@ -946,7 +955,9 @@ function SessionPage() {
           <div className="text-xs text-neutral-600">{durationMinutes}-min session</div>
         </div>
         <div className="flex items-center gap-2">
-          <MetronomeModeToggle mode={metronomeMode} onChange={setMetronomeMode} />
+          {currentBlock?.metronomeEnabled !== false && (
+            <MetronomeModeToggle mode={metronomeMode} onChange={setMetronomeMode} />
+          )}
           <button
             type="button"
             onClick={handleResetBlock}
@@ -1003,7 +1014,9 @@ function SessionPage() {
           />
         )}
 
-        <MetronomeIndicator metronome={metronomeRef.current} />
+        {currentBlock?.metronomeEnabled !== false && (
+          <MetronomeIndicator metronome={metronomeRef.current} />
+        )}
 
         {isUnbounded ? (
           <BlockCountUp seconds={elapsedSec} />
@@ -1165,7 +1178,7 @@ function SessionPage() {
         <BpmEditorModal
           open={consciousBpmEditorOpen}
           title="Conscious Practice BPM"
-          helperText={`Saved to this song. Default is ${consciousDefaultBpm} (⅓ × ${song.workingBpm}).`}
+          helperText={`Saved to this song. Default is ${consciousDefaultBpm} (⅓ × ${workingBpmForTempo(song)}).`}
           initialBpm={consciousPlayedBpm}
           onSave={(n) => {
             const clamped = Math.max(20, n);

@@ -3,6 +3,7 @@ import type { Exercise } from "@/types/exercise";
 import type { SessionRecord } from "@/types/sessionRecord";
 import {
   DEFAULT_SETTINGS,
+  DEFAULT_SONG_SESSION_MINUTES,
   migrateExerciseTemplate,
   migrateSongTemplate,
 } from "@/types/song";
@@ -47,9 +48,21 @@ function sortExercises(rows: Exercise[]): Exercise[] {
 // persisted on the next upsert.
 function normalizeSong(row: Song): Song {
   const next = { ...row };
-  if (next.practiceMode !== "simple") next.practiceMode = "smart";
+  if (
+    next.practiceMode !== "simple" &&
+    next.practiceMode !== "timed" &&
+    next.practiceMode !== "openEnded"
+  ) {
+    next.practiceMode = "smart";
+  }
   if (typeof next.includeWarmupBlock !== "boolean") {
     next.includeWarmupBlock = true;
+  }
+  if (typeof next.defaultSessionMinutes !== "number") {
+    next.defaultSessionMinutes = DEFAULT_SONG_SESSION_MINUTES;
+  }
+  if (typeof next.metronomeEnabled !== "boolean") {
+    next.metronomeEnabled = true;
   }
   next.blockTemplate = migrateSongTemplate(next.blockTemplate);
   return next;
@@ -59,7 +72,15 @@ function normalizeExercise(row: Exercise): Exercise {
   const next = { ...row };
   if (typeof next.openEnded !== "boolean") next.openEnded = false;
   if (typeof next.metronomeEnabled !== "boolean") next.metronomeEnabled = true;
-  if (next.practiceMode !== "simple") next.practiceMode = "smart";
+  if (next.openEnded) {
+    next.practiceMode = "openEnded";
+  } else if (
+    next.practiceMode !== "simple" &&
+    next.practiceMode !== "timed" &&
+    next.practiceMode !== "openEnded"
+  ) {
+    next.practiceMode = "smart";
+  }
   if (typeof next.includeWarmupBlock !== "boolean") {
     next.includeWarmupBlock = true;
   }

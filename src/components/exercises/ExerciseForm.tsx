@@ -62,7 +62,7 @@ export function ExerciseForm({
   const [sessionMinutes, setSessionMinutes] = useState<string>(
     String(initial?.sessionMinutes ?? DEFAULT_EXERCISE_MINUTES),
   );
-  const [openEnded, setOpenEnded] = useState<boolean>(initial?.openEnded ?? false);
+  const [sessionMinutesTouched, setSessionMinutesTouched] = useState(false);
   const [metronomeEnabled, setMetronomeEnabled] = useState<boolean>(
     initial?.metronomeEnabled ?? true,
   );
@@ -74,10 +74,13 @@ export function ExerciseForm({
   const settingsDefaultTemplate = useSettingsStore(
     (s) => s.settings.defaultExerciseBlockTemplate,
   );
+  const settingsDefaultSessionMinutes = useSettingsStore(
+    (s) => s.settings.defaultExerciseSessionMinutes,
+  );
   const settingsLoad = useSettingsStore((s) => s.load);
   const isEditing = initial?.practiceMode !== undefined;
   const [practiceMode, setPracticeMode] = useState<PracticeMode>(
-    initial?.practiceMode ?? "smart",
+    initial?.openEnded ? "openEnded" : initial?.practiceMode ?? "smart",
   );
   const [practiceModeTouched, setPracticeModeTouched] = useState(false);
   const [includeWarmupBlock, setIncludeWarmupBlock] = useState<boolean>(
@@ -104,9 +107,20 @@ export function ExerciseForm({
       setBlockTemplate(cloneExerciseTemplate(settingsDefaultTemplate));
     }
   }, [isEditing, blockTemplateTouched, settingsLoaded, settingsDefaultTemplate]);
+  useEffect(() => {
+    if (isEditing || sessionMinutesTouched) return;
+    if (!settingsLoaded) return;
+    setSessionMinutes(String(settingsDefaultSessionMinutes));
+  }, [
+    isEditing,
+    sessionMinutesTouched,
+    settingsLoaded,
+    settingsDefaultSessionMinutes,
+  ]);
 
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const isOpenEnded = practiceMode === "openEnded";
 
   const validate = (): ExerciseFormValues | null => {
     if (!name.trim()) {
@@ -127,7 +141,7 @@ export function ExerciseForm({
     // Session length is irrelevant for open-ended exercises but we still
     // persist a sane value so toggling the flag back on restores a length.
     if (
-      !openEnded &&
+      !isOpenEnded &&
       (!Number.isFinite(sm) ||
         sm < MIN_EXERCISE_MINUTES ||
         sm > MAX_EXERCISE_MINUTES)
@@ -141,7 +155,7 @@ export function ExerciseForm({
       ? Math.max(MIN_EXERCISE_MINUTES, Math.min(MAX_EXERCISE_MINUTES, sm))
       : DEFAULT_EXERCISE_MINUTES;
     if (
-      !openEnded &&
+      !isOpenEnded &&
       practiceMode === "smart" &&
       !isTemplateValid(blockTemplate)
     ) {
@@ -155,7 +169,7 @@ export function ExerciseForm({
       workingBpm: w,
       stepPercent: sp,
       sessionMinutes: safeMinutes,
-      openEnded,
+      openEnded: isOpenEnded,
       metronomeEnabled,
       practiceMode,
       includeWarmupBlock,
@@ -250,10 +264,10 @@ export function ExerciseForm({
           />
         </Field>
 
-        {!openEnded && (
+        {!isOpenEnded && (
           <Field
             label="Session length (minutes)"
-            hint={`Total metronome-on time per session (${MIN_EXERCISE_MINUTES}–${MAX_EXERCISE_MINUTES}). Burst stays 1.5 min and Cool Down stays 30 sec — extra time goes into Build.`}
+            hint={`Saved length for this exercise (${MIN_EXERCISE_MINUTES}-${MAX_EXERCISE_MINUTES} minutes). Smart blocks divide this time according to the block sequence.`}
           >
             <input
               type="number"
@@ -262,7 +276,10 @@ export function ExerciseForm({
               max={MAX_EXERCISE_MINUTES}
               step={1}
               value={sessionMinutes}
-              onChange={(e) => setSessionMinutes(e.target.value)}
+              onChange={(e) => {
+                setSessionMinutes(e.target.value);
+                setSessionMinutesTouched(true);
+              }}
               className="field-input"
               required
             />
@@ -272,12 +289,6 @@ export function ExerciseForm({
 
       <div className="space-y-3 rounded-lg border border-bg-border bg-bg/40 p-4">
         <Checkbox
-          checked={openEnded}
-          onChange={setOpenEnded}
-          label="Open-ended (no time blocks — just a count-up timer)"
-          hint="When on, the session is a single count-up timer at your working BPM — no warm-up, no Build/Burst/Cool Down. Useful for transcribing or unstructured practice. Press Esc when you're done."
-        />
-        <Checkbox
           checked={!metronomeEnabled}
           onChange={(v) => setMetronomeEnabled(!v)}
           label="Disable metronome for this exercise"
@@ -285,23 +296,25 @@ export function ExerciseForm({
         />
       </div>
 
-      <div
-        className={`space-y-4 rounded-lg border border-bg-border bg-bg/40 p-4 transition ${
-          openEnded ? "pointer-events-none opacity-50" : ""
-        }`}
-        aria-disabled={openEnded}
-      >
+      <div className="space-y-4 rounded-lg border border-bg-border bg-bg/40 p-4 transition">
         <div>
           <div className="text-sm font-semibold text-neutral-100">
             Practice mode
           </div>
           <div className="mt-1 text-xs text-neutral-500">
-            Smart runs Build → Burst → Cool Down with promotion. Simple plays a steady BPM at your working tempo for the whole session — like a regular metronome with a stop timer.
-            {openEnded && " Ignored while Open-ended is on."}
+            Smart runs your custom block sequence with promotion. Simple plays one steady-BPM countdown. Timed is a single countdown block that can run without a click. Open Ended is a count-up timer.
           </div>
           <div className="mt-3 inline-flex overflow-hidden rounded-lg border border-bg-border bg-bg">
-            {(["smart", "simple"] as const).map((m) => {
+            {(["smart", "simple", "timed", "openEnded"] as const).map((m) => {
               const active = practiceMode === m;
+              const label =
+                m === "openEnded"
+                  ? "Open Ended"
+                  : m === "timed"
+                    ? "Timed"
+                    : m === "simple"
+                      ? "Simple"
+                      : "Smart";
               return (
                 <button
                   key={m}
@@ -312,25 +325,27 @@ export function ExerciseForm({
                     setPracticeMode(m);
                     setPracticeModeTouched(true);
                   }}
-                  className={`px-4 py-1.5 text-sm font-semibold capitalize transition ${
+                  className={`px-4 py-1.5 text-sm font-semibold transition ${
                     active
                       ? "bg-accent text-black"
                       : "text-neutral-300 hover:bg-bg-elevated"
                   }`}
                 >
-                  {m}
+                  {label}
                 </button>
               );
             })}
           </div>
         </div>
 
-        <Checkbox
-          checked={includeWarmupBlock}
-          onChange={setIncludeWarmupBlock}
-          label="Include slow Conscious Practice warm-up block"
-          hint="When on, the session starts with the unbounded slow warm-up — you advance with N when ready. Turn off to jump straight into the body."
-        />
+        {!isOpenEnded && (
+          <Checkbox
+            checked={includeWarmupBlock}
+            onChange={setIncludeWarmupBlock}
+            label="Include slow Conscious Practice warm-up block"
+            hint="When on, the session starts with the unbounded slow warm-up — you advance with N when ready. Turn off to jump straight into the body."
+          />
+        )}
 
         {practiceMode === "smart" && (
           <div className="space-y-2 border-t border-bg-border pt-4">
@@ -339,7 +354,7 @@ export function ExerciseForm({
                 Block sequence
               </div>
               <div className="mt-1 text-xs text-neutral-500">
-                Toggle blocks on or off, reorder them, and adjust their relative size. Time is split proportionally to fill the chosen session length.
+                Toggle blocks on or off, reorder them, and set either fixed minutes or a percentage of the remaining session time.
               </div>
             </div>
             <BlockTemplateEditor

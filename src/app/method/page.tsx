@@ -111,7 +111,7 @@ export default function MethodPage() {
 
       <section className="mt-10 space-y-4">
         <h2 className="text-2xl font-semibold">6. The session structure</h2>
-        <p>Every session runs five timed blocks, each with a short on-screen instruction panel. The table below shows the proportions at 10 minutes — every block scales to fill whatever session length you pick.</p>
+        <p>Smart Practice starts from five timed blocks, each with a short on-screen instruction panel. The table below shows the default proportions at 10 minutes. You can customize the block names, instructions, tempo rules, and durations per song or from Settings.</p>
         <div className="overflow-x-auto">
           <table className="w-full border-collapse text-left text-sm">
             <thead>
@@ -132,16 +132,15 @@ export default function MethodPage() {
           </table>
         </div>
         <p className="text-neutral-400">
-          All session lengths — 5, 10, 15, 20, 30 min, or any custom length up to an hour —
-          use this same five-block shape scaled to fit. A 20-minute session is just a
-          10-minute session where each block is twice as long. Useful when the blocks are
-          too short to play the tune through even once.
+          Percentage blocks divide the time left after any fixed-minute blocks.
+          This lets you reserve a flat amount of time for one block and let the
+          rest of the session scale around it.
         </p>
         <p className="text-neutral-400">
           If your tune has more than one hard passage, the Trouble Spot block
           is replicated once per spot, with its own tempo and its own
-          promotion ladder. Each extra spot <em>adds</em> time to the session
-          rather than stealing it from the other blocks.
+          promotion ladder. The trouble-spot recipe&apos;s allocated time is split
+          evenly across those spots.
         </p>
       </section>
 

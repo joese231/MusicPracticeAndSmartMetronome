@@ -84,8 +84,12 @@ export const useExercisesStore = create<ExercisesState>((set, get) => ({
       workingBpm: input.workingBpm,
       warmupBpm: null,
       stepPercent: input.stepPercent ?? DEFAULT_STEP_PERCENT,
-      sessionMinutes: input.sessionMinutes ?? DEFAULT_EXERCISE_MINUTES,
-      openEnded: input.openEnded ?? false,
+      sessionMinutes:
+        input.sessionMinutes ??
+        globalSettings.defaultExerciseSessionMinutes ??
+        DEFAULT_EXERCISE_MINUTES,
+      openEnded:
+        input.openEnded ?? (input.practiceMode ?? settingsDefault) === "openEnded",
       metronomeEnabled: input.metronomeEnabled ?? true,
       practiceMode: input.practiceMode ?? settingsDefault,
       includeWarmupBlock: input.includeWarmupBlock ?? DEFAULT_INCLUDE_WARMUP,

@@ -5,7 +5,9 @@ import {
   cloneExerciseTemplate,
   cloneSongTemplate,
   DEFAULT_EXERCISE_BLOCK_TEMPLATE,
+  DEFAULT_SETTINGS,
   DEFAULT_SONG_BLOCK_TEMPLATE,
+  DEFAULT_SONG_SESSION_MINUTES,
   migrateExerciseTemplate,
   migrateSongTemplate,
 } from "@/types/song";
@@ -243,6 +245,52 @@ export class AppDB extends Dexie {
             row.defaultExerciseBlockTemplate = migrateExerciseTemplate(
               row.defaultExerciseBlockTemplate,
             );
+          });
+      });
+    this.version(12)
+      .stores({
+        songs: "id, title, updatedAt, sortIndex",
+        settings: "id",
+        exercises: "id, name, updatedAt, sortIndex",
+      })
+      .upgrade(async (tx) => {
+        await tx
+          .table<Song, string>("songs")
+          .toCollection()
+          .modify((row) => {
+            row.blockTemplate = migrateSongTemplate(row.blockTemplate);
+            if (typeof row.defaultSessionMinutes !== "number") {
+              row.defaultSessionMinutes = DEFAULT_SONG_SESSION_MINUTES;
+            }
+            if (typeof row.metronomeEnabled !== "boolean") {
+              row.metronomeEnabled = true;
+            }
+          });
+        await tx
+          .table<Exercise, string>("exercises")
+          .toCollection()
+          .modify((row) => {
+            row.blockTemplate = migrateExerciseTemplate(row.blockTemplate);
+            if (row.openEnded) row.practiceMode = "openEnded";
+          });
+        await tx
+          .table<SettingsRow, string>("settings")
+          .toCollection()
+          .modify((row) => {
+            row.defaultSongBlockTemplate = migrateSongTemplate(
+              row.defaultSongBlockTemplate,
+            );
+            row.defaultExerciseBlockTemplate = migrateExerciseTemplate(
+              row.defaultExerciseBlockTemplate,
+            );
+            if (typeof row.defaultSongSessionMinutes !== "number") {
+              row.defaultSongSessionMinutes =
+                DEFAULT_SETTINGS.defaultSongSessionMinutes;
+            }
+            if (typeof row.defaultExerciseSessionMinutes !== "number") {
+              row.defaultExerciseSessionMinutes =
+                DEFAULT_SETTINGS.defaultExerciseSessionMinutes;
+            }
           });
       });
   }

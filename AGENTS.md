@@ -1,6 +1,6 @@
 # Guitar Song Practice Metronome
 
-A web app for structured bluegrass speed-practice sessions. Drives a **three-tempo ladder** (working / target / overspeed) with a promotion rule, trouble-spot isolation, and optional audio recording. Two modes: **Songs** (full session with trouble-spot blocks) and **Exercises** (warm-up + Build/Burst/Cool Down, or `openEnded` count-up). Each song and exercise also carries a per-item `practiceMode` (`smart` = the default ladder; `simple` = a single steady-BPM block at workingBpm for the chosen length, like a regular metronome with a stop timer), an `includeWarmupBlock` flag that toggles the slow Conscious Practice prefix, and a `blockTemplate` that lets the user toggle, reorder, and reweight the timed blocks of the smart ladder. **Free Play** (`/free-play`) is an ad-hoc timer not tied to any item — time accrues to global stats under `__freeplay__`.
+A web app for structured bluegrass speed-practice sessions. Drives a **three-tempo ladder** (working / target / overspeed) with a promotion rule, trouble-spot isolation, and optional audio recording. Two item types: **Songs** and **Exercises**. Each song and exercise carries a per-item `practiceMode` (`smart`, `simple`, `timed`, or `openEnded`), an `includeWarmupBlock` flag that toggles the slow Conscious Practice prefix, a saved session length, and a customizable `blockTemplate` for smart practice. Smart templates are ordered recipes: users can add/remove/reorder blocks, name them, describe their purpose, choose fixed minutes or percentage-of-remaining duration, pick tempo rules, toggle per-block metronome, and decide whether the block promotes working/trouble BPM. **Free Play** (`/free-play`) is an ad-hoc timer not tied to any item — time accrues to global stats under `__freeplay__`.
 
 **Out of scope for v1**: no accounts/backend/sync, no rotation engine, no persistent recordings, no audio ML, no PWA.
 
@@ -53,22 +53,32 @@ src/
 ```ts
 type Song = {
   id: string; title: string; link: string | null;
-  workingBpm: number;
+  workingBpm: number | null;   // null allowed for no-metronome timed/open-ended songs
   warmupBpm: number | null;     // null = ⅓ × workingBpm
   troubleSpots: TroubleSpot[]; // 0–5; each drives its own Trouble Spot block + independent ladder (smart mode only)
   originalBpm: number | null;  // display-only, never used by session math
   stepPercent: number;         // default 2.5
-  practiceMode: "smart" | "simple"; // default smart; simple = one Steady-BPM block, no ladder, no trouble spots
+  practiceMode: "smart" | "simple" | "timed" | "openEnded";
   includeWarmupBlock: boolean; // default true; when false, skip the Conscious Practice prefix
   blockTemplate?: SongBlockTemplate; // smart-mode block sequence; backfilled to default on read for legacy rows
+  defaultSessionMinutes: number; // saved per-song countdown length, default 10
+  metronomeEnabled: boolean;     // used by timed/open-ended song modes
   totalPracticeSec: number;
   createdAt: string; updatedAt: string;
 };
 
-type SongBlockTemplateEntry = {
-  kind: "slowReference" | "troubleSpot" | "ceilingWork" | "overspeed" | "consolidation";
+type SmartBlockRecipe = {
+  id: string;
+  role: "slowReference" | "troubleSpot" | "ceilingWork" | "overspeed" | "consolidation" |
+    "exerciseBuild" | "exerciseBurst" | "exerciseCoolDown" | "custom";
+  name: string;
+  purpose: string;
+  instructions: string[];
   enabled: boolean;
-  weight: number; // relative duration share; allocated as (weight / totalEnabledWeight) * minutes * 60
+  duration: { kind: "fixed"; seconds: number } | { kind: "percent"; percent: number };
+  tempoRule: TempoRule;
+  metronomeEnabled: boolean;
+  progression: { kind: "none" } | { kind: "working" } | { kind: "trouble" };
 };
 
 type Settings = {
@@ -77,27 +87,29 @@ type Settings = {
   accentsEnabled: boolean;     // default true
   autoAdvanceBlocks: boolean;  // default false
   interSongPauseSec: number;   // default 20; governs both songs AND exercises (legacy name)
-  defaultPracticeMode: "smart" | "simple"; // default smart; seeds practiceMode on new songs/exercises
+  defaultPracticeMode: "smart" | "simple" | "timed" | "openEnded";
+  defaultSongSessionMinutes: number;     // default 10
+  defaultExerciseSessionMinutes: number; // default 5
   defaultSongBlockTemplate: SongBlockTemplate;     // seeds blockTemplate on new songs
   defaultExerciseBlockTemplate: ExerciseBlockTemplate; // seeds blockTemplate on new exercises
 };
 ```
 
-Exercise type: `src/types/exercise.ts`. Key fields: `sessionMinutes` (5–60, default 5), `openEnded: boolean` (collapses to unbounded count-up at workingBpm), `metronomeEnabled: boolean`, `practiceMode`, `includeWarmupBlock`, and `blockTemplate` (same semantics as on `Song`; ignored when `openEnded` is true). Exercise template kinds: `exerciseBuild`, `exerciseBurst`, `exerciseCoolDown`.
+Exercise type: `src/types/exercise.ts`. Key fields: `sessionMinutes` (5–60, default 5), legacy `openEnded: boolean` plus `practiceMode: "openEnded"` (either collapses to unbounded count-up at workingBpm), `metronomeEnabled: boolean`, `includeWarmupBlock`, and `blockTemplate` (same recipe semantics as on `Song`; ignored in simple/timed/openEnded). Exercise template roles: `exerciseBuild`, `exerciseBurst`, `exerciseCoolDown`, or `custom`.
 
-Trouble spots integrate into the smart ladder via the `troubleSpot` row in the template — its allocated seconds are split evenly across all spots. Total session length always equals `minutes * 60` regardless of spot count or which blocks are enabled; disabling a row redistributes its time across the remaining enabled rows.
+Trouble spots integrate into the smart ladder via any enabled recipe with `role: "troubleSpot"` — its allocated seconds are split evenly across all spots. Duration allocation is handled by `lib/session/duration.ts`: fixed-minute blocks take time first, then percent blocks divide the remaining time. The editor explains this as "percent of remaining time." If all enabled blocks are fixed, the timed body can be shorter than the saved session length; fixed overflow is invalid and produces no smart body blocks. Rounding residual seconds land on the first percent block.
 
 **Recordings are NOT persisted.** Latest blob lives in `useSessionStore.latestRecording`, dies on next session start or reload.
 
 ## Tempo math
 
 - `step(bpm, pct) = round(bpm * (1 + pct/100))` — uses integer scaling (`scale = 1_000_000`) to avoid float rounding bugs.
-- `targetBpm = step(workingBpm)`, `overspeedBpm = step(targetBpm)`.
+- `targetBpm = step(workingBpm)`, `overspeedBpm = step(targetBpm)`. Nullable song `workingBpm` is treated as `0` by `workingBpmForTempo`; forms prevent smart/simple/metronome-on songs from being saved without a BPM.
 - `slowReferenceBpm = round(workingBpm * 0.80)`, `consolidationBpm = round(workingBpm * 0.70)`. (Legacy `slowMusical` block was merged into `consolidation` in v10.)
-- Derived tempos are **never stored** — always recomputed from `workingBpm` in `lib/session/tempo.ts`.
-- `buildBlocks(minutes, song)` — song block entry point. Branches on `song.practiceMode`: `simple` returns a single timed `simpleMetronome` block at workingBpm; `smart` consumes `song.blockTemplate` (resolved via `songTemplate(song)`, falling back to `DEFAULT_SONG_BLOCK_TEMPLATE`) and allocates `minutes * 60` seconds proportionally across enabled rows. Residual rounding lands on `ceilingWork` when present. `troubleSpot` rows replicate per spot, sharing the row's allocation. The unbounded `CONSCIOUS_PRACTICE_BLOCK` is prepended only when `song.includeWarmupBlock !== false`. Per-kind `BlockDef` factories live in `SONG_BLOCK_FACTORIES`. There is no longer a 5-minute compact special-case — all session lengths run the user's template scaled to fit.
-- `buildExerciseBlocks(exercise)` — exercise block entry point. Branches in priority order: `openEnded` → single unbounded count-up; otherwise `practiceMode === "simple"` → optional Conscious + a single timed Steady-BPM block; else (smart) → optional Conscious + the exercise's `blockTemplate` allocated proportionally (default = Build 210 / Burst 60 / Cool Down 30, summing to 300s at 5 min). Residual rounding lands on `exerciseBuild` when present.
-- Schema migration: Dexie is at version **11**. v11 rewrites any saved exercise's `exerciseBurst` weight of 90 (the legacy default) to 60 (the new default) in both `exercises` rows and `settings.defaultExerciseBlockTemplate`; user-customized weights other than 90 are preserved. v10 rewrites any legacy `slowMusical` entries in song `blockTemplate` and `settings.defaultSongBlockTemplate` into `consolidation` (folding weights and ORing `enabled` if both kinds appear) — the union no longer contains `slowMusical`. v9 backfills `blockTemplate` on legacy songs and exercises with the canonical default, and adds `defaultSongBlockTemplate` / `defaultExerciseBlockTemplate` to the settings singleton. v8 backfills `practiceMode = "smart"` and `includeWarmupBlock = true`. The JSON-file path lazily applies the same rewrites on read via `migrateSongTemplate` and `migrateExerciseTemplate` in `FileRepository.normalizeSong` / `normalizeExercise` / `normalizeSettings`.
+- Derived tempos are **never stored** — always recomputed from `workingBpm` and recipe `tempoRule`s. `lib/session/tempoRules.ts` evaluates tempo sources (`working`, `target`, `overspeed`, `original`, `trouble`, `fixed`) with optional percent/BPM-offset/step adjustments and fallbacks.
+- `buildBlocks(minutes, song)` — song block entry point. Branches on `song.practiceMode`: `openEnded` returns one unbounded `openEnded` block; `timed` returns optional Conscious Practice plus one `timedPractice` countdown block, optionally no-metronome; `simple` returns optional Conscious Practice plus one `simpleMetronome` block at workingBpm; `smart` consumes recipe templates and duration allocation, then expands `troubleSpot` recipes per spot. The session page reads `song.defaultSessionMinutes`; there is no one-off start duration query.
+- `buildExerciseBlocks(exercise)` — exercise block entry point. Branches in priority order: legacy `openEnded` or `practiceMode === "openEnded"` → single unbounded count-up; `simple` → optional Conscious + single steady-BPM block; `timed` → optional Conscious + single `timedPractice` countdown block; otherwise smart → optional Conscious + recipe-allocated blocks. Exercise sessions read `exercise.sessionMinutes`.
+- Schema migration: Dexie is at version **12**. v12 converts legacy weight templates to recipe templates, backfills `Song.defaultSessionMinutes`, `Song.metronomeEnabled`, settings default durations, and maps legacy exercise `openEnded` rows to `practiceMode: "openEnded"`. v11 rewrites any saved exercise's `exerciseBurst` weight of 90 (the legacy default) to 60 (the new default) in both `exercises` rows and `settings.defaultExerciseBlockTemplate`; user-customized weights other than 90 are preserved. v10 rewrites legacy `slowMusical` entries in song templates into `consolidation`; v9 backfills templates and settings singleton templates; v8 backfills `practiceMode = "smart"` and `includeWarmupBlock = true`. The JSON-file path lazily applies the same rewrites on read via `FileRepository.normalizeSong` / `normalizeExercise` / `normalizeSettings`.
 
 ## Metronome
 
@@ -147,7 +159,7 @@ Don't invoke for its `scripts/` (assume Prisma/Postgres). This project's convent
 ## Quality assurance
 
 - **Linting**: ESLint config (`.eslintrc.json`) uses Next.js core-web-vitals preset.
-- **Testing**: Vitest suite covers 174 tests across 9 test files (tempo math, session state, manual logging, stats aggregates, form validation).
+- **Testing**: Vitest suite covers 203 tests across 11 test files (tempo math, session state, duration allocation, tempo rules, manual logging, stats aggregates, form validation).
 - **Build**: Next.js production build tested and passing, all routes compile cleanly.
 
 ## Pointers for future work

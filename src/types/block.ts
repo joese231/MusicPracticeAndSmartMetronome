@@ -11,6 +11,8 @@ export type BlockKind =
   | "exerciseCoolDown"
   | "openEnded"
   | "simpleMetronome"
+  | "timedPractice"
+  | "custom"
   | "freePlay";
 
 export type BlockPromotion =
@@ -27,6 +29,7 @@ export type BlockDef = {
   showEarnedButton: boolean;
   promotes: BlockPromotion;
   instructions: string[];
+  metronomeEnabled?: boolean;
   /**
    * When true, the block runs on a count-up timer and only leaves `playing`
    * phase on an explicit advance (N / Next button). `durationSec` is unused.

@@ -4,6 +4,7 @@ import {
   cloneSongTemplate,
   DEFAULT_INCLUDE_WARMUP,
   DEFAULT_SONG_BLOCK_TEMPLATE,
+  DEFAULT_SONG_SESSION_MINUTES,
   DEFAULT_STEP_PERCENT,
   MAX_TROUBLE_SPOTS,
 } from "@/types/song";
@@ -21,13 +22,15 @@ import {
 export type SongFormValues = {
   title: string;
   link: string | null;
-  workingBpm: number;
+  workingBpm: number | null;
   troubleSpots: TroubleSpot[];
   originalBpm: number | null;
   stepPercent: number;
   practiceMode: PracticeMode;
   includeWarmupBlock: boolean;
   blockTemplate: SongBlockTemplate;
+  defaultSessionMinutes: number;
+  metronomeEnabled: boolean;
 };
 
 type Props = {
@@ -42,6 +45,14 @@ export function SongForm({ initial, submitLabel, onSubmit, onCancel }: Props) {
   const [link, setLink] = useState(initial?.link ?? "");
   const [workingBpm, setWorkingBpm] = useState<string>(
     initial?.workingBpm != null ? String(initial.workingBpm) : "",
+  );
+  const [defaultSessionMinutes, setDefaultSessionMinutes] = useState<string>(
+    String(initial?.defaultSessionMinutes ?? DEFAULT_SONG_SESSION_MINUTES),
+  );
+  const [defaultSessionMinutesTouched, setDefaultSessionMinutesTouched] =
+    useState(false);
+  const [metronomeEnabled, setMetronomeEnabled] = useState<boolean>(
+    initial?.metronomeEnabled ?? true,
   );
 
   const initialSpotInputs: string[] = (initial?.troubleSpots ?? []).map((ts) =>
@@ -67,6 +78,9 @@ export function SongForm({ initial, submitLabel, onSubmit, onCancel }: Props) {
   );
   const settingsDefaultTemplate = useSettingsStore(
     (s) => s.settings.defaultSongBlockTemplate,
+  );
+  const settingsDefaultSessionMinutes = useSettingsStore(
+    (s) => s.settings.defaultSongSessionMinutes,
   );
   const settingsLoad = useSettingsStore((s) => s.load);
   const isEditing = initial?.practiceMode !== undefined;
@@ -98,6 +112,16 @@ export function SongForm({ initial, submitLabel, onSubmit, onCancel }: Props) {
       setBlockTemplate(cloneSongTemplate(settingsDefaultTemplate));
     }
   }, [isEditing, blockTemplateTouched, settingsLoaded, settingsDefaultTemplate]);
+  useEffect(() => {
+    if (isEditing || defaultSessionMinutesTouched) return;
+    if (!settingsLoaded) return;
+    setDefaultSessionMinutes(String(settingsDefaultSessionMinutes));
+  }, [
+    isEditing,
+    defaultSessionMinutesTouched,
+    settingsLoaded,
+    settingsDefaultSessionMinutes,
+  ]);
 
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -134,9 +158,25 @@ export function SongForm({ initial, submitLabel, onSubmit, onCancel }: Props) {
       setError("Title is required.");
       return;
     }
-    const w = parseInt(workingBpm, 10);
-    if (!Number.isFinite(w) || w < 30 || w > 400) {
+    const w = parseOptInt(workingBpm);
+    const bpmRequired =
+      practiceMode === "smart" ||
+      practiceMode === "simple" ||
+      metronomeEnabled;
+    if (bpmRequired && w == null) {
+      setError("Working BPM is required when the metronome or ladder is used.");
+      return;
+    }
+    if (w != null && (w < 30 || w > 400)) {
       setError("Working BPM must be between 30 and 400.");
+      return;
+    }
+    const minutes = parseInt(defaultSessionMinutes, 10);
+    if (
+      practiceMode !== "openEnded" &&
+      (!Number.isFinite(minutes) || minutes < 5 || minutes > 60)
+    ) {
+      setError("Session length must be between 5 and 60 minutes.");
       return;
     }
 
@@ -177,6 +217,10 @@ export function SongForm({ initial, submitLabel, onSubmit, onCancel }: Props) {
         practiceMode,
         includeWarmupBlock,
         blockTemplate,
+        defaultSessionMinutes: Number.isFinite(minutes)
+          ? minutes
+          : DEFAULT_SONG_SESSION_MINUTES,
+        metronomeEnabled,
       });
     } finally {
       setBusy(false);
@@ -216,9 +260,32 @@ export function SongForm({ initial, submitLabel, onSubmit, onCancel }: Props) {
             value={workingBpm}
             onChange={(e) => setWorkingBpm(e.target.value)}
             className="field-input"
-            required
+            required={
+              practiceMode === "smart" ||
+              practiceMode === "simple" ||
+              metronomeEnabled
+            }
           />
         </Field>
+
+        {practiceMode !== "openEnded" && (
+          <Field label="Session length (minutes)" hint="Saved on this song and used every time you start it.">
+            <input
+              type="number"
+              inputMode="numeric"
+              min={5}
+              max={60}
+              step={1}
+              value={defaultSessionMinutes}
+              onChange={(e) => {
+                setDefaultSessionMinutes(e.target.value);
+                setDefaultSessionMinutesTouched(true);
+              }}
+              className="field-input"
+              required
+            />
+          </Field>
+        )}
 
         <Field label="Original song BPM (optional)" hint="Tempo of the original recording. Display-only — does not affect session math.">
           <input
@@ -253,11 +320,19 @@ export function SongForm({ initial, submitLabel, onSubmit, onCancel }: Props) {
             Practice mode
           </div>
           <div className="mt-1 text-xs text-neutral-500">
-            Smart runs the three-tempo ladder with trouble-spot blocks. Simple plays a steady BPM at your working tempo for the whole session — like a regular metronome with a stop timer.
+            Smart runs your custom block sequence. Simple is one steady-BPM countdown. Timed is one countdown block. Open Ended is a count-up timer.
           </div>
           <div className="mt-3 inline-flex overflow-hidden rounded-lg border border-bg-border bg-bg">
-            {(["smart", "simple"] as const).map((m) => {
+            {(["smart", "simple", "timed", "openEnded"] as const).map((m) => {
               const active = practiceMode === m;
+              const label =
+                m === "smart"
+                  ? "Smart"
+                  : m === "simple"
+                    ? "Simple"
+                    : m === "timed"
+                      ? "Timed"
+                      : "Open Ended";
               return (
                 <button
                   key={m}
@@ -268,35 +343,56 @@ export function SongForm({ initial, submitLabel, onSubmit, onCancel }: Props) {
                     setPracticeMode(m);
                     setPracticeModeTouched(true);
                   }}
-                  className={`px-4 py-1.5 text-sm font-semibold capitalize transition ${
+                  className={`px-4 py-1.5 text-sm font-semibold transition ${
                     active
                       ? "bg-accent text-black"
                       : "text-neutral-300 hover:bg-bg-elevated"
                   }`}
                 >
-                  {m}
+                  {label}
                 </button>
               );
             })}
           </div>
         </div>
 
-        <label className="flex cursor-pointer items-start gap-3">
-          <input
-            type="checkbox"
-            checked={includeWarmupBlock}
-            onChange={(e) => setIncludeWarmupBlock(e.target.checked)}
-            className="mt-1 h-4 w-4 cursor-pointer accent-amber-500"
-          />
-          <div>
-            <div className="text-sm font-medium text-neutral-200">
-              Include slow Conscious Practice warm-up block
+        {(practiceMode === "timed" || practiceMode === "openEnded") && (
+          <label className="flex cursor-pointer items-start gap-3">
+            <input
+              type="checkbox"
+              checked={!metronomeEnabled}
+              onChange={(e) => setMetronomeEnabled(!e.target.checked)}
+              className="mt-1 h-4 w-4 cursor-pointer accent-amber-500"
+            />
+            <div>
+              <div className="text-sm font-medium text-neutral-200">
+                Disable metronome for this song
+              </div>
+              <div className="mt-0.5 text-xs text-neutral-500">
+                When off, this song can be practiced without a working BPM.
+              </div>
             </div>
-            <div className="mt-0.5 text-xs text-neutral-500">
-              When on, the session starts with the unbounded slow warm-up — you advance with N when ready. Turn off to jump straight into the body.
+          </label>
+        )}
+
+        {practiceMode !== "openEnded" && (
+          <label className="flex cursor-pointer items-start gap-3">
+            <input
+              type="checkbox"
+              checked={includeWarmupBlock}
+              onChange={(e) => setIncludeWarmupBlock(e.target.checked)}
+              className="mt-1 h-4 w-4 cursor-pointer accent-amber-500"
+            />
+            <div>
+              <div className="text-sm font-medium text-neutral-200">
+                Include slow Conscious Practice warm-up block
+              </div>
+              <div className="mt-0.5 text-xs text-neutral-500">
+                When on, the session starts with the unbounded slow warm-up — you advance with N when ready. Turn off to jump straight into the body.
+              </div>
             </div>
-          </div>
-        </label>
+          </label>
+        )}
 
         {practiceMode === "smart" && (
           <div className="space-y-2 border-t border-bg-border pt-4">
@@ -305,7 +401,7 @@ export function SongForm({ initial, submitLabel, onSubmit, onCancel }: Props) {
                 Block sequence
               </div>
               <div className="mt-1 text-xs text-neutral-500">
-                Toggle blocks on or off, reorder them, and adjust their relative size. Time is split proportionally to fill the chosen session length.
+                Toggle blocks on or off, reorder them, and set either fixed minutes or a percentage of the remaining session time.
               </div>
             </div>
             <BlockTemplateEditor
@@ -315,7 +411,12 @@ export function SongForm({ initial, submitLabel, onSubmit, onCancel }: Props) {
                 setBlockTemplate(t);
                 setBlockTemplateTouched(true);
               }}
-              previewMinutes={10}
+              previewMinutes={(() => {
+                const minutes = parseInt(defaultSessionMinutes, 10);
+                return Number.isFinite(minutes)
+                  ? Math.max(5, Math.min(60, minutes))
+                  : DEFAULT_SONG_SESSION_MINUTES;
+              })()}
               troubleSpotCount={troubleCount}
               onReset={
                 settingsDefaultTemplate && settingsDefaultTemplate.length > 0
@@ -331,9 +432,9 @@ export function SongForm({ initial, submitLabel, onSubmit, onCancel }: Props) {
       </section>
 
       <section className="rounded-lg border-2 border-accent/40 bg-bg-elevated p-5">
-        {practiceMode === "simple" && (
+        {practiceMode !== "smart" && (
           <div className="mb-3 rounded border border-bg-border bg-bg/40 px-3 py-2 text-xs text-neutral-400">
-            Trouble spots are saved but not used in Simple mode. Switch to Smart to drill them.
+            Trouble spots are saved but only used in Smart Practice.
           </div>
         )}
         <div className="flex items-center justify-between gap-3">

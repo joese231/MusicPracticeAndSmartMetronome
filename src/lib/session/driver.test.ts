@@ -28,6 +28,8 @@ const makeSong = (overrides: Partial<Song> = {}): Song => ({
   createdAt: "",
   updatedAt: "",
   ...overrides,
+  defaultSessionMinutes: overrides.defaultSessionMinutes ?? 10,
+  metronomeEnabled: overrides.metronomeEnabled ?? true,
 });
 
 describe("totalPlayingSec", () => {

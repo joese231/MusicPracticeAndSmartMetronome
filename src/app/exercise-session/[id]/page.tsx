@@ -150,7 +150,8 @@ export default function ExerciseSessionPage() {
   // openEnded, collapses to a single unbounded block). Re-derive when the
   // saved value changes — rare, but be safe.
   const sessionMinutes = exercise?.sessionMinutes ?? 5;
-  const isOpenEnded = !!exercise?.openEnded;
+  const isOpenEnded =
+    !!exercise?.openEnded || exercise?.practiceMode === "openEnded";
   const metronomeOff = exercise ? exercise.metronomeEnabled === false : false;
   const blocks = useMemo<BlockDef[]>(
     () => (exercise ? buildExerciseBlocks(exercise) : []),
@@ -158,7 +159,15 @@ export default function ExerciseSessionPage() {
     // on every store update, so depend on the specific fields instead to
     // avoid rebuilding blocks every render.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [exercise?.id, isOpenEnded, sessionMinutes],
+    [
+      exercise?.id,
+      isOpenEnded,
+      sessionMinutes,
+      exercise?.practiceMode,
+      exercise?.includeWarmupBlock,
+      exercise?.blockTemplate,
+      exercise?.metronomeEnabled,
+    ],
   );
 
   const addToast = useCallback((text: string) => {
@@ -332,8 +341,13 @@ export default function ExerciseSessionPage() {
       if (block.kind !== "consciousPractice") {
         setConsciousSlowMode(false);
       }
-      m.setBpm(block.tempoFn(songNow));
-      m.alignToDownbeat();
+      if (block.metronomeEnabled === false) {
+        m.pause();
+      } else {
+        m.resume();
+        m.setBpm(block.tempoFn(songNow));
+        m.alignToDownbeat();
+      }
     }
   }, [snap, started, blocks, advance, endSession]);
 
@@ -364,16 +378,20 @@ export default function ExerciseSessionPage() {
 
     // Skip the metronome entirely when this exercise has it disabled
     // (e.g. transcribing). The session still runs — just silently.
-    if (!metronomeOff) {
+    const anyMetronome =
+      !metronomeOff && blocks.some((b) => b.metronomeEnabled !== false);
+    if (anyMetronome) {
       const m = new Metronome();
       m.setVolume(settings.metronomeVolume);
       m.setAccentsEnabled(settings.accentsEnabled);
       metronomeRef.current = m;
 
       const firstBlock = blocks[0];
+      if (!firstBlock) return;
       const firstBpm = firstBlock.tempoFn(runtimeSongRef.current);
       try {
         await m.start(firstBpm, metronomeMode);
+        if (firstBlock.metronomeEnabled === false) m.pause();
       } catch {
         // swallow — next BPM change will retry
       }
@@ -487,6 +505,7 @@ export default function ExerciseSessionPage() {
     if (!currentBlock) return null;
     const songNow = runtimeSongRef.current;
     if (!songNow) return null;
+    if (songNow.workingBpm == null) return null;
     const playedBpm = currentBlock.tempoFn(songNow);
     const isDerived = playedBpm !== songNow.workingBpm;
     return {
@@ -510,7 +529,7 @@ export default function ExerciseSessionPage() {
     const promotedSong = promoteWorking(songNow);
     const promotedExercise: Exercise = {
       ...exNow,
-      workingBpm: promotedSong.workingBpm,
+      workingBpm: promotedSong.workingBpm ?? oldBpm,
       updatedAt: nowIso(),
     };
     runtimeSongRef.current = promotedSong;
@@ -831,7 +850,7 @@ export default function ExerciseSessionPage() {
           </div>
         </div>
         <div className="flex items-center gap-2">
-          {!metronomeOff && (
+          {!metronomeOff && currentBlock?.metronomeEnabled !== false && (
             <MetronomeModeToggle mode={metronomeMode} onChange={setMetronomeMode} />
           )}
           <button
@@ -890,7 +909,9 @@ export default function ExerciseSessionPage() {
           />
         )}
 
-        {!metronomeOff && <MetronomeIndicator metronome={metronomeRef.current} />}
+        {!metronomeOff && currentBlock?.metronomeEnabled !== false && (
+          <MetronomeIndicator metronome={metronomeRef.current} />
+        )}
 
         {isUnbounded ? (
           <BlockCountUp seconds={elapsedSec} />
