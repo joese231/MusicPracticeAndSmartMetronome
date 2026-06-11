@@ -28,6 +28,26 @@ const fmtSecs = (secs: number): string => {
   return s === 0 ? `${m}m` : `${m}m ${s}s`;
 };
 
+const durationChip = (
+  entry: SmartBlockRecipe,
+  variant: "song" | "exercise",
+): string => {
+  const additive = isAdditiveTroubleEntry(entry, variant);
+  if (entry.duration.kind === "fixed") {
+    return `${additive ? "+" : ""}${fmtSecs(entry.duration.seconds)}${
+      additive ? " each" : " fixed"
+    }`;
+  }
+  return `${additive ? "+" : ""}${entry.duration.percent}%${
+    additive ? " each" : " remaining"
+  }`;
+};
+
+const isAdditiveTroubleEntry = (
+  entry: SmartBlockRecipe,
+  variant: "song" | "exercise",
+): boolean => variant === "song" && entry.role === "troubleSpot";
+
 const newId = (): string =>
   typeof crypto !== "undefined" && "randomUUID" in crypto
     ? crypto.randomUUID()
@@ -91,48 +111,119 @@ export function BlockTemplateEditor({
     totalSec,
     allocationEntries.map((entry) => ({ id: entry.id, duration: entry.duration })),
   );
-  const previewItems =
-    allocation.ok
-      ? [
-          ...allocationEntries.map((e) => {
-          const secs = allocation.durations.get(e.id) ?? 0;
-          return `${e.name} ${fmtSecs(secs)}`;
-          }),
-          ...additiveEntries.map((e) => {
-            const secs = additiveEntryDurationSec(e, totalSec);
-            return `${e.name} +${fmtSecs(secs)} x ${troubleSpotCount}`;
-          }),
-        ]
+  const additiveRecipeEntries =
+    variant === "song"
+      ? template.filter(
+          (entry) =>
+            entry.enabled &&
+            entry.role === "troubleSpot" &&
+            durationIsPositive(entry.duration),
+        )
       : [];
+  const baseAllocatedSec = allocation.ok
+    ? allocationEntries.reduce(
+        (sum, entry) => sum + (allocation.durations.get(entry.id) ?? 0),
+        0,
+      )
+    : 0;
+  const additivePerSpotSec = additiveRecipeEntries.reduce(
+    (sum, entry) => sum + additiveEntryDurationSec(entry, totalSec),
+    0,
+  );
+  const additiveActualSec = additivePerSpotSec * troubleSpotCount;
+  const hasPercentBlocks = allocationEntries.some(
+    (entry) => entry.duration.kind === "percent",
+  );
 
   return (
     <div className="space-y-3">
-      <div className="rounded border border-bg-border bg-bg/30 px-3 py-2 text-xs text-neutral-400">
-        Fixed-time blocks keep their exact duration. Percentage blocks divide
-        whatever time remains after fixed blocks are subtracted.
+      <div className="rounded-lg border border-bg-border bg-bg/40 p-3 text-xs">
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <div className="font-semibold text-neutral-100">Block recipe</div>
+            <div className="mt-1 max-w-2xl text-neutral-400">
+              Fixed-time blocks keep their exact duration. Percentage blocks divide
+              whatever time remains after fixed blocks are subtracted.
+            </div>
+          </div>
+          <div className="flex flex-wrap justify-start gap-2 md:justify-end">
+            <span
+              className={`rounded-full px-2.5 py-1 font-semibold ${
+                validation.ok
+                  ? "bg-emerald-500/15 text-emerald-200"
+                  : "bg-red-500/15 text-red-200"
+              }`}
+            >
+              Base total: {fmtSecs(baseAllocatedSec)} / {fmtSecs(totalSec)}
+            </span>
+            {additiveRecipeEntries.length > 0 && (
+              <span className="rounded-full bg-emerald-500/15 px-2.5 py-1 font-semibold text-emerald-200">
+                Trouble: +{fmtSecs(additivePerSpotSec)} per spot
+              </span>
+            )}
+          </div>
+        </div>
+        <div className="mt-2 text-neutral-400">
+          {active.length === 0 ? (
+            <span className="text-red-300">
+              No blocks enabled. Enable at least one before saving.
+            </span>
+          ) : !validation.ok ? (
+            <span className="text-red-300">{validation.message}</span>
+          ) : (
+            <>
+              {hasPercentBlocks && allocation.ok && (
+                <span className="mr-2">
+                  {fmtSecs(allocation.remainingSec)} remains for percentage blocks.
+                </span>
+              )}
+              {additiveRecipeEntries.length > 0 && (
+                <span>
+                  Trouble spot time is added outside the base session
+                  {troubleSpotCount > 0
+                    ? ` (${fmtSecs(additiveActualSec)} for ${troubleSpotCount} spot${
+                        troubleSpotCount === 1 ? "" : "s"
+                      }).`
+                    : "."}
+                </span>
+              )}
+            </>
+          )}
+        </div>
       </div>
 
       <ul className="space-y-3">
-        {template.map((entry, idx) => (
+        {template.map((entry, idx) => {
+          const additive = isAdditiveTroubleEntry(entry, variant);
+          return (
           <li
             key={entry.id}
-            className="space-y-3 rounded-lg border border-bg-border bg-bg/40 p-3"
+            className={`space-y-3 rounded-lg border p-3 ${
+              additive
+                ? "border-emerald-500/40 bg-emerald-500/10"
+                : "border-bg-border bg-bg/40"
+            } ${entry.enabled ? "" : "opacity-70"}`}
           >
-            <div className="flex items-start gap-3">
-              <input
-                type="checkbox"
-                checked={entry.enabled}
-                onChange={(e) => update(idx, { enabled: e.target.checked })}
-                className="mt-2 h-4 w-4 cursor-pointer accent-amber-500"
-                aria-label={`Include ${entry.name}`}
-              />
-              <div className="grid min-w-0 flex-1 gap-2 md:grid-cols-2">
+            <div className="flex flex-wrap items-start gap-3">
+              <div className="flex items-center gap-2 pt-1">
+                <input
+                  type="checkbox"
+                  checked={entry.enabled}
+                  onChange={(e) => update(idx, { enabled: e.target.checked })}
+                  className="h-4 w-4 cursor-pointer accent-amber-500"
+                  aria-label={`Include ${entry.name}`}
+                />
+                <span className="text-sm font-black leading-none text-neutral-600" aria-hidden>
+                  ::
+                </span>
+              </div>
+              <div className="grid min-w-[14rem] flex-1 gap-2 md:grid-cols-[minmax(12rem,0.8fr)_minmax(16rem,1.2fr)]">
                 <label className="text-xs text-neutral-400">
                   Name
                   <input
                     value={entry.name}
                     onChange={(e) => update(idx, { name: e.target.value })}
-                    className="mt-1 w-full rounded border border-bg-border bg-bg px-2 py-1.5 text-sm text-neutral-100 outline-none focus:border-accent"
+                    className="mt-1 w-full rounded border border-bg-border bg-bg px-2 py-1.5 text-sm font-semibold text-neutral-100 outline-none focus:border-accent"
                   />
                 </label>
                 <label className="text-xs text-neutral-400">
@@ -144,25 +235,42 @@ export function BlockTemplateEditor({
                   />
                 </label>
               </div>
-              <div className="flex flex-col gap-1">
-                <button
-                  type="button"
-                  onClick={() => move(idx, -1)}
-                  disabled={idx === 0}
-                  className="rounded border border-bg-border px-1.5 py-0.5 text-xs text-neutral-300 hover:bg-bg-elevated disabled:opacity-30"
+              <div className="flex flex-wrap items-start justify-end gap-2">
+                <span
+                  className={`rounded-full px-2.5 py-1 text-xs font-semibold ${
+                    additive
+                      ? "bg-emerald-500/20 text-emerald-100"
+                      : "bg-amber-500/15 text-amber-100"
+                  }`}
                 >
-                  Up
-                </button>
-                <button
-                  type="button"
-                  onClick={() => move(idx, 1)}
-                  disabled={idx === template.length - 1}
-                  className="rounded border border-bg-border px-1.5 py-0.5 text-xs text-neutral-300 hover:bg-bg-elevated disabled:opacity-30"
-                >
-                  Down
-                </button>
+                  {durationChip(entry, variant)}
+                </span>
+                <div className="flex flex-col gap-1">
+                  <button
+                    type="button"
+                    onClick={() => move(idx, -1)}
+                    disabled={idx === 0}
+                    className="rounded border border-bg-border px-1.5 py-0.5 text-xs text-neutral-300 hover:bg-bg-elevated disabled:opacity-30"
+                  >
+                    Up
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => move(idx, 1)}
+                    disabled={idx === template.length - 1}
+                    className="rounded border border-bg-border px-1.5 py-0.5 text-xs text-neutral-300 hover:bg-bg-elevated disabled:opacity-30"
+                  >
+                    Down
+                  </button>
+                </div>
               </div>
             </div>
+            {additive && (
+              <div className="rounded border border-emerald-500/30 bg-bg/40 px-3 py-2 text-xs text-emerald-100">
+                Additive block: this runs once per saved trouble spot and does not
+                count against the base session duration.
+              </div>
+            )}
 
             <div className="flex flex-wrap items-start gap-2">
               <div className="min-w-[12rem] flex-[1_1_12rem]">
@@ -256,7 +364,8 @@ export function BlockTemplateEditor({
               Remove block
             </button>
           </li>
-        ))}
+          );
+        })}
       </ul>
 
       <div className="flex items-center gap-3">
@@ -278,36 +387,13 @@ export function BlockTemplateEditor({
         )}
       </div>
 
-      <div className="rounded border border-bg-border bg-bg/30 px-3 py-2 text-xs">
-        <div className="text-neutral-500">Preview at {previewMinutes} min:</div>
-        {active.length === 0 ? (
-          <div className="mt-0.5 text-red-300">
-            No blocks enabled. Enable at least one before saving.
-          </div>
-        ) : !validation.ok ? (
-          <div className="mt-0.5 text-red-300">
-            {validation.message}
-          </div>
-        ) : allocation.ok ? (
-          <div className="mt-0.5 text-neutral-300">
-            {allocation.fixedSec > 0 && (
-              <span className="mr-1 text-neutral-500">
-                {fmtSecs(allocation.remainingSec)} remains for percentage blocks.
-              </span>
-            )}
-            {additiveEntries.length > 0 && (
-              <span className="mr-1 text-neutral-500">
-                Trouble spot time is added outside the base session.
-              </span>
-            )}
-            {previewItems.join(" · ")}
-          </div>
-        ) : (
-          <div className="mt-0.5 text-red-300">
-            Fixed block time exceeds the selected session length.
-          </div>
-        )}
-      </div>
+      {additiveEntries.length > 0 && allocation.ok && (
+        <div className="rounded border border-emerald-500/30 bg-emerald-500/10 px-3 py-2 text-xs text-emerald-100">
+          This song currently has {troubleSpotCount} trouble spot
+          {troubleSpotCount === 1 ? "" : "s"}, adding{" "}
+          {fmtSecs(additiveActualSec)} outside the {fmtSecs(totalSec)} base session.
+        </div>
+      )}
     </div>
   );
 }
