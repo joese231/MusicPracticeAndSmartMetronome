@@ -1,7 +1,12 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { Repository } from "@/lib/db/repository";
-import { DEFAULT_SONG_BLOCK_TEMPLATE, type Song } from "@/types/song";
+import {
+  DEFAULT_SETTINGS,
+  DEFAULT_SONG_BLOCK_TEMPLATE,
+  type Song,
+} from "@/types/song";
 import { useSongsStore } from "./useSongsStore";
+import { useSettingsStore } from "./useSettingsStore";
 
 const repo: Partial<Repository> = {};
 
@@ -39,6 +44,7 @@ describe("useSongsStore persistence recovery", () => {
       delete repo[key];
     }
     useSongsStore.setState({ songs: [], loaded: false });
+    useSettingsStore.setState({ settings: { ...DEFAULT_SETTINGS }, loaded: true });
     global.fetch = vi.fn(async () => Response.json({})) as typeof fetch;
   });
 
@@ -56,5 +62,34 @@ describe("useSongsStore persistence recovery", () => {
 
     expect(repo.listSongs).toHaveBeenCalled();
     expect(useSongsStore.getState().songs).toEqual([serverSong]);
+  });
+
+  it("creates new songs at the top of the manual order", async () => {
+    repo.upsertSong = vi.fn(async () => {});
+    useSongsStore.setState({
+      songs: [
+        makeSong({ id: "song-1", sortIndex: 0, title: "First" }),
+        makeSong({ id: "song-2", sortIndex: 1, title: "Second" }),
+      ],
+      loaded: true,
+    });
+
+    const created = await useSongsStore.getState().createSong({
+      title: "Newest",
+      link: null,
+      workingBpm: 120,
+      troubleSpots: [],
+      originalBpm: null,
+    });
+
+    expect(created.sortIndex).toBe(-1);
+    expect(repo.upsertSong).toHaveBeenCalledWith(
+      expect.objectContaining({ id: created.id, sortIndex: -1 }),
+    );
+    expect(useSongsStore.getState().songs.map((s) => s.id)).toEqual([
+      created.id,
+      "song-1",
+      "song-2",
+    ]);
   });
 });

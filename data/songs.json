@@ -473,10 +473,10 @@
     "stepPercent": 2.5,
     "practiceMode": "smart",
     "includeWarmupBlock": false,
-    "totalPracticeSec": 14161,
+    "totalPracticeSec": 14160,
     "sortIndex": 3,
     "createdAt": "2026-04-27T15:29:18.877Z",
-    "updatedAt": "2026-06-12T15:31:23.171Z",
+    "updatedAt": "2026-06-12T16:24:34.896Z",
     "blockTemplate": [
       {
         "id": "song-slowReference",
@@ -626,10 +626,10 @@
     "stepPercent": 2.5,
     "practiceMode": "smart",
     "includeWarmupBlock": false,
-    "totalPracticeSec": 11787,
+    "totalPracticeSec": 11786,
     "sortIndex": 4,
     "createdAt": "2026-04-29T12:14:24.205Z",
-    "updatedAt": "2026-06-12T15:31:25.878Z",
+    "updatedAt": "2026-06-12T16:24:32.400Z",
     "blockTemplate": [
       {
         "id": "song-slowReference",
@@ -775,9 +775,9 @@
     "workingBpm": 182,
     "originalBpm": 271,
     "stepPercent": 2.5,
-    "totalPracticeSec": 15581,
+    "totalPracticeSec": 15578,
     "createdAt": "2026-04-13T21:21:14.941Z",
-    "updatedAt": "2026-06-12T15:31:30.328Z",
+    "updatedAt": "2026-06-12T16:24:30.048Z",
     "troubleSpots": [],
     "sortIndex": 5,
     "warmupBpm": null,
@@ -1844,6 +1844,6 @@
     "totalPracticeSec": 0,
     "sortIndex": 11,
     "createdAt": "2026-06-10T15:00:17.441Z",
-    "updatedAt": "2026-06-10T15:31:39.167Z"
+    "updatedAt": "2026-06-12T16:24:15.595Z"
   }
 ]

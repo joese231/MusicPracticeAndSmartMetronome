@@ -1,10 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useSongsStore } from "@/lib/store/useSongsStore";
 import { useExercisesStore } from "@/lib/store/useExercisesStore";
 import { useSessionHistoryStore } from "@/lib/store/useSessionHistoryStore";
-import { parseDurationToSeconds, createManualSessionRecord } from "@/lib/session/manualSessionUtils";
+import {
+  applyWorkingPromotions,
+  buildManualWorkingPromotions,
+  parseDurationToSeconds,
+  createManualSessionRecord,
+} from "@/lib/session/manualSessionUtils";
 import type { Song } from "@/types/song";
 import type { Exercise } from "@/types/exercise";
 
@@ -31,16 +36,54 @@ export function ManualSessionForm() {
   );
   const [sessionTitle, setSessionTitle] = useState<string>("");
   const [startBpm, setStartBpm] = useState<string>("");
-  const [endBpm, setEndBpm] = useState<string>("");
-  const [showAdvanced, setShowAdvanced] = useState(false);
+  const [promotionCount, setPromotionCount] = useState<string>("0");
   const [error, setError] = useState<string>("");
   const [success, setSuccess] = useState(false);
 
   // Get the selected item (if any)
-  const selectedItem =
-    selectedItemKind === "song"
-      ? songs.find((s) => s.id === selectedItemId)
-      : exercises.find((e) => e.id === selectedItemId);
+  const selectedItem = useMemo(
+    () =>
+      selectedItemKind === "song"
+        ? songs.find((s) => s.id === selectedItemId)
+        : exercises.find((e) => e.id === selectedItemId),
+    [exercises, selectedItemId, selectedItemKind, songs],
+  );
+
+  useEffect(() => {
+    if (!selectedItemId) {
+      setStartBpm("");
+      setPromotionCount("0");
+      return;
+    }
+    if (!selectedItem) return;
+
+    const workingBpm = selectedItem.workingBpm;
+    setStartBpm(
+      typeof workingBpm === "number" && workingBpm > 0
+        ? String(workingBpm)
+        : "",
+    );
+    setPromotionCount("0");
+  }, [selectedItem, selectedItemId]);
+
+  const startBpmNumber =
+    /^\d+$/.test(startBpm.trim()) && Number(startBpm) > 0
+      ? Number(startBpm)
+      : null;
+  const promotionCountNumber =
+    promotionCount.trim() === ""
+      ? 0
+      : /^\d+$/.test(promotionCount.trim())
+        ? Number(promotionCount)
+        : null;
+  const derivedEndBpm =
+    selectedItem && startBpmNumber != null && promotionCountNumber != null
+      ? applyWorkingPromotions(
+          startBpmNumber,
+          promotionCountNumber,
+          selectedItem.stepPercent,
+        )
+      : null;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -68,19 +111,50 @@ export function ManualSessionForm() {
       }
 
       // Validate BPM fields
-      if (startBpm) {
-        const startBpmNum = parseInt(startBpm, 10);
-        if (isNaN(startBpmNum) || startBpmNum < 1) {
-          throw new Error("Starting BPM must be a positive number");
+      let startBpmNum: number | undefined;
+      let endBpmNum: number | undefined;
+      let promotionCountNum = 0;
+
+      if (selectedItemId && !selectedItem) {
+        throw new Error("Selected item could not be found");
+      }
+
+      if (selectedItem) {
+        const trimmedStartBpm = startBpm.trim();
+        const trimmedPromotionCount = promotionCount.trim();
+
+        if (trimmedStartBpm) {
+          startBpmNum = parseInt(trimmedStartBpm, 10);
+          if (!/^\d+$/.test(trimmedStartBpm) || startBpmNum < 1) {
+            throw new Error("Starting BPM must be a positive number");
+          }
         }
-        if (endBpm) {
-          const endBpmNum = parseInt(endBpm, 10);
-          if (isNaN(endBpmNum) || endBpmNum < 1) {
-            throw new Error("Ending BPM must be a positive number");
+
+        if (trimmedPromotionCount) {
+          promotionCountNum = parseInt(trimmedPromotionCount, 10);
+          if (
+            !/^\d+$/.test(trimmedPromotionCount) ||
+            promotionCountNum < 0
+          ) {
+            throw new Error("Number of promotions must be zero or greater");
           }
-          if (endBpmNum < startBpmNum) {
-            throw new Error("Ending BPM must be greater than or equal to Starting BPM");
-          }
+        }
+
+        if (promotionCountNum > 0 && startBpmNum === undefined) {
+          throw new Error("Starting BPM is required when logging promotions");
+        }
+
+        if (startBpmNum !== undefined) {
+          endBpmNum = applyWorkingPromotions(
+            startBpmNum,
+            promotionCountNum,
+            selectedItem.stepPercent,
+          );
+        }
+      } else if (startBpm) {
+        const freeFormStartBpm = parseInt(startBpm, 10);
+        if (isNaN(freeFormStartBpm) || freeFormStartBpm < 1) {
+          throw new Error("Starting BPM must be a positive number");
         }
       }
 
@@ -93,6 +167,16 @@ export function ManualSessionForm() {
 
       // Create the session record with proper type narrowing
       let params: Parameters<typeof createManualSessionRecord>[0];
+      const workingPromotions =
+        selectedItem && startBpmNum !== undefined
+          ? buildManualWorkingPromotions({
+              startBpm: startBpmNum,
+              promotionCount: promotionCountNum,
+              stepPercent: selectedItem.stepPercent,
+              startedAt,
+              durationSec,
+            })
+          : [];
 
       if (selectedItem) {
         if (selectedItemKind === "exercise") {
@@ -102,8 +186,9 @@ export function ManualSessionForm() {
             exerciseTitle: exercise.name,
             startedAt,
             durationSec,
-            ...(startBpm && { startWorkingBpm: parseInt(startBpm, 10) }),
-            ...(endBpm && { endWorkingBpm: parseInt(endBpm, 10) }),
+            ...(startBpmNum !== undefined && { startWorkingBpm: startBpmNum }),
+            ...(endBpmNum !== undefined && { endWorkingBpm: endBpmNum }),
+            promotions: workingPromotions,
           };
         } else {
           const song = selectedItem as Song;
@@ -112,8 +197,9 @@ export function ManualSessionForm() {
             songTitle: song.title,
             startedAt,
             durationSec,
-            ...(startBpm && { startWorkingBpm: parseInt(startBpm, 10) }),
-            ...(endBpm && { endWorkingBpm: parseInt(endBpm, 10) }),
+            ...(startBpmNum !== undefined && { startWorkingBpm: startBpmNum }),
+            ...(endBpmNum !== undefined && { endWorkingBpm: endBpmNum }),
+            promotions: workingPromotions,
           };
         }
       } else {
@@ -139,7 +225,7 @@ export function ManualSessionForm() {
       setSelectedItemId("");
       setSessionTitle("");
       setStartBpm("");
-      setEndBpm("");
+      setPromotionCount("0");
 
       // Clear success message after 3 seconds
       setTimeout(() => setSuccess(false), 3000);
@@ -216,6 +302,8 @@ export function ManualSessionForm() {
               onChange={(e) => {
                 setSelectedItemKind(e.target.value as "song" | "exercise");
                 setSelectedItemId("");
+                setStartBpm("");
+                setPromotionCount("0");
               }}
               className={SELECT_CLASS}
             >
@@ -261,7 +349,7 @@ export function ManualSessionForm() {
 
         {/* BPM fields (shown if an item is selected) */}
         {selectedItemId && (
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid gap-4 md:grid-cols-3">
             <div>
               <label className="block text-sm font-medium text-neutral-300">
                 Starting Working BPM (optional)
@@ -277,33 +365,31 @@ export function ManualSessionForm() {
             </div>
             <div>
               <label className="block text-sm font-medium text-neutral-300">
-                Ending Working BPM (optional)
+                Number of promotions
               </label>
               <input
                 type="number"
-                value={endBpm}
-                onChange={(e) => setEndBpm(e.target.value)}
+                value={promotionCount}
+                onChange={(e) => setPromotionCount(e.target.value)}
                 className={INPUT_CLASS}
-                min="1"
-                placeholder="120"
+                min="0"
+                step="1"
+                placeholder="0"
               />
             </div>
-          </div>
-        )}
-
-        {/* Advanced section toggle */}
-        <button
-          type="button"
-          onClick={() => setShowAdvanced(!showAdvanced)}
-          className="text-sm text-neutral-400 hover:text-neutral-200"
-        >
-          {showAdvanced ? "▼" : "▶"} Advanced options
-        </button>
-
-        {/* Advanced: Promotions (placeholder for now) */}
-        {showAdvanced && (
-          <div className="rounded bg-neutral-800 p-4 text-sm text-neutral-400">
-            Promotions logging coming soon. For now, leave blank.
+            <div>
+              <label className="block text-sm font-medium text-neutral-300">
+                Ending Working BPM
+              </label>
+              <input
+                type="number"
+                value={derivedEndBpm ?? ""}
+                readOnly
+                className={`${INPUT_CLASS} text-neutral-400`}
+                min="1"
+                placeholder="—"
+              />
+            </div>
           </div>
         )}
 

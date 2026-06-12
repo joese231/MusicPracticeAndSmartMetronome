@@ -94,7 +94,7 @@ export const useSongsStore = create<SongsState>((set, get) => ({
     const nextSortIndex =
       existing.length === 0
         ? 0
-        : Math.max(...existing.map((s) => s.sortIndex)) + 1;
+        : Math.min(...existing.map((s) => s.sortIndex)) - 1;
     const globalSettings = useSettingsStore.getState().settings;
     const settingsDefault =
       globalSettings.defaultPracticeMode ?? DEFAULT_PRACTICE_MODE;
@@ -128,8 +128,8 @@ export const useSongsStore = create<SongsState>((set, get) => ({
       updatedAt: now,
     };
     await getRepository().upsertSong(song);
-    // Append to end of list — preserving user's manual order.
-    set({ songs: [...existing, song] });
+    // New items start at the top while preserving the rest of the manual order.
+    set({ songs: [song, ...existing] });
     return song;
   },
 

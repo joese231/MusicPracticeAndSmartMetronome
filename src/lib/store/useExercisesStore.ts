@@ -71,7 +71,7 @@ export const useExercisesStore = create<ExercisesState>((set, get) => ({
     const nextSortIndex =
       existing.length === 0
         ? 0
-        : Math.max(...existing.map((e) => e.sortIndex)) + 1;
+        : Math.min(...existing.map((e) => e.sortIndex)) - 1;
     const globalSettings = useSettingsStore.getState().settings;
     const settingsDefault =
       globalSettings.defaultPracticeMode ?? DEFAULT_PRACTICE_MODE;
@@ -106,7 +106,7 @@ export const useExercisesStore = create<ExercisesState>((set, get) => ({
       updatedAt: now,
     };
     await getRepository().upsertExercise(exercise);
-    set({ exercises: [...existing, exercise] });
+    set({ exercises: [exercise, ...existing] });
     return exercise;
   },
 

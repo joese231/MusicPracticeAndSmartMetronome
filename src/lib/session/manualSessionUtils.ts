@@ -4,6 +4,7 @@ import type {
   SessionItemKind,
   SessionRecord,
 } from "@/types/sessionRecord";
+import { step } from "./tempo";
 
 // Threshold for interpreting bare numbers as minutes (e.g., "25" = 25 minutes).
 // Numbers >= 360 are interpreted as seconds instead. 360 = 6 hours.
@@ -11,6 +12,71 @@ const BARE_NUMBER_MINUTE_THRESHOLD = 360;
 
 // ID for free-form manual sessions (those without an exercise or song)
 const FREE_FORM_SESSION_ID = "__manual__";
+
+export function applyWorkingPromotions(
+  startBpm: number,
+  promotionCount: number,
+  stepPercent: number,
+): number {
+  if (
+    !Number.isInteger(promotionCount) ||
+    promotionCount < 0 ||
+    !Number.isFinite(startBpm) ||
+    startBpm < 1
+  ) {
+    throw new Error("Promotion count and starting BPM must be valid");
+  }
+
+  let bpm = Math.round(startBpm);
+  for (let i = 0; i < promotionCount; i++) {
+    bpm = step(bpm, stepPercent);
+  }
+  return bpm;
+}
+
+export function buildManualWorkingPromotions({
+  startBpm,
+  promotionCount,
+  stepPercent,
+  startedAt,
+  durationSec,
+}: {
+  startBpm: number;
+  promotionCount: number;
+  stepPercent: number;
+  startedAt: string;
+  durationSec: number;
+}): PromotionEvent[] {
+  if (!Number.isInteger(promotionCount) || promotionCount < 0) {
+    throw new Error("Promotion count must be a non-negative integer");
+  }
+  if (promotionCount === 0) return [];
+
+  const startMs = new Date(startedAt).getTime();
+  if (!Number.isFinite(startMs)) {
+    throw new Error("Session start time is invalid");
+  }
+
+  const intervalSec = durationSec / (promotionCount + 1);
+  const promotions: PromotionEvent[] = [];
+  let fromBpm = Math.round(startBpm);
+
+  for (let i = 0; i < promotionCount; i++) {
+    const toBpm = step(fromBpm, stepPercent);
+    promotions.push({
+      at: new Date(
+        startMs + Math.round(intervalSec * (i + 1)) * 1000,
+      ).toISOString(),
+      kind: "working",
+      fromBpm,
+      toBpm,
+      stepPercent,
+    });
+    fromBpm = toBpm;
+  }
+
+  return promotions;
+}
 
 export function parseDurationToSeconds(input: string): number {
   if (!input || !input.trim()) {

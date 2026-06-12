@@ -1,5 +1,10 @@
 import { describe, it, expect } from "vitest";
-import { parseDurationToSeconds, createManualSessionRecord } from "./manualSessionUtils";
+import {
+  applyWorkingPromotions,
+  buildManualWorkingPromotions,
+  parseDurationToSeconds,
+  createManualSessionRecord,
+} from "./manualSessionUtils";
 
 // FREE_FORM_SESSION_ID is not exported, but we know the test expects "__manual__"
 const FREE_FORM_SESSION_ID = "__manual__";
@@ -147,5 +152,45 @@ describe("createManualSessionRecord", () => {
     });
 
     expect(record2.plannedMinutes).toBe(2); // Rounded
+  });
+});
+
+describe("manual working BPM promotions", () => {
+  it("derives the ending BPM by applying the item step once per promotion", () => {
+    expect(applyWorkingPromotions(100, 0, 2.5)).toBe(100);
+    expect(applyWorkingPromotions(100, 1, 2.5)).toBe(103);
+    expect(applyWorkingPromotions(100, 2, 2.5)).toBe(106);
+  });
+
+  it("builds working promotion events between the session start and end", () => {
+    const promotions = buildManualWorkingPromotions({
+      startBpm: 100,
+      promotionCount: 2,
+      stepPercent: 2.5,
+      startedAt: "2026-04-27T14:30:00.000Z",
+      durationSec: 1200,
+    });
+
+    expect(promotions).toEqual([
+      {
+        at: "2026-04-27T14:36:40.000Z",
+        kind: "working",
+        fromBpm: 100,
+        toBpm: 103,
+        stepPercent: 2.5,
+      },
+      {
+        at: "2026-04-27T14:43:20.000Z",
+        kind: "working",
+        fromBpm: 103,
+        toBpm: 106,
+        stepPercent: 2.5,
+      },
+    ]);
+  });
+
+  it("rejects invalid promotion counts", () => {
+    expect(() => applyWorkingPromotions(100, -1, 2.5)).toThrow();
+    expect(() => applyWorkingPromotions(100, 1.5, 2.5)).toThrow();
   });
 });

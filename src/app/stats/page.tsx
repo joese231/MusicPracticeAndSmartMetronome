@@ -73,17 +73,6 @@ export default function StatsPage() {
 
       {!allLoaded ? (
         <p className="text-neutral-500">Loading…</p>
-      ) : records.length === 0 ? (
-        <div className="space-y-6">
-          <div className="rounded-lg border border-dashed border-bg-border bg-bg-elevated/50 p-10 text-center">
-            <h3 className="text-xl font-semibold text-neutral-200">No sessions yet</h3>
-            <p className="mx-auto mt-3 max-w-md text-sm text-neutral-400">
-              Stats start filling in as soon as you finish your first session. Pick
-              a song or exercise from the home screen and run a quick session.
-            </p>
-          </div>
-          <ManualLoggingDetails />
-        </div>
       ) : (
         <div className="space-y-6">
           <section className="grid grid-cols-2 gap-4 sm:grid-cols-4">
@@ -93,33 +82,47 @@ export default function StatsPage() {
             <Stat label="Current streak" value={`${streak}d`} />
           </section>
 
-          {todaysRecords.length > 0 && (
-            <RecentSessionsList
-              records={todaysRecords}
-              limit={20}
-              heading="Today's sessions"
-              showItemTitle
-            />
-          )}
-
-          <CalendarHeatmap records={records} weeks={26} />
-
-          <PracticeMinutesChart records={records} days={30} />
-
-          <PromotionVelocityTable
-            records={records}
-            songs={songs}
-            exercises={exercises}
-          />
-
-          <RecentSessionsList
-            records={records}
-            limit={20}
-            heading="Recent sessions (all)"
-            showItemTitle
-          />
-
           <ManualLoggingDetails />
+
+          {records.length === 0 ? (
+            <div className="rounded-lg border border-dashed border-bg-border bg-bg-elevated/50 p-10 text-center">
+              <h3 className="text-xl font-semibold text-neutral-200">
+                No sessions yet
+              </h3>
+              <p className="mx-auto mt-3 max-w-md text-sm text-neutral-400">
+                Stats start filling in as soon as you finish your first session. Pick
+                a song or exercise from the home screen and run a quick session.
+              </p>
+            </div>
+          ) : (
+            <>
+              {todaysRecords.length > 0 && (
+                <RecentSessionsList
+                  records={todaysRecords}
+                  limit={20}
+                  heading="Today's sessions"
+                  showItemTitle
+                />
+              )}
+
+              <CalendarHeatmap records={records} weeks={26} />
+
+              <PracticeMinutesChart records={records} days={30} />
+
+              <PromotionVelocityTable
+                records={records}
+                songs={songs}
+                exercises={exercises}
+              />
+
+              <RecentSessionsList
+                records={records}
+                limit={20}
+                heading="Recent sessions (all)"
+                showItemTitle
+              />
+            </>
+          )}
         </div>
       )}
     </main>
