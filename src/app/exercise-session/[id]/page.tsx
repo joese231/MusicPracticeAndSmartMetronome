@@ -252,6 +252,9 @@ export default function ExerciseSessionPage() {
       settings.interSongPauseSec,
     ],
   );
+  endSessionRef.current = (reason) => {
+    void endSession(reason);
+  };
 
   useEffect(() => {
     if (!loadedExercises || !loadedSettings) return;
