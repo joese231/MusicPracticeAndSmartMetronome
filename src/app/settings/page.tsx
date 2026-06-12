@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useSettingsStore } from "@/lib/store/useSettingsStore";
 import { useSongsStore } from "@/lib/store/useSongsStore";
@@ -8,13 +8,36 @@ import { useSessionHistoryStore } from "@/lib/store/useSessionHistoryStore";
 import { useSessionStore } from "@/lib/store/useSessionStore";
 import { getRepository } from "@/lib/db/localRepository";
 import { Metronome } from "@/lib/metronome/scheduler";
-import { BlockTemplateEditor } from "@/components/session/BlockTemplateEditor";
+import {
+  BlockTemplateEditor,
+  validateTemplateForSession,
+} from "@/components/session/BlockTemplateEditor";
+import { SegmentedControl } from "@/components/ui/SegmentedControl";
 import {
   cloneExerciseTemplate,
   cloneSongTemplate,
   DEFAULT_EXERCISE_BLOCK_TEMPLATE,
   DEFAULT_SONG_BLOCK_TEMPLATE,
+  DEFAULT_SONG_SESSION_MINUTES,
 } from "@/types/song";
+import type { PracticeMode } from "@/types/song";
+import type { ExerciseBlockTemplate, SongBlockTemplate } from "@/types/song";
+import {
+  DEFAULT_EXERCISE_MINUTES,
+  MAX_EXERCISE_MINUTES,
+  MIN_EXERCISE_MINUTES,
+} from "@/lib/session/exerciseBlocks";
+import {
+  MAX_SESSION_MINUTES,
+  MIN_SESSION_MINUTES,
+} from "@/lib/session/blocks";
+
+const PRACTICE_MODE_OPTIONS: Array<{ value: PracticeMode; label: string }> = [
+  { value: "smart", label: "Smart" },
+  { value: "simple", label: "Simple" },
+  { value: "timed", label: "Timed" },
+  { value: "openEnded", label: "Open" },
+];
 
 export default function SettingsPage() {
   const settings = useSettingsStore((s) => s.settings);
@@ -56,6 +79,58 @@ export default function SettingsPage() {
     m.setAccentsEnabled(settings.accentsEnabled);
     m.playPreviewClick();
   };
+
+  const updateSongDefaultMinutes = useCallback(
+    (minutes: number) => {
+      const validation = validateTemplateForSession(
+        settings.defaultSongBlockTemplate,
+        minutes,
+        "song",
+        1,
+      );
+      if (validation.ok) update({ defaultSongSessionMinutes: minutes });
+    },
+    [settings.defaultSongBlockTemplate, update],
+  );
+
+  const updateExerciseDefaultMinutes = useCallback(
+    (minutes: number) => {
+      const validation = validateTemplateForSession(
+        settings.defaultExerciseBlockTemplate,
+        minutes,
+        "exercise",
+      );
+      if (validation.ok) update({ defaultExerciseSessionMinutes: minutes });
+    },
+    [settings.defaultExerciseBlockTemplate, update],
+  );
+
+  const updateSongDefaultTemplate = useCallback(
+    (template: SongBlockTemplate) => {
+      const next = cloneSongTemplate(template);
+      const validation = validateTemplateForSession(
+        next,
+        settings.defaultSongSessionMinutes,
+        "song",
+        1,
+      );
+      if (validation.ok) update({ defaultSongBlockTemplate: next });
+    },
+    [settings.defaultSongSessionMinutes, update],
+  );
+
+  const updateExerciseDefaultTemplate = useCallback(
+    (template: ExerciseBlockTemplate) => {
+      const next = cloneExerciseTemplate(template);
+      const validation = validateTemplateForSession(
+        next,
+        settings.defaultExerciseSessionMinutes,
+        "exercise",
+      );
+      if (validation.ok) update({ defaultExerciseBlockTemplate: next });
+    },
+    [settings.defaultExerciseSessionMinutes, update],
+  );
 
   const handleResetStats = async () => {
     setBusyAction("reset");
@@ -109,13 +184,39 @@ export default function SettingsPage() {
         <div className="mt-8 space-y-6">
           <Row
             label="Default practice mode for new items"
-            hint="Used as the starting choice when you create a new song or exercise. Smart runs the three-tempo ladder; Simple plays a steady BPM for the chosen length, like a regular metronome. You can still change it per-item afterwards."
+            hint="Used as the starting choice when you create a new song or exercise. You can still change it per item afterwards."
           >
-            <SegmentedTwo
-              value={settings.defaultPracticeMode === "simple" ? "simple" : "smart"}
+            <SegmentedPracticeMode
+              value={settings.defaultPracticeMode}
               onChange={(v) => update({ defaultPracticeMode: v })}
-              left={{ value: "smart", label: "Smart" }}
-              right={{ value: "simple", label: "Simple" }}
+            />
+          </Row>
+
+          <Row
+            label="Default song length"
+            hint="Saved onto newly created songs. You can change the saved length on each song later."
+          >
+            <NumberSetting
+              value={settings.defaultSongSessionMinutes}
+              min={MIN_SESSION_MINUTES}
+              max={MAX_SESSION_MINUTES}
+              fallback={DEFAULT_SONG_SESSION_MINUTES}
+              suffix="min"
+              onChange={updateSongDefaultMinutes}
+            />
+          </Row>
+
+          <Row
+            label="Default exercise length"
+            hint="Saved onto newly created exercises. Open-ended items keep this as the value to restore if you switch them back to timed practice."
+          >
+            <NumberSetting
+              value={settings.defaultExerciseSessionMinutes}
+              min={MIN_EXERCISE_MINUTES}
+              max={MAX_EXERCISE_MINUTES}
+              fallback={DEFAULT_EXERCISE_MINUTES}
+              suffix="min"
+              onChange={updateExerciseDefaultMinutes}
             />
           </Row>
 
@@ -153,7 +254,7 @@ export default function SettingsPage() {
             label="Pause between items"
             hint="After a song or exercise session finishes, wait this long before the next item in the list starts. Press Space during the countdown to skip, or Esc to exit. 0 disables the pause."
           >
-            <div className="flex items-center gap-4">
+            <div className="flex w-full flex-wrap items-center gap-3 sm:w-auto sm:gap-4">
               <input
                 type="range"
                 min={0}
@@ -163,7 +264,7 @@ export default function SettingsPage() {
                 onChange={(e) =>
                   update({ interSongPauseSec: parseInt(e.target.value, 10) })
                 }
-                className="w-48"
+                className="min-w-0 flex-1 sm:w-48 sm:flex-none"
               />
               <span className="w-12 text-right text-sm tabular-nums text-neutral-400">
                 {settings.interSongPauseSec === 0
@@ -186,13 +287,12 @@ export default function SettingsPage() {
               <BlockTemplateEditor
                 variant="song"
                 template={settings.defaultSongBlockTemplate}
-                onChange={(t) =>
-                  update({ defaultSongBlockTemplate: cloneSongTemplate(t) })
-                }
-                previewMinutes={10}
+                onChange={updateSongDefaultTemplate}
+                previewMinutes={settings.defaultSongSessionMinutes}
                 troubleSpotCount={1}
                 onReset={() =>
                   update({
+                    defaultSongSessionMinutes: DEFAULT_SONG_SESSION_MINUTES,
                     defaultSongBlockTemplate: cloneSongTemplate(
                       DEFAULT_SONG_BLOCK_TEMPLATE,
                     ),
@@ -215,14 +315,11 @@ export default function SettingsPage() {
               <BlockTemplateEditor
                 variant="exercise"
                 template={settings.defaultExerciseBlockTemplate}
-                onChange={(t) =>
-                  update({
-                    defaultExerciseBlockTemplate: cloneExerciseTemplate(t),
-                  })
-                }
-                previewMinutes={5}
+                onChange={updateExerciseDefaultTemplate}
+                previewMinutes={settings.defaultExerciseSessionMinutes}
                 onReset={() =>
                   update({
+                    defaultExerciseSessionMinutes: DEFAULT_EXERCISE_MINUTES,
                     defaultExerciseBlockTemplate: cloneExerciseTemplate(
                       DEFAULT_EXERCISE_BLOCK_TEMPLATE,
                     ),
@@ -236,7 +333,7 @@ export default function SettingsPage() {
             label="Metronome volume"
             hint="Tap Preview to hear the current volume and accent setting."
           >
-            <div className="flex items-center gap-4">
+            <div className="flex w-full flex-wrap items-center gap-3 sm:w-auto sm:gap-4">
               <input
                 type="range"
                 min={0}
@@ -244,7 +341,7 @@ export default function SettingsPage() {
                 step={0.01}
                 value={settings.metronomeVolume}
                 onChange={(e) => update({ metronomeVolume: parseFloat(e.target.value) })}
-                className="w-48"
+                className="min-w-0 flex-1 sm:w-48 sm:flex-none"
               />
               <span className="w-10 text-right text-sm tabular-nums text-neutral-400">
                 {Math.round(settings.metronomeVolume * 100)}%
@@ -372,12 +469,12 @@ function Row({
 }) {
   return (
     <div className="rounded-lg border border-bg-border bg-bg-elevated p-5">
-      <div className="flex items-center justify-between gap-4">
-        <div>
+      <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="min-w-0">
           <div className="font-semibold text-neutral-100">{label}</div>
           {hint && <div className="mt-1 text-sm text-neutral-500">{hint}</div>}
         </div>
-        <div>{children}</div>
+        <div className="w-full sm:w-auto">{children}</div>
       </div>
     </div>
   );
@@ -428,41 +525,55 @@ function Toggle({
   );
 }
 
-function SegmentedTwo<T extends string>({
+function NumberSetting({
+  value,
+  min,
+  max,
+  fallback,
+  suffix,
+  onChange,
+}: {
+  value: number;
+  min: number;
+  max: number;
+  fallback: number;
+  suffix: string;
+  onChange: (v: number) => void;
+}) {
+  const clamp = (raw: number): number => {
+    if (!Number.isFinite(raw)) return fallback;
+    return Math.max(min, Math.min(max, Math.round(raw)));
+  };
+  return (
+    <div className="flex items-center gap-2">
+      <input
+        type="number"
+        inputMode="numeric"
+        min={min}
+        max={max}
+        step={1}
+        value={value}
+        onChange={(e) => onChange(clamp(parseInt(e.target.value, 10)))}
+        className="w-24 rounded-lg border border-bg-border bg-bg px-3 py-1.5 text-right text-sm text-neutral-100 outline-none focus:border-accent"
+      />
+      <span className="w-10 text-sm text-neutral-400">{suffix}</span>
+    </div>
+  );
+}
+
+function SegmentedPracticeMode({
   value,
   onChange,
-  left,
-  right,
 }: {
-  value: T;
-  onChange: (v: T) => void;
-  left: { value: T; label: string };
-  right: { value: T; label: string };
+  value: PracticeMode;
+  onChange: (v: PracticeMode) => void;
 }) {
   return (
-    <div
-      role="radiogroup"
-      className="inline-flex overflow-hidden rounded-lg border border-bg-border bg-bg"
-    >
-      {[left, right].map((opt) => {
-        const active = value === opt.value;
-        return (
-          <button
-            key={opt.value}
-            type="button"
-            role="radio"
-            aria-checked={active}
-            onClick={() => onChange(opt.value)}
-            className={`px-4 py-1.5 text-sm font-semibold transition ${
-              active
-                ? "bg-accent text-black"
-                : "text-neutral-300 hover:bg-bg-elevated"
-            }`}
-          >
-            {opt.label}
-          </button>
-        );
-      })}
-    </div>
+    <SegmentedControl
+      value={value}
+      options={PRACTICE_MODE_OPTIONS}
+      onChange={onChange}
+      ariaLabel="Default practice mode"
+    />
   );
 }

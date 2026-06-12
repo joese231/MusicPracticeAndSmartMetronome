@@ -59,7 +59,7 @@ export function CalendarHeatmap({ records, weeks = 26 }: Props) {
 
   return (
     <div className="rounded-lg border border-bg-border bg-bg-elevated p-4">
-      <div className="mb-3 flex items-center justify-between">
+      <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
         <div className="text-sm font-semibold text-neutral-300">
           Practice calendar
         </div>
@@ -71,25 +71,27 @@ export function CalendarHeatmap({ records, weeks = 26 }: Props) {
           <span>More</span>
         </div>
       </div>
-      <div className="flex gap-1">
-        {cols.map((col, i) => (
-          <div key={i} className="flex flex-col gap-1">
-            {col.map((cell) => {
-              const b = bucket(cell.minutes);
-              const isFuture = cell.date.getTime() > today.getTime();
-              const title = isFuture
-                ? cell.key
-                : `${cell.key} — ${Math.round(cell.minutes)} min`;
-              return (
-                <div
-                  key={cell.key}
-                  title={title}
-                  className={`h-3 w-3 rounded-sm ${isFuture ? "bg-bg" : COLORS[b]}`}
-                />
-              );
-            })}
-          </div>
-        ))}
+      <div className="max-w-full overflow-x-auto pb-1">
+        <div className="flex min-w-max gap-1">
+          {cols.map((col, i) => (
+            <div key={i} className="flex flex-col gap-1">
+              {col.map((cell) => {
+                const b = bucket(cell.minutes);
+                const isFuture = cell.date.getTime() > today.getTime();
+                const title = isFuture
+                  ? cell.key
+                  : `${cell.key} — ${Math.round(cell.minutes)} min`;
+                return (
+                  <div
+                    key={cell.key}
+                    title={title}
+                    className={`h-3 w-3 rounded-sm ${isFuture ? "bg-bg" : COLORS[b]}`}
+                  />
+                );
+              })}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

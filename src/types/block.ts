@@ -1,4 +1,4 @@
-import type { Song } from "./song";
+import type { TempoSubject } from "@/lib/session/runtimeTypes";
 
 export type BlockKind =
   | "consciousPractice"
@@ -11,6 +11,8 @@ export type BlockKind =
   | "exerciseCoolDown"
   | "openEnded"
   | "simpleMetronome"
+  | "timedPractice"
+  | "custom"
   | "freePlay";
 
 export type BlockPromotion =
@@ -23,10 +25,11 @@ export type BlockDef = {
   label: string;
   /** Seconds the block should run. Ignored when `unbounded` is true. */
   durationSec: number;
-  tempoFn: (song: Song) => number;
+  tempoFn: (subject: TempoSubject) => number;
   showEarnedButton: boolean;
   promotes: BlockPromotion;
   instructions: string[];
+  metronomeEnabled?: boolean;
   /**
    * When true, the block runs on a count-up timer and only leaves `playing`
    * phase on an explicit advance (N / Next button). `durationSec` is unused.

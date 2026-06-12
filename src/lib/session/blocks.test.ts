@@ -3,7 +3,7 @@ import {
   buildBlocks,
   INSTRUCTIONS,
   sessionLengthSec,
-  SONG_BLOCK_FACTORIES,
+  songBlockStructureKey,
 } from "./blocks";
 import {
   cloneSongTemplate,
@@ -11,6 +11,7 @@ import {
   migrateSongTemplate,
 } from "@/types/song";
 import type { Song, SongBlockTemplate, TroubleSpot } from "@/types/song";
+import { evaluateTempoRule } from "./tempoRules";
 
 const makeSong = (
   spots: TroubleSpot[] = [{ bpm: 150 }],
@@ -26,6 +27,8 @@ const makeSong = (
   stepPercent: 2.5,
   practiceMode: "smart",
   includeWarmupBlock: true,
+  defaultSessionMinutes: 10,
+  metronomeEnabled: true,
   totalPracticeSec: 0,
   sortIndex: 0,
   createdAt: "",
@@ -37,8 +40,8 @@ const sumDur = (blocks: { durationSec: number }[]): number =>
   blocks.reduce((a, b) => a + b.durationSec, 0);
 
 describe("default song template", () => {
-  it("contains the five block kinds, all enabled", () => {
-    expect(DEFAULT_SONG_BLOCK_TEMPLATE.map((e) => e.kind)).toEqual([
+  it("contains the five block roles, all enabled", () => {
+    expect(DEFAULT_SONG_BLOCK_TEMPLATE.map((e) => e.role)).toEqual([
       "slowReference",
       "troubleSpot",
       "ceilingWork",
@@ -48,29 +51,49 @@ describe("default song template", () => {
     expect(DEFAULT_SONG_BLOCK_TEMPLATE.every((e) => e.enabled)).toBe(true);
   });
 
-  it("weights sum to 540", () => {
-    expect(
-      DEFAULT_SONG_BLOCK_TEMPLATE.reduce((a, e) => a + e.weight, 0),
-    ).toBe(540);
+  it("default durations use fixed base blocks and additive trouble time", () => {
+    const byRole = new Map(DEFAULT_SONG_BLOCK_TEMPLATE.map((e) => [e.role, e]));
+    expect(byRole.get("slowReference")?.duration).toEqual({
+      kind: "fixed",
+      seconds: 90,
+    });
+    expect(byRole.get("troubleSpot")?.duration).toEqual({
+      kind: "fixed",
+      seconds: 120,
+    });
+    expect(byRole.get("ceilingWork")?.duration).toEqual({
+      kind: "fixed",
+      seconds: 300,
+    });
+    expect(byRole.get("overspeed")?.duration).toEqual({
+      kind: "fixed",
+      seconds: 120,
+    });
+    expect(byRole.get("consolidation")?.duration).toEqual({
+      kind: "fixed",
+      seconds: 90,
+    });
   });
 
-  it("INSTRUCTIONS map covers every default block kind", () => {
+  it("recipes carry instructions for every default block role", () => {
     for (const entry of DEFAULT_SONG_BLOCK_TEMPLATE) {
-      expect(INSTRUCTIONS[entry.kind]).toBeDefined();
+      expect(entry.instructions.length).toBeGreaterThan(0);
+      if (entry.role !== "custom") expect(INSTRUCTIONS[entry.role]).toBeDefined();
     }
   });
 
-  it("factories produce sane tempos for a known song", () => {
+  it("default recipes produce sane tempos for a known song", () => {
     const song = makeSong([{ bpm: 150 }]);
-    expect(SONG_BLOCK_FACTORIES.slowReference(0).tempoFn(song)).toBe(
-      Math.round(220 * 0.8),
-    );
-    expect(SONG_BLOCK_FACTORIES.troubleSpot(0).tempoFn(song)).toBe(150);
-    expect(SONG_BLOCK_FACTORIES.ceilingWork(0).tempoFn(song)).toBe(226);
-    expect(SONG_BLOCK_FACTORIES.overspeed(0).tempoFn(song)).toBe(232);
-    expect(SONG_BLOCK_FACTORIES.consolidation(0).tempoFn(song)).toBe(
-      Math.round(220 * 0.7),
-    );
+    const byRole = new Map(DEFAULT_SONG_BLOCK_TEMPLATE.map((e) => [e.role, e]));
+    expect(evaluateTempoRule(byRole.get("slowReference")!.tempoRule, song)).toBe(176);
+    expect(
+      evaluateTempoRule(byRole.get("troubleSpot")!.tempoRule, song, {
+        troubleIndex: 0,
+      }),
+    ).toBe(150);
+    expect(evaluateTempoRule(byRole.get("ceilingWork")!.tempoRule, song)).toBe(226);
+    expect(evaluateTempoRule(byRole.get("overspeed")!.tempoRule, song)).toBe(232);
+    expect(evaluateTempoRule(byRole.get("consolidation")!.tempoRule, song)).toBe(154);
   });
 });
 
@@ -85,7 +108,10 @@ describe("migrateSongTemplate", () => {
     const out = migrateSongTemplate([
       { kind: "slowMusical" as never, enabled: true, weight: 60 },
     ]);
-    expect(out).toEqual([{ kind: "consolidation", enabled: true, weight: 60 }]);
+    expect(out).toHaveLength(1);
+    expect(out[0].role).toBe("consolidation");
+    expect(out[0].enabled).toBe(true);
+    expect(out[0].duration).toEqual({ kind: "percent", percent: 60 });
   });
 
   it("merges weights when both consolidation and slowMusical are present (sum + OR enabled)", () => {
@@ -94,10 +120,10 @@ describe("migrateSongTemplate", () => {
       { kind: "consolidation", enabled: false, weight: 90 },
       { kind: "slowMusical" as never, enabled: true, weight: 60 },
     ]);
-    expect(out).toEqual([
-      { kind: "slowReference", enabled: true, weight: 90 },
-      { kind: "consolidation", enabled: true, weight: 150 },
-    ]);
+    expect(out.map((e) => e.role)).toEqual(["slowReference", "consolidation"]);
+    expect(out[0].duration).toEqual({ kind: "percent", percent: 90 });
+    expect(out[1].enabled).toBe(true);
+    expect(out[1].duration).toEqual({ kind: "percent", percent: 150 });
   });
 
   it("passes through templates that contain no slowMusical entries", () => {
@@ -130,31 +156,30 @@ describe("buildBlocks — Conscious Practice prefix", () => {
 });
 
 describe("buildBlocks — default template totals", () => {
-  it("10 min with 1 trouble spot allocates the full session length", () => {
+  it("10 min with 1 trouble spot adds two minutes above the base session length", () => {
     const blocks = buildBlocks(10, makeSong([{ bpm: 150 }]));
     // 6 = Conscious + 5 default rows (troubleSpot replicated once)
     expect(blocks).toHaveLength(6);
-    expect(sumDur(blocks)).toBe(600);
+    expect(sumDur(blocks)).toBe(720);
+    expect(blocks.find((b) => b.kind === "troubleSpot")?.durationSec).toBe(120);
   });
 
-  it("10 min with 0 trouble spots: troubleSpot row drops, time redistributes", () => {
+  it("10 min with 0 trouble spots: troubleSpot row drops and base blocks still fill 10 minutes", () => {
     const blocks = buildBlocks(10, makeSong([]));
     expect(blocks.some((b) => b.kind === "troubleSpot")).toBe(false);
     // Body still totals 600 — full session length is preserved.
     expect(sumDur(blocks)).toBe(600);
   });
 
-  it("10 min with 3 trouble spots: trouble row replicates and shares its allocation", () => {
+  it("10 min with 3 trouble spots: each spot adds its own two-minute block", () => {
     const blocks = buildBlocks(
       10,
       makeSong([{ bpm: 150 }, { bpm: 160 }, { bpm: 170 }]),
     );
-    expect(sumDur(blocks)).toBe(600);
+    expect(sumDur(blocks)).toBe(960);
     const troubleBlocks = blocks.filter((b) => b.kind === "troubleSpot");
     expect(troubleBlocks).toHaveLength(3);
-    // troubleSpot weight is 120 / 540 of the default template, applied to 600s.
-    const expectedTroubleSec = Math.floor((120 / 540) * 600);
-    expect(sumDur(troubleBlocks)).toBe(expectedTroubleSec);
+    expect(troubleBlocks.map((b) => b.durationSec)).toEqual([120, 120, 120]);
   });
 
   it("each trouble block reads its own spot's BPM via tempoFn", () => {
@@ -177,6 +202,20 @@ describe("buildBlocks — default template totals", () => {
     expect(troubleBlocks[2].promotes).toEqual({ kind: "trouble", index: 2 });
   });
 
+  it("trouble blocks respect recipes with no progression", () => {
+    const template = cloneSongTemplate(DEFAULT_SONG_BLOCK_TEMPLATE);
+    template.find((entry) => entry.role === "troubleSpot")!.progression = {
+      kind: "none",
+    };
+    const trouble = buildBlocks(
+      10,
+      makeSong([{ bpm: 150 }], { blockTemplate: template }),
+    ).find((block) => block.kind === "troubleSpot");
+
+    expect(trouble?.promotes).toBeNull();
+    expect(trouble?.showEarnedButton).toBe(false);
+  });
+
   it("ceiling block still promotes working", () => {
     const blocks = buildBlocks(10, makeSong([{ bpm: 150 }]));
     const ceiling = blocks.find((b) => b.kind === "ceilingWork");
@@ -184,38 +223,88 @@ describe("buildBlocks — default template totals", () => {
   });
 });
 
-describe("buildBlocks — scaling to longer durations", () => {
-  it("15 min with 1 spot sums to exactly 900 s", () => {
+describe("buildBlocks — fixed default durations", () => {
+  it("returns no smart body blocks when fixed-only base blocks underfill the selected length", () => {
+    const blocks = buildBlocks(
+      10,
+      makeSong([], {
+        includeWarmupBlock: false,
+        blockTemplate: [
+          {
+            id: "fixed-only",
+            role: "ceilingWork",
+            name: "Fixed only",
+            purpose: "test",
+            instructions: ["test"],
+            enabled: true,
+            duration: { kind: "fixed", seconds: 60 },
+            tempoRule: { source: "working" },
+            metronomeEnabled: true,
+            progression: { kind: "working" },
+          },
+        ],
+      }),
+    );
+
+    expect(blocks).toEqual([]);
+  });
+
+  it("15 min with 1 spot rejects the fixed 10-min base as an underfilled plan", () => {
     const blocks = buildBlocks(15, makeSong([{ bpm: 150 }]));
-    expect(sumDur(blocks)).toBe(900);
+    expect(blocks).toHaveLength(1);
+    expect(blocks[0].kind).toBe("consciousPractice");
+    expect(sumDur(blocks)).toBe(0);
   });
 
-  it("20 min with 2 spots sums to exactly 1200 s", () => {
+  it("20 min with 2 spots rejects the fixed 10-min base as an underfilled plan", () => {
     const blocks = buildBlocks(20, makeSong([{ bpm: 150 }, { bpm: 160 }]));
-    expect(sumDur(blocks)).toBe(1200);
+    expect(blocks).toHaveLength(1);
+    expect(blocks[0].kind).toBe("consciousPractice");
+    expect(sumDur(blocks)).toBe(0);
   });
 
-  it("30 min with 1 spot sums to exactly 1800 s", () => {
+  it("30 min with 1 spot rejects the fixed 10-min base as an underfilled plan", () => {
     const blocks = buildBlocks(30, makeSong([{ bpm: 150 }]));
-    expect(sumDur(blocks)).toBe(1800);
+    expect(blocks).toHaveLength(1);
+    expect(blocks[0].kind).toBe("consciousPractice");
+    expect(sumDur(blocks)).toBe(0);
   });
 
-  it("5 min with 1 spot sums to exactly 300 s", () => {
+  it("5 min with 1 spot cannot fit the fixed 10-min base and returns only the warm-up", () => {
     const blocks = buildBlocks(5, makeSong([{ bpm: 150 }]));
-    expect(sumDur(blocks)).toBe(300);
+    expect(blocks).toHaveLength(1);
+    expect(blocks[0].kind).toBe("consciousPractice");
+    expect(sumDur(blocks)).toBe(0);
   });
 });
 
 describe("buildBlocks — custom templates", () => {
-  it("disabling a row drops it and redistributes time", () => {
+  it("structure key changes when only a block duration changes", () => {
+    const firstTemplate = cloneSongTemplate(DEFAULT_SONG_BLOCK_TEMPLATE);
+    const secondTemplate = cloneSongTemplate(DEFAULT_SONG_BLOCK_TEMPLATE);
+    secondTemplate[0] = {
+      ...secondTemplate[0],
+      duration: { kind: "fixed", seconds: 120 },
+    };
+
+    expect(
+      songBlockStructureKey(makeSong([], { blockTemplate: firstTemplate })),
+    ).not.toBe(
+      songBlockStructureKey(makeSong([], { blockTemplate: secondTemplate })),
+    );
+  });
+
+  it("disabling a fixed row rejects the underfilled fixed-only base plan", () => {
     const template: SongBlockTemplate = cloneSongTemplate(
       DEFAULT_SONG_BLOCK_TEMPLATE,
     );
-    const idx = template.findIndex((e) => e.kind === "overspeed");
+    const idx = template.findIndex((e) => e.role === "overspeed");
     template[idx].enabled = false;
     const blocks = buildBlocks(10, makeSong([{ bpm: 150 }], { blockTemplate: template }));
     expect(blocks.some((b) => b.kind === "overspeed")).toBe(false);
-    expect(sumDur(blocks)).toBe(600);
+    expect(blocks).toHaveLength(1);
+    expect(blocks[0].kind).toBe("consciousPractice");
+    expect(sumDur(blocks)).toBe(0);
   });
 
   it("reordering changes the body order in output", () => {
@@ -223,7 +312,7 @@ describe("buildBlocks — custom templates", () => {
       DEFAULT_SONG_BLOCK_TEMPLATE,
     );
     // Move consolidation to the front.
-    const consIdx = template.findIndex((e) => e.kind === "consolidation");
+    const consIdx = template.findIndex((e) => e.role === "consolidation");
     const [consEntry] = template.splice(consIdx, 1);
     template.unshift(consEntry);
     const blocks = buildBlocks(10, makeSong([{ bpm: 150 }], { blockTemplate: template }));
@@ -244,8 +333,16 @@ describe("buildBlocks — custom templates", () => {
 
   it("custom weights split time proportionally", () => {
     const template: SongBlockTemplate = [
-      { kind: "slowReference", enabled: true, weight: 100 },
-      { kind: "ceilingWork", enabled: true, weight: 200 },
+      {
+        ...DEFAULT_SONG_BLOCK_TEMPLATE.find((e) => e.role === "slowReference")!,
+        id: "slow",
+        duration: { kind: "percent", percent: 50 },
+      },
+      {
+        ...DEFAULT_SONG_BLOCK_TEMPLATE.find((e) => e.role === "ceilingWork")!,
+        id: "ceiling",
+        duration: { kind: "percent", percent: 100 },
+      },
     ];
     const blocks = buildBlocks(
       5,
@@ -253,9 +350,59 @@ describe("buildBlocks — custom templates", () => {
     );
     expect(blocks).toHaveLength(2);
     expect(sumDur(blocks)).toBe(300);
-    // 100/300 of 300s = 100s; 200/300 of 300s = 200s.
+    // 50/150 of 300s = 100s; 100/150 of 300s = 200s.
     expect(blocks[0].durationSec).toBe(100);
     expect(blocks[1].durationSec).toBe(200);
+  });
+
+  it("fixed blocks keep their flat duration while percent blocks divide the rest", () => {
+    const template: SongBlockTemplate = [
+      {
+        ...DEFAULT_SONG_BLOCK_TEMPLATE.find((e) => e.role === "slowReference")!,
+        id: "fixed",
+        duration: { kind: "fixed", seconds: 120 },
+      },
+      {
+        ...DEFAULT_SONG_BLOCK_TEMPLATE.find((e) => e.role === "ceilingWork")!,
+        id: "percent",
+        duration: { kind: "percent", percent: 100 },
+      },
+    ];
+    const blocks = buildBlocks(
+      10,
+      makeSong([], { blockTemplate: template, includeWarmupBlock: false }),
+    );
+    expect(blocks.map((b) => b.durationSec)).toEqual([120, 480]);
+  });
+});
+
+describe("buildBlocks — timed and open-ended song modes", () => {
+  it("timed mode returns a single countdown block after optional warm-up", () => {
+    const song = makeSong([], {
+      practiceMode: "timed",
+      includeWarmupBlock: false,
+      metronomeEnabled: false,
+      workingBpm: null,
+    });
+    const blocks = buildBlocks(12, song);
+    expect(blocks).toHaveLength(1);
+    expect(blocks[0].kind).toBe("timedPractice");
+    expect(blocks[0].durationSec).toBe(720);
+    expect(blocks[0].metronomeEnabled).toBe(false);
+    expect(blocks[0].showEarnedButton).toBe(false);
+  });
+
+  it("openEnded mode returns one unbounded count-up block without warm-up", () => {
+    const song = makeSong([], {
+      practiceMode: "openEnded",
+      metronomeEnabled: false,
+      workingBpm: null,
+    });
+    const blocks = buildBlocks(10, song);
+    expect(blocks).toHaveLength(1);
+    expect(blocks[0].kind).toBe("openEnded");
+    expect(blocks[0].unbounded).toBe(true);
+    expect(blocks[0].metronomeEnabled).toBe(false);
   });
 });
 

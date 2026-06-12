@@ -93,7 +93,7 @@ describe("createManualSessionRecord", () => {
 
     expect(record.itemId).toBe(FREE_FORM_SESSION_ID);
     expect(record.itemTitle).toBe("Jam session");
-    expect(record.itemKind).toBe("song"); // Default to song for free-form
+    expect(record.itemKind).toBe("freePlay");
     expect(record.startWorkingBpm).toBeUndefined();
     expect(record.endWorkingBpm).toBeUndefined();
   });

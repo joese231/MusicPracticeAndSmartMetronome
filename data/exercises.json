@@ -6,10 +6,10 @@
     "notes": "Emil's",
     "workingBpm": 213,
     "stepPercent": 2.5,
-    "totalPracticeSec": 2980,
+    "totalPracticeSec": 3106,
     "sortIndex": 0,
     "createdAt": "2026-04-25T12:50:42.141Z",
-    "updatedAt": "2026-06-08T14:48:36.882Z",
+    "updatedAt": "2026-06-10T15:31:39.167Z",
     "sessionMinutes": 5,
     "warmupBpm": 70,
     "openEnded": false,
@@ -18,19 +18,82 @@
     "includeWarmupBlock": true,
     "blockTemplate": [
       {
-        "kind": "exerciseBuild",
+        "id": "exercise-exerciseBuild",
+        "role": "exerciseBuild",
+        "name": "Build",
+        "purpose": "@ target BPM (working + 1 step)",
+        "instructions": [
+          "Target tempo - internalize the motion cleanly.",
+          "Three clean-and-relaxed reps earns a new working tempo."
+        ],
         "enabled": true,
-        "weight": 180
+        "duration": {
+          "kind": "fixed",
+          "seconds": 210
+        },
+        "tempoRule": {
+          "source": "working",
+          "adjustment": {
+            "kind": "steps",
+            "value": 1
+          }
+        },
+        "metronomeEnabled": true,
+        "progression": {
+          "kind": "working"
+        }
       },
       {
-        "kind": "exerciseBurst",
+        "id": "exercise-exerciseBurst",
+        "role": "exerciseBurst",
+        "name": "Burst",
+        "purpose": "@ overspeed (working + 2 steps)",
+        "instructions": [
+          "Short burst above working tempo.",
+          "Push speed without trying to earn anything here."
+        ],
         "enabled": true,
-        "weight": 60
+        "duration": {
+          "kind": "fixed",
+          "seconds": 60
+        },
+        "tempoRule": {
+          "source": "working",
+          "adjustment": {
+            "kind": "steps",
+            "value": 2
+          }
+        },
+        "metronomeEnabled": true,
+        "progression": {
+          "kind": "none"
+        }
       },
       {
-        "kind": "exerciseCoolDown",
+        "id": "exercise-exerciseCoolDown",
+        "role": "exerciseCoolDown",
+        "name": "Cool Down",
+        "purpose": "@ 80% working",
+        "instructions": [
+          "Slow and relaxed - release tension from the burst.",
+          "End with clean reps."
+        ],
         "enabled": true,
-        "weight": 30
+        "duration": {
+          "kind": "fixed",
+          "seconds": 30
+        },
+        "tempoRule": {
+          "source": "working",
+          "adjustment": {
+            "kind": "percent",
+            "value": 80
+          }
+        },
+        "metronomeEnabled": true,
+        "progression": {
+          "kind": "none"
+        }
       }
     ]
   },
@@ -50,22 +113,85 @@
     "totalPracticeSec": 2839,
     "sortIndex": 1,
     "createdAt": "2026-04-27T17:02:58.069Z",
-    "updatedAt": "2026-06-08T14:55:38.900Z",
+    "updatedAt": "2026-06-10T15:31:39.167Z",
     "blockTemplate": [
       {
-        "kind": "exerciseBuild",
+        "id": "exercise-exerciseBuild",
+        "role": "exerciseBuild",
+        "name": "Build",
+        "purpose": "@ target BPM (working + 1 step)",
+        "instructions": [
+          "Target tempo - internalize the motion cleanly.",
+          "Three clean-and-relaxed reps earns a new working tempo."
+        ],
         "enabled": true,
-        "weight": 180
+        "duration": {
+          "kind": "fixed",
+          "seconds": 210
+        },
+        "tempoRule": {
+          "source": "working",
+          "adjustment": {
+            "kind": "steps",
+            "value": 1
+          }
+        },
+        "metronomeEnabled": true,
+        "progression": {
+          "kind": "working"
+        }
       },
       {
-        "kind": "exerciseBurst",
+        "id": "exercise-exerciseBurst",
+        "role": "exerciseBurst",
+        "name": "Burst",
+        "purpose": "@ overspeed (working + 2 steps)",
+        "instructions": [
+          "Short burst above working tempo.",
+          "Push speed without trying to earn anything here."
+        ],
         "enabled": true,
-        "weight": 60
+        "duration": {
+          "kind": "fixed",
+          "seconds": 60
+        },
+        "tempoRule": {
+          "source": "working",
+          "adjustment": {
+            "kind": "steps",
+            "value": 2
+          }
+        },
+        "metronomeEnabled": true,
+        "progression": {
+          "kind": "none"
+        }
       },
       {
-        "kind": "exerciseCoolDown",
+        "id": "exercise-exerciseCoolDown",
+        "role": "exerciseCoolDown",
+        "name": "Cool Down",
+        "purpose": "@ 80% working",
+        "instructions": [
+          "Slow and relaxed - release tension from the burst.",
+          "End with clean reps."
+        ],
         "enabled": true,
-        "weight": 30
+        "duration": {
+          "kind": "fixed",
+          "seconds": 30
+        },
+        "tempoRule": {
+          "source": "working",
+          "adjustment": {
+            "kind": "percent",
+            "value": 80
+          }
+        },
+        "metronomeEnabled": true,
+        "progression": {
+          "kind": "none"
+        }
       }
     ]
   },
@@ -80,7 +206,7 @@
     "totalPracticeSec": 2930,
     "sortIndex": 2,
     "createdAt": "2026-04-25T13:10:47.389Z",
-    "updatedAt": "2026-06-08T15:02:24.198Z",
+    "updatedAt": "2026-06-10T15:31:39.167Z",
     "warmupBpm": null,
     "openEnded": false,
     "metronomeEnabled": true,
@@ -88,19 +214,82 @@
     "includeWarmupBlock": true,
     "blockTemplate": [
       {
-        "kind": "exerciseBuild",
+        "id": "exercise-exerciseBuild",
+        "role": "exerciseBuild",
+        "name": "Build",
+        "purpose": "@ target BPM (working + 1 step)",
+        "instructions": [
+          "Target tempo - internalize the motion cleanly.",
+          "Three clean-and-relaxed reps earns a new working tempo."
+        ],
         "enabled": true,
-        "weight": 180
+        "duration": {
+          "kind": "fixed",
+          "seconds": 210
+        },
+        "tempoRule": {
+          "source": "working",
+          "adjustment": {
+            "kind": "steps",
+            "value": 1
+          }
+        },
+        "metronomeEnabled": true,
+        "progression": {
+          "kind": "working"
+        }
       },
       {
-        "kind": "exerciseBurst",
+        "id": "exercise-exerciseBurst",
+        "role": "exerciseBurst",
+        "name": "Burst",
+        "purpose": "@ overspeed (working + 2 steps)",
+        "instructions": [
+          "Short burst above working tempo.",
+          "Push speed without trying to earn anything here."
+        ],
         "enabled": true,
-        "weight": 60
+        "duration": {
+          "kind": "fixed",
+          "seconds": 60
+        },
+        "tempoRule": {
+          "source": "working",
+          "adjustment": {
+            "kind": "steps",
+            "value": 2
+          }
+        },
+        "metronomeEnabled": true,
+        "progression": {
+          "kind": "none"
+        }
       },
       {
-        "kind": "exerciseCoolDown",
+        "id": "exercise-exerciseCoolDown",
+        "role": "exerciseCoolDown",
+        "name": "Cool Down",
+        "purpose": "@ 80% working",
+        "instructions": [
+          "Slow and relaxed - release tension from the burst.",
+          "End with clean reps."
+        ],
         "enabled": true,
-        "weight": 30
+        "duration": {
+          "kind": "fixed",
+          "seconds": 30
+        },
+        "tempoRule": {
+          "source": "working",
+          "adjustment": {
+            "kind": "percent",
+            "value": 80
+          }
+        },
+        "metronomeEnabled": true,
+        "progression": {
+          "kind": "none"
+        }
       }
     ]
   },
@@ -115,7 +304,7 @@
     "totalPracticeSec": 3079,
     "sortIndex": 3,
     "createdAt": "2026-04-25T13:11:25.810Z",
-    "updatedAt": "2026-06-08T15:09:47.857Z",
+    "updatedAt": "2026-06-10T15:31:39.167Z",
     "warmupBpm": null,
     "openEnded": false,
     "metronomeEnabled": true,
@@ -123,19 +312,82 @@
     "includeWarmupBlock": true,
     "blockTemplate": [
       {
-        "kind": "exerciseBuild",
+        "id": "exercise-exerciseBuild",
+        "role": "exerciseBuild",
+        "name": "Build",
+        "purpose": "@ target BPM (working + 1 step)",
+        "instructions": [
+          "Target tempo - internalize the motion cleanly.",
+          "Three clean-and-relaxed reps earns a new working tempo."
+        ],
         "enabled": true,
-        "weight": 180
+        "duration": {
+          "kind": "fixed",
+          "seconds": 210
+        },
+        "tempoRule": {
+          "source": "working",
+          "adjustment": {
+            "kind": "steps",
+            "value": 1
+          }
+        },
+        "metronomeEnabled": true,
+        "progression": {
+          "kind": "working"
+        }
       },
       {
-        "kind": "exerciseBurst",
+        "id": "exercise-exerciseBurst",
+        "role": "exerciseBurst",
+        "name": "Burst",
+        "purpose": "@ overspeed (working + 2 steps)",
+        "instructions": [
+          "Short burst above working tempo.",
+          "Push speed without trying to earn anything here."
+        ],
         "enabled": true,
-        "weight": 60
+        "duration": {
+          "kind": "fixed",
+          "seconds": 60
+        },
+        "tempoRule": {
+          "source": "working",
+          "adjustment": {
+            "kind": "steps",
+            "value": 2
+          }
+        },
+        "metronomeEnabled": true,
+        "progression": {
+          "kind": "none"
+        }
       },
       {
-        "kind": "exerciseCoolDown",
+        "id": "exercise-exerciseCoolDown",
+        "role": "exerciseCoolDown",
+        "name": "Cool Down",
+        "purpose": "@ 80% working",
+        "instructions": [
+          "Slow and relaxed - release tension from the burst.",
+          "End with clean reps."
+        ],
         "enabled": true,
-        "weight": 30
+        "duration": {
+          "kind": "fixed",
+          "seconds": 30
+        },
+        "tempoRule": {
+          "source": "working",
+          "adjustment": {
+            "kind": "percent",
+            "value": 80
+          }
+        },
+        "metronomeEnabled": true,
+        "progression": {
+          "kind": "none"
+        }
       }
     ]
   },
@@ -150,7 +402,7 @@
     "totalPracticeSec": 2880,
     "sortIndex": 4,
     "createdAt": "2026-04-25T13:13:02.366Z",
-    "updatedAt": "2026-06-08T15:15:47.364Z",
+    "updatedAt": "2026-06-10T15:31:39.167Z",
     "warmupBpm": null,
     "openEnded": false,
     "metronomeEnabled": true,
@@ -158,19 +410,82 @@
     "includeWarmupBlock": true,
     "blockTemplate": [
       {
-        "kind": "exerciseBuild",
+        "id": "exercise-exerciseBuild",
+        "role": "exerciseBuild",
+        "name": "Build",
+        "purpose": "@ target BPM (working + 1 step)",
+        "instructions": [
+          "Target tempo - internalize the motion cleanly.",
+          "Three clean-and-relaxed reps earns a new working tempo."
+        ],
         "enabled": true,
-        "weight": 180
+        "duration": {
+          "kind": "fixed",
+          "seconds": 210
+        },
+        "tempoRule": {
+          "source": "working",
+          "adjustment": {
+            "kind": "steps",
+            "value": 1
+          }
+        },
+        "metronomeEnabled": true,
+        "progression": {
+          "kind": "working"
+        }
       },
       {
-        "kind": "exerciseBurst",
+        "id": "exercise-exerciseBurst",
+        "role": "exerciseBurst",
+        "name": "Burst",
+        "purpose": "@ overspeed (working + 2 steps)",
+        "instructions": [
+          "Short burst above working tempo.",
+          "Push speed without trying to earn anything here."
+        ],
         "enabled": true,
-        "weight": 60
+        "duration": {
+          "kind": "fixed",
+          "seconds": 60
+        },
+        "tempoRule": {
+          "source": "working",
+          "adjustment": {
+            "kind": "steps",
+            "value": 2
+          }
+        },
+        "metronomeEnabled": true,
+        "progression": {
+          "kind": "none"
+        }
       },
       {
-        "kind": "exerciseCoolDown",
+        "id": "exercise-exerciseCoolDown",
+        "role": "exerciseCoolDown",
+        "name": "Cool Down",
+        "purpose": "@ 80% working",
+        "instructions": [
+          "Slow and relaxed - release tension from the burst.",
+          "End with clean reps."
+        ],
         "enabled": true,
-        "weight": 30
+        "duration": {
+          "kind": "fixed",
+          "seconds": 30
+        },
+        "tempoRule": {
+          "source": "working",
+          "adjustment": {
+            "kind": "percent",
+            "value": 80
+          }
+        },
+        "metronomeEnabled": true,
+        "progression": {
+          "kind": "none"
+        }
       }
     ]
   },
@@ -185,7 +500,7 @@
     "totalPracticeSec": 3292,
     "sortIndex": 5,
     "createdAt": "2026-04-25T13:15:48.662Z",
-    "updatedAt": "2026-06-08T15:25:44.278Z",
+    "updatedAt": "2026-06-10T15:31:39.167Z",
     "warmupBpm": 40,
     "openEnded": false,
     "metronomeEnabled": true,
@@ -193,19 +508,82 @@
     "includeWarmupBlock": true,
     "blockTemplate": [
       {
-        "kind": "exerciseBuild",
+        "id": "exercise-exerciseBuild",
+        "role": "exerciseBuild",
+        "name": "Build",
+        "purpose": "@ target BPM (working + 1 step)",
+        "instructions": [
+          "Target tempo - internalize the motion cleanly.",
+          "Three clean-and-relaxed reps earns a new working tempo."
+        ],
         "enabled": true,
-        "weight": 180
+        "duration": {
+          "kind": "fixed",
+          "seconds": 210
+        },
+        "tempoRule": {
+          "source": "working",
+          "adjustment": {
+            "kind": "steps",
+            "value": 1
+          }
+        },
+        "metronomeEnabled": true,
+        "progression": {
+          "kind": "working"
+        }
       },
       {
-        "kind": "exerciseBurst",
+        "id": "exercise-exerciseBurst",
+        "role": "exerciseBurst",
+        "name": "Burst",
+        "purpose": "@ overspeed (working + 2 steps)",
+        "instructions": [
+          "Short burst above working tempo.",
+          "Push speed without trying to earn anything here."
+        ],
         "enabled": true,
-        "weight": 60
+        "duration": {
+          "kind": "fixed",
+          "seconds": 60
+        },
+        "tempoRule": {
+          "source": "working",
+          "adjustment": {
+            "kind": "steps",
+            "value": 2
+          }
+        },
+        "metronomeEnabled": true,
+        "progression": {
+          "kind": "none"
+        }
       },
       {
-        "kind": "exerciseCoolDown",
+        "id": "exercise-exerciseCoolDown",
+        "role": "exerciseCoolDown",
+        "name": "Cool Down",
+        "purpose": "@ 80% working",
+        "instructions": [
+          "Slow and relaxed - release tension from the burst.",
+          "End with clean reps."
+        ],
         "enabled": true,
-        "weight": 30
+        "duration": {
+          "kind": "fixed",
+          "seconds": 30
+        },
+        "tempoRule": {
+          "source": "working",
+          "adjustment": {
+            "kind": "percent",
+            "value": 80
+          }
+        },
+        "metronomeEnabled": true,
+        "progression": {
+          "kind": "none"
+        }
       }
     ]
   },
@@ -223,24 +601,87 @@
     "totalPracticeSec": 1,
     "sortIndex": 6,
     "createdAt": "2026-04-27T11:17:38.941Z",
-    "updatedAt": "2026-05-20T11:04:22.295Z",
+    "updatedAt": "2026-06-10T15:31:39.167Z",
     "practiceMode": "smart",
     "includeWarmupBlock": true,
     "blockTemplate": [
       {
-        "kind": "exerciseBuild",
+        "id": "exercise-exerciseBuild",
+        "role": "exerciseBuild",
+        "name": "Build",
+        "purpose": "@ target BPM (working + 1 step)",
+        "instructions": [
+          "Target tempo - internalize the motion cleanly.",
+          "Three clean-and-relaxed reps earns a new working tempo."
+        ],
         "enabled": true,
-        "weight": 210
+        "duration": {
+          "kind": "fixed",
+          "seconds": 210
+        },
+        "tempoRule": {
+          "source": "working",
+          "adjustment": {
+            "kind": "steps",
+            "value": 1
+          }
+        },
+        "metronomeEnabled": true,
+        "progression": {
+          "kind": "working"
+        }
       },
       {
-        "kind": "exerciseBurst",
+        "id": "exercise-exerciseBurst",
+        "role": "exerciseBurst",
+        "name": "Burst",
+        "purpose": "@ overspeed (working + 2 steps)",
+        "instructions": [
+          "Short burst above working tempo.",
+          "Push speed without trying to earn anything here."
+        ],
         "enabled": true,
-        "weight": 60
+        "duration": {
+          "kind": "fixed",
+          "seconds": 60
+        },
+        "tempoRule": {
+          "source": "working",
+          "adjustment": {
+            "kind": "steps",
+            "value": 2
+          }
+        },
+        "metronomeEnabled": true,
+        "progression": {
+          "kind": "none"
+        }
       },
       {
-        "kind": "exerciseCoolDown",
+        "id": "exercise-exerciseCoolDown",
+        "role": "exerciseCoolDown",
+        "name": "Cool Down",
+        "purpose": "@ 80% working",
+        "instructions": [
+          "Slow and relaxed - release tension from the burst.",
+          "End with clean reps."
+        ],
         "enabled": true,
-        "weight": 30
+        "duration": {
+          "kind": "fixed",
+          "seconds": 30
+        },
+        "tempoRule": {
+          "source": "working",
+          "adjustment": {
+            "kind": "percent",
+            "value": 80
+          }
+        },
+        "metronomeEnabled": true,
+        "progression": {
+          "kind": "none"
+        }
       }
     ]
   },
@@ -259,24 +700,87 @@
     "includeWarmupBlock": true,
     "blockTemplate": [
       {
-        "kind": "exerciseBuild",
+        "id": "exercise-exerciseBuild",
+        "role": "exerciseBuild",
+        "name": "Build",
+        "purpose": "@ target BPM (working + 1 step)",
+        "instructions": [
+          "Target tempo - internalize the motion cleanly.",
+          "Three clean-and-relaxed reps earns a new working tempo."
+        ],
         "enabled": true,
-        "weight": 180
+        "duration": {
+          "kind": "fixed",
+          "seconds": 210
+        },
+        "tempoRule": {
+          "source": "working",
+          "adjustment": {
+            "kind": "steps",
+            "value": 1
+          }
+        },
+        "metronomeEnabled": true,
+        "progression": {
+          "kind": "working"
+        }
       },
       {
-        "kind": "exerciseBurst",
+        "id": "exercise-exerciseBurst",
+        "role": "exerciseBurst",
+        "name": "Burst",
+        "purpose": "@ overspeed (working + 2 steps)",
+        "instructions": [
+          "Short burst above working tempo.",
+          "Push speed without trying to earn anything here."
+        ],
         "enabled": true,
-        "weight": 60
+        "duration": {
+          "kind": "fixed",
+          "seconds": 60
+        },
+        "tempoRule": {
+          "source": "working",
+          "adjustment": {
+            "kind": "steps",
+            "value": 2
+          }
+        },
+        "metronomeEnabled": true,
+        "progression": {
+          "kind": "none"
+        }
       },
       {
-        "kind": "exerciseCoolDown",
+        "id": "exercise-exerciseCoolDown",
+        "role": "exerciseCoolDown",
+        "name": "Cool Down",
+        "purpose": "@ 80% working",
+        "instructions": [
+          "Slow and relaxed - release tension from the burst.",
+          "End with clean reps."
+        ],
         "enabled": true,
-        "weight": 30
+        "duration": {
+          "kind": "fixed",
+          "seconds": 30
+        },
+        "tempoRule": {
+          "source": "working",
+          "adjustment": {
+            "kind": "percent",
+            "value": 80
+          }
+        },
+        "metronomeEnabled": true,
+        "progression": {
+          "kind": "none"
+        }
       }
     ],
     "totalPracticeSec": 37,
     "sortIndex": 7,
     "createdAt": "2026-05-08T11:49:57.309Z",
-    "updatedAt": "2026-05-08T11:50:51.980Z"
+    "updatedAt": "2026-06-10T15:31:39.167Z"
   }
 ]

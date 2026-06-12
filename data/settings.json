@@ -5,48 +5,221 @@
   "autoAdvanceBlocks": false,
   "interSongPauseSec": 20,
   "defaultPracticeMode": "smart",
+  "defaultSongSessionMinutes": 10,
+  "defaultExerciseSessionMinutes": 5,
   "defaultSongBlockTemplate": [
     {
-      "kind": "slowReference",
+      "id": "song-slowReference",
+      "role": "slowReference",
+      "name": "Slow Reference",
+      "purpose": "@ 80% working",
+      "instructions": [
+        "Play the full tune slowly and relaxed.",
+        "Stay here until you can play one clean-enough repetition of the song."
+      ],
       "enabled": true,
-      "weight": 90
+      "duration": {
+        "kind": "fixed",
+        "seconds": 90
+      },
+      "tempoRule": {
+        "source": "working",
+        "adjustment": {
+          "kind": "percent",
+          "value": 80
+        }
+      },
+      "metronomeEnabled": true,
+      "progression": {
+        "kind": "none"
+      }
     },
     {
-      "kind": "troubleSpot",
+      "id": "song-troubleSpot",
+      "role": "troubleSpot",
+      "name": "Trouble Spot",
+      "purpose": "@ saved trouble BPM, else 80% working",
+      "instructions": [
+        "Loop just the hardest 1-2 bars of the tune.",
+        "Three clean-and-relaxed reps earns the next rung."
+      ],
       "enabled": true,
-      "weight": 120
+      "duration": {
+        "kind": "fixed",
+        "seconds": 120
+      },
+      "tempoRule": {
+        "source": "trouble",
+        "fallback": {
+          "source": "working",
+          "adjustment": {
+            "kind": "percent",
+            "value": 80
+          }
+        }
+      },
+      "metronomeEnabled": true,
+      "progression": {
+        "kind": "trouble"
+      }
     },
     {
-      "kind": "ceilingWork",
+      "id": "song-ceilingWork",
+      "role": "ceilingWork",
+      "name": "Ceiling Work",
+      "purpose": "@ target BPM (working + 1 step)",
+      "instructions": [
+        "Full tune at the target tempo.",
+        "Three clean-and-relaxed reps earns a new working tempo."
+      ],
       "enabled": true,
-      "weight": 180
+      "duration": {
+        "kind": "fixed",
+        "seconds": 300
+      },
+      "tempoRule": {
+        "source": "working",
+        "adjustment": {
+          "kind": "steps",
+          "value": 1
+        }
+      },
+      "metronomeEnabled": true,
+      "progression": {
+        "kind": "working"
+      }
     },
     {
-      "kind": "overspeed",
+      "id": "song-overspeed",
+      "role": "overspeed",
+      "name": "Overspeed",
+      "purpose": "@ overspeed (working + 2 steps)",
+      "instructions": [
+        "Play at least one repetition above your target tempo.",
+        "Messy is OK; the goal is to make target feel slower."
+      ],
       "enabled": true,
-      "weight": 60
+      "duration": {
+        "kind": "fixed",
+        "seconds": 120
+      },
+      "tempoRule": {
+        "source": "working",
+        "adjustment": {
+          "kind": "steps",
+          "value": 2
+        }
+      },
+      "metronomeEnabled": true,
+      "progression": {
+        "kind": "none"
+      }
     },
     {
-      "kind": "consolidation",
+      "id": "song-consolidation",
+      "role": "consolidation",
+      "name": "Consolidation",
+      "purpose": "@ 70% working",
+      "instructions": [
+        "Play relaxed reps below working tempo.",
+        "Stay here until you can play one very relaxed musical pass."
+      ],
       "enabled": true,
-      "weight": 90
+      "duration": {
+        "kind": "fixed",
+        "seconds": 90
+      },
+      "tempoRule": {
+        "source": "working",
+        "adjustment": {
+          "kind": "percent",
+          "value": 70
+        }
+      },
+      "metronomeEnabled": true,
+      "progression": {
+        "kind": "none"
+      }
     }
   ],
   "defaultExerciseBlockTemplate": [
     {
-      "kind": "exerciseBuild",
+      "id": "exercise-exerciseBuild",
+      "role": "exerciseBuild",
+      "name": "Build",
+      "purpose": "@ target BPM (working + 1 step)",
+      "instructions": [
+        "Target tempo - internalize the motion cleanly.",
+        "Three clean-and-relaxed reps earns a new working tempo."
+      ],
       "enabled": true,
-      "weight": 180
+      "duration": {
+        "kind": "fixed",
+        "seconds": 210
+      },
+      "tempoRule": {
+        "source": "working",
+        "adjustment": {
+          "kind": "steps",
+          "value": 1
+        }
+      },
+      "metronomeEnabled": true,
+      "progression": {
+        "kind": "working"
+      }
     },
     {
-      "kind": "exerciseBurst",
+      "id": "exercise-exerciseBurst",
+      "role": "exerciseBurst",
+      "name": "Burst",
+      "purpose": "@ overspeed (working + 2 steps)",
+      "instructions": [
+        "Short burst above working tempo.",
+        "Push speed without trying to earn anything here."
+      ],
       "enabled": true,
-      "weight": 60
+      "duration": {
+        "kind": "fixed",
+        "seconds": 60
+      },
+      "tempoRule": {
+        "source": "working",
+        "adjustment": {
+          "kind": "steps",
+          "value": 2
+        }
+      },
+      "metronomeEnabled": true,
+      "progression": {
+        "kind": "none"
+      }
     },
     {
-      "kind": "exerciseCoolDown",
+      "id": "exercise-exerciseCoolDown",
+      "role": "exerciseCoolDown",
+      "name": "Cool Down",
+      "purpose": "@ 80% working",
+      "instructions": [
+        "Slow and relaxed - release tension from the burst.",
+        "End with clean reps."
+      ],
       "enabled": true,
-      "weight": 30
+      "duration": {
+        "kind": "fixed",
+        "seconds": 30
+      },
+      "tempoRule": {
+        "source": "working",
+        "adjustment": {
+          "kind": "percent",
+          "value": 80
+        }
+      },
+      "metronomeEnabled": true,
+      "progression": {
+        "kind": "none"
+      }
     }
   ]
 }

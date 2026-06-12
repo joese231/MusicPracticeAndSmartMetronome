@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { recoverFromDrift } from "./scheduler";
+import { isPlayableBpm, recoverFromDrift } from "./scheduler";
 
 const P = 0.5; // 120 BPM = 500ms per beat
 
@@ -48,5 +48,20 @@ describe("recoverFromDrift", () => {
   it("exactly-at-threshold is not treated as drift", () => {
     const r = recoverFromDrift(0.98, 1.0, P);
     expect(r.skipped).toBe(false);
+  });
+});
+
+describe("isPlayableBpm", () => {
+  it("rejects invalid or unplayably slow bpm values", () => {
+    expect(isPlayableBpm(null)).toBe(false);
+    expect(isPlayableBpm(undefined)).toBe(false);
+    expect(isPlayableBpm(0)).toBe(false);
+    expect(isPlayableBpm(19)).toBe(false);
+    expect(isPlayableBpm(Number.POSITIVE_INFINITY)).toBe(false);
+  });
+
+  it("accepts finite bpm values at or above 20", () => {
+    expect(isPlayableBpm(20)).toBe(true);
+    expect(isPlayableBpm(120)).toBe(true);
   });
 });

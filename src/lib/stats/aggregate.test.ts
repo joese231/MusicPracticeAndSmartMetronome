@@ -6,6 +6,7 @@ import {
   stalledSongs,
   totalPracticeMinutes,
   currentStreakDays,
+  lastPlayedItemId,
 } from "./aggregate";
 import type { SessionRecord, PromotionEvent } from "@/types/sessionRecord";
 import type { Song } from "@/types/song";
@@ -47,6 +48,8 @@ const mkSong = (id: string): Song => ({
   stepPercent: 2.5,
   practiceMode: "smart",
   includeWarmupBlock: true,
+  defaultSessionMinutes: 10,
+  metronomeEnabled: true,
   totalPracticeSec: 0,
   sortIndex: 0,
   createdAt: "2026-01-01T00:00:00.000Z",
@@ -197,5 +200,27 @@ describe("currentStreakDays", () => {
       mkRec({ id: "c", startedAt: dayBefore.toISOString(), durationSec: 600 }),
     ];
     expect(currentStreakDays(recs, today)).toBe(3);
+  });
+});
+
+describe("lastPlayedItemId", () => {
+  it("ignores first-class free-play records", () => {
+    const records = [
+      mkRec({
+        id: "free",
+        itemId: "__freeplay__",
+        itemKind: "freePlay",
+        itemTitle: "Free Play",
+        startedAt: "2026-04-03T10:00:00.000Z",
+      }),
+      mkRec({
+        id: "song",
+        itemId: "s1",
+        itemKind: "song",
+        startedAt: "2026-04-02T10:00:00.000Z",
+      }),
+    ];
+
+    expect(lastPlayedItemId(records, "song")).toBe("s1");
   });
 });

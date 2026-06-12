@@ -18,14 +18,8 @@ import {
   troubleBlockBpmFor,
 } from "@/lib/session/tempo";
 import {
-  clampSessionMinutes,
-  MAX_SESSION_MINUTES,
-  MIN_SESSION_MINUTES,
   sessionLengthSec,
 } from "@/lib/session/blocks";
-
-const PRESETS = [5, 10, 15, 20, 30];
-const DEFAULT_PRESET = 10;
 
 export default function SongDetailPage() {
   const params = useParams<{ id: string }>();
@@ -44,8 +38,6 @@ export default function SongDetailPage() {
 
   const [editing, setEditing] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
-  const [selectedMinutes, setSelectedMinutes] = useState<number>(DEFAULT_PRESET);
-  const [customMinutes, setCustomMinutes] = useState<string>("");
 
   useEffect(() => {
     if (!loaded) void load();
@@ -59,26 +51,23 @@ export default function SongDetailPage() {
 
   const helperText = useMemo(() => {
     if (!song) return "";
+    const selectedMinutes = song.defaultSessionMinutes;
     const lengthSec = sessionLengthSec(selectedMinutes, song);
     const lengthMin = Math.round(lengthSec / 60);
     const count = song.troubleSpots.length;
     const tail =
       " A Conscious Practice warm-up runs first — you end it when ready. Blocks pause between each other so you can finish your current pass — actual wall-clock length will be a bit longer.";
-    if (selectedMinutes === 5) {
-      return "5-min compact session — skips trouble-spot blocks by design." + tail;
-    }
     if (count === 0) {
       return `${selectedMinutes} min base, no trouble spots → ${lengthMin} min of playing.` + tail;
     }
     if (count === 1) {
       return `${selectedMinutes} min base, 1 trouble spot → ${lengthMin} min of playing.` + tail;
     }
-    const extra = count - 1;
     return (
-      `${selectedMinutes} min base + ${extra} extra trouble spot${extra > 1 ? "s" : ""} → ${lengthMin} min of playing.` +
+      `${selectedMinutes} min base, ${count} trouble spots → ${lengthMin} min of playing.` +
       tail
     );
-  }, [selectedMinutes, song]);
+  }, [song]);
 
   if (!loaded) {
     return (
@@ -102,22 +91,9 @@ export default function SongDetailPage() {
   const slowRef = slowReferenceBpm(song);
   const consolidation = consolidationBpm(song);
 
-  const handlePickPreset = (m: number) => {
-    setSelectedMinutes(m);
-    setCustomMinutes("");
-  };
-
-  const handleStartCustom = () => {
-    const parsed = parseInt(customMinutes, 10);
-    if (!Number.isFinite(parsed)) return;
-    const clamped = clampSessionMinutes(parsed);
+  const handleStartSession = () => {
     unlockSharedAudioContext();
-    router.push(`/session/${song.id}?minutes=${clamped}`);
-  };
-
-  const handleStartPreset = () => {
-    unlockSharedAudioContext();
-    router.push(`/session/${song.id}?minutes=${selectedMinutes}`);
+    router.push(`/session/${song.id}`);
   };
 
   return (
@@ -187,57 +163,25 @@ export default function SongDetailPage() {
         <section className="rounded-lg border border-bg-border bg-bg-elevated p-5">
           <h2 className="text-lg font-semibold">Start session</h2>
 
-          <div className="mt-4 flex flex-wrap items-center gap-2">
-            {PRESETS.map((m) => {
-              const selected = selectedMinutes === m && customMinutes === "";
-              return (
-                <button
-                  key={m}
-                  onClick={() => handlePickPreset(m)}
-                  className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
-                    selected
-                      ? "bg-accent text-black"
-                      : "border border-bg-border text-neutral-300 hover:border-accent hover:text-neutral-100"
-                  }`}
-                >
-                  {m} min
-                </button>
-              );
-            })}
-            <div className="flex items-center gap-2 pl-2">
-              <input
-                type="number"
-                inputMode="numeric"
-                min={MIN_SESSION_MINUTES}
-                max={MAX_SESSION_MINUTES}
-                placeholder="Custom"
-                value={customMinutes}
-                onChange={(e) => {
-                  setCustomMinutes(e.target.value);
-                  const parsed = parseInt(e.target.value, 10);
-                  if (Number.isFinite(parsed)) {
-                    setSelectedMinutes(clampSessionMinutes(parsed));
-                  }
-                }}
-                className="w-24 rounded-lg border border-bg-border bg-bg px-3 py-2 text-sm text-neutral-100 outline-none focus:border-accent"
-              />
-              <button
-                onClick={handleStartCustom}
-                disabled={customMinutes.trim() === ""}
-                className="rounded-lg border border-bg-border px-3 py-2 text-sm text-neutral-200 transition hover:border-accent disabled:opacity-40"
-              >
-                Start custom
-              </button>
+          <div className="mt-4 rounded-lg border border-bg-border bg-bg/40 px-4 py-3 text-sm text-neutral-300">
+            Saved session length:{" "}
+            <span className="font-semibold text-neutral-100">
+              {song.practiceMode === "openEnded"
+                ? "Open ended"
+                : `${song.defaultSessionMinutes} min`}
+            </span>
+            <div className="mt-1 text-xs text-neutral-500">
+              Change this in Edit song.
             </div>
           </div>
 
           <div className="mt-3 text-xs text-neutral-500">{helperText}</div>
 
           <button
-            onClick={handleStartPreset}
+            onClick={handleStartSession}
             className="mt-4 block w-full rounded-lg bg-accent px-6 py-5 text-center text-xl font-semibold text-black transition hover:bg-accent-strong"
           >
-            Start {selectedMinutes}-min session
+            Start {song.practiceMode === "openEnded" ? "open-ended" : `${song.defaultSessionMinutes}-min`} session
           </button>
         </section>
 
@@ -267,6 +211,8 @@ export default function SongDetailPage() {
                   practiceMode: song.practiceMode,
                   includeWarmupBlock: song.includeWarmupBlock,
                   blockTemplate: song.blockTemplate,
+                  defaultSessionMinutes: song.defaultSessionMinutes,
+                  metronomeEnabled: song.metronomeEnabled,
                 }}
                 onSubmit={async (values) => {
                   await updateSong({

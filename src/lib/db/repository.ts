@@ -21,6 +21,9 @@ export interface Repository {
 
   listSessions(): Promise<SessionRecord[]>;
   appendSession(rec: SessionRecord): Promise<void>;
+  /** Append a completed live session and increment the matching item's
+   * totalPracticeSec in one server request. Idempotent by session id. */
+  completeSession(rec: SessionRecord): Promise<void>;
   /** Edit a session record. Currently only `durationSec` is patchable
    * (server validates: trimming-only, never extending). Returns the updated
    * record. */
@@ -30,6 +33,13 @@ export interface Repository {
   ): Promise<SessionRecord>;
   /** Delete a session record by id. Returns the removed record. */
   deleteSession(id: string): Promise<SessionRecord>;
+  /** Add a signed delta to an item's totalPracticeSec using the latest
+   * persisted row, clamped at 0. Returns the updated total. */
+  adjustPracticeTime(
+    itemKind: "song" | "exercise",
+    itemId: string,
+    deltaSec: number,
+  ): Promise<number>;
 
   /** Zero out totalPracticeSec on every song and exercise, and clear sessions.json. */
   resetAllStatistics(): Promise<void>;

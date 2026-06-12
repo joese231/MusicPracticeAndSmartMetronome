@@ -1,36 +1,29 @@
 import { NextResponse } from "next/server";
-import { promises as fs } from "node:fs";
-import path from "node:path";
+import { readJson, updateJsonAtomic, writeJsonAtomic } from "@/lib/db/fileStore";
+import type { Exercise } from "@/types/exercise";
+import type { Song } from "@/types/song";
+import { nowIso } from "@/lib/session/tempo";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const DATA_DIR = path.join(process.cwd(), "data");
-const FILE_PATH = path.join(DATA_DIR, "practice-time.json");
+const FILE = "practice-time.json";
 
 type PracticeTimeMap = Record<string, number>;
 
-async function readMap(): Promise<PracticeTimeMap> {
-  try {
-    const raw = await fs.readFile(FILE_PATH, "utf8");
-    const parsed = JSON.parse(raw) as unknown;
-    if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) return {};
-    const out: PracticeTimeMap = {};
-    for (const [k, v] of Object.entries(parsed as Record<string, unknown>)) {
-      if (typeof v === "number" && Number.isFinite(v) && v >= 0) {
-        out[k] = Math.round(v);
-      }
+function sanitizeMap(value: unknown): PracticeTimeMap {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return {};
+  const out: PracticeTimeMap = {};
+  for (const [k, v] of Object.entries(value as Record<string, unknown>)) {
+    if (typeof v === "number" && Number.isFinite(v) && v >= 0) {
+      out[k] = Math.round(v);
     }
-    return out;
-  } catch (err) {
-    if ((err as NodeJS.ErrnoException).code === "ENOENT") return {};
-    throw err;
   }
+  return out;
 }
 
-async function writeMap(map: PracticeTimeMap): Promise<void> {
-  await fs.mkdir(DATA_DIR, { recursive: true });
-  await fs.writeFile(FILE_PATH, JSON.stringify(map, null, 2) + "\n", "utf8");
+async function readMap(): Promise<PracticeTimeMap> {
+  return sanitizeMap(await readJson<unknown>(FILE, {}));
 }
 
 export async function GET() {
@@ -68,11 +61,93 @@ export async function POST(req: Request) {
   }
 
   try {
-    const map = await readMap();
-    const next = Math.max(map[id] ?? 0, Math.round(totalPracticeSec));
-    map[id] = next;
-    await writeMap(map);
+    const next = await updateJsonAtomic<unknown, number>(FILE, {}, (stored) => {
+      const map = sanitizeMap(stored);
+      const next = Math.max(map[id] ?? 0, Math.round(totalPracticeSec));
+      map[id] = next;
+      return { value: map, result: next };
+    });
     return NextResponse.json({ id, totalPracticeSec: next });
+  } catch {
+    return NextResponse.json({ error: "write failed" }, { status: 500 });
+  }
+}
+
+export async function PATCH(req: Request) {
+  let body: unknown;
+  try {
+    body = await req.json();
+  } catch {
+    return NextResponse.json({ error: "invalid json" }, { status: 400 });
+  }
+  if (!body || typeof body !== "object" || Array.isArray(body)) {
+    return NextResponse.json({ error: "invalid body" }, { status: 400 });
+  }
+  const { itemKind, itemId, deltaSec } = body as {
+    itemKind?: unknown;
+    itemId?: unknown;
+    deltaSec?: unknown;
+  };
+  if (itemKind !== "song" && itemKind !== "exercise") {
+    return NextResponse.json({ error: "invalid itemKind" }, { status: 400 });
+  }
+  if (typeof itemId !== "string" || itemId.length === 0) {
+    return NextResponse.json({ error: "invalid itemId" }, { status: 400 });
+  }
+  if (typeof deltaSec !== "number" || !Number.isFinite(deltaSec)) {
+    return NextResponse.json({ error: "invalid deltaSec" }, { status: 400 });
+  }
+
+  const file = itemKind === "song" ? "songs.json" : "exercises.json";
+  try {
+    const totalPracticeSec =
+      itemKind === "song"
+        ? await updateJsonAtomic<Song[], number>(file, [], (rows) => {
+            const idx = rows.findIndex((row) => row.id === itemId);
+            if (idx < 0) throw new Error("not-found");
+            const next = rows.slice();
+            const totalPracticeSec = Math.max(
+              0,
+              next[idx].totalPracticeSec + Math.round(deltaSec),
+            );
+            next[idx] = { ...next[idx], totalPracticeSec, updatedAt: nowIso() };
+            return { value: next, result: totalPracticeSec };
+          })
+        : await updateJsonAtomic<Exercise[], number>(file, [], (rows) => {
+            const idx = rows.findIndex((row) => row.id === itemId);
+            if (idx < 0) throw new Error("not-found");
+            const next = rows.slice();
+            const totalPracticeSec = Math.max(
+              0,
+              next[idx].totalPracticeSec + Math.round(deltaSec),
+            );
+            next[idx] = { ...next[idx], totalPracticeSec, updatedAt: nowIso() };
+            return { value: next, result: totalPracticeSec };
+          });
+
+    if (itemKind === "song") {
+      await updateJsonAtomic<unknown, null>(FILE, {}, (stored) => {
+        const map = sanitizeMap(stored);
+        return {
+          value: { ...map, [itemId]: totalPracticeSec },
+          result: null,
+        };
+      });
+    }
+
+    return NextResponse.json({ itemKind, itemId, totalPracticeSec });
+  } catch (err) {
+    if (err instanceof Error && err.message === "not-found") {
+      return NextResponse.json({ error: "item not found" }, { status: 404 });
+    }
+    throw err;
+  }
+}
+
+export async function DELETE() {
+  try {
+    await writeJsonAtomic(FILE, {});
+    return NextResponse.json({ ok: true });
   } catch {
     return NextResponse.json({ error: "write failed" }, { status: 500 });
   }

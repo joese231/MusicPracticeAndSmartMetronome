@@ -4,6 +4,19 @@ import Link from "next/link";
 import type { Song } from "@/types/song";
 import { formatPracticeTime } from "@/lib/format";
 import { useSongsStore } from "@/lib/store/useSongsStore";
+import { bpmLabel } from "./SongCard";
+
+export { bpmLabel };
+
+export function moveSongIds(ids: string[], from: number, to: number): string[] {
+  if (from < 0 || from >= ids.length || to < 0 || to >= ids.length) {
+    return ids;
+  }
+  const next = ids.slice();
+  const [moved] = next.splice(from, 1);
+  next.splice(to, 0, moved);
+  return next;
+}
 
 export function SongList({
   songs,
@@ -46,9 +59,14 @@ export function SongList({
     const from = ids.indexOf(sourceId);
     const to = ids.indexOf(dropId);
     if (from < 0 || to < 0) return;
-    const next = ids.slice();
-    next.splice(from, 1);
-    next.splice(to, 0, sourceId);
+    const next = moveSongIds(ids, from, to);
+    await reorderSongs(next);
+  };
+
+  const moveSong = async (from: number, to: number) => {
+    const ids = songs.map((s) => s.id);
+    const next = moveSongIds(ids, from, to);
+    if (next === ids) return;
     await reorderSongs(next);
   };
 
@@ -59,7 +77,7 @@ export function SongList({
 
   return (
     <ul className="space-y-3">
-      {songs.map((song) => {
+      {songs.map((song, index) => {
         const isDragging = draggingId === song.id;
         const isOver = overId === song.id && draggingId && draggingId !== song.id;
         const isLastPlayed =
@@ -82,6 +100,26 @@ export function SongList({
             } ${isDragging ? "opacity-40" : ""}`}
           >
             <div className="flex items-center gap-3 px-3 py-4">
+              <div className="flex flex-none flex-col gap-1">
+                <button
+                  type="button"
+                  aria-label={`Move ${song.title} up`}
+                  disabled={index === 0}
+                  onClick={() => void moveSong(index, index - 1)}
+                  className="rounded border border-bg-border px-2 py-1 text-xs font-semibold text-neutral-300 transition hover:border-accent/60 hover:bg-bg disabled:cursor-not-allowed disabled:opacity-35 disabled:hover:border-bg-border disabled:hover:bg-transparent"
+                >
+                  Up
+                </button>
+                <button
+                  type="button"
+                  aria-label={`Move ${song.title} down`}
+                  disabled={index === songs.length - 1}
+                  onClick={() => void moveSong(index, index + 1)}
+                  className="rounded border border-bg-border px-2 py-1 text-xs font-semibold text-neutral-300 transition hover:border-accent/60 hover:bg-bg disabled:cursor-not-allowed disabled:opacity-35 disabled:hover:border-bg-border disabled:hover:bg-transparent"
+                >
+                  Down
+                </button>
+              </div>
               <span
                 className="flex-none cursor-grab select-none px-2 text-2xl leading-none text-neutral-500 transition hover:text-neutral-200 active:cursor-grabbing"
                 aria-label="Drag to reorder"
@@ -100,8 +138,7 @@ export function SongList({
                   </h3>
                   <div className="mt-1 flex flex-wrap gap-x-4 gap-y-1 text-sm text-neutral-400">
                     <span>
-                      Working{" "}
-                      <span className="text-neutral-200">{song.workingBpm}</span> BPM
+                      Working <span className="text-neutral-200">{bpmLabel(song)}</span>
                     </span>
                     {song.troubleSpots.length > 0 && (
                       <span>

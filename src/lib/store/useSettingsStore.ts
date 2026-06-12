@@ -20,8 +20,14 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
   },
 
   update: async (patch) => {
-    const next = { ...get().settings, ...patch };
+    const previous = get().settings;
+    const next = { ...previous, ...patch };
     set({ settings: next });
-    await getRepository().saveSettings(next);
+    try {
+      await getRepository().saveSettings(next);
+    } catch (err) {
+      set({ settings: previous });
+      throw err;
+    }
   },
 }));

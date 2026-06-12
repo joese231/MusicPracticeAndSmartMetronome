@@ -96,6 +96,10 @@ export class LocalRepository implements Repository {
     // legacy adapter is migration-only — no-op.
   }
 
+  async completeSession(_rec: SessionRecord): Promise<void> {
+    // legacy adapter is migration-only — no-op.
+  }
+
   async updateSession(
     _id: string,
     patch: { durationSec: number },
@@ -137,6 +141,14 @@ export class LocalRepository implements Repository {
       endTroubleBpms: [],
       promotions: [],
     };
+  }
+
+  async adjustPracticeTime(
+    _itemKind: "song" | "exercise",
+    _itemId: string,
+    _deltaSec: number,
+  ): Promise<number> {
+    return 0;
   }
 
   async resetAllStatistics(): Promise<void> {

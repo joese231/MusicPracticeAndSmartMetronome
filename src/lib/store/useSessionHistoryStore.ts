@@ -7,6 +7,7 @@ type SessionHistoryState = {
   loaded: boolean;
   load: () => Promise<void>;
   append: (rec: SessionRecord) => Promise<void>;
+  complete: (rec: SessionRecord) => Promise<void>;
   /** Patch a session record (currently only durationSec). Returns the
    * updated record so callers can compute deltas. Server validates that
    * durationSec is trimmed-only (never extended). */
@@ -28,6 +29,16 @@ export const useSessionHistoryStore = create<SessionHistoryState>((set, get) => 
   append: async (rec) => {
     set({ records: [...get().records, rec] });
     await getRepository().appendSession(rec);
+  },
+
+  complete: async (rec) => {
+    set({ records: [...get().records, rec] });
+    try {
+      await getRepository().completeSession(rec);
+    } catch (err) {
+      set({ records: get().records.filter((r) => r.id !== rec.id) });
+      throw err;
+    }
   },
 
   update: async (id, patch) => {

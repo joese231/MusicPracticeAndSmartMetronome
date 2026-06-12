@@ -27,6 +27,8 @@ const baseSong = (overrides: Partial<Song> = {}): Song => ({
   createdAt: "2026-01-01T00:00:00.000Z",
   updatedAt: "2026-01-01T00:00:00.000Z",
   ...overrides,
+  defaultSessionMinutes: overrides.defaultSessionMinutes ?? 10,
+  metronomeEnabled: overrides.metronomeEnabled ?? true,
 });
 
 describe("step", () => {

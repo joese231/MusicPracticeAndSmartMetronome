@@ -66,6 +66,10 @@ export default function ExerciseDetailPage() {
   const songLike = exerciseAsSong(exercise);
   const burst = overspeedBpm(songLike);
   const cool = slowReferenceBpm(songLike);
+  const isOpenEnded =
+    exercise.openEnded || exercise.practiceMode === "openEnded";
+  const isSmart = !isOpenEnded && exercise.practiceMode === "smart";
+  const modeLabel = modeName(exercise.practiceMode, isOpenEnded);
 
   const handleStart = () => {
     unlockSharedAudioContext();
@@ -115,15 +119,15 @@ export default function ExerciseDetailPage() {
         <section className="rounded-lg border border-bg-border bg-bg-elevated p-5">
           <div className="flex flex-wrap items-center gap-x-8 gap-y-3 text-sm">
             <Stat label="Working" value={`${exercise.workingBpm} BPM`} highlight />
-            {!exercise.openEnded && (
+            {isSmart && (
               <>
                 <Stat label="Burst (overspeed)" value={`${burst} BPM`} />
                 <Stat label="Cool down" value={`${cool} BPM`} />
-                <Stat label="Length" value={`${exercise.sessionMinutes} min`} />
               </>
             )}
+            {!isOpenEnded && <Stat label="Length" value={`${exercise.sessionMinutes} min`} />}
             <Stat label="Step" value={`${exercise.stepPercent}%`} />
-            {exercise.openEnded && <Stat label="Mode" value="Open-ended" />}
+            <Stat label="Mode" value={modeLabel} />
             {!exercise.metronomeEnabled && <Stat label="Metronome" value="Off" />}
             <Stat label="Total practice" value={formatPracticeTime(exercise.totalPracticeSec)} />
           </div>
@@ -137,18 +141,31 @@ export default function ExerciseDetailPage() {
         <section className="rounded-lg border border-bg-border bg-bg-elevated p-5">
           <h2 className="text-lg font-semibold">Start session</h2>
           <p className="mt-2 text-xs text-neutral-500">
-            {exercise.openEnded ? (
+            {isOpenEnded ? (
               <>
                 Open-ended count-up timer at <span className="font-mono">{exercise.workingBpm}</span>{" "}
                 BPM
                 {exercise.metronomeEnabled ? "" : " (metronome off)"}. Press{" "}
                 <span className="font-mono">Esc</span> when you&apos;re done.
               </>
+            ) : isSmart ? (
+              <>
+                {exercise.includeWarmupBlock
+                  ? "Conscious Practice warm-up (you end it when ready), then "
+                  : ""}
+                your saved smart block sequence for {exercise.sessionMinutes} minutes. Press{" "}
+                <span className="font-mono">+</span> in Build to promote your working BPM.
+              </>
+            ) : exercise.practiceMode === "timed" ? (
+              <>
+                Single {exercise.sessionMinutes}-minute countdown block at{" "}
+                <span className="font-mono">{exercise.workingBpm}</span> BPM
+                {exercise.metronomeEnabled ? "" : " with the metronome off"}.
+              </>
             ) : (
               <>
-                Conscious Practice warm-up (you end it when ready), then{" "}
-                {formatBuildDuration(exercise.sessionMinutes)} Build · 1.5 min Burst · 30 sec Cool Down. Press{" "}
-                <span className="font-mono">+</span> in Build to promote your working BPM.
+                Single {exercise.sessionMinutes}-minute steady metronome block at{" "}
+                <span className="font-mono">{exercise.workingBpm}</span> BPM.
               </>
             )}
           </p>
@@ -156,7 +173,7 @@ export default function ExerciseDetailPage() {
             onClick={handleStart}
             className="mt-4 block w-full rounded-lg bg-accent px-6 py-5 text-center text-xl font-semibold text-black transition hover:bg-accent-strong"
           >
-            {exercise.openEnded
+            {isOpenEnded
               ? "Start open-ended session"
               : `Start ${exercise.sessionMinutes}-min session`}
           </button>
@@ -239,12 +256,11 @@ export default function ExerciseDetailPage() {
   );
 }
 
-function formatBuildDuration(sessionMinutes: number): string {
-  const buildSec = sessionMinutes * 60 - 120;
-  if (buildSec % 60 === 0) return `${buildSec / 60} min`;
-  const min = Math.floor(buildSec / 60);
-  const sec = buildSec % 60;
-  return min > 0 ? `${min} min ${sec} sec` : `${sec} sec`;
+function modeName(mode: string, isOpenEnded: boolean): string {
+  if (isOpenEnded) return "Open-ended";
+  if (mode === "timed") return "Timed";
+  if (mode === "simple") return "Simple";
+  return "Smart";
 }
 
 function Stat({

@@ -1,5 +1,9 @@
 import { v4 as uuidv4 } from "uuid";
-import { SessionRecord, PromotionEvent } from "@/types/sessionRecord";
+import type {
+  PromotionEvent,
+  SessionItemKind,
+  SessionRecord,
+} from "@/types/sessionRecord";
 
 // Threshold for interpreting bare numbers as minutes (e.g., "25" = 25 minutes).
 // Numbers >= 360 are interpreted as seconds instead. 360 = 6 hours.
@@ -110,7 +114,7 @@ export function createManualSessionRecord(
 
   // Determine itemId and itemTitle
   let itemId: string;
-  let itemKind: "song" | "exercise";
+  let itemKind: SessionItemKind;
   let itemTitle: string;
 
   if (exerciseId) {
@@ -124,7 +128,7 @@ export function createManualSessionRecord(
   } else {
     // Free-form session
     itemId = FREE_FORM_SESSION_ID;
-    itemKind = "song"; // Default to song for free-form
+    itemKind = "freePlay";
     itemTitle = sessionTitle || "Manual Session";
   }
 

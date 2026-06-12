@@ -7,7 +7,7 @@ A web app for structured bluegrass speed-practice sessions. It drives a three-te
 The core practice loop is fully working:
 
 - **Songs** — add a song with a working BPM and up to 5 trouble spots, then run timed sessions that walk you through Conscious Practice → Target Work → Overspeed → Ceiling Work → Trouble Spot blocks. Hit "I earned it" to promote your BPM and the metronome jumps to the new tempo on the spot.
-- **Exercises** — run technique drills (scales, arpeggios, picking patterns) on a customizable session length (5–60 min, default 5, saved per exercise). Block flow: Conscious Practice → Build → Burst (fixed 90s) → Cool Down (fixed 30s). The Build block absorbs all remaining time.
+- **Exercises** — run technique drills (scales, arpeggios, picking patterns) on a customizable session length (5–60 min, default 5, saved per exercise). Smart exercise templates default to Conscious Practice → Build (3:30) → Burst (1:00) → Cool Down (0:30), and can be customized with fixed or percent-of-remaining blocks.
 - **Metronome** — Web Audio API look-ahead scheduler with all-beats / backbeat 2&4 toggle and accent control. Tempo changes are phase-preserving (no glitch).
 - **Session recording** — audio captured in-memory for immediate playback on the song/exercise detail page after the session. Ephemeral (resets on next session).
 - **Stats** — calendar heatmap, daily practice minutes, and BPM promotion timeline per song/exercise.

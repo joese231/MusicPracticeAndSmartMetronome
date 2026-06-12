@@ -138,7 +138,7 @@ export default function FreePlayPage() {
       const rec: SessionRecord = {
         id: genSessionRecordId(),
         itemId: FREE_PLAY_ITEM_ID,
-        itemKind: "exercise",
+        itemKind: "freePlay",
         itemTitle: FREE_PLAY_ITEM_TITLE,
         startedAt: startIsoRef.current,
         endedAt: new Date().toISOString(),

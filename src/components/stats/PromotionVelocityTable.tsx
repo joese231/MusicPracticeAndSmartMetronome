@@ -9,7 +9,7 @@ type Item = {
   id: string;
   title: string;
   href: string;
-  workingBpm: number;
+  workingBpm: number | null;
 };
 
 type Props = {
@@ -82,7 +82,7 @@ export function PromotionVelocityTable({
                   </Link>
                 </td>
                 <td className="py-2 pr-3 font-mono tabular-nums text-neutral-300">
-                  {it.workingBpm}
+                  {it.workingBpm ?? "—"}
                 </td>
                 <td className="py-2 pr-3 text-neutral-300">{v.count}</td>
                 <td className="py-2 pr-3 text-neutral-400">

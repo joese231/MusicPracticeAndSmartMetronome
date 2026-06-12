@@ -1,9 +1,8 @@
 import type { BlockDef } from "@/types/block";
 import type { Exercise } from "@/types/exercise";
 import type {
-  ExerciseBlockKind,
   ExerciseBlockTemplate,
-  ExerciseBlockTemplateEntry,
+  SmartBlockRecipe,
 } from "@/types/song";
 import {
   cloneExerciseTemplate,
@@ -11,10 +10,12 @@ import {
 } from "@/types/song";
 import {
   buildSimpleMetronomeBlock,
+  buildTimedPracticeBlock,
   CONSCIOUS_PRACTICE_BLOCK,
   INSTRUCTIONS,
 } from "./blocks";
-import { overspeedBpm, slowReferenceBpm } from "./tempo";
+import { workingBpmForTempo } from "./tempo";
+import { activeRecipeEntries, allocateRecipeBlocks, tempoRuleBlock } from "./templateBlocks";
 
 export const DEFAULT_EXERCISE_MINUTES = 5;
 export const MIN_EXERCISE_MINUTES = 5;
@@ -25,39 +26,6 @@ const clampMinutes = (m: number): number => {
   return Math.max(MIN_EXERCISE_MINUTES, Math.min(MAX_EXERCISE_MINUTES, Math.round(m)));
 };
 
-export const EXERCISE_BLOCK_FACTORIES: Record<
-  ExerciseBlockKind,
-  (durationSec: number) => BlockDef
-> = {
-  exerciseBuild: (durationSec) => ({
-    kind: "exerciseBuild",
-    label: "Build",
-    durationSec,
-    tempoFn: (s) => s.workingBpm,
-    showEarnedButton: true,
-    promotes: { kind: "working" },
-    instructions: INSTRUCTIONS.exerciseBuild,
-  }),
-  exerciseBurst: (durationSec) => ({
-    kind: "overspeed",
-    label: "Burst",
-    durationSec,
-    tempoFn: overspeedBpm,
-    showEarnedButton: false,
-    promotes: null,
-    instructions: INSTRUCTIONS.overspeed,
-  }),
-  exerciseCoolDown: (durationSec) => ({
-    kind: "exerciseCoolDown",
-    label: "Cool Down",
-    durationSec,
-    tempoFn: slowReferenceBpm,
-    showEarnedButton: false,
-    promotes: null,
-    instructions: INSTRUCTIONS.exerciseCoolDown,
-  }),
-};
-
 /**
  * Single open-ended block — count-up timer at the exercise's working BPM.
  */
@@ -66,10 +34,11 @@ export const OPEN_ENDED_BLOCK: BlockDef = {
   label: "Open-ended",
   durationSec: 0,
   unbounded: true,
-  tempoFn: (s) => s.workingBpm,
+  tempoFn: (s) => workingBpmForTempo(s),
   showEarnedButton: false,
   promotes: null,
   instructions: INSTRUCTIONS.openEnded,
+  metronomeEnabled: true,
 };
 
 const exerciseTemplate = (e: Exercise): ExerciseBlockTemplate => {
@@ -81,8 +50,8 @@ const exerciseTemplate = (e: Exercise): ExerciseBlockTemplate => {
 
 const activeExerciseEntries = (
   template: ExerciseBlockTemplate,
-): ExerciseBlockTemplateEntry[] =>
-  template.filter((e) => e.enabled && e.weight > 0);
+): SmartBlockRecipe[] =>
+  activeRecipeEntries(template);
 
 /**
  * Build the body (timed blocks only) for an exercise session of the given
@@ -99,23 +68,7 @@ export const buildExerciseTimedBlocks = (
     : cloneExerciseTemplate(DEFAULT_EXERCISE_BLOCK_TEMPLATE);
   const entries = activeExerciseEntries(template);
   if (entries.length === 0) return [];
-
-  const totalWeight = entries.reduce((a, e) => a + e.weight, 0);
-  const allocs = entries.map((e) => ({
-    entry: e,
-    secs: Math.floor((e.weight / totalWeight) * total),
-  }));
-  const allocatedSum = allocs.reduce((a, x) => a + x.secs, 0);
-  const residual = total - allocatedSum;
-  if (residual !== 0) {
-    const buildIdx = allocs.findIndex((a) => a.entry.kind === "exerciseBuild");
-    const idx = buildIdx >= 0 ? buildIdx : 0;
-    allocs[idx].secs += residual;
-  }
-
-  return allocs.map(({ entry, secs }) =>
-    EXERCISE_BLOCK_FACTORIES[entry.kind](secs),
-  );
+  return allocateRecipeBlocks(total, entries, exerciseRecipeToBlock);
 };
 
 /**
@@ -128,17 +81,52 @@ export const buildExerciseTimedBlocks = (
  *                              template, allocated proportionally.
  */
 export const buildExerciseBlocks = (exercise: Exercise): BlockDef[] => {
-  if (exercise.openEnded) return [OPEN_ENDED_BLOCK];
+  if (exercise.openEnded || exercise.practiceMode === "openEnded") {
+    return [{ ...OPEN_ENDED_BLOCK, metronomeEnabled: exercise.metronomeEnabled !== false }];
+  }
 
   const out: BlockDef[] = [];
   if (exercise.includeWarmupBlock !== false) out.push(CONSCIOUS_PRACTICE_BLOCK);
 
   if (exercise.practiceMode === "simple") {
     const minutes = clampMinutes(exercise.sessionMinutes);
-    out.push(buildSimpleMetronomeBlock(minutes * 60));
+    out.push({
+      ...buildSimpleMetronomeBlock(minutes * 60),
+      metronomeEnabled: exercise.metronomeEnabled !== false,
+    });
+    return out;
+  }
+
+  if (exercise.practiceMode === "timed") {
+    const minutes = clampMinutes(exercise.sessionMinutes);
+    out.push(buildTimedPracticeBlock(minutes * 60, exercise.metronomeEnabled !== false));
     return out;
   }
 
   out.push(...buildExerciseTimedBlocks(exercise.sessionMinutes, exercise));
   return out;
 };
+
+function exerciseRecipeToBlock(
+  entry: SmartBlockRecipe,
+  durationSec: number,
+): BlockDef {
+  const kind =
+    entry.role === "exerciseBuild"
+      ? "exerciseBuild"
+      : entry.role === "exerciseCoolDown"
+        ? "exerciseCoolDown"
+        : entry.role === "exerciseBurst"
+          ? "overspeed"
+          : "custom";
+  return {
+    ...tempoRuleBlock(entry, durationSec, kind),
+    instructions:
+      entry.instructions.length > 0
+        ? entry.instructions
+        : kind === "overspeed"
+          ? INSTRUCTIONS.overspeed
+          : INSTRUCTIONS.exerciseBuild,
+    metronomeEnabled: entry.metronomeEnabled,
+  };
+}

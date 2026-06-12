@@ -19,13 +19,15 @@ import { useSettingsStore } from "./useSettingsStore";
 type NewSongInput = {
   title: string;
   link: string | null;
-  workingBpm: number;
+  workingBpm: number | null;
   troubleSpots: TroubleSpot[];
   originalBpm: number | null;
   stepPercent?: number;
   practiceMode?: PracticeMode;
   includeWarmupBlock?: boolean;
   blockTemplate?: SongBlockTemplate;
+  defaultSessionMinutes?: number;
+  metronomeEnabled?: boolean;
 };
 
 type SongsState = {
@@ -51,6 +53,10 @@ const genId = (): string => {
   return `s_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
 };
 
+function isStaleWriteError(err: unknown): boolean {
+  return err instanceof Error && err.message.includes("409");
+}
+
 export const useSongsStore = create<SongsState>((set, get) => ({
   songs: [],
   loaded: false,
@@ -62,12 +68,16 @@ export const useSongsStore = create<SongsState>((set, get) => ({
     for (const song of songs) {
       const fileValue = fileMap[song.id];
       if (typeof fileValue === "number" && fileValue > song.totalPracticeSec) {
+        await getRepository().adjustPracticeTime(
+          "song",
+          song.id,
+          fileValue - song.totalPracticeSec,
+        );
         const merged: Song = {
           ...song,
           totalPracticeSec: fileValue,
           updatedAt: nowIso(),
         };
-        await getRepository().upsertSong(merged);
         reconciled.push(merged);
       } else {
         reconciled.push(song);
@@ -107,6 +117,11 @@ export const useSongsStore = create<SongsState>((set, get) => ({
       blockTemplate: input.blockTemplate
         ? cloneSongTemplate(input.blockTemplate)
         : settingsTemplate,
+      defaultSessionMinutes:
+        input.defaultSessionMinutes ??
+        globalSettings.defaultSongSessionMinutes ??
+        10,
+      metronomeEnabled: input.metronomeEnabled ?? true,
       totalPracticeSec: 0,
       sortIndex: nextSortIndex,
       createdAt: now,
@@ -120,11 +135,16 @@ export const useSongsStore = create<SongsState>((set, get) => ({
 
   updateSong: async (song) => {
     const updated = { ...song, updatedAt: nowIso() };
-    await getRepository().upsertSong(updated);
-    // Preserve the current list order — don't re-sort by title.
-    set({
-      songs: get().songs.map((s) => (s.id === updated.id ? updated : s)),
-    });
+    try {
+      await getRepository().upsertSong(updated);
+      // Preserve the current list order — don't re-sort by title.
+      set({
+        songs: get().songs.map((s) => (s.id === updated.id ? updated : s)),
+      });
+    } catch (err) {
+      if (isStaleWriteError(err)) await get().load();
+      throw err;
+    }
   },
 
   deleteSong: async (id) => {
@@ -141,30 +161,36 @@ export const useSongsStore = create<SongsState>((set, get) => ({
     }
     // Optimistic update first so the UI lands immediately on drop.
     set({ songs: next });
-    await getRepository().reorderSongs(orderedIds);
+    try {
+      await getRepository().reorderSongs(orderedIds);
+    } catch (err) {
+      await get().load();
+      throw err;
+    }
   },
 
   incrementPracticeTime: async (id, seconds) => {
     const s = get().songs.find((x) => x.id === id);
     if (!s) return;
+    const total = await getRepository().adjustPracticeTime(
+      "song",
+      id,
+      Math.round(seconds),
+    );
     const updated: Song = {
       ...s,
-      totalPracticeSec: s.totalPracticeSec + Math.round(seconds),
+      totalPracticeSec: total,
       updatedAt: nowIso(),
     };
-    await getRepository().upsertSong(updated);
     set({ songs: get().songs.map((x) => (x.id === id ? updated : x)) });
-    void postPracticeTime(id, updated.totalPracticeSec);
   },
 
   adjustPracticeTime: async (id, deltaSec) => {
     const s = get().songs.find((x) => x.id === id);
     if (!s) return;
-    const next = Math.max(0, s.totalPracticeSec + Math.round(deltaSec));
+    const next = await getRepository().adjustPracticeTime("song", id, deltaSec);
     const updated: Song = { ...s, totalPracticeSec: next, updatedAt: nowIso() };
-    await getRepository().upsertSong(updated);
     set({ songs: get().songs.map((x) => (x.id === id ? updated : x)) });
-    void postPracticeTime(id, updated.totalPracticeSec);
   },
 }));
 
@@ -184,21 +210,5 @@ async function fetchPracticeTimeMap(): Promise<Record<string, number>> {
     return out;
   } catch {
     return {};
-  }
-}
-
-async function postPracticeTime(
-  id: string,
-  totalPracticeSec: number,
-): Promise<void> {
-  if (typeof fetch === "undefined") return;
-  try {
-    await fetch("/api/practice-time", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id, totalPracticeSec }),
-    });
-  } catch {
-    // file mirror is best-effort — Dexie remains authoritative in-browser
   }
 }
