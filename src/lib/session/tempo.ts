@@ -1,4 +1,5 @@
 import type { Song } from "@/types/song";
+import type { TempoSubject } from "./runtimeTypes";
 
 export const nowIso = () => new Date().toISOString();
 
@@ -10,28 +11,28 @@ export const step = (bpm: number, stepPercent: number): number => {
   return Math.round((bpm * factor) / scale);
 };
 
-export const workingBpmForTempo = (s: Song): number => s.workingBpm ?? 0;
+export const workingBpmForTempo = (s: TempoSubject): number => s.workingBpm ?? 0;
 
-export const targetBpm = (s: Song): number => step(workingBpmForTempo(s), s.stepPercent);
+export const targetBpm = (s: TempoSubject): number => step(workingBpmForTempo(s), s.stepPercent);
 
-export const overspeedBpm = (s: Song): number => step(targetBpm(s), s.stepPercent);
+export const overspeedBpm = (s: TempoSubject): number => step(targetBpm(s), s.stepPercent);
 
 /**
  * Conscious Practice warm-up BPM. Uses the song's saved `warmupBpm` if set;
  * otherwise falls back to ⅓ × workingBpm, floored at 20. Single source of
  * truth for both the tempoFn and any UI that needs the default value.
  */
-export const warmupBpmFor = (s: Song): number =>
+export const warmupBpmFor = (s: TempoSubject): number =>
   s.warmupBpm ?? Math.max(20, Math.round(workingBpmForTempo(s) / 3));
 
-export const slowReferenceBpm = (s: Song): number => Math.round(workingBpmForTempo(s) * 0.8);
+export const slowReferenceBpm = (s: TempoSubject): number => Math.round(workingBpmForTempo(s) * 0.8);
 
-export const consolidationBpm = (s: Song): number => Math.round(workingBpmForTempo(s) * 0.7);
+export const consolidationBpm = (s: TempoSubject): number => Math.round(workingBpmForTempo(s) * 0.7);
 
-export const fiveMinSlowReferenceBpm = (s: Song): number =>
+export const fiveMinSlowReferenceBpm = (s: TempoSubject): number =>
   Math.round(workingBpmForTempo(s) * 0.8);
 
-export const troubleBlockBpmFor = (s: Song, index: number): number =>
+export const troubleBlockBpmFor = (s: TempoSubject, index: number): number =>
   s.troubleSpots[index]?.bpm ?? slowReferenceBpm(s);
 
 export const promoteWorking = (s: Song): Song => ({

@@ -7,10 +7,12 @@ export type PromotionEvent = {
   stepPercent: number;
 };
 
+export type SessionItemKind = "song" | "exercise" | "freePlay";
+
 export type SessionRecord = {
   id: string;
   itemId: string;
-  itemKind: "song" | "exercise";
+  itemKind: SessionItemKind;
   itemTitle: string;
   startedAt: string;
   endedAt: string;

@@ -1,4 +1,5 @@
 "use client";
+import React, { useState } from "react";
 import {
   allocateBlockDurations,
   validateBlockDurationPlan,
@@ -43,6 +44,46 @@ const durationChip = (
   }`;
 };
 
+const tempoRuleLabel = (rule: TempoRule): string => {
+  const source =
+    rule.source === "working"
+      ? "Working"
+      : rule.source === "target"
+        ? "Target"
+        : rule.source === "overspeed"
+          ? "Overspeed"
+          : rule.source === "original"
+            ? "Original"
+            : rule.source === "trouble"
+              ? "Trouble"
+              : `${rule.bpm} BPM`;
+  const adjustment = "adjustment" in rule ? rule.adjustment : undefined;
+  if (!adjustment || rule.source === "fixed") return source;
+  if (adjustment.kind === "percent") return `${source} x ${adjustment.value}%`;
+  if (adjustment.kind === "bpmOffset") {
+    return `${source} ${adjustment.value >= 0 ? "+" : ""}${adjustment.value} BPM`;
+  }
+  return `${source} ${adjustment.value >= 0 ? "+" : ""}${adjustment.value} step${
+    Math.abs(adjustment.value) === 1 ? "" : "s"
+  }`;
+};
+
+const progressionLabel = (
+  progression: ProgressionRule,
+  entry: SmartBlockRecipe,
+  variant: "song" | "exercise",
+): string => {
+  if (
+    progression.kind === "trouble" &&
+    variant === "song" &&
+    entry.role === "troubleSpot"
+  ) {
+    return "Promote trouble";
+  }
+  if (progression.kind === "working") return "Promote working";
+  return "No progression";
+};
+
 const isAdditiveTroubleEntry = (
   entry: SmartBlockRecipe,
   variant: "song" | "exercise",
@@ -74,6 +115,8 @@ export function BlockTemplateEditor({
   variant,
   troubleSpotCount = 0,
 }: EditorProps) {
+  const [expandedId, setExpandedId] = useState<string | null>(null);
+
   const update = (idx: number, patch: Partial<SmartBlockRecipe>) => {
     onChange(template.map((e, i) => (i === idx ? { ...e, ...patch } : e)));
   };
@@ -195,6 +238,7 @@ export function BlockTemplateEditor({
       <ul className="space-y-3">
         {template.map((entry, idx) => {
           const additive = isAdditiveTroubleEntry(entry, variant);
+          const isExpanded = expandedId === entry.id;
           return (
           <li
             key={entry.id}
@@ -205,46 +249,54 @@ export function BlockTemplateEditor({
             } ${entry.enabled ? "" : "opacity-70"}`}
           >
             <div className="flex flex-wrap items-start gap-3">
-              <div className="flex items-center gap-2 pt-1">
+              <div className="flex min-w-0 flex-1 items-start gap-3">
                 <input
                   type="checkbox"
                   checked={entry.enabled}
                   onChange={(e) => update(idx, { enabled: e.target.checked })}
-                  className="h-4 w-4 cursor-pointer accent-amber-500"
+                  className="mt-1 h-4 w-4 shrink-0 cursor-pointer accent-amber-500"
                   aria-label={`Include ${entry.name}`}
                 />
-                <span className="text-sm font-black leading-none text-neutral-600" aria-hidden>
-                  ::
-                </span>
-              </div>
-              <div className="grid min-w-[14rem] flex-1 gap-2 md:grid-cols-[minmax(12rem,0.8fr)_minmax(16rem,1.2fr)]">
-                <label className="text-xs text-neutral-400">
-                  Name
-                  <input
-                    value={entry.name}
-                    onChange={(e) => update(idx, { name: e.target.value })}
-                    className="mt-1 w-full rounded border border-bg-border bg-bg px-2 py-1.5 text-sm font-semibold text-neutral-100 outline-none focus:border-accent"
-                  />
-                </label>
-                <label className="text-xs text-neutral-400">
-                  Purpose
-                  <input
-                    value={entry.purpose}
-                    onChange={(e) => update(idx, { purpose: e.target.value })}
-                    className="mt-1 w-full rounded border border-bg-border bg-bg px-2 py-1.5 text-sm text-neutral-100 outline-none focus:border-accent"
-                  />
-                </label>
+                <div className="min-w-0 flex-1">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span
+                      className="text-sm font-black leading-none text-neutral-600"
+                      aria-hidden
+                    >
+                      ::
+                    </span>
+                    <div className="min-w-0 text-sm font-semibold text-neutral-100">
+                      {entry.name}
+                    </div>
+                  </div>
+                  {entry.purpose && (
+                    <div className="mt-1 line-clamp-2 text-xs text-neutral-400">
+                      {entry.purpose}
+                    </div>
+                  )}
+                  <div className="mt-2 flex flex-wrap gap-1.5">
+                    <span
+                      className={`rounded-full px-2.5 py-1 text-xs font-semibold ${
+                        additive
+                          ? "bg-emerald-500/20 text-emerald-100"
+                          : "bg-amber-500/15 text-amber-100"
+                      }`}
+                    >
+                      {durationChip(entry, variant)}
+                    </span>
+                    <span className="rounded-full bg-bg px-2.5 py-1 text-xs font-semibold text-neutral-300">
+                      {tempoRuleLabel(entry.tempoRule)}
+                    </span>
+                    <span className="rounded-full bg-bg px-2.5 py-1 text-xs font-semibold text-neutral-300">
+                      {progressionLabel(entry.progression, entry, variant)}
+                    </span>
+                    <span className="rounded-full bg-bg px-2.5 py-1 text-xs font-semibold text-neutral-300">
+                      {entry.metronomeEnabled ? "Metronome on" : "Metronome off"}
+                    </span>
+                  </div>
+                </div>
               </div>
               <div className="flex flex-wrap items-start justify-end gap-2">
-                <span
-                  className={`rounded-full px-2.5 py-1 text-xs font-semibold ${
-                    additive
-                      ? "bg-emerald-500/20 text-emerald-100"
-                      : "bg-amber-500/15 text-amber-100"
-                  }`}
-                >
-                  {durationChip(entry, variant)}
-                </span>
                 <div className="flex flex-col gap-1">
                   <button
                     type="button"
@@ -263,6 +315,14 @@ export function BlockTemplateEditor({
                     Down
                   </button>
                 </div>
+                <button
+                  type="button"
+                  onClick={() => setExpandedId(isExpanded ? null : entry.id)}
+                  aria-expanded={isExpanded}
+                  className="rounded border border-bg-border px-2 py-1 text-xs text-neutral-300 hover:bg-bg-elevated"
+                >
+                  {isExpanded ? "Collapse" : "Edit"}
+                </button>
               </div>
             </div>
             {additive && (
@@ -272,97 +332,127 @@ export function BlockTemplateEditor({
               </div>
             )}
 
-            <div className="flex flex-wrap items-start gap-2">
-              <div className="min-w-[12rem] flex-[1_1_12rem]">
-                <DurationEditor
-                  value={entry.duration}
-                  onChange={(duration) => update(idx, { duration })}
-                  disabled={!entry.enabled}
-                  maxFixedMinutes={Math.max(
-                    0.25,
-                    roundMinutes(
-                      (entry.role === "troubleSpot" && variant === "song"
-                        ? totalSec
-                        : totalSec -
-                          template.reduce((sum, other, otherIdx) => {
-                            if (otherIdx === idx || !other.enabled) return sum;
-                            if (
-                              variant === "song" &&
-                              other.role === "troubleSpot"
-                            ) {
-                              return sum;
-                            }
-                            if (other.duration.kind !== "fixed") return sum;
-                            return sum + Math.max(0, other.duration.seconds);
-                          }, 0)) / 60,
-                    ),
-                  )}
-                />
-              </div>
-              <div className="min-w-[15rem] flex-[1_1_15rem]">
-                <TempoRuleEditor
-                  value={entry.tempoRule}
-                  onChange={(tempoRule) => update(idx, { tempoRule })}
-                  disabled={!entry.enabled}
-                />
-              </div>
-              <label className="min-w-[10rem] flex-[1_1_10rem] text-xs text-neutral-400">
-                Progression
-                <select
-                  value={entry.progression.kind}
-                  onChange={(e) =>
-                    update(idx, {
-                      progression: { kind: e.target.value as ProgressionRule["kind"] },
-                    })
-                  }
-                  disabled={!entry.enabled}
-                  className="mt-1 w-full rounded border border-bg-border bg-bg px-2 py-1.5 text-sm text-neutral-100 outline-none focus:border-accent disabled:opacity-50"
+            {isExpanded && (
+              <div className="space-y-3">
+                <div className="grid gap-2 md:grid-cols-[minmax(12rem,0.8fr)_minmax(16rem,1.2fr)]">
+                  <label className="min-w-0 text-xs text-neutral-400">
+                    Name
+                    <input
+                      value={entry.name}
+                      onChange={(e) => update(idx, { name: e.target.value })}
+                      className="mt-1 w-full rounded border border-bg-border bg-bg px-2 py-1.5 text-sm font-semibold text-neutral-100 outline-none focus:border-accent"
+                    />
+                  </label>
+                  <label className="min-w-0 text-xs text-neutral-400">
+                    Purpose
+                    <input
+                      value={entry.purpose}
+                      onChange={(e) => update(idx, { purpose: e.target.value })}
+                      className="mt-1 w-full rounded border border-bg-border bg-bg px-2 py-1.5 text-sm text-neutral-100 outline-none focus:border-accent"
+                    />
+                  </label>
+                </div>
+
+                <div className="flex flex-wrap items-start gap-2">
+                  <div className="min-w-[12rem] flex-[1_1_12rem]">
+                    <DurationEditor
+                      value={entry.duration}
+                      onChange={(duration) => update(idx, { duration })}
+                      disabled={!entry.enabled}
+                      maxFixedMinutes={Math.max(
+                        0.25,
+                        roundMinutes(
+                          (entry.role === "troubleSpot" && variant === "song"
+                            ? totalSec
+                            : totalSec -
+                              template.reduce((sum, other, otherIdx) => {
+                                if (otherIdx === idx || !other.enabled) return sum;
+                                if (
+                                  variant === "song" &&
+                                  other.role === "troubleSpot"
+                                ) {
+                                  return sum;
+                                }
+                                if (other.duration.kind !== "fixed") return sum;
+                                return sum + Math.max(0, other.duration.seconds);
+                              }, 0)) / 60,
+                        ),
+                      )}
+                    />
+                  </div>
+                  <div className="min-w-[15rem] flex-[1_1_15rem]">
+                    <TempoRuleEditor
+                      value={entry.tempoRule}
+                      onChange={(tempoRule) => update(idx, { tempoRule })}
+                      disabled={!entry.enabled}
+                    />
+                  </div>
+                  <label className="min-w-[10rem] flex-[1_1_10rem] text-xs text-neutral-400">
+                    Progression
+                    <select
+                      value={
+                        entry.progression.kind === "trouble" &&
+                        !(variant === "song" && entry.role === "troubleSpot")
+                          ? "none"
+                          : entry.progression.kind
+                      }
+                      onChange={(e) =>
+                        update(idx, {
+                          progression: {
+                            kind: e.target.value as ProgressionRule["kind"],
+                          },
+                        })
+                      }
+                      disabled={!entry.enabled}
+                      className="mt-1 w-full rounded border border-bg-border bg-bg px-2 py-1.5 text-sm text-neutral-100 outline-none focus:border-accent disabled:opacity-50"
+                    >
+                      <option value="none">None</option>
+                      <option value="working">Promote working</option>
+                      {variant === "song" && entry.role === "troubleSpot" && (
+                        <option value="trouble">Promote trouble</option>
+                      )}
+                    </select>
+                  </label>
+                  <label className="flex min-w-[8rem] flex-[0_1_8rem] items-center gap-2 pt-6 text-xs text-neutral-300">
+                    <input
+                      type="checkbox"
+                      checked={entry.metronomeEnabled}
+                      onChange={(e) =>
+                        update(idx, { metronomeEnabled: e.target.checked })
+                      }
+                      disabled={!entry.enabled}
+                      className="h-4 w-4 accent-amber-500 disabled:opacity-50"
+                    />
+                    Metronome
+                  </label>
+                </div>
+
+                <label className="block text-xs text-neutral-400">
+                  Instructions
+                  <textarea
+                    value={entry.instructions.join("\n")}
+                    onChange={(e) =>
+                      update(idx, {
+                        instructions: e.target.value
+                          .split(/\r?\n/)
+                          .map((line) => line.trim())
+                          .filter(Boolean),
+                      })
+                    }
+                    rows={2}
+                    className="mt-1 w-full rounded border border-bg-border bg-bg px-2 py-1.5 text-sm text-neutral-100 outline-none focus:border-accent"
+                  />
+                </label>
+
+                <button
+                  type="button"
+                  onClick={() => remove(idx)}
+                  className="text-xs text-neutral-500 underline hover:text-red-300"
                 >
-                  <option value="none">None</option>
-                  <option value="working">Promote working</option>
-                  {entry.role === "troubleSpot" && (
-                    <option value="trouble">Promote trouble</option>
-                  )}
-                </select>
-              </label>
-              <label className="flex min-w-[8rem] flex-[0_1_8rem] items-center gap-2 pt-6 text-xs text-neutral-300">
-                <input
-                  type="checkbox"
-                  checked={entry.metronomeEnabled}
-                  onChange={(e) =>
-                    update(idx, { metronomeEnabled: e.target.checked })
-                  }
-                  disabled={!entry.enabled}
-                  className="h-4 w-4 accent-amber-500 disabled:opacity-50"
-                />
-                Metronome
-              </label>
-            </div>
-
-            <label className="block text-xs text-neutral-400">
-              Instructions
-              <textarea
-                value={entry.instructions.join("\n")}
-                onChange={(e) =>
-                  update(idx, {
-                    instructions: e.target.value
-                      .split(/\r?\n/)
-                      .map((line) => line.trim())
-                      .filter(Boolean),
-                  })
-                }
-                rows={2}
-                className="mt-1 w-full rounded border border-bg-border bg-bg px-2 py-1.5 text-sm text-neutral-100 outline-none focus:border-accent"
-              />
-            </label>
-
-            <button
-              type="button"
-              onClick={() => remove(idx)}
-              className="text-xs text-neutral-500 underline hover:text-red-300"
-            >
-              Remove block
-            </button>
+                  Remove block
+                </button>
+              </div>
+            )}
           </li>
           );
         })}
@@ -635,6 +725,18 @@ export function validateTemplateForSession(
   variant: "song" | "exercise" = "song",
   troubleSpotCount = 0,
 ): { ok: true } | { ok: false; message: string } {
+  const invalidTroubleProgression = template.some(
+    (entry) =>
+      entry.progression.kind === "trouble" &&
+      !(variant === "song" && entry.role === "troubleSpot"),
+  );
+  if (invalidTroubleProgression) {
+    return {
+      ok: false,
+      message: "Trouble progression is only available on song Trouble Spot blocks.",
+    };
+  }
+
   const active = allocationTemplateEntries(template, variant, troubleSpotCount);
   if (active.length === 0) {
     return { ok: false, message: "Enable at least one block in the block sequence." };

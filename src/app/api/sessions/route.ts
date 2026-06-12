@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import type { SessionRecord } from "@/types/sessionRecord";
-import { readJson, writeJsonAtomic } from "@/lib/db/fileStore";
+import { readJson, updateJsonAtomic, writeJsonAtomic } from "@/lib/db/fileStore";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -26,13 +26,19 @@ export async function POST(req: Request) {
   if (typeof rec.id !== "string" || typeof rec.itemId !== "string") {
     return NextResponse.json({ error: "invalid record" }, { status: 400 });
   }
-  const rows = await readJson<SessionRecord[]>(FILE, []);
-  if (rows.some((r) => r.id === rec.id)) {
-    return NextResponse.json({ ok: true, deduped: true });
-  }
-  rows.push(rec);
-  await writeJsonAtomic(FILE, rows);
-  return NextResponse.json({ ok: true });
+  const result = await updateJsonAtomic<SessionRecord[], { deduped: boolean }>(
+    FILE,
+    [],
+    (rows) => {
+      if (rows.some((r) => r.id === rec.id)) {
+        return { value: rows, result: { deduped: true } };
+      }
+      return { value: [...rows, rec], result: { deduped: false } };
+    },
+  );
+  return NextResponse.json(
+    result.deduped ? { ok: true, deduped: true } : { ok: true },
+  );
 }
 
 // Replace the entire array. Used by the "Reset all statistics" and "Factory

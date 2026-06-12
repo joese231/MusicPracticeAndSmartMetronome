@@ -3,6 +3,18 @@ import Link from "next/link";
 import type { Song } from "@/types/song";
 import { formatPracticeTime } from "@/lib/format";
 
+export function bpmLabel(song: Song): string {
+  if (song.workingBpm != null) return `${song.workingBpm} BPM`;
+  if (
+    song.metronomeEnabled === false ||
+    song.practiceMode === "timed" ||
+    song.practiceMode === "openEnded"
+  ) {
+    return "No BPM";
+  }
+  return "BPM needed";
+}
+
 export function SongCard({ song }: { song: Song }) {
   return (
     <Link
@@ -14,7 +26,7 @@ export function SongCard({ song }: { song: Song }) {
           <h3 className="truncate text-xl font-semibold text-neutral-100">{song.title}</h3>
           <div className="mt-1 flex flex-wrap gap-x-4 gap-y-1 text-sm text-neutral-400">
             <span>
-              Working <span className="text-neutral-200">{song.workingBpm}</span> BPM
+              Working <span className="text-neutral-200">{bpmLabel(song)}</span>
             </span>
             {song.troubleSpots.length > 0 && (
               <span>

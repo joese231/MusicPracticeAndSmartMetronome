@@ -13,44 +13,21 @@ import type {
   SessionRecord,
 } from "@/types/sessionRecord";
 import {
-  Metronome,
-  type MetronomeMode,
   enableMetronomeDebug,
 } from "@/lib/metronome/scheduler";
-import { SessionRecorder } from "@/lib/audio/recorder";
-import {
-  advanceSnapshot,
-  elapsedInPlayingSec,
-  initialSnapshot,
-  repeatCurrentBlockSnapshot,
-  rewindSnapshot,
-  tickSnapshot,
-  timeLeftInPlayingSec,
-} from "@/lib/session/driver";
 import { buildExerciseBlocks } from "@/lib/session/exerciseBlocks";
 import { exerciseAsSong } from "@/lib/session/exerciseAdapter";
 import { nowIso, promoteWorking, warmupBpmFor } from "@/lib/session/tempo";
+import { usePracticeSession } from "@/lib/session/usePracticeSession";
 import { setActiveHomeTab } from "@/lib/ui/activeTab";
 import type { Exercise } from "@/types/exercise";
 import type { Song } from "@/types/song";
-import type { BlockDef, DriverSnapshot } from "@/types/block";
+import type { BlockDef } from "@/types/block";
 
-import { BlockHeader } from "@/components/session/BlockHeader";
-import { BlockCountdown } from "@/components/session/BlockCountdown";
-import { BlockCountUp } from "@/components/session/BlockCountUp";
-import { BlockInstructions } from "@/components/session/BlockInstructions";
-import { EarnedButton } from "@/components/session/EarnedButton";
-import { SkipBlockButton } from "@/components/session/SkipBlockButton";
-import { PreviousBlockButton } from "@/components/session/PreviousBlockButton";
-import { ShortcutsHint } from "@/components/session/ShortcutsHint";
-import { RecordingIndicator } from "@/components/session/RecordingIndicator";
-import { MetronomeIndicator } from "@/components/metronome/MetronomeIndicator";
-import { MetronomeModeToggle } from "@/components/metronome/MetronomeModeToggle";
 import { MetronomeDiagnosticsPanel } from "@/components/session/MetronomeDiagnostics";
 import { BpmEditorModal } from "@/components/session/BpmEditorModal";
 import { BetweenItemsOverlay } from "@/components/session/BetweenItemsOverlay";
-
-type Toast = { id: number; text: string };
+import { SessionShell } from "@/components/session/SessionShell";
 
 type BetweenItems = {
   nextItemId: string;
@@ -58,8 +35,6 @@ type BetweenItems = {
   startedAtMs: number;
   durationSec: number;
 };
-
-const AUTO_ADVANCE_DELAY_MS = 1000;
 
 export default function ExerciseSessionPage() {
   const params = useParams<{ id: string }>();
@@ -81,9 +56,6 @@ export default function ExerciseSessionPage() {
     s.exercises.find((x) => x.id === id),
   );
   const updateExercise = useExercisesStore((s) => s.updateExercise);
-  const incrementPracticeTime = useExercisesStore(
-    (s) => s.incrementPracticeTime,
-  );
 
   const settings = useSettingsStore((s) => s.settings);
   const loadedSettings = useSettingsStore((s) => s.loaded);
@@ -92,32 +64,18 @@ export default function ExerciseSessionPage() {
   const setLatestRecording = useSessionStore((s) => s.setLatestRecording);
   const clearLatestRecording = useSessionStore((s) => s.clearLatestRecording);
 
-  const appendSessionRecord = useSessionHistoryStore((s) => s.append);
+  const completeSessionRecord = useSessionHistoryStore((s) => s.complete);
 
-  const [started, setStarted] = useState(false);
-  const [metronomeMode, setMetronomeMode] = useState<MetronomeMode>("all");
-  const [toasts, setToasts] = useState<Toast[]>([]);
-  const [paused, setPaused] = useState(false);
   const [betweenItems, setBetweenItems] = useState<BetweenItems | null>(null);
   const [betweenItemsPaused, setBetweenItemsPaused] = useState(false);
   const [bpmEditorOpen, setBpmEditorOpen] = useState(false);
   const [consciousSlowMode, setConsciousSlowMode] = useState(false);
   const [consciousBpmEditorOpen, setConsciousBpmEditorOpen] = useState(false);
-
-  const [snap, setSnap] = useState<DriverSnapshot | null>(null);
-  const [nowMs, setNowMs] = useState<number>(() => Date.now());
-
-  const pausedRef = useRef(false);
-  pausedRef.current = paused;
-  const pausedAtRef = useRef<number>(0);
   const betweenItemsRef = useRef<BetweenItems | null>(null);
   betweenItemsRef.current = betweenItems;
   const betweenItemsPausedRef = useRef(false);
   betweenItemsPausedRef.current = betweenItemsPaused;
   const betweenItemsPausedAtRef = useRef<number>(0);
-
-  const sessionStartMsRef = useRef<number>(0);
-  const sessionStartIsoRef = useRef<string>("");
   const startWorkingBpmRef = useRef<number>(0);
   const promotionsRef = useRef<PromotionEvent[]>([]);
   // Runtime exercise (in Song-shape, for tempoFn). Promotion mutates this in
@@ -125,14 +83,13 @@ export default function ExerciseSessionPage() {
   // separately so the store stays canonical.
   const runtimeSongRef = useRef<Song | null>(null);
   const exerciseRef = useRef<Exercise | null>(null);
-  const metronomeRef = useRef<Metronome | null>(null);
-  const recorderRef = useRef<SessionRecorder | null>(null);
-  const recordingActiveRef = useRef(false);
-  const endedRef = useRef(false);
-  const [recordingActive, setRecordingActive] = useState(false);
-
-  const autoAdvanceRef = useRef(settings.autoAdvanceBlocks);
-  autoAdvanceRef.current = settings.autoAdvanceBlocks;
+  const earnedHandlerRef = useRef<() => void>(() => {});
+  const endSessionRef = useRef<(reason: "complete" | "abort") => void>(
+    () => {},
+  );
+  const handleBetweenItemsSkipRef = useRef<() => void>(() => {});
+  const handleBetweenItemsCancelRef = useRef<() => void>(() => {});
+  const handleBetweenItemsPauseToggleRef = useRef<() => void>(() => {});
 
   useEffect(() => {
     if (!loadedExercises) void loadExercises();
@@ -152,7 +109,13 @@ export default function ExerciseSessionPage() {
   const sessionMinutes = exercise?.sessionMinutes ?? 5;
   const isOpenEnded =
     !!exercise?.openEnded || exercise?.practiceMode === "openEnded";
-  const metronomeOff = exercise ? exercise.metronomeEnabled === false : false;
+  const usesGlobalMetronomeToggle =
+    isOpenEnded ||
+    exercise?.practiceMode === "simple" ||
+    exercise?.practiceMode === "timed";
+  const metronomeOff = exercise
+    ? usesGlobalMetronomeToggle && exercise.metronomeEnabled === false
+    : false;
   const blocks = useMemo<BlockDef[]>(
     () => (exercise ? buildExerciseBlocks(exercise) : []),
     // Inputs that affect the block list. The exercise object identity changes
@@ -170,66 +133,51 @@ export default function ExerciseSessionPage() {
     ],
   );
 
-  const addToast = useCallback((text: string) => {
-    const toastId = Date.now() + Math.random();
-    setToasts((t) => [...t, { id: toastId, text }]);
-    setTimeout(() => setToasts((t) => t.filter((x) => x.id !== toastId)), 2200);
-  }, []);
-
-  useEffect(() => {
-    if (!started) return;
-    let raf = 0;
-    let cancelled = false;
-    const loop = () => {
-      if (cancelled) return;
-      if (!pausedRef.current) {
-        const n = Date.now();
-        setNowMs(n);
-        setSnap((prev) => (prev ? tickSnapshot(prev, blocks, n) : prev));
+  const practice = usePracticeSession({
+    blocks,
+    runtimeSubjectRef: runtimeSongRef,
+    settings,
+    metronomeMode: "all",
+    clearLatestRecording,
+    getStartSubject: () => (exercise ? exerciseAsSong(exercise) : null),
+    onBeforeStart: (subject) => {
+      if (!exercise) return;
+      exerciseRef.current = exercise;
+      runtimeSongRef.current = subject as Song;
+    },
+    onSessionStarted: (_startMs, _subject) => {
+      if (!exercise) return;
+      startWorkingBpmRef.current = exercise.workingBpm;
+      promotionsRef.current = [];
+    },
+    onBlockStarted: (block) => {
+      if (block.kind !== "consciousPractice") {
+        setConsciousSlowMode(false);
       }
-      raf = requestAnimationFrame(loop);
-    };
-    raf = requestAnimationFrame(loop);
-    return () => {
-      cancelled = true;
-      cancelAnimationFrame(raf);
-    };
-  }, [started, blocks]);
+    },
+    onComplete: () => endSessionRef.current("complete"),
+    onAbort: () => endSessionRef.current("abort"),
+    onPlus: () => earnedHandlerRef.current(),
+    isIntermissionActive: () => !!betweenItemsRef.current,
+    onIntermissionSkip: () => handleBetweenItemsSkipRef.current(),
+    onIntermissionCancel: () => handleBetweenItemsCancelRef.current(),
+    onIntermissionPauseToggle: () => handleBetweenItemsPauseToggleRef.current(),
+    metronomeSuppressed: metronomeOff,
+  });
 
   const endSession = useCallback(
     async (reason: "complete" | "abort") => {
-      if (endedRef.current) return;
-      endedRef.current = true;
-
-      if (pausedAtRef.current > 0) {
-        sessionStartMsRef.current += Date.now() - pausedAtRef.current;
-        pausedAtRef.current = 0;
-      }
-
-      const elapsedSec = sessionStartMsRef.current
-        ? (Date.now() - sessionStartMsRef.current) / 1000
-        : 0;
-
-      const m = metronomeRef.current;
-      if (m) {
-        m.stop();
-        m.dispose();
-        metronomeRef.current = null;
-      }
-
+      await practice.finishSession(reason, async ({ elapsedSec, startedAt, recorder }) => {
       const exId = exercise?.id;
-      if (exId) {
-        void incrementPracticeTime(exId, Math.max(0, elapsedSec));
-      }
 
-      if (exId && sessionStartIsoRef.current) {
+      if (exId && startedAt) {
         const exNow = exerciseRef.current ?? exercise;
         const rec: SessionRecord = {
           id: genSessionRecordId(),
           itemId: exId,
           itemKind: "exercise",
           itemTitle: exercise?.name ?? exId,
-          startedAt: sessionStartIsoRef.current,
+          startedAt,
           endedAt: new Date().toISOString(),
           durationSec: Math.max(0, Math.round(elapsedSec)),
           endedReason: reason,
@@ -240,15 +188,16 @@ export default function ExerciseSessionPage() {
           endTroubleBpms: [],
           promotions: promotionsRef.current.slice(),
         };
-        void appendSessionRecord(rec).catch(() => {
-          // best-effort
-        });
+        void completeSessionRecord(rec)
+          .then(() => loadExercises())
+          .catch(() => {
+            // best-effort
+          });
       }
 
-      const rec = recorderRef.current;
-      if (rec && exId) {
+      if (recorder && exId) {
         try {
-          const result = await rec.stop();
+          const result = await recorder.stop();
           const blobUrl = URL.createObjectURL(result.blob);
           setLatestRecording({
             // Recording is keyed by id only — exercises and songs share the
@@ -264,7 +213,6 @@ export default function ExerciseSessionPage() {
           // swallow
         }
       }
-      recorderRef.current = null;
 
       // On a normal completion, flow into the next exercise in the user's
       // ordered list. Mirrors the song session's between-songs behavior.
@@ -290,163 +238,44 @@ export default function ExerciseSessionPage() {
       setActiveHomeTab("exercises");
       if (exId) router.push(`/exercises/${exId}`);
       else router.push("/");
+      });
     },
     [
       exercise,
       exercises,
-      incrementPracticeTime,
+      loadExercises,
+      practice,
       router,
       setLatestRecording,
-      appendSessionRecord,
+      completeSessionRecord,
       sessionMinutes,
       settings.interSongPauseSec,
     ],
   );
 
-  const advance = useCallback(() => {
-    setSnap((prev) => {
-      if (!prev) return prev;
-      return advanceSnapshot(prev, blocks, Date.now());
-    });
-  }, [blocks]);
-
-  const prevPhaseKeyRef = useRef<string>("");
-  useEffect(() => {
-    if (!started || !snap || endedRef.current) return;
-    const key = `${snap.phase}-${snap.blockIndex}`;
-    if (key === prevPhaseKeyRef.current) return;
-    prevPhaseKeyRef.current = key;
-
-    if (snap.phase === "ended") {
-      void endSession("complete");
-      return;
-    }
-
-    const m = metronomeRef.current;
-    if (!m) return;
-
-    if (snap.phase === "awaiting") {
-      m.playTransitionCue();
-      if (autoAdvanceRef.current) {
-        const t = setTimeout(() => advance(), AUTO_ADVANCE_DELAY_MS);
-        return () => clearTimeout(t);
-      }
-      return;
-    }
-
-    if (snap.phase === "playing") {
-      const block = blocks[snap.blockIndex];
-      const songNow = runtimeSongRef.current;
-      if (!block || !songNow) return;
-      if (block.kind !== "consciousPractice") {
-        setConsciousSlowMode(false);
-      }
-      if (block.metronomeEnabled === false) {
-        m.pause();
-      } else {
-        m.resume();
-        m.setBpm(block.tempoFn(songNow));
-        m.alignToDownbeat();
-      }
-    }
-  }, [snap, started, blocks, advance, endSession]);
-
-  useEffect(() => {
-    metronomeRef.current?.setVolume(settings.metronomeVolume);
-    metronomeRef.current?.setAccentsEnabled(settings.accentsEnabled);
-  }, [settings.metronomeVolume, settings.accentsEnabled]);
-
-  useEffect(() => {
-    metronomeRef.current?.setMode(metronomeMode);
-  }, [metronomeMode]);
-
-  const startingRef = useRef(false);
-  const startSession = useCallback(async () => {
-    if (!exercise || started || startingRef.current) return;
-    startingRef.current = true;
-
-    clearLatestRecording();
-    exerciseRef.current = exercise;
-    runtimeSongRef.current = exerciseAsSong(exercise);
-
-    const prev = metronomeRef.current;
-    if (prev) {
-      prev.stop();
-      prev.dispose();
-      metronomeRef.current = null;
-    }
-
-    // Skip the metronome entirely when this exercise has it disabled
-    // (e.g. transcribing). The session still runs — just silently.
-    const anyMetronome =
-      !metronomeOff && blocks.some((b) => b.metronomeEnabled !== false);
-    if (anyMetronome) {
-      const m = new Metronome();
-      m.setVolume(settings.metronomeVolume);
-      m.setAccentsEnabled(settings.accentsEnabled);
-      metronomeRef.current = m;
-
-      const firstBlock = blocks[0];
-      if (!firstBlock) return;
-      const firstBpm = firstBlock.tempoFn(runtimeSongRef.current);
-      try {
-        await m.start(firstBpm, metronomeMode);
-        if (firstBlock.metronomeEnabled === false) m.pause();
-      } catch {
-        // swallow — next BPM change will retry
-      }
-    }
-
-    if (settings.recordingEnabled) {
-      const rec = new SessionRecorder();
-      try {
-        await rec.start();
-        recorderRef.current = rec;
-        recordingActiveRef.current = true;
-        setRecordingActive(true);
-      } catch (err) {
-        recorderRef.current = null;
-        recordingActiveRef.current = false;
-        setRecordingActive(false);
-        addToast("Recording disabled — mic permission denied.");
-        void err;
-      }
-    }
-
-    const startMs = Date.now();
-    sessionStartMsRef.current = startMs;
-    sessionStartIsoRef.current = new Date(startMs).toISOString();
-    startWorkingBpmRef.current = exercise.workingBpm;
-    promotionsRef.current = [];
-    prevPhaseKeyRef.current = "playing-0";
-    setSnap(initialSnapshot(startMs));
-    setNowMs(startMs);
-    setStarted(true);
-  }, [
-    exercise,
-    started,
-    blocks,
-    metronomeMode,
-    metronomeOff,
-    settings.metronomeVolume,
-    settings.recordingEnabled,
-    settings.accentsEnabled,
-    clearLatestRecording,
-    addToast,
-  ]);
-
   useEffect(() => {
     if (!loadedExercises || !loadedSettings) return;
     if (!exercise) return;
-    if (started || startingRef.current) return;
+    if (practice.started || practice.startingRef.current) return;
     const t = setTimeout(() => {
-      void startSession();
+      void practice.startSession();
     }, 0);
     return () => clearTimeout(t);
-  }, [loadedExercises, loadedSettings, exercise, started, startSession]);
+  }, [loadedExercises, loadedSettings, exercise, practice]);
 
-  const currentBlock = snap ? blocks[snap.blockIndex] : undefined;
-  const nextBlock = snap ? blocks[snap.blockIndex + 1] : undefined;
+  const currentBlock = practice.currentBlock;
+  const nextBlock = practice.nextBlock;
+  const snap = practice.snap;
+  const started = practice.started;
+  const paused = practice.paused;
+  const nowMs = practice.nowMs;
+  const metronomeRef = practice.metronomeRef;
+  const addToast = practice.addToast;
+  const advance = practice.advance;
+  const recordingActive = practice.recordingActive;
+  const metronomeMode = practice.metronomeMode;
+  const setMetronomeMode = practice.setMetronomeMode;
+  const toasts = practice.toasts;
 
   const tempoBpm = useMemo(() => {
     if (!currentBlock) return 0;
@@ -473,10 +302,9 @@ export default function ExerciseSessionPage() {
     if (!block || block.kind !== "consciousPractice") return;
     if (tempoBpm <= 0) return;
     metronomeRef.current?.setBpm(tempoBpm);
-  }, [tempoBpm, snap, started, blocks]);
+  }, [tempoBpm, snap, started, blocks, metronomeRef]);
 
-  const timeLeftSec =
-    snap && currentBlock ? timeLeftInPlayingSec(snap, blocks, nowMs) : 0;
+  const timeLeftSec = practice.timeLeftSec;
 
   const showEarnedButton =
     !!currentBlock &&
@@ -489,7 +317,7 @@ export default function ExerciseSessionPage() {
   const canEditBpm = snap?.phase === "playing" && !paused;
   const isConscious = currentBlock?.kind === "consciousPractice";
   const isUnbounded = !!currentBlock?.unbounded;
-  const elapsedSec = snap ? elapsedInPlayingSec(snap, nowMs) : 0;
+  const elapsedSec = practice.elapsedSec;
   const consciousPlayedBpm = currentBlock ? tempoBpm : 0;
   const consciousDefaultBpm = exercise
     ? Math.max(20, Math.round(exercise.workingBpm / 3))
@@ -544,47 +372,15 @@ export default function ExerciseSessionPage() {
     });
     addToast(`Working: ${oldBpm} → ${promotedExercise.workingBpm}`);
     await updateExercise(promotedExercise);
-  }, [snap, blocks, updateExercise, addToast]);
+  }, [snap, blocks, updateExercise, addToast, metronomeRef]);
+  earnedHandlerRef.current = () => {
+    void handleEarned();
+  };
 
-  const handleSkip = useCallback(() => {
-    if (!snap || snap.phase === "ended") return;
-    if (pausedRef.current) return;
-    advance();
-  }, [snap, advance]);
-
-  const handleRepeatBlock = useCallback(() => {
-    if (!snap) return;
-    if (pausedRef.current) return;
-    setSnap((prev) =>
-      prev ? repeatCurrentBlockSnapshot(prev, blocks, Date.now()) : prev,
-    );
-  }, [snap, blocks]);
-
-  const handlePrevious = useCallback(() => {
-    if (!snap || snap.phase === "ended") return;
-    if (pausedRef.current) return;
-    if (snap.blockIndex === 0) return;
-    setSnap((prev) =>
-      prev ? rewindSnapshot(prev, blocks, Date.now()) : prev,
-    );
-  }, [snap, blocks]);
-
-  const handlePauseToggle = useCallback(() => {
-    if (!snap) return;
-    if (pausedRef.current) {
-      const delta = Date.now() - pausedAtRef.current;
-      pausedAtRef.current = 0;
-      sessionStartMsRef.current += delta;
-      setSnap((s) => (s ? { ...s, blockStartMs: s.blockStartMs + delta } : s));
-      metronomeRef.current?.resume();
-      setPaused(false);
-    } else {
-      if (snap.phase !== "playing") return;
-      pausedAtRef.current = Date.now();
-      metronomeRef.current?.pause();
-      setPaused(true);
-    }
-  }, [snap]);
+  const handleSkip = practice.handleSkip;
+  const handleRepeatBlock = practice.handleRepeatBlock;
+  const handlePrevious = practice.handlePrevious;
+  const handlePauseToggle = practice.handlePauseToggle;
 
   const handleEditBpm = useCallback(
     async (newBpm: number) => {
@@ -612,17 +408,10 @@ export default function ExerciseSessionPage() {
       addToast(`Working: ${oldBpm} → ${newBpm}`);
       await updateExercise(updatedExercise);
     },
-    [snap, blocks, updateExercise, addToast],
+    [snap, blocks, updateExercise, addToast, metronomeRef],
   );
 
-  const handleResetBlock = useCallback(() => {
-    if (!snap || snap.phase !== "playing") return;
-    if (pausedRef.current) return;
-    const now = Date.now();
-    setSnap((s) => (s ? { ...s, blockStartMs: now } : s));
-    metronomeRef.current?.alignToDownbeat();
-    addToast("Block reset");
-  }, [snap, addToast]);
+  const handleResetBlock = practice.handleResetBlock;
 
   // Skip the inter-item countdown — route to the next exercise immediately.
   const handleBetweenItemsSkip = useCallback(() => {
@@ -638,16 +427,9 @@ export default function ExerciseSessionPage() {
   }, [router]);
 
   const handleRepeatLastBlockFromBetween = useCallback(() => {
-    // Reset the session-ended guards so endSession can fire again when the
-    // repeated block finishes, and so the snap-watching useEffect resumes
-    // handling phase transitions (metronome restart, chime, etc.).
-    endedRef.current = false;
-    prevPhaseKeyRef.current = "";
     setBetweenItems(null);
-    setSnap((prev) =>
-      prev ? repeatCurrentBlockSnapshot(prev, blocks, Date.now()) : prev,
-    );
-  }, [blocks]);
+    practice.repeatCurrentBlockFromEnded();
+  }, [practice]);
 
   // Pause / resume the inter-item countdown. Mirrors the block-pause shape.
   const handleBetweenItemsPauseToggle = useCallback(() => {
@@ -663,6 +445,9 @@ export default function ExerciseSessionPage() {
       setBetweenItemsPaused(true);
     }
   }, []);
+  handleBetweenItemsSkipRef.current = handleBetweenItemsSkip;
+  handleBetweenItemsCancelRef.current = handleBetweenItemsCancel;
+  handleBetweenItemsPauseToggleRef.current = handleBetweenItemsPauseToggle;
 
   // Auto-route when the inter-item countdown hits 0.
   useEffect(() => {
@@ -677,107 +462,6 @@ export default function ExerciseSessionPage() {
     }, remainingMs);
     return () => clearTimeout(t);
   }, [betweenItems, betweenItemsPaused, router]);
-
-  const handleSpace = useCallback(() => {
-    if (!snap || snap.phase === "ended") return;
-    if (pausedRef.current) return;
-    advance();
-  }, [snap, advance]);
-
-  const handlePlus = useCallback(() => {
-    if (!snap || snap.phase !== "playing") return;
-    if (pausedRef.current) return;
-    const block = blocks[snap.blockIndex];
-    if (!block?.showEarnedButton) return;
-    void handleEarned();
-  }, [snap, blocks, handleEarned]);
-
-  const startedRef = useRef(started);
-  startedRef.current = started;
-  const keyHandlersRef = useRef({
-    handleSpace,
-    handlePlus,
-    handleSkip,
-    handlePauseToggle,
-    handleResetBlock,
-    handleBetweenItemsSkip,
-    handleBetweenItemsCancel,
-    handleBetweenItemsPauseToggle,
-    endSession,
-  });
-  keyHandlersRef.current = {
-    handleSpace,
-    handlePlus,
-    handleSkip,
-    handlePauseToggle,
-    handleResetBlock,
-    handleBetweenItemsSkip,
-    handleBetweenItemsCancel,
-    handleBetweenItemsPauseToggle,
-    endSession,
-  };
-
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (!startedRef.current) return;
-      if (e.target instanceof HTMLElement) {
-        const tag = e.target.tagName;
-        if (tag === "INPUT" || tag === "TEXTAREA") return;
-      }
-      const h = keyHandlersRef.current;
-
-      // Inter-item countdown has its own lean keymap.
-      if (betweenItemsRef.current) {
-        if (e.code === "Space" || e.key === " ") {
-          e.preventDefault();
-          e.stopPropagation();
-          h.handleBetweenItemsSkip();
-        } else if (e.key === "p" || e.key === "P") {
-          e.preventDefault();
-          e.stopPropagation();
-          h.handleBetweenItemsPauseToggle();
-        } else if (e.key === "Escape" || e.key === "Esc") {
-          e.preventDefault();
-          e.stopPropagation();
-          h.handleBetweenItemsCancel();
-        }
-        return;
-      }
-
-      if (e.code === "Space" || e.key === " ") {
-        e.preventDefault();
-        e.stopPropagation();
-        h.handleSpace();
-      } else if (e.key === "+" || e.key === "=") {
-        e.preventDefault();
-        e.stopPropagation();
-        h.handlePlus();
-      } else if (e.key === "p" || e.key === "P") {
-        e.preventDefault();
-        e.stopPropagation();
-        h.handlePauseToggle();
-      } else if (e.key === "r" || e.key === "R") {
-        e.preventDefault();
-        e.stopPropagation();
-        h.handleResetBlock();
-      } else if (e.key === "Escape" || e.key === "Esc") {
-        e.preventDefault();
-        e.stopPropagation();
-        void h.endSession("abort");
-      }
-    };
-    window.addEventListener("keydown", onKey, true);
-    return () => window.removeEventListener("keydown", onKey, true);
-  }, []);
-
-  useEffect(() => {
-    return () => {
-      metronomeRef.current?.dispose();
-      metronomeRef.current = null;
-      recorderRef.current?.cancel();
-      recorderRef.current = null;
-    };
-  }, []);
 
   if (!loadedExercises || !loadedSettings) {
     return (
@@ -837,94 +521,50 @@ export default function ExerciseSessionPage() {
   const awaiting = snap.phase === "awaiting";
 
   return (
-    <main className="relative flex h-screen flex-col overflow-hidden px-6 py-4">
-      <div className="flex items-start justify-between">
-        <div className="flex items-center gap-3">
-          <RecordingIndicator active={recordingActive} />
-        </div>
-        <div className="text-center">
-          <div className="text-sm text-neutral-400">{exercise.name}</div>
-          <div className="text-xs text-neutral-600">
-            {isOpenEnded ? "Open-ended" : `${sessionMinutes}-min exercise`}
-            {metronomeOff ? " · metronome off" : ""}
-          </div>
-        </div>
-        <div className="flex items-center gap-2">
-          {!metronomeOff && currentBlock?.metronomeEnabled !== false && (
-            <MetronomeModeToggle mode={metronomeMode} onChange={setMetronomeMode} />
-          )}
-          <button
-            type="button"
-            onClick={handleResetBlock}
-            disabled={!canReset}
-            className="rounded-lg border border-bg-border px-3 py-2 text-sm text-neutral-300 transition hover:bg-bg-elevated disabled:cursor-not-allowed disabled:opacity-40"
-          >
-            Reset block
-          </button>
-          <button
-            type="button"
-            onClick={() =>
-              isConscious
-                ? setConsciousBpmEditorOpen(true)
-                : setBpmEditorOpen(true)
-            }
-            disabled={!canEditBpm}
-            className="rounded-lg border border-bg-border px-3 py-2 text-sm text-neutral-300 transition hover:bg-bg-elevated disabled:cursor-not-allowed disabled:opacity-40"
-          >
-            Edit BPM
-          </button>
-          <button
-            type="button"
-            onClick={handlePauseToggle}
-            disabled={!canPause && !paused}
-            className={`rounded-lg border px-4 py-2 text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-40 ${
-              paused
-                ? "border-accent bg-accent text-black hover:bg-accent-strong"
-                : "border-bg-border text-neutral-200 hover:border-accent hover:text-neutral-100"
-            }`}
-          >
-            {paused ? "Resume" : "Pause"}
-          </button>
-          <PreviousBlockButton
-            onClick={handlePrevious}
-            disabled={snap.blockIndex === 0 || paused}
-          />
-          <SkipBlockButton onClick={handleSkip} />
-          <button
-            onClick={() => void endSession("abort")}
-            className="rounded-lg border border-bg-border px-3 py-2 text-sm text-neutral-300 transition hover:border-red-900 hover:text-red-300"
-          >
-            End
-          </button>
-        </div>
-      </div>
-
-      <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-4 pt-2">
-        {currentBlock && (
-          <BlockHeader
-            label={currentBlock.label}
-            tempoBpm={tempoBpm}
-            blockIndex={snap.blockIndex}
-            totalBlocks={blocks.length}
-          />
-        )}
-
-        {!metronomeOff && currentBlock?.metronomeEnabled !== false && (
-          <MetronomeIndicator metronome={metronomeRef.current} />
-        )}
-
-        {isUnbounded ? (
-          <BlockCountUp seconds={elapsedSec} />
-        ) : (
-          <BlockCountdown seconds={timeLeftSec} />
-        )}
-
-        {currentBlock && <BlockInstructions items={currentBlock.instructions} />}
-      </div>
-
-      <div className="flex w-full shrink-0 flex-col items-center justify-center gap-3 pt-2">
-        {isConscious && snap.phase === "playing" && !paused && (
-          <div className="flex items-center gap-2">
+    <SessionShell
+      title={exercise.name}
+      subtitle={`${isOpenEnded ? "Open-ended" : `${sessionMinutes}-min exercise`}${
+        metronomeOff ? " · metronome off" : ""
+      }`}
+      currentBlock={currentBlock}
+      nextBlock={nextBlock}
+      tempoBpm={tempoBpm}
+      nextTempoBpm={
+        nextBlock
+          ? nextBlock.tempoFn(runtimeSongRef.current ?? exerciseAsSong(exercise))
+          : undefined
+      }
+      blockIndex={snap.blockIndex}
+      totalBlocks={blocks.length}
+      awaiting={awaiting}
+      paused={paused}
+      isUnbounded={isUnbounded}
+      elapsedSec={elapsedSec}
+      timeLeftSec={timeLeftSec}
+      recordingActive={recordingActive}
+      metronomeMode={metronomeMode}
+      metronome={metronomeRef.current}
+      showMetronomeControls={
+        !metronomeOff && currentBlock?.metronomeEnabled !== false
+      }
+      showMetronomeIndicator={
+        !metronomeOff && currentBlock?.metronomeEnabled !== false
+      }
+      canResetBlock={canReset}
+      canEditBpm={canEditBpm}
+      canPause={canPause}
+      canPrevious={snap.blockIndex > 0 && !paused}
+      showEarnedButton={showEarnedButton}
+      earnedHint={showEarnedButton ? undefined : "Only active during the Build block"}
+      unboundedActionLabel={
+        currentBlock?.kind === "openEnded" ? "End session" : undefined
+      }
+      unboundedActionShortcut={
+        currentBlock?.kind === "openEnded" ? "(Esc)" : "(Space)"
+      }
+      beforePrimaryControls={
+        isConscious && snap.phase === "playing" && !paused ? (
+          <div className="flex flex-wrap items-center justify-center gap-2">
             <button
               type="button"
               onClick={() => {
@@ -967,106 +607,27 @@ export default function ExerciseSessionPage() {
               Set BPM…
             </button>
           </div>
-        )}
-
-        {awaiting ? (
-          !nextBlock ? (
-            <div className="flex items-center gap-3">
-              <button
-                onClick={handleRepeatBlock}
-                className="rounded-xl border border-bg-border bg-bg-elevated px-8 py-5 text-xl font-semibold text-neutral-100 transition hover:bg-bg-elevated/80"
-              >
-                Repeat block
-              </button>
-              <button
-                onClick={advance}
-                className="rounded-xl bg-accent px-10 py-5 text-2xl font-bold text-black shadow-lg transition hover:bg-accent-strong"
-              >
-                Finish
-                <span className="ml-3 text-sm font-normal opacity-70">(Space)</span>
-              </button>
-            </div>
-          ) : (
-            <button
-              onClick={advance}
-              className="rounded-xl bg-accent px-10 py-5 text-2xl font-bold text-black shadow-lg transition hover:bg-accent-strong"
-            >
-              Continue → {nextBlock.label}
-              <span className="ml-3 text-sm font-normal opacity-70">(Space)</span>
-            </button>
-          )
-        ) : isUnbounded ? (
-          <button
-            onClick={() =>
-              currentBlock?.kind === "openEnded"
-                ? void endSession("complete")
-                : advance()
-            }
-            className="rounded-xl bg-accent px-10 py-5 text-2xl font-bold text-black shadow-lg transition hover:bg-accent-strong"
-          >
-            {currentBlock?.kind === "openEnded"
-              ? "End session"
-              : `Finish warm-up → ${nextBlock ? nextBlock.label : "Finish"}`}
-            <span className="ml-3 text-sm font-normal opacity-70">
-              {currentBlock?.kind === "openEnded" ? "(Esc)" : "(Space)"}
-            </span>
-          </button>
-        ) : (
-          <EarnedButton
-            onClick={handleEarned}
-            disabled={!showEarnedButton}
-            hint={
-              showEarnedButton
-                ? undefined
-                : "Only active during the Build block"
-            }
-          />
-        )}
-      </div>
-
-      <div className="shrink-0 pt-3">
-        <ShortcutsHint />
-      </div>
-
-      {paused && (
-        <div className="pointer-events-none absolute inset-0 flex items-start justify-center bg-bg/60 pt-24 backdrop-blur-[2px]">
-          <div className="pointer-events-none text-center">
-            <div className="text-xs uppercase tracking-[0.3em] text-neutral-400">
-              Paused
-            </div>
-            <div className="mt-3 text-5xl font-bold text-accent">⏸</div>
-            <div className="mt-3 text-xs uppercase tracking-wider text-neutral-500">
-              Press <span className="font-mono text-neutral-300">P</span> or
-              click Resume to continue
-            </div>
-          </div>
-        </div>
-      )}
-
-      {awaiting && !paused && (
-        <div className="pointer-events-none absolute inset-0 flex items-start justify-center bg-bg/50 pt-24 backdrop-blur-[2px]">
-          <div className="pointer-events-none text-center">
-            <div className="text-xs uppercase tracking-[0.3em] text-neutral-400">
-              Finish your pass — then press Space
-            </div>
-            {nextBlock && (
-              <>
-                <div className="mt-3 text-xs uppercase tracking-wider text-neutral-500">
-                  Up next
-                </div>
-                <div className="mt-1 text-4xl font-semibold text-neutral-100">
-                  {nextBlock.label}
-                </div>
-                <div className="mt-2 font-mono text-5xl font-bold text-accent tabular-nums">
-                  {nextBlock.tempoFn(runtimeSongRef.current ?? exerciseAsSong(exercise))}
-                  <span className="ml-2 text-xl text-neutral-400">BPM</span>
-                </div>
-              </>
-            )}
-          </div>
-        </div>
-      )}
-
+        ) : null
+      }
+      onMetronomeModeChange={setMetronomeMode}
+      onResetBlock={handleResetBlock}
+      onEditBpm={() =>
+        isConscious ? setConsciousBpmEditorOpen(true) : setBpmEditorOpen(true)
+      }
+      onPauseToggle={handlePauseToggle}
+      onPrevious={handlePrevious}
+      onSkip={handleSkip}
+      onEnd={() => void endSession("abort")}
+      onEarned={handleEarned}
+      onAdvance={advance}
+      onRepeatBlock={handleRepeatBlock}
+      onUnboundedAction={
+        currentBlock?.kind === "openEnded"
+          ? () => void endSession("complete")
+          : advance
+      }
+      toasts={toasts}
+    >
       {bpmEditorState && (
         <BpmEditorModal
           open={bpmEditorOpen}
@@ -1122,17 +683,6 @@ export default function ExerciseSessionPage() {
       )}
 
       {debug && <MetronomeDiagnosticsPanel metronome={metronomeRef.current} />}
-
-      <div className="pointer-events-none fixed bottom-10 left-1/2 flex -translate-x-1/2 flex-col items-center gap-2">
-        {toasts.map((t) => (
-          <div
-            key={t.id}
-            className="rounded-lg bg-neutral-100 px-4 py-2 text-sm font-semibold text-black shadow-lg"
-          >
-            {t.text}
-          </div>
-        ))}
-      </div>
-    </main>
+    </SessionShell>
   );
 }

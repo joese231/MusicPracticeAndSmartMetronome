@@ -1,5 +1,12 @@
 "use client";
+import React from "react";
 import type { MetronomeMode } from "@/lib/metronome/scheduler";
+import { SegmentedControl } from "@/components/ui/SegmentedControl";
+
+const METRONOME_MODE_OPTIONS: Array<{ value: MetronomeMode; label: string }> = [
+  { value: "all", label: "All beats" },
+  { value: "backbeat", label: "Backbeat 2 & 4" },
+];
 
 export function MetronomeModeToggle({
   mode,
@@ -9,25 +16,12 @@ export function MetronomeModeToggle({
   onChange: (m: MetronomeMode) => void;
 }) {
   return (
-    <div className="inline-flex rounded-lg border border-bg-border bg-bg-elevated p-1 text-sm">
-      <button
-        type="button"
-        onClick={() => onChange("all")}
-        className={`rounded-md px-3 py-1.5 transition ${
-          mode === "all" ? "bg-accent text-black font-semibold" : "text-neutral-300 hover:text-neutral-100"
-        }`}
-      >
-        All beats
-      </button>
-      <button
-        type="button"
-        onClick={() => onChange("backbeat")}
-        className={`rounded-md px-3 py-1.5 transition ${
-          mode === "backbeat" ? "bg-accent text-black font-semibold" : "text-neutral-300 hover:text-neutral-100"
-        }`}
-      >
-        Backbeat 2 &amp; 4
-      </button>
-    </div>
+    <SegmentedControl
+      value={mode}
+      options={METRONOME_MODE_OPTIONS}
+      onChange={onChange}
+      ariaLabel="Metronome beat mode"
+      className="bg-bg-elevated"
+    />
   );
 }

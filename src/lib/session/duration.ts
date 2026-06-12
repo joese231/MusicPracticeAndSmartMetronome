@@ -20,6 +20,18 @@ export type DurationAllocationResult =
     }
   | {
       ok: false;
+      reason: "fixed-underfills-total";
+      fixedSec: number;
+      totalSec: number;
+    }
+  | {
+      ok: false;
+      reason: "percent-exceeds-100";
+      id: string;
+      percent: number;
+    }
+  | {
+      ok: false;
       reason: "no-positive-percent";
       fixedSec: number;
       remainingSec: number;
@@ -180,4 +192,13 @@ export function allocateBlockDurations(
     fixedSec,
     remainingSec,
   };
+}
+
+export function allocateValidatedBlockDurations(
+  totalSec: number,
+  rows: DurationRow[],
+): DurationAllocationResult {
+  const validation = validateBlockDurationPlan(totalSec, rows);
+  if (!validation.ok) return validation;
+  return allocateBlockDurations(totalSec, rows);
 }

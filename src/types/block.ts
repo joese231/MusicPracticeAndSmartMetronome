@@ -1,4 +1,4 @@
-import type { Song } from "./song";
+import type { TempoSubject } from "@/lib/session/runtimeTypes";
 
 export type BlockKind =
   | "consciousPractice"
@@ -25,7 +25,7 @@ export type BlockDef = {
   label: string;
   /** Seconds the block should run. Ignored when `unbounded` is true. */
   durationSec: number;
-  tempoFn: (song: Song) => number;
+  tempoFn: (subject: TempoSubject) => number;
   showEarnedButton: boolean;
   promotes: BlockPromotion;
   instructions: string[];

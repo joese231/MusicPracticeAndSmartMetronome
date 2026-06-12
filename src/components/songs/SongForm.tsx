@@ -18,6 +18,14 @@ import {
   BlockTemplateEditor,
   validateTemplateForSession,
 } from "@/components/session/BlockTemplateEditor";
+import { SegmentedControl } from "@/components/ui/SegmentedControl";
+
+const PRACTICE_MODE_OPTIONS: Array<{ value: PracticeMode; label: string }> = [
+  { value: "smart", label: "Smart" },
+  { value: "simple", label: "Simple" },
+  { value: "timed", label: "Timed" },
+  { value: "openEnded", label: "Open Ended" },
+];
 
 export type SongFormValues = {
   title: string;
@@ -330,37 +338,16 @@ export function SongForm({ initial, submitLabel, onSubmit, onCancel }: Props) {
           <div className="mt-1 text-xs text-neutral-500">
             Smart runs your custom block sequence. Simple is one steady-BPM countdown. Timed is one countdown block. Open Ended is a count-up timer.
           </div>
-          <div className="mt-3 inline-flex overflow-hidden rounded-lg border border-bg-border bg-bg">
-            {(["smart", "simple", "timed", "openEnded"] as const).map((m) => {
-              const active = practiceMode === m;
-              const label =
-                m === "smart"
-                  ? "Smart"
-                  : m === "simple"
-                    ? "Simple"
-                    : m === "timed"
-                      ? "Timed"
-                      : "Open Ended";
-              return (
-                <button
-                  key={m}
-                  type="button"
-                  role="radio"
-                  aria-checked={active}
-                  onClick={() => {
-                    setPracticeMode(m);
-                    setPracticeModeTouched(true);
-                  }}
-                  className={`px-4 py-1.5 text-sm font-semibold transition ${
-                    active
-                      ? "bg-accent text-black"
-                      : "text-neutral-300 hover:bg-bg-elevated"
-                  }`}
-                >
-                  {label}
-                </button>
-              );
-            })}
+          <div className="mt-3">
+            <SegmentedControl
+              value={practiceMode}
+              options={PRACTICE_MODE_OPTIONS}
+              onChange={(m) => {
+                setPracticeMode(m);
+                setPracticeModeTouched(true);
+              }}
+              ariaLabel="Song practice mode"
+            />
           </div>
         </div>
 

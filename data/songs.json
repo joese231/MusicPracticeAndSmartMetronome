@@ -147,10 +147,10 @@
     ],
     "defaultSessionMinutes": 10,
     "metronomeEnabled": false,
-    "totalPracticeSec": 0,
+    "totalPracticeSec": 2159,
     "sortIndex": 0,
     "createdAt": "2026-06-10T14:04:57.223Z",
-    "updatedAt": "2026-06-10T15:31:39.167Z"
+    "updatedAt": "2026-06-12T13:54:52.479Z"
   },
   {
     "id": "5c5ffa71-9051-4eb6-95c1-4630265ac577",
@@ -300,30 +300,183 @@
     ],
     "defaultSessionMinutes": 10,
     "metronomeEnabled": false,
-    "totalPracticeSec": 0,
+    "totalPracticeSec": 2695,
     "sortIndex": 1,
     "createdAt": "2026-06-10T14:59:09.110Z",
-    "updatedAt": "2026-06-10T15:31:39.167Z"
+    "updatedAt": "2026-06-12T14:16:50.923Z"
+  },
+  {
+    "id": "58148c75-8f5b-4b2b-822a-098df01fb11d",
+    "title": "Escabana (Rythm)",
+    "link": "https://www.youtube.com/watch?v=gRTh_N8jG40&list=RDgRTh_N8jG40&start_radio=1",
+    "workingBpm": null,
+    "warmupBpm": null,
+    "troubleSpots": [],
+    "originalBpm": null,
+    "stepPercent": 2.5,
+    "practiceMode": "timed",
+    "includeWarmupBlock": false,
+    "blockTemplate": [
+      {
+        "id": "song-slowReference",
+        "role": "slowReference",
+        "name": "Slow Reference",
+        "purpose": "@ 80% working",
+        "instructions": [
+          "Play the full tune slowly and relaxed.",
+          "Stay here until you can play one clean-enough repetition of the song."
+        ],
+        "enabled": true,
+        "duration": {
+          "kind": "fixed",
+          "seconds": 90
+        },
+        "tempoRule": {
+          "source": "working",
+          "adjustment": {
+            "kind": "percent",
+            "value": 80
+          }
+        },
+        "metronomeEnabled": true,
+        "progression": {
+          "kind": "none"
+        }
+      },
+      {
+        "id": "song-troubleSpot",
+        "role": "troubleSpot",
+        "name": "Trouble Spot",
+        "purpose": "@ saved trouble BPM, else 80% working",
+        "instructions": [
+          "Loop just the hardest 1-2 bars of the tune.",
+          "Three clean-and-relaxed reps earns the next rung."
+        ],
+        "enabled": true,
+        "duration": {
+          "kind": "fixed",
+          "seconds": 120
+        },
+        "tempoRule": {
+          "source": "trouble",
+          "fallback": {
+            "source": "working",
+            "adjustment": {
+              "kind": "percent",
+              "value": 80
+            }
+          }
+        },
+        "metronomeEnabled": true,
+        "progression": {
+          "kind": "trouble"
+        }
+      },
+      {
+        "id": "song-ceilingWork",
+        "role": "ceilingWork",
+        "name": "Ceiling Work",
+        "purpose": "@ target BPM (working + 1 step)",
+        "instructions": [
+          "Full tune at the target tempo.",
+          "Three clean-and-relaxed reps earns a new working tempo."
+        ],
+        "enabled": true,
+        "duration": {
+          "kind": "fixed",
+          "seconds": 300
+        },
+        "tempoRule": {
+          "source": "working",
+          "adjustment": {
+            "kind": "steps",
+            "value": 1
+          }
+        },
+        "metronomeEnabled": true,
+        "progression": {
+          "kind": "working"
+        }
+      },
+      {
+        "id": "song-overspeed",
+        "role": "overspeed",
+        "name": "Overspeed",
+        "purpose": "@ overspeed (working + 2 steps)",
+        "instructions": [
+          "Play at least one repetition above your target tempo.",
+          "Messy is OK; the goal is to make target feel slower."
+        ],
+        "enabled": true,
+        "duration": {
+          "kind": "fixed",
+          "seconds": 120
+        },
+        "tempoRule": {
+          "source": "working",
+          "adjustment": {
+            "kind": "steps",
+            "value": 2
+          }
+        },
+        "metronomeEnabled": true,
+        "progression": {
+          "kind": "none"
+        }
+      },
+      {
+        "id": "song-consolidation",
+        "role": "consolidation",
+        "name": "Consolidation",
+        "purpose": "@ 70% working",
+        "instructions": [
+          "Play relaxed reps below working tempo.",
+          "Stay here until you can play one very relaxed musical pass."
+        ],
+        "enabled": true,
+        "duration": {
+          "kind": "fixed",
+          "seconds": 90
+        },
+        "tempoRule": {
+          "source": "working",
+          "adjustment": {
+            "kind": "percent",
+            "value": 70
+          }
+        },
+        "metronomeEnabled": true,
+        "progression": {
+          "kind": "none"
+        }
+      }
+    ],
+    "defaultSessionMinutes": 10,
+    "metronomeEnabled": false,
+    "totalPracticeSec": 2625,
+    "sortIndex": 2,
+    "createdAt": "2026-06-10T16:16:07.462Z",
+    "updatedAt": "2026-06-12T14:47:13.161Z"
   },
   {
     "id": "dc275ae4-6f34-45b0-a041-3a04783d7427",
     "title": "One - Depapepe Rythm Part",
     "link": "https://www.youtube.com/watch?v=Hpa4nTozXBw&list=RDHpa4nTozXBw",
-    "workingBpm": 187,
+    "workingBpm": 192,
     "warmupBpm": null,
     "troubleSpots": [
       {
-        "bpm": 164
+        "bpm": 176
       }
     ],
     "originalBpm": 200,
     "stepPercent": 2.5,
     "practiceMode": "smart",
     "includeWarmupBlock": false,
-    "totalPracticeSec": 12378,
-    "sortIndex": 2,
+    "totalPracticeSec": 14160,
+    "sortIndex": 3,
     "createdAt": "2026-04-27T15:29:18.877Z",
-    "updatedAt": "2026-06-10T15:31:39.167Z",
+    "updatedAt": "2026-06-12T14:47:32.357Z",
     "blockTemplate": [
       {
         "id": "song-slowReference",
@@ -337,7 +490,7 @@
         "enabled": true,
         "duration": {
           "kind": "fixed",
-          "seconds": 90
+          "seconds": 300
         },
         "tempoRule": {
           "source": "working",
@@ -415,7 +568,7 @@
           "Play at least one repetition above your target tempo.",
           "Messy is OK; the goal is to make target feel slower."
         ],
-        "enabled": true,
+        "enabled": false,
         "duration": {
           "kind": "fixed",
           "seconds": 120
@@ -441,7 +594,7 @@
           "Play relaxed reps below working tempo.",
           "Stay here until you can play one very relaxed musical pass."
         ],
-        "enabled": true,
+        "enabled": false,
         "duration": {
           "kind": "fixed",
           "seconds": 90
@@ -459,27 +612,24 @@
         }
       }
     ],
-    "defaultSessionMinutes": 10
+    "defaultSessionMinutes": 10,
+    "metronomeEnabled": true
   },
   {
     "id": "ccc5bda1-f0e0-418f-a73c-c2855b575ad8",
     "title": "One - Depapepe Melodic Part",
     "link": null,
-    "workingBpm": 192,
+    "workingBpm": 197,
     "warmupBpm": 120,
-    "troubleSpots": [
-      {
-        "bpm": 195
-      }
-    ],
+    "troubleSpots": [],
     "originalBpm": 200,
     "stepPercent": 2.5,
     "practiceMode": "smart",
     "includeWarmupBlock": false,
-    "totalPracticeSec": 10520,
-    "sortIndex": 3,
+    "totalPracticeSec": 11786,
+    "sortIndex": 4,
     "createdAt": "2026-04-29T12:14:24.205Z",
-    "updatedAt": "2026-06-10T15:31:39.167Z",
+    "updatedAt": "2026-06-11T14:00:19.968Z",
     "blockTemplate": [
       {
         "id": "song-slowReference",
@@ -493,7 +643,7 @@
         "enabled": true,
         "duration": {
           "kind": "fixed",
-          "seconds": 90
+          "seconds": 300
         },
         "tempoRule": {
           "source": "working",
@@ -516,7 +666,7 @@
           "Loop just the hardest 1-2 bars of the tune.",
           "Three clean-and-relaxed reps earns the next rung."
         ],
-        "enabled": true,
+        "enabled": false,
         "duration": {
           "kind": "fixed",
           "seconds": 120
@@ -571,7 +721,7 @@
           "Play at least one repetition above your target tempo.",
           "Messy is OK; the goal is to make target feel slower."
         ],
-        "enabled": true,
+        "enabled": false,
         "duration": {
           "kind": "fixed",
           "seconds": 120
@@ -597,7 +747,7 @@
           "Play relaxed reps below working tempo.",
           "Stay here until you can play one very relaxed musical pass."
         ],
-        "enabled": true,
+        "enabled": false,
         "duration": {
           "kind": "fixed",
           "seconds": 90
@@ -615,7 +765,8 @@
         }
       }
     ],
-    "defaultSessionMinutes": 10
+    "defaultSessionMinutes": 10,
+    "metronomeEnabled": true
   },
   {
     "id": "de7b70c2-3c07-4e13-ae2b-6028a94269e7",
@@ -624,11 +775,11 @@
     "workingBpm": 182,
     "originalBpm": 271,
     "stepPercent": 2.5,
-    "totalPracticeSec": 14327,
+    "totalPracticeSec": 15578,
     "createdAt": "2026-04-13T21:21:14.941Z",
-    "updatedAt": "2026-06-10T15:31:39.167Z",
+    "updatedAt": "2026-06-10T19:43:58.378Z",
     "troubleSpots": [],
-    "sortIndex": 4,
+    "sortIndex": 5,
     "warmupBpm": null,
     "practiceMode": "smart",
     "includeWarmupBlock": true,
@@ -778,10 +929,10 @@
     "troubleSpots": [],
     "originalBpm": 186,
     "stepPercent": 2.5,
-    "totalPracticeSec": 9149,
+    "totalPracticeSec": 9851,
     "createdAt": "2026-04-13T22:43:56.394Z",
-    "updatedAt": "2026-06-10T15:31:39.167Z",
-    "sortIndex": 5,
+    "updatedAt": "2026-06-10T19:55:45.530Z",
+    "sortIndex": 6,
     "warmupBpm": null,
     "practiceMode": "smart",
     "includeWarmupBlock": true,
@@ -931,161 +1082,9 @@
     "troubleSpots": [],
     "originalBpm": 261,
     "stepPercent": 2.5,
-    "totalPracticeSec": 11978,
+    "totalPracticeSec": 12980,
     "createdAt": "2026-04-13T22:46:44.165Z",
-    "updatedAt": "2026-06-10T15:31:39.167Z",
-    "sortIndex": 6,
-    "warmupBpm": null,
-    "practiceMode": "smart",
-    "includeWarmupBlock": true,
-    "blockTemplate": [
-      {
-        "id": "song-slowReference",
-        "role": "slowReference",
-        "name": "Slow Reference",
-        "purpose": "@ 80% working",
-        "instructions": [
-          "Play the full tune slowly and relaxed.",
-          "Stay here until you can play one clean-enough repetition of the song."
-        ],
-        "enabled": true,
-        "duration": {
-          "kind": "fixed",
-          "seconds": 90
-        },
-        "tempoRule": {
-          "source": "working",
-          "adjustment": {
-            "kind": "percent",
-            "value": 80
-          }
-        },
-        "metronomeEnabled": true,
-        "progression": {
-          "kind": "none"
-        }
-      },
-      {
-        "id": "song-troubleSpot",
-        "role": "troubleSpot",
-        "name": "Trouble Spot",
-        "purpose": "@ saved trouble BPM, else 80% working",
-        "instructions": [
-          "Loop just the hardest 1-2 bars of the tune.",
-          "Three clean-and-relaxed reps earns the next rung."
-        ],
-        "enabled": true,
-        "duration": {
-          "kind": "fixed",
-          "seconds": 120
-        },
-        "tempoRule": {
-          "source": "trouble",
-          "fallback": {
-            "source": "working",
-            "adjustment": {
-              "kind": "percent",
-              "value": 80
-            }
-          }
-        },
-        "metronomeEnabled": true,
-        "progression": {
-          "kind": "trouble"
-        }
-      },
-      {
-        "id": "song-ceilingWork",
-        "role": "ceilingWork",
-        "name": "Ceiling Work",
-        "purpose": "@ target BPM (working + 1 step)",
-        "instructions": [
-          "Full tune at the target tempo.",
-          "Three clean-and-relaxed reps earns a new working tempo."
-        ],
-        "enabled": true,
-        "duration": {
-          "kind": "fixed",
-          "seconds": 300
-        },
-        "tempoRule": {
-          "source": "working",
-          "adjustment": {
-            "kind": "steps",
-            "value": 1
-          }
-        },
-        "metronomeEnabled": true,
-        "progression": {
-          "kind": "working"
-        }
-      },
-      {
-        "id": "song-overspeed",
-        "role": "overspeed",
-        "name": "Overspeed",
-        "purpose": "@ overspeed (working + 2 steps)",
-        "instructions": [
-          "Play at least one repetition above your target tempo.",
-          "Messy is OK; the goal is to make target feel slower."
-        ],
-        "enabled": true,
-        "duration": {
-          "kind": "fixed",
-          "seconds": 120
-        },
-        "tempoRule": {
-          "source": "working",
-          "adjustment": {
-            "kind": "steps",
-            "value": 2
-          }
-        },
-        "metronomeEnabled": true,
-        "progression": {
-          "kind": "none"
-        }
-      },
-      {
-        "id": "song-consolidation",
-        "role": "consolidation",
-        "name": "Consolidation",
-        "purpose": "@ 70% working",
-        "instructions": [
-          "Play relaxed reps below working tempo.",
-          "Stay here until you can play one very relaxed musical pass."
-        ],
-        "enabled": true,
-        "duration": {
-          "kind": "fixed",
-          "seconds": 90
-        },
-        "tempoRule": {
-          "source": "working",
-          "adjustment": {
-            "kind": "percent",
-            "value": 70
-          }
-        },
-        "metronomeEnabled": true,
-        "progression": {
-          "kind": "none"
-        }
-      }
-    ],
-    "defaultSessionMinutes": 10
-  },
-  {
-    "id": "dc69fcf9-0d9a-46cd-837a-b7a10b887071",
-    "title": "Arkansas Traveler Whole song",
-    "link": "https://truefire.com/bluegrass-guitar-lessons/bluegrass-blaze/arkansas-traveler/v97799",
-    "workingBpm": 180,
-    "troubleSpots": [],
-    "originalBpm": 248,
-    "stepPercent": 2.5,
-    "totalPracticeSec": 8406,
-    "createdAt": "2026-04-13T22:48:00.779Z",
-    "updatedAt": "2026-06-10T15:31:39.167Z",
+    "updatedAt": "2026-06-11T14:17:11.804Z",
     "sortIndex": 7,
     "warmupBpm": null,
     "practiceMode": "smart",
@@ -1225,19 +1224,20 @@
         }
       }
     ],
-    "defaultSessionMinutes": 10
+    "defaultSessionMinutes": 10,
+    "metronomeEnabled": true
   },
   {
-    "id": "59d69a12-2dce-41c7-9ebe-0325d5b9a277",
-    "title": "Seney stretch [Capo1]",
-    "link": "https://www.youtube.com/watch?v=q8_rCRymt88&list=RDq8_rCRymt88&start_radio=1&t=7s",
-    "workingBpm": 195,
+    "id": "dc69fcf9-0d9a-46cd-837a-b7a10b887071",
+    "title": "Arkansas Traveler Whole song",
+    "link": "https://truefire.com/bluegrass-guitar-lessons/bluegrass-blaze/arkansas-traveler/v97799",
+    "workingBpm": 185,
     "troubleSpots": [],
-    "originalBpm": 210,
+    "originalBpm": 248,
     "stepPercent": 2.5,
-    "totalPracticeSec": 8807,
-    "createdAt": "2026-04-13T22:49:52.792Z",
-    "updatedAt": "2026-06-10T15:31:39.167Z",
+    "totalPracticeSec": 9041,
+    "createdAt": "2026-04-13T22:48:00.779Z",
+    "updatedAt": "2026-06-11T14:28:06.947Z",
     "sortIndex": 8,
     "warmupBpm": null,
     "practiceMode": "smart",
@@ -1377,176 +1377,22 @@
         }
       }
     ],
-    "defaultSessionMinutes": 10
+    "defaultSessionMinutes": 10,
+    "metronomeEnabled": true
   },
   {
-    "id": "cd5bdc97-4e73-41f8-81eb-aa8907e9ec2a",
-    "title": "Escabana",
-    "link": "https://www.youtube.com/watch?v=gRTh_N8jG40&list=RDgRTh_N8jG40&start_radio=1",
-    "workingBpm": 100,
-    "troubleSpots": [
-      {
-        "bpm": 95
-      },
-      {
-        "bpm": 95
-      }
-    ],
-    "originalBpm": 125,
-    "stepPercent": 2.5,
-    "totalPracticeSec": 9081,
-    "createdAt": "2026-04-13T22:50:50.703Z",
-    "updatedAt": "2026-06-10T15:31:39.167Z",
-    "sortIndex": 9,
-    "warmupBpm": 40,
-    "practiceMode": "smart",
-    "includeWarmupBlock": true,
-    "blockTemplate": [
-      {
-        "id": "song-slowReference",
-        "role": "slowReference",
-        "name": "Slow Reference",
-        "purpose": "@ 80% working",
-        "instructions": [
-          "Play the full tune slowly and relaxed.",
-          "Stay here until you can play one clean-enough repetition of the song."
-        ],
-        "enabled": true,
-        "duration": {
-          "kind": "fixed",
-          "seconds": 90
-        },
-        "tempoRule": {
-          "source": "working",
-          "adjustment": {
-            "kind": "percent",
-            "value": 80
-          }
-        },
-        "metronomeEnabled": true,
-        "progression": {
-          "kind": "none"
-        }
-      },
-      {
-        "id": "song-troubleSpot",
-        "role": "troubleSpot",
-        "name": "Trouble Spot",
-        "purpose": "@ saved trouble BPM, else 80% working",
-        "instructions": [
-          "Loop just the hardest 1-2 bars of the tune.",
-          "Three clean-and-relaxed reps earns the next rung."
-        ],
-        "enabled": true,
-        "duration": {
-          "kind": "fixed",
-          "seconds": 120
-        },
-        "tempoRule": {
-          "source": "trouble",
-          "fallback": {
-            "source": "working",
-            "adjustment": {
-              "kind": "percent",
-              "value": 80
-            }
-          }
-        },
-        "metronomeEnabled": true,
-        "progression": {
-          "kind": "trouble"
-        }
-      },
-      {
-        "id": "song-ceilingWork",
-        "role": "ceilingWork",
-        "name": "Ceiling Work",
-        "purpose": "@ target BPM (working + 1 step)",
-        "instructions": [
-          "Full tune at the target tempo.",
-          "Three clean-and-relaxed reps earns a new working tempo."
-        ],
-        "enabled": true,
-        "duration": {
-          "kind": "fixed",
-          "seconds": 300
-        },
-        "tempoRule": {
-          "source": "working",
-          "adjustment": {
-            "kind": "steps",
-            "value": 1
-          }
-        },
-        "metronomeEnabled": true,
-        "progression": {
-          "kind": "working"
-        }
-      },
-      {
-        "id": "song-overspeed",
-        "role": "overspeed",
-        "name": "Overspeed",
-        "purpose": "@ overspeed (working + 2 steps)",
-        "instructions": [
-          "Play at least one repetition above your target tempo.",
-          "Messy is OK; the goal is to make target feel slower."
-        ],
-        "enabled": true,
-        "duration": {
-          "kind": "fixed",
-          "seconds": 120
-        },
-        "tempoRule": {
-          "source": "working",
-          "adjustment": {
-            "kind": "steps",
-            "value": 2
-          }
-        },
-        "metronomeEnabled": true,
-        "progression": {
-          "kind": "none"
-        }
-      },
-      {
-        "id": "song-consolidation",
-        "role": "consolidation",
-        "name": "Consolidation",
-        "purpose": "@ 70% working",
-        "instructions": [
-          "Play relaxed reps below working tempo.",
-          "Stay here until you can play one very relaxed musical pass."
-        ],
-        "enabled": true,
-        "duration": {
-          "kind": "fixed",
-          "seconds": 90
-        },
-        "tempoRule": {
-          "source": "working",
-          "adjustment": {
-            "kind": "percent",
-            "value": 70
-          }
-        },
-        "metronomeEnabled": true,
-        "progression": {
-          "kind": "none"
-        }
-      }
-    ],
-    "defaultSessionMinutes": 10
-  },
-  {
-    "id": "f8165a82-98c4-433d-bda7-63419efd6911",
-    "title": "test",
-    "link": null,
-    "workingBpm": 180,
-    "warmupBpm": null,
+    "id": "59d69a12-2dce-41c7-9ebe-0325d5b9a277",
+    "title": "Seney stretch [Capo1]",
+    "link": "https://www.youtube.com/watch?v=q8_rCRymt88&list=RDq8_rCRymt88&start_radio=1&t=7s",
+    "workingBpm": 195,
     "troubleSpots": [],
-    "originalBpm": null,
+    "originalBpm": 210,
     "stepPercent": 2.5,
+    "totalPracticeSec": 9680,
+    "createdAt": "2026-04-13T22:49:52.792Z",
+    "updatedAt": "2026-06-11T14:42:54.541Z",
+    "sortIndex": 9,
+    "warmupBpm": null,
     "practiceMode": "smart",
     "includeWarmupBlock": true,
     "blockTemplate": [
@@ -1685,11 +1531,167 @@
       }
     ],
     "defaultSessionMinutes": 10,
-    "metronomeEnabled": true,
-    "totalPracticeSec": 36,
+    "metronomeEnabled": true
+  },
+  {
+    "id": "cd5bdc97-4e73-41f8-81eb-aa8907e9ec2a",
+    "title": "Escabana",
+    "link": "https://www.youtube.com/watch?v=gRTh_N8jG40&list=RDgRTh_N8jG40&start_radio=1",
+    "workingBpm": 100,
+    "troubleSpots": [
+      {
+        "bpm": 97
+      },
+      {
+        "bpm": 95
+      }
+    ],
+    "originalBpm": 125,
+    "stepPercent": 2.5,
+    "totalPracticeSec": 10139,
+    "createdAt": "2026-04-13T22:50:50.703Z",
+    "updatedAt": "2026-06-11T15:00:46.726Z",
     "sortIndex": 10,
-    "createdAt": "2026-06-10T14:09:01.237Z",
-    "updatedAt": "2026-06-10T15:31:39.167Z"
+    "warmupBpm": 40,
+    "practiceMode": "smart",
+    "includeWarmupBlock": true,
+    "blockTemplate": [
+      {
+        "id": "song-slowReference",
+        "role": "slowReference",
+        "name": "Slow Reference",
+        "purpose": "@ 80% working",
+        "instructions": [
+          "Play the full tune slowly and relaxed.",
+          "Stay here until you can play one clean-enough repetition of the song."
+        ],
+        "enabled": true,
+        "duration": {
+          "kind": "fixed",
+          "seconds": 90
+        },
+        "tempoRule": {
+          "source": "working",
+          "adjustment": {
+            "kind": "percent",
+            "value": 80
+          }
+        },
+        "metronomeEnabled": true,
+        "progression": {
+          "kind": "none"
+        }
+      },
+      {
+        "id": "song-troubleSpot",
+        "role": "troubleSpot",
+        "name": "Trouble Spot",
+        "purpose": "@ saved trouble BPM, else 80% working",
+        "instructions": [
+          "Loop just the hardest 1-2 bars of the tune.",
+          "Three clean-and-relaxed reps earns the next rung."
+        ],
+        "enabled": true,
+        "duration": {
+          "kind": "fixed",
+          "seconds": 120
+        },
+        "tempoRule": {
+          "source": "trouble",
+          "fallback": {
+            "source": "working",
+            "adjustment": {
+              "kind": "percent",
+              "value": 80
+            }
+          }
+        },
+        "metronomeEnabled": true,
+        "progression": {
+          "kind": "trouble"
+        }
+      },
+      {
+        "id": "song-ceilingWork",
+        "role": "ceilingWork",
+        "name": "Ceiling Work",
+        "purpose": "@ target BPM (working + 1 step)",
+        "instructions": [
+          "Full tune at the target tempo.",
+          "Three clean-and-relaxed reps earns a new working tempo."
+        ],
+        "enabled": true,
+        "duration": {
+          "kind": "fixed",
+          "seconds": 300
+        },
+        "tempoRule": {
+          "source": "working",
+          "adjustment": {
+            "kind": "steps",
+            "value": 1
+          }
+        },
+        "metronomeEnabled": true,
+        "progression": {
+          "kind": "working"
+        }
+      },
+      {
+        "id": "song-overspeed",
+        "role": "overspeed",
+        "name": "Overspeed",
+        "purpose": "@ overspeed (working + 2 steps)",
+        "instructions": [
+          "Play at least one repetition above your target tempo.",
+          "Messy is OK; the goal is to make target feel slower."
+        ],
+        "enabled": true,
+        "duration": {
+          "kind": "fixed",
+          "seconds": 120
+        },
+        "tempoRule": {
+          "source": "working",
+          "adjustment": {
+            "kind": "steps",
+            "value": 2
+          }
+        },
+        "metronomeEnabled": true,
+        "progression": {
+          "kind": "none"
+        }
+      },
+      {
+        "id": "song-consolidation",
+        "role": "consolidation",
+        "name": "Consolidation",
+        "purpose": "@ 70% working",
+        "instructions": [
+          "Play relaxed reps below working tempo.",
+          "Stay here until you can play one very relaxed musical pass."
+        ],
+        "enabled": true,
+        "duration": {
+          "kind": "fixed",
+          "seconds": 90
+        },
+        "tempoRule": {
+          "source": "working",
+          "adjustment": {
+            "kind": "percent",
+            "value": 70
+          }
+        },
+        "metronomeEnabled": true,
+        "progression": {
+          "kind": "none"
+        }
+      }
+    ],
+    "defaultSessionMinutes": 10,
+    "metronomeEnabled": true
   },
   {
     "id": "b30b8bc7-a8ed-4c4b-ba8a-a5e8ebc1d996",

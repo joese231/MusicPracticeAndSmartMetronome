@@ -27,6 +27,15 @@ const LOOKAHEAD_MS = 25;
 const SCHEDULE_HORIZON_SEC = 0.1;
 const MAX_LATE_SEC = 0.02;
 const REANCHOR_LEAD_SEC = 0.05;
+const MIN_PLAYABLE_BPM = 20;
+
+export function isPlayableBpm(bpm: unknown): bpm is number {
+  return (
+    typeof bpm === "number" &&
+    Number.isFinite(bpm) &&
+    bpm >= MIN_PLAYABLE_BPM
+  );
+}
 
 /**
  * Scheduler recovery. The 25ms setInterval is soft — under React renders,
@@ -297,6 +306,10 @@ export class Metronome {
   private lateTickCount = 0;
 
   async start(bpm: number, mode: MetronomeMode = "all"): Promise<void> {
+    if (!isPlayableBpm(bpm)) {
+      this.stop();
+      return;
+    }
     this.bpm = bpm;
     this.mode = mode;
 
@@ -326,6 +339,7 @@ export class Metronome {
 
   resume(): void {
     if (!this.ctx) return;
+    if (!isPlayableBpm(this.bpm)) return;
     this.running = true;
     this.nextBeatTime = Math.max(
       this.nextBeatTime,
@@ -340,6 +354,10 @@ export class Metronome {
   }
 
   setBpm(bpm: number): void {
+    if (!isPlayableBpm(bpm)) {
+      this.stop();
+      return;
+    }
     this.bpm = bpm;
     if (this.ctx && this.running) {
       this.nextBeatTime = Math.max(
@@ -487,6 +505,10 @@ export class Metronome {
 
   private tick(): void {
     if (!this.running || !this.ctx || !this.masterGain) return;
+    if (!isPlayableBpm(this.bpm)) {
+      this.stop();
+      return;
+    }
     const now = this.ctx.currentTime;
 
     const secondsPerBeat = 60 / this.bpm;

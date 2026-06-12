@@ -5,6 +5,20 @@ import type { Exercise } from "@/types/exercise";
 import { formatPracticeTime } from "@/lib/format";
 import { useExercisesStore } from "@/lib/store/useExercisesStore";
 
+export function moveExerciseIds(
+  ids: string[],
+  from: number,
+  to: number,
+): string[] {
+  if (from < 0 || from >= ids.length || to < 0 || to >= ids.length) {
+    return ids;
+  }
+  const next = ids.slice();
+  const [moved] = next.splice(from, 1);
+  next.splice(to, 0, moved);
+  return next;
+}
+
 export function ExerciseList({
   exercises,
   lastPlayedId,
@@ -42,9 +56,14 @@ export function ExerciseList({
     const from = ids.indexOf(sourceId);
     const to = ids.indexOf(dropId);
     if (from < 0 || to < 0) return;
-    const next = ids.slice();
-    next.splice(from, 1);
-    next.splice(to, 0, sourceId);
+    const next = moveExerciseIds(ids, from, to);
+    await reorderExercises(next);
+  };
+
+  const moveExercise = async (from: number, to: number) => {
+    const ids = exercises.map((x) => x.id);
+    const next = moveExerciseIds(ids, from, to);
+    if (next === ids) return;
     await reorderExercises(next);
   };
 
@@ -55,7 +74,7 @@ export function ExerciseList({
 
   return (
     <ul className="space-y-3">
-      {exercises.map((ex) => {
+      {exercises.map((ex, index) => {
         const isDragging = draggingId === ex.id;
         const isOver = overId === ex.id && draggingId && draggingId !== ex.id;
         const isLastPlayed =
@@ -78,6 +97,26 @@ export function ExerciseList({
             } ${isDragging ? "opacity-40" : ""}`}
           >
             <div className="flex items-center gap-3 px-3 py-4">
+              <div className="flex flex-none flex-col gap-1">
+                <button
+                  type="button"
+                  aria-label={`Move ${ex.name} up`}
+                  disabled={index === 0}
+                  onClick={() => void moveExercise(index, index - 1)}
+                  className="rounded border border-bg-border px-2 py-1 text-xs font-semibold text-neutral-300 transition hover:border-accent/60 hover:bg-bg disabled:cursor-not-allowed disabled:opacity-35 disabled:hover:border-bg-border disabled:hover:bg-transparent"
+                >
+                  Up
+                </button>
+                <button
+                  type="button"
+                  aria-label={`Move ${ex.name} down`}
+                  disabled={index === exercises.length - 1}
+                  onClick={() => void moveExercise(index, index + 1)}
+                  className="rounded border border-bg-border px-2 py-1 text-xs font-semibold text-neutral-300 transition hover:border-accent/60 hover:bg-bg disabled:cursor-not-allowed disabled:opacity-35 disabled:hover:border-bg-border disabled:hover:bg-transparent"
+                >
+                  Down
+                </button>
+              </div>
               <span
                 className="flex-none cursor-grab select-none px-2 text-2xl leading-none text-neutral-500 transition hover:text-neutral-200 active:cursor-grabbing"
                 aria-label="Drag to reorder"

@@ -17,6 +17,14 @@ import {
   BlockTemplateEditor,
   validateTemplateForSession,
 } from "@/components/session/BlockTemplateEditor";
+import { SegmentedControl } from "@/components/ui/SegmentedControl";
+
+const PRACTICE_MODE_OPTIONS: Array<{ value: PracticeMode; label: string }> = [
+  { value: "smart", label: "Smart" },
+  { value: "simple", label: "Simple" },
+  { value: "timed", label: "Timed" },
+  { value: "openEnded", label: "Open Ended" },
+];
 
 export type ExerciseFormValues = {
   name: string;
@@ -310,37 +318,16 @@ export function ExerciseForm({
           <div className="mt-1 text-xs text-neutral-500">
             Smart runs your custom block sequence with promotion. Simple plays one steady-BPM countdown. Timed is a single countdown block that can run without a click. Open Ended is a count-up timer.
           </div>
-          <div className="mt-3 inline-flex overflow-hidden rounded-lg border border-bg-border bg-bg">
-            {(["smart", "simple", "timed", "openEnded"] as const).map((m) => {
-              const active = practiceMode === m;
-              const label =
-                m === "openEnded"
-                  ? "Open Ended"
-                  : m === "timed"
-                    ? "Timed"
-                    : m === "simple"
-                      ? "Simple"
-                      : "Smart";
-              return (
-                <button
-                  key={m}
-                  type="button"
-                  role="radio"
-                  aria-checked={active}
-                  onClick={() => {
-                    setPracticeMode(m);
-                    setPracticeModeTouched(true);
-                  }}
-                  className={`px-4 py-1.5 text-sm font-semibold transition ${
-                    active
-                      ? "bg-accent text-black"
-                      : "text-neutral-300 hover:bg-bg-elevated"
-                  }`}
-                >
-                  {label}
-                </button>
-              );
-            })}
+          <div className="mt-3">
+            <SegmentedControl
+              value={practiceMode}
+              options={PRACTICE_MODE_OPTIONS}
+              onChange={(m) => {
+                setPracticeMode(m);
+                setPracticeModeTouched(true);
+              }}
+              ariaLabel="Exercise practice mode"
+            />
           </div>
         </div>
 

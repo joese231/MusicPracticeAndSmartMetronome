@@ -149,8 +149,8 @@ export function ManualSessionForm() {
   };
 
   return (
-    <div className="mb-8 rounded-lg border border-neutral-700 bg-neutral-900 p-6">
-      <h2 className="mb-6 text-xl font-bold">Log Manual Session</h2>
+    <div className="space-y-4">
+      <h2 className="sr-only">Log Manual Session</h2>
 
       {error && (
         <div className="mb-4 rounded bg-red-900 p-3 text-red-100" role="alert">
@@ -310,7 +310,7 @@ export function ManualSessionForm() {
         {/* Submit */}
         <button
           type="submit"
-          className="w-full rounded bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700"
+          className="w-full rounded-lg bg-accent px-4 py-2 text-sm font-bold text-black transition hover:bg-accent-strong"
         >
           Log Session
         </button>

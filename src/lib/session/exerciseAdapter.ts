@@ -2,8 +2,8 @@ import type { Exercise } from "@/types/exercise";
 import type { Song } from "@/types/song";
 
 /**
- * Wrap an Exercise as a Song-shaped object so the existing driver, tempo
- * helpers, and BlockDef.tempoFn (which all take a Song) work unchanged. The
+ * Wrap an Exercise as a Song-shaped object for legacy session-page UI fields.
+ * Pure tempo helpers now only require the smaller TempoSubject shape. The
  * returned object has no trouble spots and no originalBpm — the exercise
  * session only ever promotes workingBpm.
  */

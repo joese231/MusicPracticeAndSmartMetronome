@@ -190,7 +190,7 @@ describe("ManualSessionForm - Form Logic", () => {
 
       expect(record).toMatchObject({
         itemId: "__manual__",
-        itemKind: "song",
+        itemKind: "freePlay",
         itemTitle: "Jam session",
         startedAt: "2026-04-27T14:30:00",
         durationSec: 3600,
@@ -495,7 +495,7 @@ describe("ManualSessionForm - Form Submission E2E", () => {
         durationSec: 3600,
         endedReason: "manual",
       });
-      expect(record.itemKind).toBe("song");
+      expect(record.itemKind).toBe("freePlay");
     });
 
     it("submits a free-form transcription session", () => {
@@ -768,7 +768,7 @@ describe("ManualSessionForm - Form Submission E2E", () => {
         durationSec: 1500,
       });
 
-      expect(record.itemKind).toBe("song");
+      expect(record.itemKind).toBe("freePlay");
       expect(record.itemId).toBe("__manual__");
       expect(record.itemTitle).toBe("Noodling around");
     });

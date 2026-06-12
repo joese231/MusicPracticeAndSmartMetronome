@@ -13,20 +13,8 @@ import type {
   SessionRecord,
 } from "@/types/sessionRecord";
 import {
-  Metronome,
-  type MetronomeMode,
   enableMetronomeDebug,
 } from "@/lib/metronome/scheduler";
-import { SessionRecorder } from "@/lib/audio/recorder";
-import {
-  advanceSnapshot,
-  elapsedInPlayingSec,
-  initialSnapshot,
-  repeatCurrentBlockSnapshot,
-  rewindSnapshot,
-  tickSnapshot,
-  timeLeftInPlayingSec,
-} from "@/lib/session/driver";
 import {
   buildBlocks,
   clampSessionMinutes,
@@ -39,25 +27,14 @@ import {
   warmupBpmFor,
   workingBpmForTempo,
 } from "@/lib/session/tempo";
+import { usePracticeSession } from "@/lib/session/usePracticeSession";
 import type { Song } from "@/types/song";
-import type { BlockDef, DriverSnapshot } from "@/types/block";
+import type { BlockDef } from "@/types/block";
 
-import { BlockHeader } from "@/components/session/BlockHeader";
-import { BlockCountdown } from "@/components/session/BlockCountdown";
-import { BlockCountUp } from "@/components/session/BlockCountUp";
-import { BlockInstructions } from "@/components/session/BlockInstructions";
-import { EarnedButton } from "@/components/session/EarnedButton";
-import { SkipBlockButton } from "@/components/session/SkipBlockButton";
-import { PreviousBlockButton } from "@/components/session/PreviousBlockButton";
-import { ShortcutsHint } from "@/components/session/ShortcutsHint";
-import { RecordingIndicator } from "@/components/session/RecordingIndicator";
-import { MetronomeIndicator } from "@/components/metronome/MetronomeIndicator";
-import { MetronomeModeToggle } from "@/components/metronome/MetronomeModeToggle";
 import { MetronomeDiagnosticsPanel } from "@/components/session/MetronomeDiagnostics";
 import { BpmEditorModal } from "@/components/session/BpmEditorModal";
 import { BetweenItemsOverlay } from "@/components/session/BetweenItemsOverlay";
-
-type Toast = { id: number; text: string };
+import { SessionShell } from "@/components/session/SessionShell";
 
 type BetweenSongs = {
   nextSongId: string;
@@ -65,9 +42,6 @@ type BetweenSongs = {
   startedAtMs: number;
   durationSec: number;
 };
-
-// Brief pause before auto-advance kicks in when the legacy behavior is on.
-const AUTO_ADVANCE_DELAY_MS = 1000;
 
 export default function SessionPageWrapper() {
   return (
@@ -101,7 +75,6 @@ function SessionPage() {
   const songs = useSongsStore((s) => s.songs);
   const song = useSongsStore((s) => s.songs.find((x) => x.id === id));
   const updateSong = useSongsStore((s) => s.updateSong);
-  const incrementPracticeTime = useSongsStore((s) => s.incrementPracticeTime);
 
   const settings = useSettingsStore((s) => s.settings);
   const loadedSettings = useSettingsStore((s) => s.loaded);
@@ -110,12 +83,8 @@ function SessionPage() {
   const setLatestRecording = useSessionStore((s) => s.setLatestRecording);
   const clearLatestRecording = useSessionStore((s) => s.clearLatestRecording);
 
-  const appendSessionRecord = useSessionHistoryStore((s) => s.append);
+  const completeSessionRecord = useSessionHistoryStore((s) => s.complete);
 
-  const [started, setStarted] = useState(false);
-  const [metronomeMode, setMetronomeMode] = useState<MetronomeMode>("all");
-  const [toasts, setToasts] = useState<Toast[]>([]);
-  const [paused, setPaused] = useState(false);
   const [betweenSongs, setBetweenSongs] = useState<BetweenSongs | null>(null);
   const [betweenSongsPaused, setBetweenSongsPaused] = useState(false);
   const [bpmEditorOpen, setBpmEditorOpen] = useState(false);
@@ -134,34 +103,17 @@ function SessionPage() {
   // time resumes cleanly.
   const betweenSongsPausedAtRef = useRef<number>(0);
 
-  // Explicit session state machine.
-  const [snap, setSnap] = useState<DriverSnapshot | null>(null);
-  const [nowMs, setNowMs] = useState<number>(() => Date.now());
-
-  const pausedRef = useRef(false);
-  pausedRef.current = paused;
-  // Wall-clock ms when we paused (0 when not paused). Used on resume/end to
-  // shift blockStartMs + sessionStartMs forward so paused time doesn't count
-  // toward the block countdown or totalPracticeSec.
-  const pausedAtRef = useRef<number>(0);
-
-  const sessionStartMsRef = useRef<number>(0);
-  const sessionStartIsoRef = useRef<string>("");
   const startWorkingBpmRef = useRef<number | null>(null);
   const startTroubleBpmsRef = useRef<(number | null)[]>([]);
   const promotionsRef = useRef<PromotionEvent[]>([]);
   const songRuntimeRef = useRef<Song | null>(null);
-  const metronomeRef = useRef<Metronome | null>(null);
-  const recorderRef = useRef<SessionRecorder | null>(null);
-  const recordingActiveRef = useRef(false);
-  const endedRef = useRef(false);
-  const [recordingActive, setRecordingActive] = useState(false);
-
-  // autoAdvanceBlocks is read at phase-transition time via a ref so toggling
-  // it in settings mid-session affects the *next* block break, not the whole
-  // session retroactively.
-  const autoAdvanceRef = useRef(settings.autoAdvanceBlocks);
-  autoAdvanceRef.current = settings.autoAdvanceBlocks;
+  const earnedHandlerRef = useRef<() => void>(() => {});
+  const endSessionRef = useRef<(reason: "complete" | "abort") => void>(
+    () => {},
+  );
+  const handleBetweenSongsSkipRef = useRef<() => void>(() => {});
+  const handleBetweenSongsCancelRef = useRef<() => void>(() => {});
+  const handleBetweenSongsPauseToggleRef = useRef<() => void>(() => {});
   const durationMinutes = clampSessionMinutes(song?.defaultSessionMinutes ?? 10);
 
   useEffect(() => {
@@ -184,72 +136,50 @@ function SessionPage() {
     [durationMinutes, song?.id, blockStructureKey],
   );
 
-  const addToast = useCallback((text: string) => {
-    const toastId = Date.now() + Math.random();
-    setToasts((t) => [...t, { id: toastId, text }]);
-    setTimeout(() => setToasts((t) => t.filter((x) => x.id !== toastId)), 2200);
-  }, []);
-
-  // RAF loop: advance `nowMs` for the countdown, and call tickSnapshot which
-  // flips the phase to `awaiting` the moment a playing block runs out.
-  useEffect(() => {
-    if (!started) return;
-    let raf = 0;
-    let cancelled = false;
-    const loop = () => {
-      if (cancelled) return;
-      if (!pausedRef.current) {
-        const n = Date.now();
-        setNowMs(n);
-        setSnap((prev) => (prev ? tickSnapshot(prev, blocks, n) : prev));
+  const practice = usePracticeSession({
+    blocks,
+    runtimeSubjectRef: songRuntimeRef,
+    settings,
+    metronomeMode: "all",
+    clearLatestRecording,
+    getStartSubject: () => song ?? null,
+    onBeforeStart: (subject) => {
+      songRuntimeRef.current = subject as Song;
+    },
+    onSessionStarted: (_startMs, subject) => {
+      const startSong = subject as Song;
+      startWorkingBpmRef.current = startSong.workingBpm;
+      startTroubleBpmsRef.current = startSong.troubleSpots.map((s) => s.bpm);
+      promotionsRef.current = [];
+    },
+    onBlockStarted: (block) => {
+      if (block.kind !== "consciousPractice") {
+        setConsciousSlowMode(false);
       }
-      raf = requestAnimationFrame(loop);
-    };
-    raf = requestAnimationFrame(loop);
-    return () => {
-      cancelled = true;
-      cancelAnimationFrame(raf);
-    };
-  }, [started, blocks]);
+    },
+    onComplete: () => endSessionRef.current("complete"),
+    onAbort: () => endSessionRef.current("abort"),
+    onPlus: () => earnedHandlerRef.current(),
+    isIntermissionActive: () => !!betweenSongsRef.current,
+    onIntermissionSkip: () => handleBetweenSongsSkipRef.current(),
+    onIntermissionCancel: () => handleBetweenSongsCancelRef.current(),
+    onIntermissionPauseToggle: () => handleBetweenSongsPauseToggleRef.current(),
+    createMetronomeWhenSilent: true,
+  });
 
   const endSession = useCallback(
     async (reason: "complete" | "abort") => {
-      if (endedRef.current) return;
-      endedRef.current = true;
-
-      // If we're ending while paused, absorb the outstanding paused span into
-      // sessionStartMsRef so that span doesn't get counted as practice.
-      if (pausedAtRef.current > 0) {
-        sessionStartMsRef.current += Date.now() - pausedAtRef.current;
-        pausedAtRef.current = 0;
-      }
-
-      // Wall-clock elapsed — intentionally includes any awaiting gaps, since
-      // time spent finishing the current pass still counts as practice.
-      const elapsedSec = sessionStartMsRef.current
-        ? (Date.now() - sessionStartMsRef.current) / 1000
-        : 0;
-
-      const m = metronomeRef.current;
-      if (m) {
-        m.stop();
-        m.dispose();
-        metronomeRef.current = null;
-      }
-
+      await practice.finishSession(reason, async ({ elapsedSec, startedAt, recorder }) => {
       const songId = song?.id;
-      if (songId) {
-        void incrementPracticeTime(songId, Math.max(0, elapsedSec));
-      }
 
-      if (songId && sessionStartIsoRef.current) {
+      if (songId && startedAt) {
         const songNow = songRuntimeRef.current ?? song;
         const rec: SessionRecord = {
           id: genSessionRecordId(),
           itemId: songId,
           itemKind: "song",
           itemTitle: song?.title ?? songId,
-          startedAt: sessionStartIsoRef.current,
+          startedAt,
           endedAt: new Date().toISOString(),
           durationSec: Math.max(0, Math.round(elapsedSec)),
           endedReason: reason,
@@ -260,15 +190,16 @@ function SessionPage() {
           endTroubleBpms: songNow ? songNow.troubleSpots.map((s) => s.bpm) : [],
           promotions: promotionsRef.current.slice(),
         };
-        void appendSessionRecord(rec).catch(() => {
-          // best-effort — never block session teardown
-        });
+        void completeSessionRecord(rec)
+          .then(() => loadSongs())
+          .catch(() => {
+            // best-effort — never block session teardown
+          });
       }
 
-      const rec = recorderRef.current;
-      if (rec && songId) {
+      if (recorder && songId) {
         try {
-          const result = await rec.stop();
+          const result = await recorder.stop();
           const blobUrl = URL.createObjectURL(result.blob);
           setLatestRecording({
             songId,
@@ -282,7 +213,6 @@ function SessionPage() {
           // swallow
         }
       }
-      recorderRef.current = null;
 
       // On a normal completion, flow straight into the next song in the
       // user's ordered list at the same session length. This skips the trip
@@ -312,170 +242,23 @@ function SessionPage() {
 
       if (songId) router.push(`/songs/${songId}`);
       else router.push("/");
+      });
     },
     [
       durationMinutes,
-      incrementPracticeTime,
+      loadSongs,
+      practice,
       router,
       setLatestRecording,
       song,
       songs,
       settings.interSongPauseSec,
-      appendSessionRecord,
+      completeSessionRecord,
     ],
   );
-
-  // Advance from `awaiting` (or skip from `playing`) to the next block.
-  // Resumes the metronome at the new block's tempo.
-  const advance = useCallback(() => {
-    setSnap((prev) => {
-      if (!prev) return prev;
-      return advanceSnapshot(prev, blocks, Date.now());
-    });
-  }, [blocks]);
-
-  // Phase-transition side effects: drive the metronome off snapshot changes.
-  const prevPhaseKeyRef = useRef<string>("");
-  useEffect(() => {
-    if (!started || !snap || endedRef.current) return;
-    const key = `${snap.phase}-${snap.blockIndex}`;
-    if (key === prevPhaseKeyRef.current) return;
-    prevPhaseKeyRef.current = key;
-
-    if (snap.phase === "ended") {
-      void endSession("complete");
-      return;
-    }
-
-    const m = metronomeRef.current;
-    if (!m) return;
-
-    if (snap.phase === "awaiting") {
-      // Metronome keeps running at the current block's BPM so the player
-      // can finish their current pass in time — only the chime fires.
-      m.playTransitionCue();
-      if (autoAdvanceRef.current) {
-        const t = setTimeout(() => advance(), AUTO_ADVANCE_DELAY_MS);
-        return () => clearTimeout(t);
-      }
-      return;
-    }
-
-    if (snap.phase === "playing") {
-      const block = blocks[snap.blockIndex];
-      const songNow = songRuntimeRef.current;
-      if (!block || !songNow) return;
-      // The transient "2× slower" toggle belongs to exactly one warm-up
-      // block instance — drop it whenever a new block begins.
-      if (block.kind !== "consciousPractice") {
-        setConsciousSlowMode(false);
-      }
-      if (block.metronomeEnabled === false) {
-        m.pause();
-      } else {
-        m.resume();
-        // Metronome is already running from startSession / the previous block;
-        // just switch tempo for the new block. Slow-mode / saved-warmup
-        // changes are pushed by the dedicated tempoBpm effect below.
-        m.setBpm(block.tempoFn(songNow));
-        // Align the accent pattern to the start of this block — otherwise
-        // beatIndex's continuous count from session start produces downbeats
-        // that land mid-bar relative to the block the player is focused on.
-        m.alignToDownbeat();
-      }
-    }
-  }, [snap, started, blocks, advance, endSession]);
-
-
-  useEffect(() => {
-    metronomeRef.current?.setVolume(settings.metronomeVolume);
-    metronomeRef.current?.setAccentsEnabled(settings.accentsEnabled);
-  }, [settings.metronomeVolume, settings.accentsEnabled]);
-
-  useEffect(() => {
-    metronomeRef.current?.setMode(metronomeMode);
-  }, [metronomeMode]);
-
-  const startingRef = useRef(false);
-  const startSession = useCallback(async () => {
-    if (!song || started || startingRef.current) return;
-    startingRef.current = true;
-
-    clearLatestRecording();
-    songRuntimeRef.current = song;
-
-    // Dispose any leftover instance before installing a new one. Under
-    // Strict-Mode or auto-advance edge cases a stale Metronome could still
-    // be scheduling against the shared AudioContext; two live instances
-    // interleaving beats on the same destination is the exact shape of
-    // "weird, varying-volume clicks" we're hunting.
-    const prev = metronomeRef.current;
-    if (prev) {
-      prev.stop();
-      prev.dispose();
-      metronomeRef.current = null;
-    }
-
-    const m = new Metronome();
-    m.setVolume(settings.metronomeVolume);
-    // Single-source read for accents: apply the current setting right before
-    // start so there's no window where start-time state and the mirror
-    // effect disagree.
-    m.setAccentsEnabled(settings.accentsEnabled);
-    metronomeRef.current = m;
-
-    const firstBlock = blocks[0];
-    if (!firstBlock) return;
-    const anyMetronome = blocks.some((b) => b.metronomeEnabled !== false);
-    if (anyMetronome) {
-      const firstBpm = firstBlock.tempoFn(song);
-      try {
-        await m.start(firstBpm, metronomeMode);
-        if (firstBlock.metronomeEnabled === false) m.pause();
-      } catch {
-        // swallow — next BPM change will retry
-      }
-    }
-
-    if (settings.recordingEnabled) {
-      const rec = new SessionRecorder();
-      try {
-        await rec.start();
-        recorderRef.current = rec;
-        recordingActiveRef.current = true;
-        setRecordingActive(true);
-      } catch (err) {
-        recorderRef.current = null;
-        recordingActiveRef.current = false;
-        setRecordingActive(false);
-        addToast("Recording disabled — mic permission denied.");
-        void err;
-      }
-    }
-
-    const startMs = Date.now();
-    sessionStartMsRef.current = startMs;
-    sessionStartIsoRef.current = new Date(startMs).toISOString();
-    startWorkingBpmRef.current = song.workingBpm;
-    startTroubleBpmsRef.current = song.troubleSpots.map((s) => s.bpm);
-    promotionsRef.current = [];
-    // Pre-seed the phase key so the phase effect doesn't re-trigger start
-    // behavior on the first `playing-0` snapshot.
-    prevPhaseKeyRef.current = "playing-0";
-    setSnap(initialSnapshot(startMs));
-    setNowMs(startMs);
-    setStarted(true);
-  }, [
-    song,
-    started,
-    blocks,
-    metronomeMode,
-    settings.metronomeVolume,
-    settings.recordingEnabled,
-    settings.accentsEnabled,
-    clearLatestRecording,
-    addToast,
-  ]);
+  endSessionRef.current = (reason) => {
+    void endSession(reason);
+  };
 
   // Auto-start as soon as data is loaded — the user already committed by
   // clicking "Start N-minute session" on the song page.
@@ -490,15 +273,28 @@ function SessionPage() {
   useEffect(() => {
     if (!loadedSongs || !loadedSettings) return;
     if (!song) return;
-    if (started || startingRef.current) return;
+    if (practice.started || practice.startingRef.current) return;
     const t = setTimeout(() => {
-      void startSession();
+      void practice.startSession();
     }, 0);
     return () => clearTimeout(t);
-  }, [loadedSongs, loadedSettings, song, started, startSession]);
+  }, [loadedSongs, loadedSettings, song, practice]);
 
-  const currentBlock = snap ? blocks[snap.blockIndex] : undefined;
-  const nextBlock = snap ? blocks[snap.blockIndex + 1] : undefined;
+  const currentBlock = practice.currentBlock;
+  const nextBlock = practice.nextBlock;
+  const snap = practice.snap;
+  const started = practice.started;
+  const paused = practice.paused;
+  const nowMs = practice.nowMs;
+  const setSnap = practice.setSnap;
+  const pausedRef = practice.pausedRef;
+  const metronomeRef = practice.metronomeRef;
+  const addToast = practice.addToast;
+  const advance = practice.advance;
+  const recordingActive = practice.recordingActive;
+  const metronomeMode = practice.metronomeMode;
+  const setMetronomeMode = practice.setMetronomeMode;
+  const toasts = practice.toasts;
 
   const tempoBpm = useMemo(() => {
     if (!currentBlock) return 0;
@@ -524,10 +320,9 @@ function SessionPage() {
     if (!block || block.kind !== "consciousPractice") return;
     if (tempoBpm <= 0) return;
     metronomeRef.current?.setBpm(tempoBpm);
-  }, [tempoBpm, snap, started, blocks]);
+  }, [tempoBpm, snap, started, blocks, metronomeRef]);
 
-  const timeLeftSec =
-    snap && currentBlock ? timeLeftInPlayingSec(snap, blocks, nowMs) : 0;
+  const timeLeftSec = practice.timeLeftSec;
 
   const showEarnedButton =
     !!currentBlock &&
@@ -540,7 +335,7 @@ function SessionPage() {
   const canEditBpm = snap?.phase === "playing" && !paused;
   const isConscious = currentBlock?.kind === "consciousPractice";
   const isUnbounded = !!currentBlock?.unbounded;
-  const elapsedSec = snap ? elapsedInPlayingSec(snap, nowMs) : 0;
+  const elapsedSec = practice.elapsedSec;
   // Played BPM during the warm-up — already reflects the slow-mode toggle
   // and the saved warmupBpm via tempoBpm.
   const consciousPlayedBpm = currentBlock ? tempoBpm : 0;
@@ -637,52 +432,15 @@ function SessionPage() {
       addToast(`${label}: ${oldBpm} → ${newSpot.bpm}`);
       await updateSong(promoted);
     }
-  }, [snap, blocks, updateSong, addToast]);
+  }, [snap, blocks, updateSong, addToast, metronomeRef]);
+  earnedHandlerRef.current = () => {
+    void handleEarned();
+  };
 
-  // Skip button: jump straight to the next block regardless of phase.
-  const handleSkip = useCallback(() => {
-    if (!snap || snap.phase === "ended") return;
-    if (pausedRef.current) return;
-    advance();
-  }, [snap, advance]);
-
-  const handleRepeatBlock = useCallback(() => {
-    if (!snap) return;
-    if (pausedRef.current) return;
-    setSnap((prev) =>
-      prev ? repeatCurrentBlockSnapshot(prev, blocks, Date.now()) : prev,
-    );
-  }, [snap, blocks]);
-
-  // Previous block button: step back to the prior block and restart it.
-  const handlePrevious = useCallback(() => {
-    if (!snap || snap.phase === "ended") return;
-    if (pausedRef.current) return;
-    if (snap.blockIndex === 0) return;
-    setSnap((prev) =>
-      prev ? rewindSnapshot(prev, blocks, Date.now()) : prev,
-    );
-  }, [snap, blocks]);
-
-  // Pause / resume during a playing block. Freezes the metronome, the RAF
-  // countdown, and the practice-time accumulator by shifting blockStartMs
-  // and sessionStartMs forward by the paused duration on resume.
-  const handlePauseToggle = useCallback(() => {
-    if (!snap) return;
-    if (pausedRef.current) {
-      const delta = Date.now() - pausedAtRef.current;
-      pausedAtRef.current = 0;
-      sessionStartMsRef.current += delta;
-      setSnap((s) => (s ? { ...s, blockStartMs: s.blockStartMs + delta } : s));
-      metronomeRef.current?.resume();
-      setPaused(false);
-    } else {
-      if (snap.phase !== "playing") return;
-      pausedAtRef.current = Date.now();
-      metronomeRef.current?.pause();
-      setPaused(true);
-    }
-  }, [snap]);
+  const handleSkip = practice.handleSkip;
+  const handleRepeatBlock = practice.handleRepeatBlock;
+  const handlePrevious = practice.handlePrevious;
+  const handlePauseToggle = practice.handlePauseToggle;
 
   // Edit the underlying BPM of the currently-playing block and persist the
   // correction to the song. Trouble Spot blocks edit that spot's `bpm`;
@@ -723,21 +481,10 @@ function SessionPage() {
       addToast(`${label}: ${oldBpm} → ${newBpm}`);
       await updateSong(updated);
     },
-    [snap, blocks, updateSong, addToast],
+    [snap, blocks, updateSong, addToast, metronomeRef],
   );
 
-  // Restart the current block's countdown from its full duration and
-  // realign the metronome's accent pattern to a downbeat so the fresh
-  // take starts musically on beat 1. Only meaningful during `playing`
-  // phase.
-  const handleResetBlock = useCallback(() => {
-    if (!snap || snap.phase !== "playing") return;
-    if (pausedRef.current) return;
-    const now = Date.now();
-    setSnap((s) => (s ? { ...s, blockStartMs: now } : s));
-    metronomeRef.current?.alignToDownbeat();
-    addToast("Block reset");
-  }, [snap, addToast]);
+  const handleResetBlock = practice.handleResetBlock;
 
   // Skip the inter-song countdown — route to the next song immediately.
   const handleBetweenSongsSkip = useCallback(() => {
@@ -769,6 +516,9 @@ function SessionPage() {
       setBetweenSongsPaused(true);
     }
   }, []);
+  handleBetweenSongsSkipRef.current = handleBetweenSongsSkip;
+  handleBetweenSongsCancelRef.current = handleBetweenSongsCancel;
+  handleBetweenSongsPauseToggleRef.current = handleBetweenSongsPauseToggle;
 
   // Auto-route when the inter-song countdown hits 0. Uses setTimeout rather
   // than deriving from the RAF `nowMs` so the route fires even if the tab
@@ -787,113 +537,6 @@ function SessionPage() {
     }, remainingMs);
     return () => clearTimeout(t);
   }, [betweenSongs, betweenSongsPaused, router, durationMinutes]);
-
-  // Space: advance to the next block regardless of phase.
-  const handleSpace = useCallback(() => {
-    if (!snap || snap.phase === "ended") return;
-    if (pausedRef.current) return;
-    advance();
-  }, [snap, advance]);
-
-  // "+" key: promote BPM (same as the "I earned it" button).
-  const handlePlus = useCallback(() => {
-    if (!snap || snap.phase !== "playing") return;
-    if (pausedRef.current) return;
-    const block = blocks[snap.blockIndex];
-    if (!block?.showEarnedButton) return;
-    void handleEarned();
-  }, [snap, blocks, handleEarned]);
-
-  // Keyboard listener — unconditional, handlers via ref so we don't reattach
-  // on every RAF tick.
-  const startedRef = useRef(started);
-  startedRef.current = started;
-  const keyHandlersRef = useRef({
-    handleSpace,
-    handlePlus,
-    handleSkip,
-    handlePauseToggle,
-    handleResetBlock,
-    handleBetweenSongsSkip,
-    handleBetweenSongsCancel,
-    handleBetweenSongsPauseToggle,
-    endSession,
-  });
-  keyHandlersRef.current = {
-    handleSpace,
-    handlePlus,
-    handleSkip,
-    handlePauseToggle,
-    handleResetBlock,
-    handleBetweenSongsSkip,
-    handleBetweenSongsCancel,
-    handleBetweenSongsPauseToggle,
-    endSession,
-  };
-
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (!startedRef.current) return;
-      if (e.target instanceof HTMLElement) {
-        const tag = e.target.tagName;
-        if (tag === "INPUT" || tag === "TEXTAREA") return;
-      }
-      const h = keyHandlersRef.current;
-
-      // Inter-song countdown has its own lean keymap: Space skips, Esc
-      // cancels back to home. Other shortcuts are silenced here — the
-      // session has already ended, so Skip/Pause/Reset/Earned are no-ops.
-      if (betweenSongsRef.current) {
-        if (e.code === "Space" || e.key === " ") {
-          e.preventDefault();
-          e.stopPropagation();
-          h.handleBetweenSongsSkip();
-        } else if (e.key === "p" || e.key === "P") {
-          e.preventDefault();
-          e.stopPropagation();
-          h.handleBetweenSongsPauseToggle();
-        } else if (e.key === "Escape" || e.key === "Esc") {
-          e.preventDefault();
-          e.stopPropagation();
-          h.handleBetweenSongsCancel();
-        }
-        return;
-      }
-
-      if (e.code === "Space" || e.key === " ") {
-        e.preventDefault();
-        e.stopPropagation();
-        h.handleSpace();
-      } else if (e.key === "+" || e.key === "=") {
-        e.preventDefault();
-        e.stopPropagation();
-        h.handlePlus();
-      } else if (e.key === "p" || e.key === "P") {
-        e.preventDefault();
-        e.stopPropagation();
-        h.handlePauseToggle();
-      } else if (e.key === "r" || e.key === "R") {
-        e.preventDefault();
-        e.stopPropagation();
-        h.handleResetBlock();
-      } else if (e.key === "Escape" || e.key === "Esc") {
-        e.preventDefault();
-        e.stopPropagation();
-        void h.endSession("abort");
-      }
-    };
-    window.addEventListener("keydown", onKey, true);
-    return () => window.removeEventListener("keydown", onKey, true);
-  }, []);
-
-  useEffect(() => {
-    return () => {
-      metronomeRef.current?.dispose();
-      metronomeRef.current = null;
-      recorderRef.current?.cancel();
-      recorderRef.current = null;
-    };
-  }, []);
 
   if (!loadedSongs || !loadedSettings) {
     return (
@@ -952,91 +595,44 @@ function SessionPage() {
   const awaiting = snap.phase === "awaiting";
 
   return (
-    <main className="relative flex h-screen flex-col overflow-hidden px-6 py-4">
-      <div className="flex items-start justify-between">
-        <div className="flex items-center gap-3">
-          <RecordingIndicator active={recordingActive} />
-        </div>
-        <div className="text-center">
-          <div className="text-sm text-neutral-400">{song.title}</div>
-          <div className="text-xs text-neutral-600">{durationMinutes}-min session</div>
-        </div>
-        <div className="flex items-center gap-2">
-          {currentBlock?.metronomeEnabled !== false && (
-            <MetronomeModeToggle mode={metronomeMode} onChange={setMetronomeMode} />
-          )}
-          <button
-            type="button"
-            onClick={handleResetBlock}
-            disabled={!canReset}
-            className="rounded-lg border border-bg-border px-3 py-2 text-sm text-neutral-300 transition hover:bg-bg-elevated disabled:cursor-not-allowed disabled:opacity-40"
-          >
-            Reset block
-          </button>
-          <button
-            type="button"
-            onClick={() =>
-              isConscious
-                ? setConsciousBpmEditorOpen(true)
-                : setBpmEditorOpen(true)
-            }
-            disabled={!canEditBpm}
-            className="rounded-lg border border-bg-border px-3 py-2 text-sm text-neutral-300 transition hover:bg-bg-elevated disabled:cursor-not-allowed disabled:opacity-40"
-          >
-            Edit BPM
-          </button>
-          <button
-            type="button"
-            onClick={handlePauseToggle}
-            disabled={!canPause && !paused}
-            className={`rounded-lg border px-4 py-2 text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-40 ${
-              paused
-                ? "border-accent bg-accent text-black hover:bg-accent-strong"
-                : "border-bg-border text-neutral-200 hover:border-accent hover:text-neutral-100"
-            }`}
-          >
-            {paused ? "Resume" : "Pause"}
-          </button>
-          <PreviousBlockButton
-            onClick={handlePrevious}
-            disabled={snap.blockIndex === 0 || paused}
-          />
-          <SkipBlockButton onClick={handleSkip} />
-          <button
-            onClick={() => void endSession("abort")}
-            className="rounded-lg border border-bg-border px-3 py-2 text-sm text-neutral-300 transition hover:border-red-900 hover:text-red-300"
-          >
-            End
-          </button>
-        </div>
-      </div>
-
-      <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-4 pt-2">
-        {currentBlock && (
-          <BlockHeader
-            label={blockLabelWithTroubleIndex(currentBlock, blocks)}
-            tempoBpm={tempoBpm}
-            blockIndex={snap.blockIndex}
-            totalBlocks={blocks.length}
-          />
-        )}
-
-        {currentBlock?.metronomeEnabled !== false && (
-          <MetronomeIndicator metronome={metronomeRef.current} />
-        )}
-
-        {isUnbounded ? (
-          <BlockCountUp seconds={elapsedSec} />
-        ) : (
-          <BlockCountdown seconds={timeLeftSec} />
-        )}
-
-        {currentBlock && <BlockInstructions items={currentBlock.instructions} />}
-      </div>
-
-      <div className="flex w-full shrink-0 flex-col items-center justify-center gap-3 pt-2">
-        {isConscious && snap.phase === "playing" && !paused && (
-          <div className="flex items-center gap-2">
+    <SessionShell
+      title={song.title}
+      subtitle={`${durationMinutes}-min session`}
+      currentBlock={currentBlock}
+      nextBlock={nextBlock}
+      currentBlockLabel={
+        currentBlock ? blockLabelWithTroubleIndex(currentBlock, blocks) : ""
+      }
+      nextBlockLabel={
+        nextBlock ? blockLabelWithTroubleIndex(nextBlock, blocks) : ""
+      }
+      tempoBpm={tempoBpm}
+      nextTempoBpm={
+        nextBlock ? nextBlock.tempoFn(songRuntimeRef.current ?? song) : undefined
+      }
+      blockIndex={snap.blockIndex}
+      totalBlocks={blocks.length}
+      awaiting={awaiting}
+      paused={paused}
+      isUnbounded={isUnbounded}
+      elapsedSec={elapsedSec}
+      timeLeftSec={timeLeftSec}
+      recordingActive={recordingActive}
+      metronomeMode={metronomeMode}
+      metronome={metronomeRef.current}
+      showMetronomeControls={currentBlock?.metronomeEnabled !== false}
+      showMetronomeIndicator={currentBlock?.metronomeEnabled !== false}
+      canResetBlock={canReset}
+      canEditBpm={canEditBpm}
+      canPause={canPause}
+      canPrevious={snap.blockIndex > 0 && !paused}
+      showEarnedButton={showEarnedButton}
+      earnedHint={
+        showEarnedButton ? undefined : "Not available during this block"
+      }
+      beforePrimaryControls={
+        isConscious && snap.phase === "playing" && !paused ? (
+          <div className="flex flex-wrap items-center justify-center gap-2">
             <button
               type="button"
               onClick={() => {
@@ -1078,98 +674,22 @@ function SessionPage() {
               Set BPM…
             </button>
           </div>
-        )}
-
-        {awaiting ? (
-          !nextBlock ? (
-            <div className="flex items-center gap-3">
-              <button
-                onClick={handleRepeatBlock}
-                className="rounded-xl border border-bg-border bg-bg-elevated px-8 py-5 text-xl font-semibold text-neutral-100 transition hover:bg-bg-elevated/80"
-              >
-                Repeat block
-              </button>
-              <button
-                onClick={advance}
-                className="rounded-xl bg-accent px-10 py-5 text-2xl font-bold text-black shadow-lg transition hover:bg-accent-strong"
-              >
-                Finish
-                <span className="ml-3 text-sm font-normal opacity-70">(Space)</span>
-              </button>
-            </div>
-          ) : (
-            <button
-              onClick={advance}
-              className="rounded-xl bg-accent px-10 py-5 text-2xl font-bold text-black shadow-lg transition hover:bg-accent-strong"
-            >
-              Continue → {nextBlock.label}
-              <span className="ml-3 text-sm font-normal opacity-70">(Space)</span>
-            </button>
-          )
-        ) : isUnbounded ? (
-          <button
-            onClick={advance}
-            className="rounded-xl bg-accent px-10 py-5 text-2xl font-bold text-black shadow-lg transition hover:bg-accent-strong"
-          >
-            Finish warm-up → {nextBlock ? nextBlock.label : "Finish"}
-            <span className="ml-3 text-sm font-normal opacity-70">(Space)</span>
-          </button>
-        ) : (
-          <EarnedButton
-            onClick={handleEarned}
-            disabled={!showEarnedButton}
-            hint={
-              showEarnedButton
-                ? undefined
-                : "Not available during this block"
-            }
-          />
-        )}
-      </div>
-
-      <div className="shrink-0 pt-3">
-        <ShortcutsHint />
-      </div>
-
-      {paused && (
-        <div className="pointer-events-none absolute inset-0 flex items-start justify-center bg-bg/60 pt-24 backdrop-blur-[2px]">
-          <div className="pointer-events-none text-center">
-            <div className="text-xs uppercase tracking-[0.3em] text-neutral-400">
-              Paused
-            </div>
-            <div className="mt-3 text-5xl font-bold text-accent">⏸</div>
-            <div className="mt-3 text-xs uppercase tracking-wider text-neutral-500">
-              Press <span className="font-mono text-neutral-300">P</span> or
-              click Resume to continue
-            </div>
-          </div>
-        </div>
-      )}
-
-      {awaiting && !paused && (
-        <div className="pointer-events-none absolute inset-0 flex items-start justify-center bg-bg/50 pt-24 backdrop-blur-[2px]">
-          <div className="pointer-events-none text-center">
-            <div className="text-xs uppercase tracking-[0.3em] text-neutral-400">
-              Finish your pass — then press Space
-            </div>
-            {nextBlock && (
-              <>
-                <div className="mt-3 text-xs uppercase tracking-wider text-neutral-500">
-                  Up next
-                </div>
-                <div className="mt-1 text-4xl font-semibold text-neutral-100">
-                  {blockLabelWithTroubleIndex(nextBlock, blocks)}
-                </div>
-                <div className="mt-2 font-mono text-5xl font-bold text-accent tabular-nums">
-                  {nextBlock.tempoFn(songRuntimeRef.current ?? song)}
-                  <span className="ml-2 text-xl text-neutral-400">BPM</span>
-                </div>
-              </>
-            )}
-          </div>
-        </div>
-      )}
-
+        ) : null
+      }
+      onMetronomeModeChange={setMetronomeMode}
+      onResetBlock={handleResetBlock}
+      onEditBpm={() =>
+        isConscious ? setConsciousBpmEditorOpen(true) : setBpmEditorOpen(true)
+      }
+      onPauseToggle={handlePauseToggle}
+      onPrevious={handlePrevious}
+      onSkip={handleSkip}
+      onEnd={() => void endSession("abort")}
+      onEarned={handleEarned}
+      onAdvance={advance}
+      onRepeatBlock={handleRepeatBlock}
+      toasts={toasts}
+    >
       {bpmEditor && (
         <BpmEditorModal
           open={bpmEditorOpen}
@@ -1221,18 +741,7 @@ function SessionPage() {
       )}
 
       {debug && <MetronomeDiagnosticsPanel metronome={metronomeRef.current} />}
-
-      <div className="pointer-events-none fixed bottom-10 left-1/2 flex -translate-x-1/2 flex-col items-center gap-2">
-        {toasts.map((t) => (
-          <div
-            key={t.id}
-            className="rounded-lg bg-neutral-100 px-4 py-2 text-sm font-semibold text-black shadow-lg"
-          >
-            {t.text}
-          </div>
-        ))}
-      </div>
-    </main>
+    </SessionShell>
   );
 }
 

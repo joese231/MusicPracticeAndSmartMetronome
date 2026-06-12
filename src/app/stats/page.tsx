@@ -71,18 +71,18 @@ export default function StatsPage() {
         </nav>
       </header>
 
-      {/* Manual session logging form */}
-      {allLoaded && <ManualSessionForm />}
-
       {!allLoaded ? (
         <p className="text-neutral-500">Loading…</p>
       ) : records.length === 0 ? (
-        <div className="rounded-lg border border-dashed border-bg-border bg-bg-elevated/50 p-10 text-center">
-          <h3 className="text-xl font-semibold text-neutral-200">No sessions yet</h3>
-          <p className="mx-auto mt-3 max-w-md text-sm text-neutral-400">
-            Stats start filling in as soon as you finish your first session. Pick
-            a song or exercise from the home screen and run a quick session.
-          </p>
+        <div className="space-y-6">
+          <div className="rounded-lg border border-dashed border-bg-border bg-bg-elevated/50 p-10 text-center">
+            <h3 className="text-xl font-semibold text-neutral-200">No sessions yet</h3>
+            <p className="mx-auto mt-3 max-w-md text-sm text-neutral-400">
+              Stats start filling in as soon as you finish your first session. Pick
+              a song or exercise from the home screen and run a quick session.
+            </p>
+          </div>
+          <ManualLoggingDetails />
         </div>
       ) : (
         <div className="space-y-6">
@@ -118,6 +118,8 @@ export default function StatsPage() {
             heading="Recent sessions (all)"
             showItemTitle
           />
+
+          <ManualLoggingDetails />
         </div>
       )}
     </main>
@@ -132,5 +134,18 @@ function Stat({ label, value }: { label: string; value: string }) {
       </div>
       <div className="mt-1 text-2xl font-bold text-neutral-100">{value}</div>
     </div>
+  );
+}
+
+function ManualLoggingDetails() {
+  return (
+    <details className="rounded-lg border border-bg-border bg-bg-elevated p-4">
+      <summary className="cursor-pointer text-sm font-semibold text-neutral-100">
+        Log a past session
+      </summary>
+      <div className="mt-4">
+        <ManualSessionForm />
+      </div>
+    </details>
   );
 }

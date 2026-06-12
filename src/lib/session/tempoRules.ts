@@ -1,4 +1,5 @@
-import type { Song, TempoAdjustment, TempoRule } from "@/types/song";
+import type { TempoAdjustment, TempoRule } from "@/types/song";
+import type { TempoSubject } from "./runtimeTypes";
 import { overspeedBpm, step, targetBpm, workingBpmForTempo } from "./tempo";
 
 export type TempoRuleContext = {
@@ -7,7 +8,7 @@ export type TempoRuleContext = {
 
 export function evaluateTempoRule(
   rule: TempoRule,
-  song: Song,
+  song: TempoSubject,
   context: TempoRuleContext = {},
 ): number {
   const base = sourceBpm(rule, song, context);
@@ -17,7 +18,7 @@ export function evaluateTempoRule(
 
 function sourceBpm(
   rule: TempoRule,
-  song: Song,
+  song: TempoSubject,
   context: TempoRuleContext,
 ): number {
   switch (rule.source) {

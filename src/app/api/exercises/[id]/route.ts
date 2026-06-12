@@ -1,0 +1,74 @@
+import { NextResponse } from "next/server";
+import {
+  validateExercise,
+  validateExercisePatch,
+} from "@/lib/api/validation";
+import { updateJsonAtomic } from "@/lib/db/fileStore";
+import type { Exercise } from "@/types/exercise";
+
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+
+const FILE = "exercises.json";
+
+type Context = { params: { id: string } };
+
+export async function PATCH(req: Request, { params }: Context) {
+  const body = (await req.json()) as unknown;
+  const request = validateExercisePatch(body);
+  if (!request.ok) {
+    return NextResponse.json({ error: request.error }, { status: 400 });
+  }
+
+  return updateJsonAtomic<Exercise[], Response>(
+    FILE,
+    [] as Exercise[],
+    (rows) => {
+    const idx = rows.findIndex((row) => row.id === params.id);
+    if (idx < 0) {
+      return {
+        value: rows,
+        result: NextResponse.json(
+          { error: "exercise not found" },
+          { status: 404 },
+        ),
+      };
+    }
+
+    const current = rows[idx];
+    if (
+      request.value.expectedUpdatedAt &&
+      current.updatedAt !== request.value.expectedUpdatedAt
+    ) {
+      return {
+        value: rows,
+        result: NextResponse.json(
+          { error: "exercise was modified by another write" },
+          { status: 409 },
+        ),
+      };
+    }
+
+    const next = { ...current, ...request.value.patch, id: current.id };
+    const validated = validateExercise(next);
+    if (!validated.ok) {
+      return {
+        value: rows,
+        result: NextResponse.json({ error: validated.error }, { status: 400 }),
+      };
+    }
+
+    const out = [...rows];
+    out[idx] = validated.value;
+    return { value: out, result: NextResponse.json(validated.value) };
+    },
+  );
+}
+
+export async function DELETE(_req: Request, { params }: Context) {
+  await updateJsonAtomic(FILE, [] as Exercise[], (rows) => ({
+    value: rows.filter((row) => row.id !== params.id),
+    result: undefined,
+  }));
+  return NextResponse.json({ ok: true });
+}

@@ -50,6 +50,10 @@ const genId = (): string => {
   return `e_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
 };
 
+function isStaleWriteError(err: unknown): boolean {
+  return err instanceof Error && err.message.includes("409");
+}
+
 export const useExercisesStore = create<ExercisesState>((set, get) => ({
   exercises: [],
   loaded: false,
@@ -108,12 +112,17 @@ export const useExercisesStore = create<ExercisesState>((set, get) => ({
 
   updateExercise: async (exercise) => {
     const updated = { ...exercise, updatedAt: nowIso() };
-    await getRepository().upsertExercise(updated);
-    set({
-      exercises: get().exercises.map((e) =>
-        e.id === updated.id ? updated : e,
-      ),
-    });
+    try {
+      await getRepository().upsertExercise(updated);
+      set({
+        exercises: get().exercises.map((e) =>
+          e.id === updated.id ? updated : e,
+        ),
+      });
+    } catch (err) {
+      if (isStaleWriteError(err)) await get().load();
+      throw err;
+    }
   },
 
   deleteExercise: async (id) => {
@@ -129,31 +138,43 @@ export const useExercisesStore = create<ExercisesState>((set, get) => ({
       if (ex) next.push({ ...ex, sortIndex: i });
     }
     set({ exercises: next });
-    await getRepository().reorderExercises(orderedIds);
+    try {
+      await getRepository().reorderExercises(orderedIds);
+    } catch (err) {
+      await get().load();
+      throw err;
+    }
   },
 
   incrementPracticeTime: async (id, seconds) => {
     const e = get().exercises.find((x) => x.id === id);
     if (!e) return;
+    const total = await getRepository().adjustPracticeTime(
+      "exercise",
+      id,
+      Math.round(seconds),
+    );
     const updated: Exercise = {
       ...e,
-      totalPracticeSec: e.totalPracticeSec + Math.round(seconds),
+      totalPracticeSec: total,
       updatedAt: nowIso(),
     };
-    await getRepository().upsertExercise(updated);
     set({ exercises: get().exercises.map((x) => (x.id === id ? updated : x)) });
   },
 
   adjustPracticeTime: async (id, deltaSec) => {
     const e = get().exercises.find((x) => x.id === id);
     if (!e) return;
-    const next = Math.max(0, e.totalPracticeSec + Math.round(deltaSec));
+    const next = await getRepository().adjustPracticeTime(
+      "exercise",
+      id,
+      deltaSec,
+    );
     const updated: Exercise = {
       ...e,
       totalPracticeSec: next,
       updatedAt: nowIso(),
     };
-    await getRepository().upsertExercise(updated);
     set({ exercises: get().exercises.map((x) => (x.id === id ? updated : x)) });
   },
 }));

@@ -1,0 +1,515 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Architecture Review - Guitar Song Practice Metronome</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #11100d;
+      --panel: #181612;
+      --panel-2: #211e18;
+      --line: #383226;
+      --text: #f5efe3;
+      --muted: #b7ab99;
+      --dim: #817665;
+      --accent: #f5b74f;
+      --green: #72d391;
+      --red: #ff6f61;
+      --blue: #7eb6ff;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.5;
+    }
+    a { color: inherit; }
+    .shell {
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr);
+      min-height: 100vh;
+    }
+    nav {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      border-right: 1px solid var(--line);
+      background: #0d0c0a;
+      padding: 24px 18px;
+      overflow: auto;
+    }
+    nav .kicker {
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    nav h1 {
+      margin: 8px 0 20px;
+      font-size: 20px;
+      line-height: 1.15;
+      letter-spacing: 0;
+    }
+    nav a {
+      display: block;
+      margin: 5px 0;
+      padding: 8px 10px;
+      border-radius: 8px;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 14px;
+    }
+    nav a:hover { background: var(--panel-2); color: var(--text); }
+    main {
+      padding: 36px;
+      max-width: 1180px;
+      width: 100%;
+    }
+    .hero {
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 26px;
+      margin-bottom: 28px;
+    }
+    .eyebrow {
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    h2 {
+      margin: 38px 0 14px;
+      font-size: 28px;
+      letter-spacing: 0;
+    }
+    h3 {
+      margin: 0 0 10px;
+      font-size: 18px;
+      letter-spacing: 0;
+    }
+    p { margin: 0 0 12px; color: var(--muted); }
+    .hero h2 {
+      margin: 8px 0 10px;
+      max-width: 900px;
+      font-size: 44px;
+      line-height: 1.05;
+    }
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 22px;
+    }
+    .metric, .card, .finding, .roadmap, .quote {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+    }
+    .metric {
+      padding: 14px;
+      min-height: 112px;
+    }
+    .metric strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 28px;
+      line-height: 1;
+    }
+    .metric span {
+      display: block;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .card { padding: 18px; }
+    .card ul, .finding ul, .roadmap ul {
+      margin: 10px 0 0;
+      padding-left: 20px;
+      color: var(--muted);
+    }
+    .card li, .finding li, .roadmap li { margin: 7px 0; }
+    .verdict {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr);
+      gap: 16px;
+      align-items: stretch;
+    }
+    .callout {
+      border: 1px solid color-mix(in srgb, var(--accent), var(--line) 45%);
+      border-radius: 8px;
+      background: rgba(245, 183, 79, .08);
+      padding: 18px;
+    }
+    .callout strong { color: var(--accent); }
+    .finding {
+      margin: 12px 0;
+      padding: 18px;
+    }
+    .finding header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 42px;
+      height: 26px;
+      border-radius: 999px;
+      padding: 0 10px;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .04em;
+    }
+    .p0 { background: rgba(255, 111, 97, .14); color: var(--red); border: 1px solid rgba(255, 111, 97, .35); }
+    .p1 { background: rgba(245, 183, 79, .14); color: var(--accent); border: 1px solid rgba(245, 183, 79, .35); }
+    .p2 { background: rgba(126, 182, 255, .13); color: var(--blue); border: 1px solid rgba(126, 182, 255, .35); }
+    .tag {
+      color: var(--dim);
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+    code {
+      border: 1px solid var(--line);
+      border-radius: 5px;
+      background: #0d0c0a;
+      padding: 1px 5px;
+      color: #f7dca3;
+      font-size: .92em;
+    }
+    .file {
+      color: var(--dim);
+      font-size: 13px;
+      word-break: break-word;
+    }
+    .roadmap {
+      display: grid;
+      grid-template-columns: 160px minmax(0, 1fr);
+      gap: 18px;
+      margin: 12px 0;
+      padding: 18px;
+    }
+    .roadmap .phase {
+      color: var(--accent);
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+    .quote {
+      padding: 16px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .quote strong { color: var(--text); }
+    .two-col {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .ok { color: var(--green); }
+    .warn { color: var(--accent); }
+    .bad { color: var(--red); }
+    footer {
+      margin-top: 42px;
+      border-top: 1px solid var(--line);
+      padding-top: 18px;
+      color: var(--dim);
+      font-size: 13px;
+    }
+    @media (max-width: 920px) {
+      .shell { grid-template-columns: 1fr; }
+      nav { position: static; height: auto; border-right: 0; border-bottom: 1px solid var(--line); }
+      main { padding: 24px 18px; }
+      .hero h2 { font-size: 34px; }
+      .summary-grid, .cards, .verdict, .two-col { grid-template-columns: 1fr; }
+      .roadmap { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <nav aria-label="Report navigation">
+      <div class="kicker">Architecture Audit</div>
+      <h1>Guitar Song Practice Metronome</h1>
+      <a href="#verdict">Verdict</a>
+      <a href="#strengths">What is solid</a>
+      <a href="#critical">Critical risks</a>
+      <a href="#session">Session model</a>
+      <a href="#persistence">Persistence</a>
+      <a href="#frontend">Frontend and UX</a>
+      <a href="#roadmap">Roadmap</a>
+      <a href="#agents">Subagent split</a>
+    </nav>
+
+    <main>
+      <section class="hero" id="verdict">
+        <div class="eyebrow">Reviewed June 11, 2026</div>
+        <h2>The app is not flawed from the ground up. The core idea is sound, but two persistence bugs need priority.</h2>
+        <p>
+          The best parts are the pure session logic, repository boundary, metronome scheduler design, and focused dark UI.
+          The biggest risks are not conceptual. They are consistency issues: file-backed read-modify-write races, statistics
+          totals drifting from session records, duplicated song/exercise session code, and a few UI surfaces that are too
+          desktop-heavy.
+        </p>
+        <div class="summary-grid">
+          <div class="metric"><strong class="bad">2</strong><span>P0 issues found, both in persistence/statistics.</span></div>
+          <div class="metric"><strong class="warn">9</strong><span>P1 improvements worth scheduling before adding major features.</span></div>
+          <div class="metric"><strong class="ok">0</strong><span>Foundation-level rewrites recommended.</span></div>
+          <div class="metric"><strong>3</strong><span>Parallel subagents audited domain logic, persistence, and UX.</span></div>
+        </div>
+      </section>
+
+      <section id="strengths">
+        <h2>What Is Solid</h2>
+        <div class="cards">
+          <article class="card">
+            <h3>Domain Core</h3>
+            <p>Tempo math, duration allocation, block building, and the driver state machine are mostly pure functions with focused tests.</p>
+            <ul>
+              <li><code>src/lib/session</code> is the right place for practice rules.</li>
+              <li>Derived tempos are recomputed instead of stored.</li>
+              <li>The driver has a small, understandable state shape.</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>Persistence Boundary</h3>
+            <p>The <code>Repository</code> interface is a good seam. It keeps UI code from depending directly on JSON files or future cloud storage.</p>
+            <ul>
+              <li>JSON write-then-rename is the right primitive.</li>
+              <li>Lazy normalization keeps legacy rows readable.</li>
+              <li>Session append IDs are retry-friendly.</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>Product Design</h3>
+            <p>The product is organized around real practice workflows instead of marketing pages or generic dashboards.</p>
+            <ul>
+              <li>Live session screen correctly prioritizes BPM and timer.</li>
+              <li>Stats and method pages reinforce the training model.</li>
+              <li>The visual language is quiet and appropriate for repeated use.</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section id="critical">
+        <h2>Critical Risks</h2>
+        <article class="finding">
+          <header><span class="badge p0">P0</span><h3>File read-modify-write can lose data</h3></header>
+          <p>
+            API routes read JSON, mutate a whole array, then call an atomic write. The lock protects the write step, but not
+            the read plus mutation. Two near-simultaneous appends can both read the old file and the later write can drop
+            the earlier session.
+          </p>
+          <p class="file">Evidence: <code>src/app/api/sessions/route.ts:29</code>, <code>src/app/api/sessions/[id]/route.ts:33</code>, <code>src/lib/db/fileStore.ts:42</code></p>
+          <p><strong>Fix:</strong> add a server-side <code>updateJsonAtomic(name, fallback, mutator)</code> helper where read, validation, mutation, and write happen under one per-file lock.</p>
+        </article>
+
+        <article class="finding">
+          <header><span class="badge p0">P0</span><h3>Reset statistics can be undone by the practice-time mirror</h3></header>
+          <p>
+            <code>resetAllStatistics()</code> clears song totals and sessions, but does not clear <code>data/practice-time.json</code>.
+            On the next song load, <code>useSongsStore</code> can read the mirror and write the old larger total back to the song.
+          </p>
+          <p class="file">Evidence: <code>src/lib/db/fileRepository.ts:261</code>, <code>src/lib/store/useSongsStore.ts:60</code>, <code>src/app/api/practice-time/route.ts</code></p>
+          <p><strong>Fix:</strong> either delete the mirror and derive totals from session records, or clear it in reset/factory reset and document exactly which source is authoritative.</p>
+        </article>
+      </section>
+
+      <section id="session">
+        <h2>Session Model</h2>
+        <div class="verdict">
+          <div class="callout">
+            <strong>Assessment:</strong>
+            <p>The session core is well designed. The main issue is that the runtime shell has outgrown the page components, and songs/exercises now duplicate behavior in separate places.</p>
+          </div>
+          <div class="quote">
+            <strong>Best next abstraction:</strong> a shared <code>PracticeItemRuntime</code> or <code>TempoSubject</code> plus one reusable session shell. Songs and exercises should differ by item policy, not by copy-pasted pages.
+          </div>
+        </div>
+
+        <article class="finding">
+          <header><span class="badge p1">P1</span><h3>Song and exercise session code is duplicated and drifting</h3></header>
+          <p>
+            The song and exercise pages both own metronome lifecycle, recording, keyboard shortcuts, routing, pause logic,
+            block transitions, session records, and BPM edits. That makes every future session behavior change twice as
+            risky.
+          </p>
+          <p class="file">Evidence: <code>src/app/session/[id]/page.tsx:86</code>, <code>src/app/exercise-session/[id]/page.tsx:64</code></p>
+          <p><strong>Fix:</strong> extract <code>usePracticeSession</code> for lifecycle/state and <code>SessionShell</code> for layout. Keep item-specific code in adapters: label, next route, promotion target, and record shape.</p>
+        </article>
+
+        <article class="finding">
+          <header><span class="badge p1">P1</span><h3>Template progression semantics are broader than runtime behavior</h3></header>
+          <p>
+            <code>ProgressionRule</code> allows <code>trouble</code>, but runtime support is effectively song trouble-spot expansion only.
+            Non-trouble rows and exercise rows ignore that option.
+          </p>
+          <p class="file">Evidence: <code>src/types/song.ts:53</code>, <code>src/lib/session/blocks.ts:272</code>, <code>src/lib/session/exerciseBlocks.ts:134</code></p>
+          <p><strong>Fix:</strong> validate that <code>trouble</code> only appears on song trouble rows, or remove it from the generic recipe model and make it a song-specific expansion rule.</p>
+        </article>
+
+        <article class="finding">
+          <header><span class="badge p1">P1</span><h3>Duration contract is inconsistent</h3></header>
+          <p>
+            Validation rejects fixed-only templates that underfill the selected session length, but allocation accepts them.
+            This can make "planned minutes" disagree with actual scheduled block time.
+          </p>
+          <p class="file">Evidence: <code>src/lib/session/duration.ts:102</code>, <code>src/lib/session/duration.ts:139</code></p>
+          <p><strong>Fix:</strong> choose one rule. If selected minutes means planned body length, builders and validators should both reject underfill. If it means allocation cap, rename the UI language.</p>
+        </article>
+
+        <article class="finding">
+          <header><span class="badge p1">P1</span><h3>Invalid BPM relies too much on form validation</h3></header>
+          <p>
+            Nullable song BPM can become <code>0</code> for tempo functions, and scheduler entry points do not enforce a valid playable BPM.
+          </p>
+          <p class="file">Evidence: <code>src/lib/session/tempo.ts:13</code>, <code>src/lib/metronome/scheduler.ts:299</code></p>
+          <p><strong>Fix:</strong> add runtime guards before scheduler start/setBpm and return explicit no-metronome behavior for unplayable tempos.</p>
+        </article>
+      </section>
+
+      <section id="persistence">
+        <h2>Persistence</h2>
+        <article class="finding">
+          <header><span class="badge p1">P1</span><h3>Session completion is not transactional</h3></header>
+          <p>
+            Ending a session updates item totals and appends the session record independently. A failure in either path can
+            leave stats and history disagreeing.
+          </p>
+          <p class="file">Evidence: <code>src/app/session/[id]/page.tsx:240</code>, <code>src/app/session/[id]/page.tsx:263</code>, <code>src/app/exercise-session/[id]/page.tsx:220</code></p>
+          <p><strong>Fix:</strong> add a repository operation such as <code>completeSession(record, itemDelta)</code> that appends the record and updates the item total in one server mutation.</p>
+        </article>
+
+        <article class="finding">
+          <header><span class="badge p1">P1</span><h3>Full-row upserts can overwrite newer data</h3></header>
+          <p>
+            Item edits replace the full saved row from the client snapshot. A stale edit can overwrite practice totals,
+            sort order, or another tab's template changes.
+          </p>
+          <p class="file">Evidence: <code>src/lib/db/fileRepository.ts:138</code>, <code>src/lib/db/fileRepository.ts:183</code></p>
+          <p><strong>Fix:</strong> use patch APIs for specific mutations, or add revision checks to reject stale writes.</p>
+        </article>
+
+        <article class="finding">
+          <header><span class="badge p1">P1</span><h3>API boundaries need stronger validation</h3></header>
+          <p>
+            Songs, exercises, and settings routes accept broad objects or arrays. A malformed client write can poison JSON
+            and break later app loads.
+          </p>
+          <p class="file">Evidence: <code>src/app/api/songs/route.ts:15</code>, <code>src/app/api/exercises/route.ts:15</code>, <code>src/app/api/settings/route.ts:17</code></p>
+          <p><strong>Fix:</strong> add strict hand validators or a schema parser before writing any JSON file.</p>
+        </article>
+      </section>
+
+      <section id="frontend">
+        <h2>Frontend and UX</h2>
+        <article class="finding">
+          <header><span class="badge p1">P1</span><h3>Settings has confirmed mobile overflow</h3></header>
+          <p>
+            At a 390px viewport, the settings page overflowed horizontally. The metronome volume row combines a fixed-width
+            range input, percentage label, and preview button inside a non-wrapping row.
+          </p>
+          <p class="file">Evidence: <code>src/app/settings/page.tsx:272</code>, <code>src/app/settings/page.tsx:411</code></p>
+          <p><strong>Fix:</strong> make settings rows stack or wrap on small screens, and use <code>w-full max-w-*</code> instead of fixed range widths.</p>
+        </article>
+
+        <article class="finding">
+          <header><span class="badge p1">P1</span><h3>Live session layout is too desktop-first</h3></header>
+          <p>
+            The live session uses <code>h-screen overflow-hidden</code> with a large non-wrapping toolbar. On smaller screens,
+            controls or instructions can be clipped.
+          </p>
+          <p class="file">Evidence: <code>src/app/session/[id]/page.tsx:955</code>, <code>src/app/exercise-session/[id]/page.tsx:840</code></p>
+          <p><strong>Fix:</strong> use <code>min-h-dvh</code>, allow vertical scrolling where needed, and move secondary controls into a compact menu or second row.</p>
+        </article>
+
+        <article class="finding">
+          <header><span class="badge p1">P1</span><h3>Template editor exposes too much at once</h3></header>
+          <p>
+            Each block row shows every advanced option inline. The power is useful, but basic edits like toggling blocks or
+            changing minutes are buried in a dense form.
+          </p>
+          <p class="file">Evidence: <code>src/components/session/BlockTemplateEditor.tsx:195</code></p>
+          <p><strong>Fix:</strong> collapse blocks by default. Show name, enabled state, duration, tempo, and promotion in the row; expand one block for advanced editing.</p>
+        </article>
+
+        <article class="finding">
+          <header><span class="badge p2">P2</span><h3>Reorder and segmented controls need accessibility polish</h3></header>
+          <p>
+            Drag reorder is mouse-centric, and several segmented controls are visually clear but incomplete as keyboard-accessible radiogroups.
+          </p>
+          <p class="file">Evidence: <code>src/components/songs/SongList.tsx:68</code>, <code>src/components/exercises/ExerciseList.tsx:64</code>, <code>src/components/metronome/MetronomeModeToggle.tsx:12</code></p>
+          <p><strong>Fix:</strong> add explicit up/down reorder buttons and extract a reusable segmented-control component with roving tabindex and arrow-key behavior.</p>
+        </article>
+      </section>
+
+      <section id="roadmap">
+        <h2>Recommended Roadmap</h2>
+        <div class="roadmap">
+          <div class="phase">First</div>
+          <div>
+            <h3>Make JSON persistence safe</h3>
+            <ul>
+              <li>Add atomic read-modify-write helper under the server file lock.</li>
+              <li>Clear or remove <code>practice-time.json</code> so reset statistics stays reset.</li>
+              <li>Add focused regression tests for concurrent session appends and reset behavior.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="roadmap">
+          <div class="phase">Second</div>
+          <div>
+            <h3>Unify the session runtime</h3>
+            <ul>
+              <li>Extract shared session lifecycle logic from song and exercise pages.</li>
+              <li>Replace <code>exerciseAsSong</code> with a smaller runtime tempo subject.</li>
+              <li>Make duration and progression rules explicit and validated.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="roadmap">
+          <div class="phase">Third</div>
+          <div>
+            <h3>Improve the heavy UI surfaces</h3>
+            <ul>
+              <li>Fix settings and live-session responsive layout.</li>
+              <li>Collapse advanced template editing by default.</li>
+              <li>Move manual stats logging behind a disclosure or below the dashboard summary.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="agents">
+        <h2>Subagent Split</h2>
+        <div class="two-col">
+          <div class="quote"><strong>Domain/session agent:</strong> found strong pure logic, but flagged duplicated song/exercise builders, vague progression semantics, duration contract inconsistency, and invalid BPM guards.</div>
+          <div class="quote"><strong>Persistence agent:</strong> found the two P0 issues: file read-modify-write races and reset statistics being restored from <code>practice-time.json</code>.</div>
+          <div class="quote"><strong>Frontend/UX agent:</strong> confirmed mobile settings overflow and recommended a shared session shell, progressive template editing, accessible reorder, and segmented-control cleanup.</div>
+          <div class="quote"><strong>Main-thread review:</strong> cross-checked central files, confirmed existing dirty JSON data files, and kept this report as a separate artifact.</div>
+        </div>
+      </section>
+
+      <footer>
+        Report artifact: <code>C:\Claude Code\Guitar Song Practice Metronome\reports\architecture-review-2026-06-11.html</code>.
+        This review did not change app source code or data files.
+      </footer>
+    </main>
+  </div>
+</body>
+</html>

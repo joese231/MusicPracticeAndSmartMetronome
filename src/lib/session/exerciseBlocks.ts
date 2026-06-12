@@ -8,7 +8,6 @@ import {
   cloneExerciseTemplate,
   DEFAULT_EXERCISE_BLOCK_TEMPLATE,
 } from "@/types/song";
-import { allocateBlockDurations } from "./duration";
 import {
   buildSimpleMetronomeBlock,
   buildTimedPracticeBlock,
@@ -16,7 +15,7 @@ import {
   INSTRUCTIONS,
 } from "./blocks";
 import { workingBpmForTempo } from "./tempo";
-import { evaluateTempoRule } from "./tempoRules";
+import { activeRecipeEntries, allocateRecipeBlocks, tempoRuleBlock } from "./templateBlocks";
 
 export const DEFAULT_EXERCISE_MINUTES = 5;
 export const MIN_EXERCISE_MINUTES = 5;
@@ -52,10 +51,7 @@ const exerciseTemplate = (e: Exercise): ExerciseBlockTemplate => {
 const activeExerciseEntries = (
   template: ExerciseBlockTemplate,
 ): SmartBlockRecipe[] =>
-  template.filter((e) =>
-    e.enabled &&
-    (e.duration.kind === "fixed" ? e.duration.seconds > 0 : e.duration.percent > 0),
-  );
+  activeRecipeEntries(template);
 
 /**
  * Build the body (timed blocks only) for an exercise session of the given
@@ -72,15 +68,7 @@ export const buildExerciseTimedBlocks = (
     : cloneExerciseTemplate(DEFAULT_EXERCISE_BLOCK_TEMPLATE);
   const entries = activeExerciseEntries(template);
   if (entries.length === 0) return [];
-  const allocation = allocateBlockDurations(
-    total,
-    entries.map((entry) => ({ id: entry.id, duration: entry.duration })),
-  );
-  if (!allocation.ok) return [];
-
-  return entries.map((entry) =>
-    exerciseRecipeToBlock(entry, allocation.durations.get(entry.id) ?? 0),
-  );
+  return allocateRecipeBlocks(total, entries, exerciseRecipeToBlock);
 };
 
 /**
@@ -131,15 +119,8 @@ function exerciseRecipeToBlock(
         : entry.role === "exerciseBurst"
           ? "overspeed"
           : "custom";
-  const promotes =
-    entry.progression.kind === "working" ? { kind: "working" as const } : null;
   return {
-    kind,
-    label: entry.name,
-    durationSec,
-    tempoFn: (s) => evaluateTempoRule(entry.tempoRule, s),
-    showEarnedButton: entry.progression.kind === "working",
-    promotes,
+    ...tempoRuleBlock(entry, durationSec, kind),
     instructions:
       entry.instructions.length > 0
         ? entry.instructions

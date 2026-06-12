@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { evaluateTempoRule } from "./tempoRules";
+import type { TempoSubject } from "./runtimeTypes";
 import type { Song, TempoRule } from "@/types/song";
 
 const song = (overrides: Partial<Song> = {}): Song => ({
@@ -70,6 +71,18 @@ describe("evaluateTempoRule", () => {
   it("evaluates target and overspeed sources", () => {
     expect(evaluateTempoRule({ source: "target" }, song())).toBe(123);
     expect(evaluateTempoRule({ source: "overspeed" }, song())).toBe(126);
+  });
+
+  it("evaluates against a minimal tempo subject", () => {
+    const subject: TempoSubject = {
+      workingBpm: 100,
+      warmupBpm: null,
+      troubleSpots: [],
+      originalBpm: null,
+      stepPercent: 5,
+    };
+
+    expect(evaluateTempoRule({ source: "target" }, subject)).toBe(105);
   });
 
   it("uses saved trouble BPM when present", () => {

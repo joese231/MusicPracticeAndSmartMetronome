@@ -15,6 +15,8 @@ const SONGS_URL = "/api/songs";
 const EXERCISES_URL = "/api/exercises";
 const SETTINGS_URL = "/api/settings";
 const SESSIONS_URL = "/api/sessions";
+const COMPLETE_SESSION_URL = "/api/sessions/complete";
+const PRACTICE_TIME_URL = "/api/practice-time";
 
 async function getJson<T>(url: string): Promise<T> {
   const res = await fetch(url, { cache: "no-store" });
@@ -29,6 +31,40 @@ async function putJson(url: string, body: unknown): Promise<void> {
     body: JSON.stringify(body),
   });
   if (!res.ok) throw new Error(`PUT ${url} failed: ${res.status}`);
+}
+
+async function postJson<T>(url: string, body: unknown): Promise<T> {
+  const res = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) throw new Error(`POST ${url} failed: ${res.status}`);
+  return (await res.json()) as T;
+}
+
+async function patchJson<T>(url: string, body: unknown): Promise<T> {
+  const res = await fetch(url, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) {
+    let suffix = "";
+    try {
+      const json = (await res.json()) as { error?: string };
+      suffix = json.error ? `: ${json.error}` : "";
+    } catch {
+      suffix = "";
+    }
+    throw new Error(`PATCH ${url} failed: ${res.status}${suffix}`);
+  }
+  return (await res.json()) as T;
+}
+
+async function deleteJson(url: string): Promise<void> {
+  const res = await fetch(url, { method: "DELETE" });
+  if (!res.ok) throw new Error(`DELETE ${url} failed: ${res.status}`);
 }
 
 function sortSongs(rows: Song[]): Song[] {
@@ -137,35 +173,33 @@ export class FileRepository implements Repository {
 
   upsertSong(song: Song): Promise<void> {
     return this.chainSongs(async () => {
-      const rows = await getJson<Song[]>(SONGS_URL);
-      const idx = rows.findIndex((s) => s.id === song.id);
-      if (idx >= 0) rows[idx] = song;
-      else rows.push(song);
-      await putJson(SONGS_URL, rows);
+      const existing = await this.getSong(song.id);
+      if (!existing) {
+        await postJson<{ ok: true }>(SONGS_URL, song);
+        return;
+      }
+      const {
+        id: _id,
+        createdAt: _createdAt,
+        totalPracticeSec: _totalPracticeSec,
+        ...patch
+      } = song;
+      await patchJson<Song>(`${SONGS_URL}/${encodeURIComponent(song.id)}`, {
+        expectedUpdatedAt: existing.updatedAt,
+        patch,
+      });
     });
   }
 
   deleteSong(id: string): Promise<void> {
     return this.chainSongs(async () => {
-      const rows = await getJson<Song[]>(SONGS_URL);
-      await putJson(SONGS_URL, rows.filter((s) => s.id !== id));
+      await deleteJson(`${SONGS_URL}/${encodeURIComponent(id)}`);
     });
   }
 
   reorderSongs(orderedIds: string[]): Promise<void> {
     return this.chainSongs(async () => {
-      const rows = await getJson<Song[]>(SONGS_URL);
-      const byId = new Map(rows.map((s) => [s.id, s]));
-      const next: Song[] = [];
-      for (let i = 0; i < orderedIds.length; i++) {
-        const row = byId.get(orderedIds[i]);
-        if (row) next.push({ ...row, sortIndex: i });
-      }
-      // Preserve any rows not in orderedIds (shouldn't happen, but defensive).
-      for (const row of rows) {
-        if (!orderedIds.includes(row.id)) next.push(row);
-      }
-      await putJson(SONGS_URL, next);
+      await patchJson<{ ok: true }>(`${SONGS_URL}/reorder`, { orderedIds });
     });
   }
 
@@ -182,34 +216,36 @@ export class FileRepository implements Repository {
 
   upsertExercise(exercise: Exercise): Promise<void> {
     return this.chainExercises(async () => {
-      const rows = await getJson<Exercise[]>(EXERCISES_URL);
-      const idx = rows.findIndex((e) => e.id === exercise.id);
-      if (idx >= 0) rows[idx] = exercise;
-      else rows.push(exercise);
-      await putJson(EXERCISES_URL, rows);
+      const existing = await this.getExercise(exercise.id);
+      if (!existing) {
+        await postJson<{ ok: true }>(EXERCISES_URL, exercise);
+        return;
+      }
+      const {
+        id: _id,
+        createdAt: _createdAt,
+        totalPracticeSec: _totalPracticeSec,
+        ...patch
+      } = exercise;
+      await patchJson<Exercise>(
+        `${EXERCISES_URL}/${encodeURIComponent(exercise.id)}`,
+        {
+          expectedUpdatedAt: existing.updatedAt,
+          patch,
+        },
+      );
     });
   }
 
   deleteExercise(id: string): Promise<void> {
     return this.chainExercises(async () => {
-      const rows = await getJson<Exercise[]>(EXERCISES_URL);
-      await putJson(EXERCISES_URL, rows.filter((e) => e.id !== id));
+      await deleteJson(`${EXERCISES_URL}/${encodeURIComponent(id)}`);
     });
   }
 
   reorderExercises(orderedIds: string[]): Promise<void> {
     return this.chainExercises(async () => {
-      const rows = await getJson<Exercise[]>(EXERCISES_URL);
-      const byId = new Map(rows.map((e) => [e.id, e]));
-      const next: Exercise[] = [];
-      for (let i = 0; i < orderedIds.length; i++) {
-        const row = byId.get(orderedIds[i]);
-        if (row) next.push({ ...row, sortIndex: i });
-      }
-      for (const row of rows) {
-        if (!orderedIds.includes(row.id)) next.push(row);
-      }
-      await putJson(EXERCISES_URL, next);
+      await patchJson<{ ok: true }>(`${EXERCISES_URL}/reorder`, { orderedIds });
     });
   }
 
@@ -220,7 +256,7 @@ export class FileRepository implements Repository {
 
   saveSettings(s: Settings): Promise<void> {
     return this.chainSettings(async () => {
-      await putJson(SETTINGS_URL, s);
+      await patchJson<{ ok: true }>(SETTINGS_URL, s);
     });
   }
 
@@ -235,6 +271,17 @@ export class FileRepository implements Repository {
       body: JSON.stringify(rec),
     });
     if (!res.ok) throw new Error(`POST ${SESSIONS_URL} failed: ${res.status}`);
+  }
+
+  async completeSession(rec: SessionRecord): Promise<void> {
+    const res = await fetch(COMPLETE_SESSION_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ record: rec }),
+    });
+    if (!res.ok) {
+      throw new Error(`POST ${COMPLETE_SESSION_URL} failed: ${res.status}`);
+    }
   }
 
   async updateSession(
@@ -258,6 +305,21 @@ export class FileRepository implements Repository {
     return (await res.json()) as SessionRecord;
   }
 
+  async adjustPracticeTime(
+    itemKind: "song" | "exercise",
+    itemId: string,
+    deltaSec: number,
+  ): Promise<number> {
+    const res = await fetch(PRACTICE_TIME_URL, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ itemKind, itemId, deltaSec }),
+    });
+    if (!res.ok) throw new Error(`PATCH ${PRACTICE_TIME_URL} failed: ${res.status}`);
+    const body = (await res.json()) as { totalPracticeSec: number };
+    return body.totalPracticeSec;
+  }
+
   async resetAllStatistics(): Promise<void> {
     // Zero totalPracticeSec on every song and exercise.
     const songs = await getJson<Song[]>(SONGS_URL);
@@ -275,6 +337,7 @@ export class FileRepository implements Repository {
     });
     // Clear session history.
     await putJson(SESSIONS_URL, []);
+    await deleteJson(PRACTICE_TIME_URL);
   }
 
   async factoryReset(): Promise<void> {
@@ -285,5 +348,6 @@ export class FileRepository implements Repository {
       await putJson(EXERCISES_URL, []);
     });
     await putJson(SESSIONS_URL, []);
+    await deleteJson(PRACTICE_TIME_URL);
   }
 }
