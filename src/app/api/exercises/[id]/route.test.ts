@@ -56,13 +56,35 @@ describe("exercise item API", () => {
           },
         }),
       }),
-      { params: { id: "exercise-1" } },
+      { params: Promise.resolve({ id: "exercise-1" }) },
     );
 
     expect(res.status).toBe(400);
     await expect(res.json()).resolves.toEqual({
       error: "exercise patch field totalPracticeSec is not editable here",
     });
+  });
+
+  it("rejects patches that try to overwrite manual order", async () => {
+    const res = await PATCH(
+      new Request("http://test/api/exercises/exercise-1", {
+        method: "PATCH",
+        body: JSON.stringify({
+          expectedUpdatedAt: "2026-06-12T00:00:00.000Z",
+          patch: {
+            sortIndex: 99,
+            updatedAt: "2026-06-12T00:01:00.000Z",
+          },
+        }),
+      }),
+      { params: Promise.resolve({ id: "exercise-1" }) },
+    );
+
+    expect(res.status).toBe(400);
+    await expect(res.json()).resolves.toEqual({
+      error: "exercise patch field sortIndex is not editable here",
+    });
+    expect(exercises[0].sortIndex).toBe(0);
   });
 
   it("rejects stale patches when updatedAt changed", async () => {
@@ -77,7 +99,7 @@ describe("exercise item API", () => {
           },
         }),
       }),
-      { params: { id: "exercise-1" } },
+      { params: Promise.resolve({ id: "exercise-1" }) },
     );
 
     expect(res.status).toBe(409);
@@ -98,7 +120,7 @@ describe("exercise item API", () => {
           },
         }),
       }),
-      { params: { id: "exercise-1" } },
+      { params: Promise.resolve({ id: "exercise-1" }) },
     );
 
     expect(res.status).toBe(200);

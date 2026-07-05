@@ -17,18 +17,12 @@ describe("FileRepository statistics resets", () => {
       const url = String(input);
       const method = init?.method ?? "GET";
       calls.push({ url, method });
-      if (method === "GET" && (url === "/api/songs" || url === "/api/exercises")) {
-        return Response.json([]);
-      }
       return Response.json({ ok: true });
     }) as typeof fetch;
 
     await new FileRepository().resetAllStatistics();
 
-    expect(calls).toContainEqual({
-      url: "/api/practice-time",
-      method: "DELETE",
-    });
+    expect(calls).toEqual([{ url: "/api/statistics/reset", method: "POST" }]);
   });
 
   it("clears the practice-time mirror when factory resetting", async () => {
@@ -40,10 +34,7 @@ describe("FileRepository statistics resets", () => {
 
     await new FileRepository().factoryReset();
 
-    expect(calls).toContainEqual({
-      url: "/api/practice-time",
-      method: "DELETE",
-    });
+    expect(calls).toEqual([{ url: "/api/factory-reset", method: "POST" }]);
   });
 
   it("uses the complete-session endpoint for live session completion", async () => {
@@ -82,6 +73,86 @@ describe("FileRepository statistics resets", () => {
             durationSec: 300,
           }),
         },
+      },
+    ]);
+  });
+
+  it("routes item manual session appends through the item-total endpoint", async () => {
+    const calls: Array<{ url: string; method: string; body: unknown }> = [];
+    global.fetch = vi.fn(async (input, init) => {
+      calls.push({
+        url: String(input),
+        method: init?.method ?? "GET",
+        body: init?.body ? JSON.parse(String(init.body)) : null,
+      });
+      return Response.json({ ok: true });
+    }) as typeof fetch;
+
+    await new FileRepository().appendSession({
+      id: "manual-1",
+      itemId: "song-1",
+      itemKind: "song",
+      itemTitle: "Test song",
+      startedAt: "2026-06-11T12:00:00.000Z",
+      endedAt: "2026-06-11T12:05:00.000Z",
+      durationSec: 300,
+      endedReason: "manual",
+      plannedMinutes: 5,
+      startTroubleBpms: [],
+      endTroubleBpms: [],
+      promotions: [],
+    });
+
+    expect(calls).toEqual([
+      {
+        url: "/api/sessions/complete",
+        method: "POST",
+        body: {
+          record: expect.objectContaining({
+            id: "manual-1",
+            itemKind: "song",
+            durationSec: 300,
+          }),
+        },
+      },
+    ]);
+  });
+
+  it("keeps free-play session appends append-only", async () => {
+    const calls: Array<{ url: string; method: string; body: unknown }> = [];
+    global.fetch = vi.fn(async (input, init) => {
+      calls.push({
+        url: String(input),
+        method: init?.method ?? "GET",
+        body: init?.body ? JSON.parse(String(init.body)) : null,
+      });
+      return Response.json({ ok: true });
+    }) as typeof fetch;
+
+    await new FileRepository().appendSession({
+      id: "free-1",
+      itemId: "__freeplay__",
+      itemKind: "freePlay",
+      itemTitle: "Free Play",
+      startedAt: "2026-06-11T12:00:00.000Z",
+      endedAt: "2026-06-11T12:05:00.000Z",
+      durationSec: 300,
+      endedReason: "manual",
+      plannedMinutes: 0,
+      startTroubleBpms: [],
+      endTroubleBpms: [],
+      promotions: [],
+    });
+
+    expect(calls).toEqual([
+      {
+        url: "/api/sessions",
+        method: "POST",
+        body: expect.objectContaining({
+          id: "free-1",
+          itemKind: "freePlay",
+          durationSec: 300,
+        }),
       },
     ]);
   });
@@ -181,6 +252,9 @@ describe("FileRepository statistics resets", () => {
         totalPracticeSec: expect.anything(),
       }),
     });
+    expect((calls[3].body as { patch: Record<string, unknown> }).patch).not.toHaveProperty(
+      "sortIndex",
+    );
   });
 
   it("uses narrow exercise endpoints for create, edit, delete, and reorder", async () => {
@@ -252,5 +326,8 @@ describe("FileRepository statistics resets", () => {
         totalPracticeSec: expect.anything(),
       }),
     });
+    expect((calls[3].body as { patch: Record<string, unknown> }).patch).not.toHaveProperty(
+      "sortIndex",
+    );
   });
 });

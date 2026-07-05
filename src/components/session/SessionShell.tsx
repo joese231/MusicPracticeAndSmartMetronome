@@ -249,7 +249,7 @@ export function SessionShell({
       </div>
 
       {paused && (
-        <div className="pointer-events-none absolute inset-0 flex items-start justify-center bg-bg/60 pt-24 backdrop-blur-[2px]">
+        <div className="pointer-events-auto absolute inset-0 flex items-start justify-center bg-bg/60 pt-24 backdrop-blur-[2px]">
           <div className="pointer-events-none text-center">
             <div className="text-xs uppercase tracking-[0.3em] text-neutral-400">
               Paused

@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
@@ -24,6 +25,24 @@ const recipe = (
 });
 
 describe("validateTemplateForSession", () => {
+  it("rejects trouble tempo rules for exercise templates", () => {
+    expect(
+      validateTemplateForSession(
+        [
+          recipe({
+            role: "exerciseBuild",
+            tempoRule: { source: "trouble", fallback: { source: "working" } },
+          }),
+        ],
+        5,
+        "exercise",
+      ),
+    ).toEqual({
+      ok: false,
+      message: "Trouble tempo is only available on song Trouble Spot blocks.",
+    });
+  });
+
   it("rejects trouble progression outside song trouble-spot rows", () => {
     expect(
       validateTemplateForSession(
@@ -107,5 +126,15 @@ describe("BlockTemplateEditor", () => {
     expect(html).not.toContain("Duration");
     expect(html).not.toContain("Instructions");
     expect(html).not.toContain("Play cleanly");
+  });
+
+  it("renders the Trouble tempo source only for song templates", () => {
+    const source = readFileSync(
+      new URL("./BlockTemplateEditor.tsx", import.meta.url),
+      "utf8",
+    );
+
+    expect(source).toContain('variant === "song"');
+    expect(source).toContain('<option value="trouble">Trouble</option>');
   });
 });

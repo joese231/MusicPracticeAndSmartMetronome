@@ -385,6 +385,7 @@ export function BlockTemplateEditor({
                       value={entry.tempoRule}
                       onChange={(tempoRule) => update(idx, { tempoRule })}
                       disabled={!entry.enabled}
+                      variant={variant}
                     />
                   </div>
                   <label className="min-w-[10rem] flex-[1_1_10rem] text-xs text-neutral-400">
@@ -570,20 +571,31 @@ function TempoRuleEditor({
   value,
   onChange,
   disabled,
+  variant,
 }: {
   value: TempoRule;
   onChange: (value: TempoRule) => void;
   disabled: boolean;
+  variant: "song" | "exercise";
 }) {
-  const source = value.source;
-  const adjustment = "adjustment" in value ? value.adjustment : undefined;
+  const effectiveValue: TempoRule =
+    variant === "exercise" && value.source === "trouble"
+      ? { source: "working" }
+      : value;
+  const source = effectiveValue.source;
+  const adjustment =
+    "adjustment" in effectiveValue ? effectiveValue.adjustment : undefined;
   const setSource = (nextSource: TempoRule["source"]) => {
     if (nextSource === "fixed") onChange({ source: "fixed", bpm: 100 });
     else if (nextSource === "original") {
       onChange({ source: "original", fallback: { source: "working" } });
-    } else if (nextSource === "trouble") {
+    } else if (nextSource === "trouble" && variant === "song") {
       onChange({ source: "trouble", fallback: { source: "working" } });
-    } else {
+    } else if (
+      nextSource === "working" ||
+      nextSource === "target" ||
+      nextSource === "overspeed"
+    ) {
       onChange({ source: nextSource });
     }
   };
@@ -601,14 +613,14 @@ function TempoRuleEditor({
           <option value="target">Target</option>
           <option value="overspeed">Overspeed</option>
           <option value="original">Original</option>
-          <option value="trouble">Trouble</option>
+          {variant === "song" && <option value="trouble">Trouble</option>}
           <option value="fixed">Fixed</option>
         </select>
         {source === "fixed" ? (
           <input
             type="number"
             min={20}
-            value={value.bpm}
+            value={effectiveValue.bpm}
             onChange={(e) =>
               onChange({ source: "fixed", bpm: parseInt(e.target.value, 10) || 20 })
             }
@@ -628,7 +640,7 @@ function TempoRuleEditor({
                     : kind === "bpmOffset"
                       ? { kind: "bpmOffset" as const, value: 0 }
                       : { kind: "steps" as const, value: 1 };
-              onChange(withAdjustment(value, patch));
+              onChange(withAdjustment(effectiveValue, patch));
             }}
             disabled={disabled}
             className="rounded border border-bg-border bg-bg px-2 py-1.5 text-sm text-neutral-100 outline-none focus:border-accent disabled:opacity-50"
@@ -646,7 +658,7 @@ function TempoRuleEditor({
           value={adjustment.value}
           onChange={(e) =>
             onChange(
-              withAdjustment(value, {
+              withAdjustment(effectiveValue, {
                 ...adjustment,
                 value: parseFloat(e.target.value) || 0,
               }),
@@ -734,6 +746,18 @@ export function validateTemplateForSession(
     return {
       ok: false,
       message: "Trouble progression is only available on song Trouble Spot blocks.",
+    };
+  }
+
+  const invalidTroubleTempo = template.some(
+    (entry) =>
+      entry.tempoRule.source === "trouble" &&
+      !(variant === "song" && entry.role === "troubleSpot"),
+  );
+  if (invalidTroubleTempo) {
+    return {
+      ok: false,
+      message: "Trouble tempo is only available on song Trouble Spot blocks.",
     };
   }
 

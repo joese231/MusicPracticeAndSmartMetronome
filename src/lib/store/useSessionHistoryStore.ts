@@ -28,7 +28,12 @@ export const useSessionHistoryStore = create<SessionHistoryState>((set, get) => 
 
   append: async (rec) => {
     set({ records: [...get().records, rec] });
-    await getRepository().appendSession(rec);
+    try {
+      await getRepository().appendSession(rec);
+    } catch (err) {
+      set({ records: get().records.filter((r) => r.id !== rec.id) });
+      throw err;
+    }
   },
 
   complete: async (rec) => {

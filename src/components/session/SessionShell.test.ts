@@ -12,4 +12,14 @@ describe("SessionShell", () => {
     expect(source).toContain("overflow-x-hidden");
     expect(source).toContain("flex flex-wrap items-start justify-between");
   });
+
+  it("intercepts pointer input while paused", () => {
+    const source = readFileSync(
+      new URL("./SessionShell.tsx", import.meta.url),
+      "utf8",
+    );
+
+    expect(source).toContain("paused &&");
+    expect(source).toContain("pointer-events-auto absolute inset-0");
+  });
 });

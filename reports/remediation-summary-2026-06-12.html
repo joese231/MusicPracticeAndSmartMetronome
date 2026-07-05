@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Architecture Remediation Summary</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #0c0f13;
+        --band: #111720;
+        --panel: #151d27;
+        --border: #2a3746;
+        --text: #eef4f8;
+        --muted: #a4b0bd;
+        --faint: #718092;
+        --green: #34d399;
+        --green-bg: rgba(52, 211, 153, 0.13);
+        --blue: #60a5fa;
+        --blue-bg: rgba(96, 165, 250, 0.14);
+        --amber: #fbbf24;
+        --amber-bg: rgba(251, 191, 36, 0.14);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+          "Segoe UI", sans-serif;
+        line-height: 1.55;
+      }
+
+      main {
+        max-width: 1180px;
+        margin: 0 auto;
+        padding: 40px 22px 64px;
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
+
+      h1 {
+        font-size: clamp(2rem, 4vw, 3.5rem);
+        line-height: 1.05;
+        max-width: 850px;
+      }
+
+      h2 {
+        font-size: 1.2rem;
+        margin-bottom: 14px;
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 28px;
+        align-items: end;
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 28px;
+      }
+
+      .lede {
+        color: var(--muted);
+        max-width: 760px;
+        margin-top: 14px;
+        font-size: 1.02rem;
+      }
+
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        border: 1px solid rgba(52, 211, 153, 0.42);
+        background: var(--green-bg);
+        color: #d5fbeb;
+        border-radius: 999px;
+        padding: 9px 13px;
+        font-size: 0.86rem;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+
+      .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--green);
+      }
+
+      .metrics {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 12px;
+        margin: 26px 0;
+      }
+
+      .metric,
+      .section,
+      .stage,
+      .decision {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+      }
+
+      .metric {
+        padding: 16px;
+      }
+
+      .metric .value {
+        font-size: 1.55rem;
+        font-weight: 800;
+      }
+
+      .metric .label {
+        color: var(--muted);
+        font-size: 0.88rem;
+      }
+
+      .section {
+        padding: 20px;
+        margin-top: 18px;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .stage {
+        padding: 16px;
+        min-height: 170px;
+      }
+
+      .stage h3 {
+        font-size: 1rem;
+        margin-bottom: 8px;
+      }
+
+      .stage p,
+      .decision p,
+      td {
+        color: var(--muted);
+      }
+
+      .stage .status {
+        display: inline-block;
+        margin-top: 12px;
+        padding: 4px 9px;
+        border-radius: 999px;
+        background: var(--green-bg);
+        color: #bdf5dc;
+        font-size: 0.78rem;
+        font-weight: 800;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        overflow: hidden;
+        border-radius: 8px;
+      }
+
+      th,
+      td {
+        text-align: left;
+        vertical-align: top;
+        border-bottom: 1px solid var(--border);
+        padding: 12px;
+      }
+
+      th {
+        color: var(--text);
+        background: var(--band);
+        font-size: 0.88rem;
+      }
+
+      tr:last-child td {
+        border-bottom: 0;
+      }
+
+      .decision {
+        padding: 15px;
+        border-left: 4px solid var(--blue);
+        background: var(--blue-bg);
+      }
+
+      .decision strong {
+        color: var(--text);
+      }
+
+      code {
+        color: #d7ecff;
+        background: #0b1118;
+        border: 1px solid var(--border);
+        border-radius: 5px;
+        padding: 2px 5px;
+      }
+
+      .footer {
+        color: var(--faint);
+        margin-top: 24px;
+        font-size: 0.9rem;
+      }
+
+      @media (max-width: 880px) {
+        .hero,
+        .metrics,
+        .grid {
+          grid-template-columns: 1fr;
+        }
+
+        table,
+        thead,
+        tbody,
+        tr,
+        th,
+        td {
+          display: block;
+        }
+
+        th {
+          display: none;
+        }
+
+        td {
+          padding: 10px 0;
+        }
+
+        tr {
+          border-bottom: 1px solid var(--border);
+          padding: 10px 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section class="hero">
+        <div>
+          <h1>Architecture review remediation is complete</h1>
+          <p class="lede">
+            The app kept its local-first Next/Zustand/Repository foundation, but
+            the weak points from the architecture review were hardened across
+            runtime safety, persistence consistency, template validation, UX, and
+            maintenance tooling.
+          </p>
+        </div>
+        <div class="badge"><span class="dot"></span> All 7 stages complete</div>
+      </section>
+
+      <section class="metrics" aria-label="Verification summary">
+        <div class="metric">
+          <div class="value">321</div>
+          <div class="label">Vitest tests passing</div>
+        </div>
+        <div class="metric">
+          <div class="value">52</div>
+          <div class="label">test files</div>
+        </div>
+        <div class="metric">
+          <div class="value">0</div>
+          <div class="label">production audit vulnerabilities</div>
+        </div>
+        <div class="metric">
+          <div class="value">15.5.19</div>
+          <div class="label">Next.js build verified</div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>Stage Outcomes</h2>
+        <div class="grid">
+          <article class="stage">
+            <h3>1. Runtime and accessibility</h3>
+            <p>
+              Paused sessions cannot advance accidentally, pause overlays now
+              intercept controls, and settings/free-play controls have clearer
+              accessible labels.
+            </p>
+            <span class="status">Fixed</span>
+          </article>
+          <article class="stage">
+            <h3>2. Persistence consistency</h3>
+            <p>
+              Session completion, manual item logging, trim, and delete flows now
+              coordinate item totals server-side and validate records before
+              writing.
+            </p>
+            <span class="status">Fixed</span>
+          </article>
+          <article class="stage">
+            <h3>3. Ordering and bulk writes</h3>
+            <p>
+              Normal edits cannot overwrite manual order; reorder, statistics
+              reset, and factory reset use narrow server-side atomic routes.
+            </p>
+            <span class="status">Fixed</span>
+          </article>
+          <article class="stage">
+            <h3>4. Live session lifecycle</h3>
+            <p>
+              Recorder/metronome startup is cancellation-safe, recorder stop
+              handles inactive/error states, and pending BPM writes settle before
+              completion records.
+            </p>
+            <span class="status">Fixed</span>
+          </article>
+          <article class="stage">
+            <h3>5. Invalid templates</h3>
+            <p>
+              Smart block builders now return explicit invalid plans, and live
+              pages show a configuration error instead of hanging on startup.
+            </p>
+            <span class="status">Fixed</span>
+          </article>
+          <article class="stage">
+            <h3>6. Product UX</h3>
+            <p>
+              Start-session controls are higher on item pages, no-BPM modes avoid
+              misleading ladder stats, Free Play is discoverable, and settings
+              template drafts are explicit.
+            </p>
+            <span class="status">Fixed</span>
+          </article>
+          <article class="stage">
+            <h3>7. Maintainability</h3>
+            <p>
+              Next/PostCSS/tooling were upgraded, QA scripts were added, latest
+              recordings were tagged by item kind/id/session, and shared session
+              artifact helpers were extracted.
+            </p>
+            <span class="status">Fixed</span>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>Main Architecture Changes</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Area</th>
+              <th>What changed</th>
+              <th>Why it matters</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Repository/API writes</td>
+              <td>
+                Completion and rollback flows use atomic server routes and a
+                completion ledger.
+              </td>
+              <td>
+                Session history and item totals are less likely to drift after
+                retries, stale clients, or interrupted writes.
+              </td>
+            </tr>
+            <tr>
+              <td>Session runtime</td>
+              <td>
+                Startup cancellation, recorder cleanup, pause guards, and shared
+                artifact builders were added.
+              </td>
+              <td>
+                Live sessions now have fewer race conditions and less duplicated
+                finalization logic.
+              </td>
+            </tr>
+            <tr>
+              <td>Template validation</td>
+              <td>
+                Song/exercise block builders expose block-plan errors instead of
+                returning empty runnable bodies.
+              </td>
+              <td>
+                Bad saved templates become fixable configuration states, not a
+                broken session screen.
+              </td>
+            </tr>
+            <tr>
+              <td>Future recordings</td>
+              <td>
+                Latest recording metadata now includes
+                <code>itemKind</code>, <code>itemId</code>, and
+                <code>sessionId</code>.
+              </td>
+              <td>
+                Persistent recordings can be added later without ambiguous
+                song/exercise/free-play ownership.
+              </td>
+            </tr>
+            <tr>
+              <td>Future PWA/offline</td>
+              <td>
+                Added <code>docs/offline-write-queue-strategy.md</code> as the
+                required queue design before service-worker caching.
+              </td>
+              <td>
+                Offline support now has a data-consistency gate instead of being
+                a cache-only feature.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="section">
+        <h2>Verification Run</h2>
+        <div class="decision">
+          <p>
+            <strong>Passed:</strong> <code>npm run lint</code>,
+            <code>npm run qa</code>, and <code>npm run audit</code>.
+            The in-app browser smoke check also confirmed the Home Free Play
+            entry point and Settings template save/revert controls on
+            <code>http://localhost:3005</code>.
+          </p>
+        </div>
+      </section>
+
+      <p class="footer">
+        Generated June 12, 2026. Full implementation details are documented in
+        AGENTS.md and the staged remediation plan.
+      </p>
+    </main>
+  </body>
+</html>

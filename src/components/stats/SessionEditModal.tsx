@@ -11,18 +11,14 @@ type Props = {
 };
 
 /**
- * Edit a session record's duration (trim only) or delete it. On both paths
- * the corresponding song/exercise's totalPracticeSec is rolled back by the
- * delta. For sessions whose item no longer exists (or for synthetic items
- * like Free Play), the rollback step is silently skipped.
+ * Edit a session record's duration (trim only) or delete it. The API route
+ * coordinates any matching song/exercise total rollback with the session write.
  */
 export function SessionEditModal({ record, onClose }: Props) {
   const updateSession = useSessionHistoryStore((s) => s.update);
   const removeSession = useSessionHistoryStore((s) => s.remove);
-  const adjustSongTime = useSongsStore((s) => s.adjustPracticeTime);
-  const adjustExerciseTime = useExercisesStore((s) => s.adjustPracticeTime);
-  const songs = useSongsStore((s) => s.songs);
-  const exercises = useExercisesStore((s) => s.exercises);
+  const loadSongs = useSongsStore((s) => s.load);
+  const loadExercises = useExercisesStore((s) => s.load);
 
   const [minutes, setMinutes] = useState("0");
   const [seconds, setSeconds] = useState("0");
@@ -46,11 +42,6 @@ export function SessionEditModal({ record, onClose }: Props) {
   }, [record]);
 
   if (!record) return null;
-
-  const itemExists =
-    record.itemKind === "song"
-      ? songs.some((s) => s.id === record.itemId)
-      : exercises.some((e) => e.id === record.itemId);
 
   const dt = new Date(record.startedAt);
   const dateStr = dt.toLocaleDateString(undefined, {
@@ -89,14 +80,11 @@ export function SessionEditModal({ record, onClose }: Props) {
     }
     setBusy(true);
     try {
-      const delta = newDur - record.durationSec;
       await updateSession(record.id, { durationSec: newDur });
-      if (itemExists) {
-        if (record.itemKind === "song") {
-          await adjustSongTime(record.itemId, delta);
-        } else {
-          await adjustExerciseTime(record.itemId, delta);
-        }
+      if (record.itemKind === "song") {
+        await loadSongs();
+      } else if (record.itemKind === "exercise") {
+        await loadExercises();
       }
       onClose();
     } catch (err) {
@@ -111,13 +99,10 @@ export function SessionEditModal({ record, onClose }: Props) {
     setBusy(true);
     try {
       await removeSession(record.id);
-      if (itemExists) {
-        const delta = -record.durationSec;
-        if (record.itemKind === "song") {
-          await adjustSongTime(record.itemId, delta);
-        } else {
-          await adjustExerciseTime(record.itemId, delta);
-        }
+      if (record.itemKind === "song") {
+        await loadSongs();
+      } else if (record.itemKind === "exercise") {
+        await loadExercises();
       }
       onClose();
     } catch (err) {

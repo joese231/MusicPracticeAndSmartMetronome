@@ -1,5 +1,5 @@
 "use client";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useSettingsStore } from "@/lib/store/useSettingsStore";
 import { useSongsStore } from "@/lib/store/useSongsStore";
@@ -56,10 +56,26 @@ export default function SettingsPage() {
   const [confirmFactory, setConfirmFactory] = useState(false);
   const [busyAction, setBusyAction] = useState<null | "reset" | "factory">(null);
   const [actionMessage, setActionMessage] = useState<string | null>(null);
+  const [songTemplateDraft, setSongTemplateDraft] =
+    useState<SongBlockTemplate | null>(null);
+  const [exerciseTemplateDraft, setExerciseTemplateDraft] =
+    useState<ExerciseBlockTemplate | null>(null);
 
   useEffect(() => {
     if (!loaded) void load();
   }, [loaded, load]);
+
+  useEffect(() => {
+    if (!loaded) return;
+    setSongTemplateDraft(cloneSongTemplate(settings.defaultSongBlockTemplate));
+    setExerciseTemplateDraft(
+      cloneExerciseTemplate(settings.defaultExerciseBlockTemplate),
+    );
+  }, [
+    loaded,
+    settings.defaultSongBlockTemplate,
+    settings.defaultExerciseBlockTemplate,
+  ]);
 
   useEffect(() => {
     return () => {
@@ -80,57 +96,103 @@ export default function SettingsPage() {
     m.playPreviewClick();
   };
 
+  const songTemplate = songTemplateDraft ?? settings.defaultSongBlockTemplate;
+  const exerciseTemplate =
+    exerciseTemplateDraft ?? settings.defaultExerciseBlockTemplate;
+  const songTemplateValidation = validateTemplateForSession(
+    songTemplate,
+    settings.defaultSongSessionMinutes,
+    "song",
+    1,
+  );
+  const exerciseTemplateValidation = validateTemplateForSession(
+    exerciseTemplate,
+    settings.defaultExerciseSessionMinutes,
+    "exercise",
+  );
+  const songTemplateDirty = useMemo(
+    () =>
+      JSON.stringify(songTemplate) !==
+      JSON.stringify(settings.defaultSongBlockTemplate),
+    [songTemplate, settings.defaultSongBlockTemplate],
+  );
+  const exerciseTemplateDirty = useMemo(
+    () =>
+      JSON.stringify(exerciseTemplate) !==
+      JSON.stringify(settings.defaultExerciseBlockTemplate),
+    [exerciseTemplate, settings.defaultExerciseBlockTemplate],
+  );
+
   const updateSongDefaultMinutes = useCallback(
     (minutes: number) => {
       const validation = validateTemplateForSession(
-        settings.defaultSongBlockTemplate,
+        songTemplate,
         minutes,
         "song",
         1,
       );
       if (validation.ok) update({ defaultSongSessionMinutes: minutes });
     },
-    [settings.defaultSongBlockTemplate, update],
+    [songTemplate, update],
   );
 
   const updateExerciseDefaultMinutes = useCallback(
     (minutes: number) => {
       const validation = validateTemplateForSession(
-        settings.defaultExerciseBlockTemplate,
+        exerciseTemplate,
         minutes,
         "exercise",
       );
       if (validation.ok) update({ defaultExerciseSessionMinutes: minutes });
     },
-    [settings.defaultExerciseBlockTemplate, update],
+    [exerciseTemplate, update],
   );
 
   const updateSongDefaultTemplate = useCallback(
     (template: SongBlockTemplate) => {
-      const next = cloneSongTemplate(template);
-      const validation = validateTemplateForSession(
-        next,
-        settings.defaultSongSessionMinutes,
-        "song",
-        1,
-      );
-      if (validation.ok) update({ defaultSongBlockTemplate: next });
+      setSongTemplateDraft(cloneSongTemplate(template));
     },
-    [settings.defaultSongSessionMinutes, update],
+    [],
   );
 
   const updateExerciseDefaultTemplate = useCallback(
     (template: ExerciseBlockTemplate) => {
-      const next = cloneExerciseTemplate(template);
-      const validation = validateTemplateForSession(
-        next,
-        settings.defaultExerciseSessionMinutes,
-        "exercise",
-      );
-      if (validation.ok) update({ defaultExerciseBlockTemplate: next });
+      setExerciseTemplateDraft(cloneExerciseTemplate(template));
     },
-    [settings.defaultExerciseSessionMinutes, update],
+    [],
   );
+
+  const saveSongDefaultTemplate = useCallback(() => {
+    if (!songTemplateValidation.ok) return;
+    update({ defaultSongBlockTemplate: cloneSongTemplate(songTemplate) });
+  }, [songTemplate, songTemplateValidation.ok, update]);
+
+  const saveExerciseDefaultTemplate = useCallback(() => {
+    if (!exerciseTemplateValidation.ok) return;
+    update({
+      defaultExerciseBlockTemplate: cloneExerciseTemplate(exerciseTemplate),
+    });
+  }, [exerciseTemplate, exerciseTemplateValidation.ok, update]);
+
+  const discardSongTemplateDraft = useCallback(() => {
+    setSongTemplateDraft(cloneSongTemplate(settings.defaultSongBlockTemplate));
+  }, [settings.defaultSongBlockTemplate]);
+
+  const discardExerciseTemplateDraft = useCallback(() => {
+    setExerciseTemplateDraft(
+      cloneExerciseTemplate(settings.defaultExerciseBlockTemplate),
+    );
+  }, [settings.defaultExerciseBlockTemplate]);
+
+  const resetSongTemplateDraft = useCallback(() => {
+    setSongTemplateDraft(cloneSongTemplate(DEFAULT_SONG_BLOCK_TEMPLATE));
+  }, []);
+
+  const resetExerciseTemplateDraft = useCallback(() => {
+    setExerciseTemplateDraft(
+      cloneExerciseTemplate(DEFAULT_EXERCISE_BLOCK_TEMPLATE),
+    );
+  }, []);
 
   const handleResetStats = async () => {
     setBusyAction("reset");
@@ -227,6 +289,7 @@ export default function SettingsPage() {
             <Toggle
               checked={settings.recordingEnabled}
               onChange={(v) => update({ recordingEnabled: v })}
+              ariaLabel="Record practice sessions"
             />
           </Row>
 
@@ -237,6 +300,7 @@ export default function SettingsPage() {
             <Toggle
               checked={settings.accentsEnabled}
               onChange={(v) => update({ accentsEnabled: v })}
+              ariaLabel="Use accented clicks"
             />
           </Row>
 
@@ -247,6 +311,7 @@ export default function SettingsPage() {
             <Toggle
               checked={settings.autoAdvanceBlocks}
               onChange={(v) => update({ autoAdvanceBlocks: v })}
+              ariaLabel="Auto-advance between blocks"
             />
           </Row>
 
@@ -286,18 +351,18 @@ export default function SettingsPage() {
             <div className="mt-4">
               <BlockTemplateEditor
                 variant="song"
-                template={settings.defaultSongBlockTemplate}
+                template={songTemplate}
                 onChange={updateSongDefaultTemplate}
                 previewMinutes={settings.defaultSongSessionMinutes}
                 troubleSpotCount={1}
-                onReset={() =>
-                  update({
-                    defaultSongSessionMinutes: DEFAULT_SONG_SESSION_MINUTES,
-                    defaultSongBlockTemplate: cloneSongTemplate(
-                      DEFAULT_SONG_BLOCK_TEMPLATE,
-                    ),
-                  })
-                }
+                onReset={resetSongTemplateDraft}
+              />
+              <TemplateDraftActions
+                dirty={songTemplateDirty}
+                validationOk={songTemplateValidation.ok}
+                saveLabel="Save song default sequence"
+                onSave={saveSongDefaultTemplate}
+                onDiscard={discardSongTemplateDraft}
               />
             </div>
           </section>
@@ -314,17 +379,17 @@ export default function SettingsPage() {
             <div className="mt-4">
               <BlockTemplateEditor
                 variant="exercise"
-                template={settings.defaultExerciseBlockTemplate}
+                template={exerciseTemplate}
                 onChange={updateExerciseDefaultTemplate}
                 previewMinutes={settings.defaultExerciseSessionMinutes}
-                onReset={() =>
-                  update({
-                    defaultExerciseSessionMinutes: DEFAULT_EXERCISE_MINUTES,
-                    defaultExerciseBlockTemplate: cloneExerciseTemplate(
-                      DEFAULT_EXERCISE_BLOCK_TEMPLATE,
-                    ),
-                  })
-                }
+                onReset={resetExerciseTemplateDraft}
+              />
+              <TemplateDraftActions
+                dirty={exerciseTemplateDirty}
+                validationOk={exerciseTemplateValidation.ok}
+                saveLabel="Save exercise default sequence"
+                onSave={saveExerciseDefaultTemplate}
+                onDiscard={discardExerciseTemplateDraft}
               />
             </div>
           </section>
@@ -458,6 +523,46 @@ export default function SettingsPage() {
   );
 }
 
+function TemplateDraftActions({
+  dirty,
+  validationOk,
+  saveLabel,
+  onSave,
+  onDiscard,
+}: {
+  dirty: boolean;
+  validationOk: boolean;
+  saveLabel: string;
+  onSave: () => void;
+  onDiscard: () => void;
+}) {
+  return (
+    <div className="mt-4 flex flex-wrap items-center gap-3">
+      <button
+        type="button"
+        onClick={onSave}
+        disabled={!dirty || !validationOk}
+        className="rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-black transition hover:bg-accent-strong disabled:cursor-not-allowed disabled:opacity-50"
+      >
+        {saveLabel}
+      </button>
+      <button
+        type="button"
+        onClick={onDiscard}
+        disabled={!dirty}
+        className="rounded-lg border border-bg-border px-3 py-2 text-sm text-neutral-300 transition hover:bg-bg-elevated disabled:cursor-not-allowed disabled:opacity-40"
+      >
+        Revert unsaved changes
+      </button>
+      {!validationOk && (
+        <span className="text-xs text-red-300">
+          Fix the block sequence before saving.
+        </span>
+      )}
+    </div>
+  );
+}
+
 function Row({
   label,
   hint,
@@ -503,9 +608,11 @@ function DangerRow({
 function Toggle({
   checked,
   onChange,
+  ariaLabel,
 }: {
   checked: boolean;
   onChange: (v: boolean) => void;
+  ariaLabel: string;
 }) {
   return (
     <button
@@ -515,6 +622,7 @@ function Toggle({
         checked ? "bg-accent" : "bg-bg-border"
       }`}
       aria-pressed={checked}
+      aria-label={ariaLabel}
     >
       <span
         className={`absolute top-0.5 h-6 w-6 rounded-full bg-white transition ${

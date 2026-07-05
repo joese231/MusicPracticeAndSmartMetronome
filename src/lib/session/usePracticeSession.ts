@@ -118,6 +118,7 @@ export function usePracticeSession({
   const recorderRef = useRef<SessionRecorder | null>(null);
   const endedRef = useRef(false);
   const startingRef = useRef(false);
+  const startGenerationRef = useRef(0);
   const prevPhaseKeyRef = useRef<string>("");
   const startedRef = useRef(started);
   startedRef.current = started;
@@ -156,6 +157,8 @@ export function usePracticeSession({
   }, [started, blocks]);
 
   const advance = useCallback(() => {
+    if (pausedRef.current) return;
+
     setSnap((prev) => {
       if (!prev) return prev;
       return advanceSnapshot(prev, blocks, Date.now());
@@ -216,6 +219,8 @@ export function usePracticeSession({
     const firstBlock = blocks[0];
     if (!firstBlock) return;
     startingRef.current = true;
+    const generation = startGenerationRef.current + 1;
+    startGenerationRef.current = generation;
 
     clearLatestRecording();
     onBeforeStart?.(subject);
@@ -238,6 +243,13 @@ export function usePracticeSession({
       if (anyMetronome) {
         const firstBpm = firstBlock.tempoFn(subject);
         void m.start(firstBpm, metronomeModeState).then(() => {
+          if (
+            generation !== startGenerationRef.current ||
+            metronomeRef.current !== m
+          ) {
+            m.dispose();
+            return;
+          }
           if (firstBlock.metronomeEnabled === false) m.pause();
         }).catch(() => {
           // A later tempo change can retry after the user resolves audio setup.
@@ -249,9 +261,19 @@ export function usePracticeSession({
       const rec = new SessionRecorder();
       try {
         await rec.start();
+        if (generation !== startGenerationRef.current) {
+          rec.cancel();
+          startingRef.current = false;
+          return;
+        }
         recorderRef.current = rec;
         setRecordingActive(true);
       } catch (err) {
+        if (generation !== startGenerationRef.current) {
+          rec.cancel();
+          startingRef.current = false;
+          return;
+        }
         recorderRef.current = null;
         setRecordingActive(false);
         if (onRecordingError) {
@@ -272,6 +294,7 @@ export function usePracticeSession({
     setSnap(initialSnapshot(startMs));
     setNowMs(startMs);
     setStarted(true);
+    startingRef.current = false;
   }, [
     blocks,
     clearLatestRecording,
@@ -296,6 +319,8 @@ export function usePracticeSession({
     ) => {
       if (endedRef.current) return;
       endedRef.current = true;
+      startGenerationRef.current += 1;
+      startingRef.current = false;
 
       if (pausedAtRef.current > 0) {
         sessionStartMsRef.current += Date.now() - pausedAtRef.current;
@@ -375,14 +400,6 @@ export function usePracticeSession({
     addToast("Block reset");
   }, [snap, addToast]);
 
-  const repeatCurrentBlockFromEnded = useCallback(() => {
-    endedRef.current = false;
-    prevPhaseKeyRef.current = "";
-    setSnap((prev) =>
-      prev ? repeatCurrentBlockSnapshot(prev, blocks, Date.now()) : prev,
-    );
-  }, [blocks]);
-
   const keyboardHandlersRef = useRef({
     handleSpace: advance,
     handlePlus: onPlus,
@@ -460,6 +477,8 @@ export function usePracticeSession({
 
   useEffect(() => {
     return () => {
+      startGenerationRef.current += 1;
+      startingRef.current = false;
       metronomeRef.current?.dispose();
       metronomeRef.current = null;
       recorderRef.current?.cancel();
@@ -506,6 +525,5 @@ export function usePracticeSession({
     handlePrevious,
     handlePauseToggle,
     handleResetBlock,
-    repeatCurrentBlockFromEnded,
   };
 }

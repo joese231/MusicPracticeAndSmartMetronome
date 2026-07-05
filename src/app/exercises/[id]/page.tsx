@@ -103,19 +103,6 @@ export default function ExerciseDetailPage() {
       </header>
 
       <div className="mt-6 space-y-4">
-        <LatestRecordingPanel songId={exercise.id} />
-
-        {exerciseRecords.length > 0 && (
-          <>
-            <BpmTimelineChart
-              records={exerciseRecords}
-              itemId={exercise.id}
-              troubleSpotCount={0}
-            />
-            <RecentSessionsList records={exerciseRecords} limit={10} />
-          </>
-        )}
-
         <section className="rounded-lg border border-bg-border bg-bg-elevated p-5">
           <div className="flex flex-wrap items-center gap-x-8 gap-y-3 text-sm">
             <Stat label="Working" value={`${exercise.workingBpm} BPM`} highlight />
@@ -178,6 +165,19 @@ export default function ExerciseDetailPage() {
               : `Start ${exercise.sessionMinutes}-min session`}
           </button>
         </section>
+
+        <LatestRecordingPanel itemKind="exercise" itemId={exercise.id} />
+
+        {exerciseRecords.length > 0 && (
+          <>
+            <BpmTimelineChart
+              records={exerciseRecords}
+              itemId={exercise.id}
+              troubleSpotCount={0}
+            />
+            <RecentSessionsList records={exerciseRecords} limit={10} />
+          </>
+        )}
 
         <section className="rounded-lg border border-bg-border bg-bg-elevated p-5">
           <div className="flex items-center justify-between">

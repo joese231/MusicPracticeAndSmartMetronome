@@ -4,7 +4,7 @@ import { BootMigration } from "@/components/BootMigration";
 
 export const metadata: Metadata = {
   title: "Guitar Song Practice Metronome",
-  description: "Structured bluegrass speed-practice sessions — tempo ladder, block timer, metronome.",
+  description: "Structured guitar speed-practice for songs and exercises with a tempo ladder, block timer, and metronome.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

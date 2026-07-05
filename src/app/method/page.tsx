@@ -12,7 +12,7 @@ export default function MethodPage() {
       </Link>
       <h1 className="mt-4 text-4xl font-bold tracking-tight">The Method</h1>
       <p className="mt-3 text-neutral-400">
-        This is a short, structured speed-practice method for bluegrass tunes. The app runs
+        This is a short, structured speed-practice method for guitar songs and exercises. The app runs
         a session against a metronome so you don&rsquo;t have to manage timers, tempo math,
         or rep counting. Read this once and the rest of the app makes sense.
       </p>

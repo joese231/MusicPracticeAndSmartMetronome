@@ -4,6 +4,7 @@ import type {
   SongBlockTemplate,
   SmartBlockRecipe,
 } from "@/types/song";
+import type { DurationAllocationResult } from "./duration";
 import type { TempoSubject } from "./runtimeTypes";
 import {
   DEFAULT_SONG_BLOCK_TEMPLATE,
@@ -17,10 +18,70 @@ import {
 import { evaluateTempoRule } from "./tempoRules";
 import {
   activeRecipeEntries,
-  allocateRecipeBlocks,
   allocateRecipeDurations,
   tempoRuleBlock,
 } from "./templateBlocks";
+
+type DurationFailureReason = Extract<
+  DurationAllocationResult,
+  { ok: false }
+>["reason"];
+
+export type BlockBuildFailureReason =
+  | DurationFailureReason
+  | "no-active-blocks"
+  | "no-base-blocks";
+
+export type BlockBuildPlan =
+  | { ok: true; blocks: BlockDef[] }
+  | {
+      ok: false;
+      kind: "invalidTemplate" | "emptyBody";
+      reason: BlockBuildFailureReason;
+      message: string;
+      blocks: BlockDef[];
+    };
+
+export const blockBuildFailureMessage = (
+  itemKind: "song" | "exercise",
+  reason: BlockBuildFailureReason,
+): string => {
+  const item = itemKind === "song" ? "song" : "exercise";
+  switch (reason) {
+    case "fixed-exceeds-total":
+      return `The fixed smart-template blocks are longer than this ${item}'s saved session length. Shorten fixed blocks or increase the session length before starting.`;
+    case "fixed-underfills-total":
+      return `The fixed smart-template blocks do not fill this ${item}'s saved session length. Add time, change a block to percent of remaining time, or reduce the saved length before starting.`;
+    case "percent-exceeds-100":
+      return `A smart-template percent block is above 100%. Lower it before starting this ${item}.`;
+    case "no-positive-percent":
+      return `This smart template has remaining time assigned to percent blocks, but none of those percent blocks has a positive value. Add a positive percent value before starting.`;
+    case "no-base-blocks":
+      return itemKind === "song"
+        ? "This smart song template has no enabled non-trouble blocks. Add at least one base block before starting."
+        : "This smart exercise template has no enabled timed blocks. Add at least one block before starting.";
+    case "no-active-blocks":
+      return `This smart ${item} template has no enabled blocks with a positive duration. Enable a block before starting.`;
+  }
+};
+
+const okBlockPlan = (blocks: BlockDef[]): BlockBuildPlan => ({
+  ok: true,
+  blocks,
+});
+
+const invalidBlockPlan = (
+  blocks: BlockDef[],
+  kind: "invalidTemplate" | "emptyBody",
+  reason: BlockBuildFailureReason,
+  itemKind: "song" | "exercise",
+): BlockBuildPlan => ({
+  ok: false,
+  kind,
+  reason,
+  message: blockBuildFailureMessage(itemKind, reason),
+  blocks,
+});
 
 export const INSTRUCTIONS: Record<string, string[]> = {
   consciousPractice: [
@@ -238,35 +299,42 @@ export const songBlockStructureKey = (song: Song): string =>
  *   Empty / all-disabled templates yield no body blocks (caller should
  *   prevent saving such a config from the form).
  */
-export const buildBlocks = (minutes: number, song: Song): BlockDef[] => {
+export const buildBlockPlan = (minutes: number, song: Song): BlockBuildPlan => {
   const result: BlockDef[] = [];
 
   if (song.practiceMode === "openEnded") {
-    return [buildOpenEndedSongBlock(song.metronomeEnabled !== false)];
+    return okBlockPlan([buildOpenEndedSongBlock(song.metronomeEnabled !== false)]);
   }
 
   if (wantsWarmup(song)) result.push(CONSCIOUS_PRACTICE_BLOCK);
 
   if (song.practiceMode === "simple") {
     result.push(buildSimpleMetronomeBlock(minutes * 60));
-    return result;
+    return okBlockPlan(result);
   }
 
   if (song.practiceMode === "timed") {
     result.push(buildTimedPracticeBlock(minutes * 60, song.metronomeEnabled !== false));
-    return result;
+    return okBlockPlan(result);
   }
 
   const template = songTemplate(song);
   const troubleCount = song.troubleSpots.length;
   const entries = activeEntries(template, troubleCount);
-  if (entries.length === 0) return result;
+  if (entries.length === 0) {
+    return invalidBlockPlan(result, "emptyBody", "no-active-blocks", "song");
+  }
 
   const totalSec = minutes * 60;
   const timedEntries = baseEntries(template, troubleCount);
+  if (timedEntries.length === 0) {
+    return invalidBlockPlan(result, "emptyBody", "no-base-blocks", "song");
+  }
   const allocation =
     timedEntries.length > 0 ? allocateRecipeDurations(totalSec, timedEntries) : null;
-  if (allocation && !allocation.ok) return result;
+  if (allocation && !allocation.ok) {
+    return invalidBlockPlan(result, "invalidTemplate", allocation.reason, "song");
+  }
 
   for (const entry of entries) {
     if (entry.role === "troubleSpot") {
@@ -296,8 +364,11 @@ export const buildBlocks = (minutes: number, song: Song): BlockDef[] => {
     }
   }
 
-  return result;
+  return okBlockPlan(result);
 };
+
+export const buildBlocks = (minutes: number, song: Song): BlockDef[] =>
+  buildBlockPlan(minutes, song).blocks;
 
 function recipeToBlock(entry: SmartBlockRecipe, durationSec: number): BlockDef {
   const roleKind =

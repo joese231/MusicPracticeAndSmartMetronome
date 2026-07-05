@@ -51,6 +51,21 @@ export default function SongDetailPage() {
 
   const helperText = useMemo(() => {
     if (!song) return "";
+    if (song.practiceMode === "openEnded") {
+      if (song.metronomeEnabled && song.workingBpm != null) {
+        return `Open-ended count-up timer at ${song.workingBpm} BPM. Press Esc when you're done.`;
+      }
+      return "Open-ended count-up timer with no metronome. Press Esc when you're done.";
+    }
+    if (song.practiceMode === "timed") {
+      if (song.metronomeEnabled && song.workingBpm != null) {
+        return `Single ${song.defaultSessionMinutes}-minute countdown at ${song.workingBpm} BPM. No ladder or promotions.`;
+      }
+      return `Single ${song.defaultSessionMinutes}-minute countdown with no metronome. No ladder or promotions.`;
+    }
+    if (song.practiceMode === "simple") {
+      return `Single ${song.defaultSessionMinutes}-minute steady metronome block at ${song.workingBpm} BPM.`;
+    }
     const selectedMinutes = song.defaultSessionMinutes;
     const lengthSec = sessionLengthSec(selectedMinutes, song);
     const lengthMin = Math.round(lengthSec / 60);
@@ -86,10 +101,15 @@ export default function SongDetailPage() {
     );
   }
 
-  const target = targetBpm(song);
-  const overspeed = overspeedBpm(song);
-  const slowRef = slowReferenceBpm(song);
-  const consolidation = consolidationBpm(song);
+  const hasWorkingBpm = song.workingBpm != null;
+  const isSmart = song.practiceMode === "smart";
+  const isSimple = song.practiceMode === "simple";
+  const showLadderTempoStats = hasWorkingBpm && isSmart;
+  const showStepStat = hasWorkingBpm && (isSmart || isSimple);
+  const target = hasWorkingBpm ? targetBpm(song) : null;
+  const overspeed = hasWorkingBpm ? overspeedBpm(song) : null;
+  const slowRef = hasWorkingBpm ? slowReferenceBpm(song) : null;
+  const consolidation = hasWorkingBpm ? consolidationBpm(song) : null;
 
   const handleStartSession = () => {
     unlockSharedAudioContext();
@@ -119,43 +139,47 @@ export default function SongDetailPage() {
       </header>
 
       <div className="mt-6 space-y-4">
-        <LatestRecordingPanel songId={song.id} />
-
-        {songRecords.length > 0 && (
-          <>
-            <BpmTimelineChart
-              records={songRecords}
-              itemId={song.id}
-              troubleSpotCount={song.troubleSpots.length}
-            />
-            <RecentSessionsList records={songRecords} limit={10} />
-          </>
-        )}
-
         <section className="rounded-lg border border-bg-border bg-bg-elevated p-5">
           <div className="flex flex-wrap items-center gap-x-8 gap-y-3 text-sm">
-            <Stat label="Working" value={`${song.workingBpm} BPM`} highlight />
-            <Stat label="Target" value={`${target} BPM`} />
-            <Stat label="Overspeed" value={`${overspeed} BPM`} />
-            {song.troubleSpots.length === 0 ? (
-              <Stat label="Trouble spots" value="None" />
-            ) : (
-              song.troubleSpots.map((ts, i) => {
-                const label =
-                  song.troubleSpots.length > 1 ? `Trouble ${i + 1}` : "Trouble";
-                const value =
-                  ts.bpm != null
-                    ? `${ts.bpm} BPM`
-                    : `${troubleBlockBpmFor(song, i)} BPM (auto)`;
-                return <Stat key={i} label={label} value={value} />;
-              })
+            <Stat label="Mode" value={modeName(song.practiceMode)} />
+            {song.practiceMode !== "openEnded" && (
+              <Stat label="Length" value={`${song.defaultSessionMinutes} min`} />
+            )}
+            {hasWorkingBpm && (
+              <Stat label="Working" value={`${song.workingBpm} BPM`} highlight />
+            )}
+            {showLadderTempoStats && target != null && overspeed != null && (
+              <>
+                <Stat label="Target" value={`${target} BPM`} />
+                <Stat label="Overspeed" value={`${overspeed} BPM`} />
+                {song.troubleSpots.length === 0 ? (
+                  <Stat label="Trouble spots" value="None" />
+                ) : (
+                  song.troubleSpots.map((ts, i) => {
+                    const label =
+                      song.troubleSpots.length > 1
+                        ? `Trouble ${i + 1}`
+                        : "Trouble";
+                    const value =
+                      ts.bpm != null
+                        ? `${ts.bpm} BPM`
+                        : `${troubleBlockBpmFor(song, i)} BPM (auto)`;
+                    return <Stat key={i} label={label} value={value} />;
+                  })
+                )}
+              </>
             )}
             {song.originalBpm != null && (
               <Stat label="Original" value={`${song.originalBpm} BPM`} />
             )}
-            <Stat label="Slow ref" value={`${slowRef} BPM`} />
-            <Stat label="Consolidation" value={`${consolidation} BPM`} />
-            <Stat label="Step" value={`${song.stepPercent}%`} />
+            {showLadderTempoStats && slowRef != null && consolidation != null && (
+              <>
+                <Stat label="Slow ref" value={`${slowRef} BPM`} />
+                <Stat label="Consolidation" value={`${consolidation} BPM`} />
+              </>
+            )}
+            {showStepStat && <Stat label="Step" value={`${song.stepPercent}%`} />}
+            {!song.metronomeEnabled && <Stat label="Metronome" value="Off" />}
             <Stat label="Total practice" value={formatPracticeTime(song.totalPracticeSec)} />
           </div>
         </section>
@@ -184,6 +208,19 @@ export default function SongDetailPage() {
             Start {song.practiceMode === "openEnded" ? "open-ended" : `${song.defaultSessionMinutes}-min`} session
           </button>
         </section>
+
+        <LatestRecordingPanel itemKind="song" itemId={song.id} />
+
+        {songRecords.length > 0 && (
+          <>
+            <BpmTimelineChart
+              records={songRecords}
+              itemId={song.id}
+              troubleSpotCount={song.troubleSpots.length}
+            />
+            <RecentSessionsList records={songRecords} limit={10} />
+          </>
+        )}
 
         <section className="rounded-lg border border-bg-border bg-bg-elevated p-5">
           <div className="flex items-center justify-between">
@@ -278,4 +315,11 @@ function Stat({
       </div>
     </div>
   );
+}
+
+function modeName(mode: string): string {
+  if (mode === "openEnded") return "Open-ended";
+  if (mode === "timed") return "Timed";
+  if (mode === "simple") return "Simple";
+  return "Smart";
 }

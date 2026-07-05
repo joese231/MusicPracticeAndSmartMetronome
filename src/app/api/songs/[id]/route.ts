@@ -8,9 +8,10 @@ export const dynamic = "force-dynamic";
 
 const FILE = "songs.json";
 
-type Context = { params: { id: string } };
+type Context = { params: Promise<{ id: string }> };
 
 export async function PATCH(req: Request, { params }: Context) {
+  const { id } = await params;
   const body = (await req.json()) as unknown;
   const request = validateSongPatch(body);
   if (!request.ok) {
@@ -18,7 +19,7 @@ export async function PATCH(req: Request, { params }: Context) {
   }
 
   return updateJsonAtomic<Song[], Response>(FILE, [] as Song[], (rows) => {
-    const idx = rows.findIndex((row) => row.id === params.id);
+    const idx = rows.findIndex((row) => row.id === id);
     if (idx < 0) {
       return {
         value: rows,
@@ -56,8 +57,9 @@ export async function PATCH(req: Request, { params }: Context) {
 }
 
 export async function DELETE(_req: Request, { params }: Context) {
+  const { id } = await params;
   await updateJsonAtomic(FILE, [] as Song[], (rows) => ({
-    value: rows.filter((row) => row.id !== params.id),
+    value: rows.filter((row) => row.id !== id),
     result: undefined,
   }));
   return NextResponse.json({ ok: true });

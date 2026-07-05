@@ -16,7 +16,7 @@ import {
   enableMetronomeDebug,
 } from "@/lib/metronome/scheduler";
 import {
-  buildBlocks,
+  buildBlockPlan,
   clampSessionMinutes,
   songBlockStructureKey,
 } from "@/lib/session/blocks";
@@ -28,6 +28,12 @@ import {
   workingBpmForTempo,
 } from "@/lib/session/tempo";
 import { usePracticeSession } from "@/lib/session/usePracticeSession";
+import {
+  buildLatestRecording,
+  buildSongSessionRecord,
+  intermissionRemainingSec,
+  resumeIntermission,
+} from "@/lib/session/sessionArtifacts";
 import type { Song } from "@/types/song";
 import type { BlockDef } from "@/types/block";
 
@@ -108,6 +114,7 @@ function SessionPage() {
   const promotionsRef = useRef<PromotionEvent[]>([]);
   const songRuntimeRef = useRef<Song | null>(null);
   const earnedHandlerRef = useRef<() => void>(() => {});
+  const pendingSongWriteRef = useRef<Promise<void>>(Promise.resolve());
   const endSessionRef = useRef<(reason: "complete" | "abort") => void>(
     () => {},
   );
@@ -115,6 +122,15 @@ function SessionPage() {
   const handleBetweenSongsCancelRef = useRef<() => void>(() => {});
   const handleBetweenSongsPauseToggleRef = useRef<() => void>(() => {});
   const durationMinutes = clampSessionMinutes(song?.defaultSessionMinutes ?? 10);
+
+  const queueSongUpdate = useCallback(
+    (next: Song) => {
+      const write = updateSong(next);
+      pendingSongWriteRef.current = write.catch(() => undefined);
+      return write;
+    },
+    [updateSong],
+  );
 
   useEffect(() => {
     if (!loadedSongs) void loadSongs();
@@ -126,8 +142,8 @@ function SessionPage() {
   }, [song]);
 
   const blockStructureKey = song ? songBlockStructureKey(song) : "";
-  const blocks = useMemo<BlockDef[]>(
-    () => (song ? buildBlocks(durationMinutes, song) : []),
+  const blockPlan = useMemo(
+    () => (song ? buildBlockPlan(durationMinutes, song) : null),
     // Blocks are captured once per session start. tempoFns close over the
     // runtime song ref so mid-session promotions still flow through. The
     // structure key intentionally captures template/mode changes without
@@ -135,6 +151,7 @@ function SessionPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [durationMinutes, song?.id, blockStructureKey],
   );
+  const blocks = useMemo<BlockDef[]>(() => blockPlan?.blocks ?? [], [blockPlan]);
 
   const practice = usePracticeSession({
     blocks,
@@ -170,18 +187,19 @@ function SessionPage() {
   const endSession = useCallback(
     async (reason: "complete" | "abort") => {
       await practice.finishSession(reason, async ({ elapsedSec, startedAt, recorder }) => {
+      await pendingSongWriteRef.current.catch(() => undefined);
       const songId = song?.id;
+      let sessionId: string | null = null;
 
       if (songId && startedAt) {
         const songNow = songRuntimeRef.current ?? song;
-        const rec: SessionRecord = {
+        const rec: SessionRecord = buildSongSessionRecord({
           id: genSessionRecordId(),
           itemId: songId,
-          itemKind: "song",
           itemTitle: song?.title ?? songId,
           startedAt,
           endedAt: new Date().toISOString(),
-          durationSec: Math.max(0, Math.round(elapsedSec)),
+          elapsedSec,
           endedReason: reason,
           plannedMinutes: durationMinutes,
           startWorkingBpm: startWorkingBpmRef.current ?? undefined,
@@ -189,7 +207,8 @@ function SessionPage() {
           startTroubleBpms: startTroubleBpmsRef.current,
           endTroubleBpms: songNow ? songNow.troubleSpots.map((s) => s.bpm) : [],
           promotions: promotionsRef.current.slice(),
-        };
+        });
+        sessionId = rec.id;
         void completeSessionRecord(rec)
           .then(() => loadSongs())
           .catch(() => {
@@ -197,18 +216,20 @@ function SessionPage() {
           });
       }
 
-      if (recorder && songId) {
+      if (recorder && songId && sessionId) {
         try {
           const result = await recorder.stop();
           const blobUrl = URL.createObjectURL(result.blob);
-          setLatestRecording({
-            songId,
+          setLatestRecording(buildLatestRecording({
+            itemKind: "song",
+            itemId: songId,
+            sessionId,
             blob: result.blob,
             blobUrl,
             durationSec: result.durationSec,
-            durationMinutes,
+            plannedMinutes: durationMinutes,
             createdAt: new Date().toISOString(),
-          });
+          }));
         } catch {
           // swallow
         }
@@ -273,12 +294,13 @@ function SessionPage() {
   useEffect(() => {
     if (!loadedSongs || !loadedSettings) return;
     if (!song) return;
+    if (!blockPlan || !blockPlan.ok) return;
     if (practice.started || practice.startingRef.current) return;
     const t = setTimeout(() => {
       void practice.startSession();
     }, 0);
     return () => clearTimeout(t);
-  }, [loadedSongs, loadedSettings, song, practice]);
+  }, [loadedSongs, loadedSettings, song, blockPlan, practice]);
 
   const currentBlock = practice.currentBlock;
   const nextBlock = practice.nextBlock;
@@ -407,7 +429,7 @@ function SessionPage() {
         stepPercent: songNow.stepPercent,
       });
       addToast(`Working: ${oldBpm} → ${promoted.workingBpm}`);
-      await updateSong(promoted);
+      await queueSongUpdate(promoted);
     } else if (promotes.kind === "trouble") {
       const idx = promotes.index;
       const spot = songNow.troubleSpots[idx];
@@ -430,9 +452,9 @@ function SessionPage() {
       const label =
         promoted.troubleSpots.length > 1 ? `Trouble ${idx + 1}` : "Trouble";
       addToast(`${label}: ${oldBpm} → ${newSpot.bpm}`);
-      await updateSong(promoted);
+      await queueSongUpdate(promoted);
     }
-  }, [snap, blocks, updateSong, addToast, metronomeRef]);
+  }, [snap, blocks, queueSongUpdate, addToast, metronomeRef]);
   earnedHandlerRef.current = () => {
     void handleEarned();
   };
@@ -479,9 +501,9 @@ function SessionPage() {
       metronomeRef.current?.setBpm(block.tempoFn(updated));
       setBpmEditorOpen(false);
       addToast(`${label}: ${oldBpm} → ${newBpm}`);
-      await updateSong(updated);
+      await queueSongUpdate(updated);
     },
-    [snap, blocks, updateSong, addToast, metronomeRef],
+    [snap, blocks, queueSongUpdate, addToast, metronomeRef],
   );
 
   const handleResetBlock = practice.handleResetBlock;
@@ -507,9 +529,14 @@ function SessionPage() {
     const current = betweenSongsRef.current;
     if (!current) return;
     if (betweenSongsPausedRef.current) {
-      const delta = Date.now() - betweenSongsPausedAtRef.current;
+      const now = Date.now();
+      const resumed = resumeIntermission(
+        current,
+        betweenSongsPausedAtRef.current,
+        now,
+      );
       betweenSongsPausedAtRef.current = 0;
-      setBetweenSongs({ ...current, startedAtMs: current.startedAtMs + delta });
+      setBetweenSongs(resumed);
       setBetweenSongsPaused(false);
     } else {
       betweenSongsPausedAtRef.current = Date.now();
@@ -560,6 +587,29 @@ function SessionPage() {
     );
   }
 
+  if (blockPlan && !blockPlan.ok) {
+    return (
+      <main className="mx-auto flex min-h-screen max-w-xl flex-col justify-center px-6 py-10">
+        <p className="text-sm font-semibold uppercase text-accent">
+          Smart template
+        </p>
+        <h1 className="mt-2 text-2xl font-bold">
+          Session configuration needs attention
+        </h1>
+        <p className="mt-3 text-sm leading-6 text-neutral-400">
+          {blockPlan.message}
+        </p>
+        <button
+          type="button"
+          onClick={() => router.push(`/songs/${song.id}`)}
+          className="mt-6 w-fit rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-black transition hover:opacity-90"
+        >
+          Edit song
+        </button>
+      </main>
+    );
+  }
+
   if (!started || !snap) {
     return (
       <main className="flex min-h-screen items-center justify-center text-neutral-500">
@@ -575,11 +625,7 @@ function SessionPage() {
     const effectiveNowMs = betweenSongsPaused
       ? betweenSongsPausedAtRef.current
       : nowMs;
-    const elapsedMs = effectiveNowMs - betweenSongs.startedAtMs;
-    const remainingSec = Math.max(
-      0,
-      Math.ceil(betweenSongs.durationSec - elapsedMs / 1000),
-    );
+    const remainingSec = intermissionRemainingSec(betweenSongs, effectiveNowMs);
     return (
       <BetweenItemsOverlay
         nextItemTitle={betweenSongs.nextSongTitle}

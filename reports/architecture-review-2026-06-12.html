@@ -1,0 +1,731 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Guitar Practice Metronome Architecture Review</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #0b0d10;
+        --panel: #14181d;
+        --panel-2: #101419;
+        --border: #27313c;
+        --muted: #9aa4b2;
+        --faint: #687384;
+        --text: #f4f6f8;
+        --accent: #f59e0b;
+        --accent-soft: rgba(245, 158, 11, 0.13);
+        --red: #f87171;
+        --red-soft: rgba(248, 113, 113, 0.12);
+        --blue: #60a5fa;
+        --blue-soft: rgba(96, 165, 250, 0.12);
+        --green: #34d399;
+        --green-soft: rgba(52, 211, 153, 0.12);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background:
+          linear-gradient(180deg, rgba(245, 158, 11, 0.08), transparent 360px),
+          var(--bg);
+        color: var(--text);
+        font-family:
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          sans-serif;
+        line-height: 1.45;
+      }
+
+      a {
+        color: inherit;
+      }
+
+      code {
+        border: 1px solid var(--border);
+        border-radius: 5px;
+        background: #090b0e;
+        padding: 0.1rem 0.3rem;
+        color: #f8d28b;
+        font-size: 0.92em;
+      }
+
+      .page {
+        width: min(1180px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 34px 0 56px;
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: minmax(0, 1.3fr) minmax(280px, 0.7fr);
+        gap: 22px;
+        align-items: stretch;
+        margin-bottom: 22px;
+      }
+
+      .hero-main,
+      .panel {
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: rgba(20, 24, 29, 0.92);
+        box-shadow: 0 24px 80px rgba(0, 0, 0, 0.25);
+      }
+
+      .hero-main {
+        padding: 28px;
+      }
+
+      .eyebrow {
+        margin: 0 0 10px;
+        color: var(--accent);
+        font-size: 0.8rem;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      h1 {
+        margin: 0;
+        max-width: 820px;
+        font-size: clamp(2.1rem, 4vw, 4.1rem);
+        line-height: 0.98;
+        letter-spacing: 0;
+      }
+
+      .lead {
+        margin: 18px 0 0;
+        max-width: 760px;
+        color: var(--muted);
+        font-size: 1.05rem;
+      }
+
+      .hero-side {
+        padding: 22px;
+      }
+
+      .verdict {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 14px;
+        border: 1px solid rgba(52, 211, 153, 0.4);
+        border-radius: 999px;
+        background: var(--green-soft);
+        padding: 6px 10px;
+        color: #b7f7dd;
+        font-size: 0.82rem;
+        font-weight: 800;
+      }
+
+      .big-number {
+        margin-top: 10px;
+        font-size: 2.4rem;
+        font-weight: 900;
+      }
+
+      .side-note {
+        margin: 6px 0 0;
+        color: var(--muted);
+        font-size: 0.92rem;
+      }
+
+      .grid {
+        display: grid;
+        gap: 16px;
+      }
+
+      .grid.cols-3 {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .grid.cols-2 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .section {
+        margin-top: 22px;
+      }
+
+      .section-header {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 12px;
+      }
+
+      h2 {
+        margin: 0;
+        font-size: 1.35rem;
+        letter-spacing: 0;
+      }
+
+      .section-header p {
+        margin: 4px 0 0;
+        color: var(--muted);
+      }
+
+      .panel {
+        padding: 18px;
+      }
+
+      .panel h3 {
+        margin: 0 0 8px;
+        font-size: 1rem;
+      }
+
+      .panel p {
+        margin: 0;
+        color: var(--muted);
+      }
+
+      .architecture {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 10px;
+        align-items: stretch;
+      }
+
+      .box {
+        min-height: 108px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: var(--panel-2);
+        padding: 14px;
+      }
+
+      .box strong {
+        display: block;
+        margin-bottom: 8px;
+      }
+
+      .box span {
+        display: block;
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
+      .arrow {
+        color: var(--accent);
+        font-weight: 900;
+      }
+
+      .finding {
+        display: grid;
+        grid-template-columns: 72px minmax(0, 1fr);
+        gap: 14px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: var(--panel);
+        padding: 16px;
+      }
+
+      .rank {
+        display: flex;
+        height: 44px;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        font-weight: 900;
+      }
+
+      .p0 .rank {
+        background: var(--red-soft);
+        color: #fecaca;
+      }
+
+      .p1 .rank {
+        background: var(--accent-soft);
+        color: #fcdca4;
+      }
+
+      .p2 .rank {
+        background: var(--blue-soft);
+        color: #bfdbfe;
+      }
+
+      .finding h3 {
+        margin: 0 0 6px;
+        font-size: 1.04rem;
+      }
+
+      .finding p {
+        margin: 0 0 10px;
+        color: var(--muted);
+      }
+
+      .meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .tag {
+        display: inline-flex;
+        align-items: center;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        background: #0c1015;
+        padding: 4px 8px;
+        color: var(--muted);
+        font-size: 0.78rem;
+        font-weight: 700;
+      }
+
+      .good {
+        border-color: rgba(52, 211, 153, 0.36);
+        background: var(--green-soft);
+      }
+
+      .warn {
+        border-color: rgba(245, 158, 11, 0.36);
+        background: var(--accent-soft);
+      }
+
+      .bad {
+        border-color: rgba(248, 113, 113, 0.36);
+        background: var(--red-soft);
+      }
+
+      .roadmap {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .step {
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: var(--panel);
+        padding: 16px;
+      }
+
+      .step b {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--accent);
+      }
+
+      ul {
+        margin: 0;
+        padding-left: 1.1rem;
+        color: var(--muted);
+      }
+
+      li + li {
+        margin-top: 0.35rem;
+      }
+
+      .table {
+        width: 100%;
+        border-collapse: collapse;
+        overflow: hidden;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+      }
+
+      .table th,
+      .table td {
+        border-bottom: 1px solid var(--border);
+        padding: 10px 12px;
+        text-align: left;
+        vertical-align: top;
+      }
+
+      .table th {
+        background: #0c1015;
+        color: var(--text);
+        font-size: 0.84rem;
+      }
+
+      .table td {
+        color: var(--muted);
+      }
+
+      .table tr:last-child td {
+        border-bottom: 0;
+      }
+
+      .footer {
+        margin-top: 28px;
+        color: var(--faint);
+        font-size: 0.88rem;
+      }
+
+      @media (max-width: 980px) {
+        .hero,
+        .grid.cols-3,
+        .grid.cols-2,
+        .architecture,
+        .roadmap {
+          grid-template-columns: 1fr;
+        }
+
+        .finding {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <section class="hero">
+        <div class="hero-main">
+          <p class="eyebrow">Architecture and product design review - June 12, 2026</p>
+          <h1>Strong foundation, with a few real edge-case risks to harden.</h1>
+          <p class="lead">
+            I reviewed the app locally and used four independent subagents for persistence,
+            session runtime, UX, and maintainability. The app is not flawed from the ground up:
+            the Repository boundary, pure tempo/session math, and Web Audio scheduler are good
+            foundations. The main risks are multi-file persistence consistency, live-session
+            lifecycle edge cases, and growing complexity in large client modules.
+          </p>
+        </div>
+
+        <aside class="hero-side panel">
+          <div class="verdict">Verdict: keep the architecture, harden the seams</div>
+          <div class="big-number">276 / 276</div>
+          <p class="side-note">Vitest tests passed locally across 35 test files.</p>
+          <div class="big-number">Build OK</div>
+          <p class="side-note">Next production build completed successfully.</p>
+          <div class="big-number">4 agents</div>
+          <p class="side-note">Persistence, runtime, UX, and QA/maintainability audits.</p>
+        </aside>
+      </section>
+
+      <section class="section">
+        <div class="section-header">
+          <div>
+            <h2>Architecture Shape</h2>
+            <p>The current shape is appropriate for v1, but the persistence seam needs stronger transaction semantics.</p>
+          </div>
+        </div>
+        <div class="architecture">
+          <div class="box">
+            <strong>Next App Router</strong>
+            <span>Pages, API routes, client screens, and local-only app flows.</span>
+          </div>
+          <div class="box">
+            <strong>Zustand Stores</strong>
+            <span>UI state talks to <code>Repository</code>, not raw files.</span>
+          </div>
+          <div class="box">
+            <strong>Repository</strong>
+            <span>Good seam for future cloud sync and storage swaps.</span>
+          </div>
+          <div class="box">
+            <strong>JSON API Routes</strong>
+            <span>Per-file atomic writes and optimistic item edits.</span>
+          </div>
+          <div class="box">
+            <strong>Pure Runtime</strong>
+            <span>Tempo, duration, driver, and stats logic are well separated.</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-header">
+          <div>
+            <h2>What Is Solid</h2>
+            <p>These parts should be preserved rather than replaced.</p>
+          </div>
+        </div>
+        <div class="grid cols-3">
+          <article class="panel good">
+            <h3>Repository seam</h3>
+            <p>
+              Stores depend on <code>src/lib/db/repository.ts</code>, which keeps storage strategy
+              swappable. This is the right starting point for cloud sync or an offline repository.
+            </p>
+          </article>
+          <article class="panel good">
+            <h3>Pure session math</h3>
+            <p>
+              Tempo stepping, duration allocation, block building, and driver state are mostly pure
+              functions with meaningful tests. This lowers regression risk.
+            </p>
+          </article>
+          <article class="panel good">
+            <h3>Metronome engineering</h3>
+            <p>
+              Shared AudioContext, prerendered click buffers, drift recovery, and diagnostics show
+              that the audio foundation has already handled real browser timing problems.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-header">
+          <div>
+            <h2>Priority Fixes</h2>
+            <p>P0 items are the ones I would fix before adding new major features.</p>
+          </div>
+        </div>
+        <div class="grid">
+          <article class="finding p0">
+            <div class="rank">P0</div>
+            <div>
+              <h3>Paused sessions can still advance</h3>
+              <p>
+                The hook exposes raw <code>advance</code> with no paused guard, keyboard Space calls
+                it directly, and the pause overlay uses <code>pointer-events-none</code>. A paused
+                session can move to the next block and restart metronome behavior while visually paused.
+              </p>
+              <div class="meta">
+                <span class="tag bad">Runtime correctness</span>
+                <span class="tag">src/lib/session/usePracticeSession.ts:158</span>
+                <span class="tag">src/components/session/SessionShell.tsx:251</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="finding p0">
+            <div class="rank">P0</div>
+            <div>
+              <h3>Session completion is not crash-atomic across files</h3>
+              <p>
+                <code>/api/sessions/complete</code> appends a session, then separately updates song
+                or exercise totals. If the process fails between writes, retry sees a duplicate session
+                and can skip the missing total update.
+              </p>
+              <div class="meta">
+                <span class="tag bad">Persistence consistency</span>
+                <span class="tag">src/app/api/sessions/complete/route.ts:123</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="finding p0">
+            <div class="rank">P0</div>
+            <div>
+              <h3>Start lifecycle can run audio before the visible timer</h3>
+              <p>
+                The metronome can start before microphone permission resolves, while the session timer
+                and UI only move to started afterward. If permission stalls or the component unmounts,
+                lifecycle cleanup is not fully cancellation-safe.
+              </p>
+              <div class="meta">
+                <span class="tag bad">Lifecycle race</span>
+                <span class="tag">src/lib/session/usePracticeSession.ts:230</span>
+                <span class="tag">src/lib/session/usePracticeSession.ts:248</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="finding p0">
+            <div class="rank">P0</div>
+            <div>
+              <h3>Reorder can be overwritten by stale item edits</h3>
+              <p>
+                Reorder routes mutate only <code>sortIndex</code> without updating <code>updatedAt</code>,
+                while normal item PATCH payloads can include <code>sortIndex</code>. A stale edit can
+                restore an old order after drag/drop.
+              </p>
+              <div class="meta">
+                <span class="tag bad">Data loss edge case</span>
+                <span class="tag">src/app/api/songs/reorder/route.ts:31</span>
+                <span class="tag">src/lib/api/validation.ts</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="finding p0">
+            <div class="rank">P0</div>
+            <div>
+              <h3>Dependency audit currently fails</h3>
+              <p>
+                Verified locally: <code>npm audit --omit=dev</code> reports 2 production vulnerabilities
+                through <code>next</code>/<code>postcss</code>. Full <code>npm audit</code> reports 12
+                total vulnerabilities. The fix path is a framework/tooling upgrade pass, not a casual
+                force fix.
+              </p>
+              <div class="meta">
+                <span class="tag bad">Security maintenance</span>
+                <span class="tag">package.json</span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-header">
+          <div>
+            <h2>Important Next</h2>
+            <p>These are not foundational failures, but they will keep producing bugs if ignored.</p>
+          </div>
+        </div>
+        <div class="grid cols-2">
+          <article class="panel warn">
+            <h3>Invalid smart templates need explicit build errors</h3>
+            <p>
+              <code>buildBlocks</code> and <code>buildExerciseBlocks</code> can return only warm-up or
+              no body blocks when allocation is invalid. Return a discriminated result like
+              <code>{ status: "invalidTemplate" }</code> and show a configuration screen instead of
+              letting auto-start fail silently.
+            </p>
+          </article>
+          <article class="panel warn">
+            <h3>Manual log, trim, and delete are split transactions</h3>
+            <p>
+              Manual item logs append sessions without updating item totals. Trim/delete update the
+              session first, then item totals in a second request. Move these through unified server
+              endpoints that apply the session change and item-time delta together.
+            </p>
+          </article>
+          <article class="panel warn">
+            <h3>Recording stop needs inactive/error handling</h3>
+            <p>
+              <code>SessionRecorder.stop()</code> can hang if the recorder is already inactive and
+              does not reject on recorder errors. Make stop/cancel state transitions explicit before
+              persistent recordings are added.
+            </p>
+          </article>
+          <article class="panel warn">
+            <h3>Session schema validation lags item validation</h3>
+            <p>
+              Song and exercise routes validate carefully, but <code>/api/sessions</code> accepts
+              under-checked records. Add <code>validateSessionRecord</code> for live, manual, free-play,
+              and import paths.
+            </p>
+          </article>
+          <article class="panel warn">
+            <h3>Detail pages put history before starting</h3>
+            <p>
+              On song and exercise detail pages, the primary practice action sits below history and
+              charts. Move current BPM/mode and Start first, then show history below.
+            </p>
+          </article>
+          <article class="panel warn">
+            <h3>Mode-aware copy is missing in places</h3>
+            <p>
+              Timed or no-metronome songs can still show ladder-derived BPM language. Hide target,
+              overspeed, slow reference, and warm-up copy when those concepts do not apply.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-header">
+          <div>
+            <h2>Maintainability</h2>
+            <p>The app is still workable, but several modules are becoming change magnets.</p>
+          </div>
+        </div>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Area</th>
+              <th>Current risk</th>
+              <th>Recommended direction</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>BlockTemplateEditor.tsx</code></td>
+              <td>Validation, preview math, row UI, duration controls, tempo controls, and help copy are one large component.</td>
+              <td>Extract editor state helpers, row component, duration editor, tempo editor, and validation display.</td>
+            </tr>
+            <tr>
+              <td>Song/exercise live pages</td>
+              <td>Promotion, recording finalization, intermission, BPM editing, and record building are duplicated.</td>
+              <td>Create typed item-session adapters and shared intermission/recording controllers.</td>
+            </tr>
+            <tr>
+              <td>Recording model</td>
+              <td><code>LatestRecording.songId</code> stores song, exercise, and free-play IDs.</td>
+              <td>Rename to <code>{ itemKind, itemId, sessionId }</code> before persistent recordings.</td>
+            </tr>
+            <tr>
+              <td>UI testing</td>
+              <td>Many pure tests pass, but some UI tests are source-string smoke checks.</td>
+              <td>Add React Testing Library/jsdom interaction tests for session start/end, pause, forms, templates, and free play.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="section">
+        <div class="section-header">
+          <div>
+            <h2>Roadmap</h2>
+            <p>A practical order that improves reliability without derailing v1.</p>
+          </div>
+        </div>
+        <div class="roadmap">
+          <article class="step">
+            <b>1. Safety patch</b>
+            <ul>
+              <li>Guard all advance commands while paused.</li>
+              <li>Make pause overlay intercept clicks.</li>
+              <li>Fix Free Play toggle labels.</li>
+              <li>Add accessible names to settings toggles.</li>
+            </ul>
+          </article>
+          <article class="step">
+            <b>2. Persistence hardening</b>
+            <ul>
+              <li>Remove <code>sortIndex</code> from normal item patches.</li>
+              <li>Add duplicate completion reconciliation.</li>
+              <li>Unify manual log, trim, and delete endpoints.</li>
+              <li>Add session record validation.</li>
+            </ul>
+          </article>
+          <article class="step">
+            <b>3. Runtime hardening</b>
+            <ul>
+              <li>Add start cancellation tokens.</li>
+              <li>Make recorder stop/cancel explicit.</li>
+              <li>Return explicit block build errors.</li>
+              <li>Add hook-level fake timer tests.</li>
+            </ul>
+          </article>
+          <article class="step">
+            <b>4. Growth work</b>
+            <ul>
+              <li>Upgrade Next/Vitest/tooling after audit review.</li>
+              <li>Extract item-session adapters.</li>
+              <li>Create shared form/control primitives.</li>
+              <li>Plan offline/sync before PWA.</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-header">
+          <div>
+            <h2>Bottom Line</h2>
+            <p>The architecture should be evolved, not replaced.</p>
+          </div>
+        </div>
+        <div class="panel">
+          <p>
+            The core design is defensible for a local-first v1 app. The most important correction is
+            to stop treating multi-file JSON writes as transactional. The next most important correction
+            is to make the live-session hook own only safe, guarded state transitions. After that, the
+            product design improvements are straightforward: put practice-start actions first, make copy
+            mode-aware, and split large UI modules before adding cloud sync, PWA, or persistent recordings.
+          </p>
+        </div>
+      </section>
+
+      <p class="footer">
+        Local verification: <code>npm run test</code> passed, <code>npm run build</code> passed,
+        <code>npm audit --omit=dev</code> failed with 2 production vulnerabilities, and
+        full <code>npm audit</code> failed with 12 total vulnerabilities.
+      </p>
+    </main>
+  </body>
+</html>

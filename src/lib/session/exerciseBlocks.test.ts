@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
 import {
+  buildExerciseBlockPlan,
   buildExerciseBlocks,
   buildExerciseTimedBlocks,
   DEFAULT_EXERCISE_MINUTES,
@@ -101,6 +102,36 @@ describe("buildExerciseTimedBlocks (default template)", () => {
 });
 
 describe("buildExerciseBlocks", () => {
+  it("reports invalid smart templates explicitly", () => {
+    const plan = buildExerciseBlockPlan(
+      makeExercise(100, 10, {
+        blockTemplate: [
+          {
+            id: "fixed-only",
+            role: "exerciseBuild",
+            name: "Fixed only",
+            purpose: "test",
+            instructions: ["test"],
+            enabled: true,
+            duration: { kind: "fixed", seconds: 60 },
+            tempoRule: { source: "working" },
+            metronomeEnabled: true,
+            progression: { kind: "working" },
+          },
+        ],
+      }),
+    );
+
+    expect(plan).toMatchObject({
+      ok: false,
+      kind: "invalidTemplate",
+      reason: "fixed-underfills-total",
+    });
+    expect(plan.blocks.map((block) => block.kind)).toEqual([
+      "consciousPractice",
+    ]);
+  });
+
   it("prepends an unbounded Conscious Practice warm-up", () => {
     const blocks = buildExerciseBlocks(makeExercise(100, DEFAULT_EXERCISE_MINUTES));
     expect(blocks[0].kind).toBe("consciousPractice");

@@ -53,13 +53,35 @@ describe("song item API", () => {
           },
         }),
       }),
-      { params: { id: "song-1" } },
+      { params: Promise.resolve({ id: "song-1" }) },
     );
 
     expect(res.status).toBe(400);
     await expect(res.json()).resolves.toEqual({
       error: "song patch field totalPracticeSec is not editable here",
     });
+  });
+
+  it("rejects patches that try to overwrite manual order", async () => {
+    const res = await PATCH(
+      new Request("http://test/api/songs/song-1", {
+        method: "PATCH",
+        body: JSON.stringify({
+          expectedUpdatedAt: "2026-06-12T00:00:00.000Z",
+          patch: {
+            sortIndex: 99,
+            updatedAt: "2026-06-12T00:01:00.000Z",
+          },
+        }),
+      }),
+      { params: Promise.resolve({ id: "song-1" }) },
+    );
+
+    expect(res.status).toBe(400);
+    await expect(res.json()).resolves.toEqual({
+      error: "song patch field sortIndex is not editable here",
+    });
+    expect(songs[0].sortIndex).toBe(0);
   });
 
   it("rejects stale patches when updatedAt changed", async () => {
@@ -74,7 +96,7 @@ describe("song item API", () => {
           },
         }),
       }),
-      { params: { id: "song-1" } },
+      { params: Promise.resolve({ id: "song-1" }) },
     );
 
     expect(res.status).toBe(409);
@@ -95,7 +117,7 @@ describe("song item API", () => {
           },
         }),
       }),
-      { params: { id: "song-1" } },
+      { params: Promise.resolve({ id: "song-1" }) },
     );
 
     expect(res.status).toBe(200);

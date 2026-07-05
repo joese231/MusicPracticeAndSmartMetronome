@@ -73,6 +73,9 @@ export default function HomePage() {
       <header className="mb-8 flex items-center justify-between">
         <h1 className="text-3xl font-bold tracking-tight">Practice</h1>
         <nav className="flex items-center gap-5 text-sm text-neutral-400">
+          <Link href="/free-play" className="transition hover:text-neutral-100">
+            Free Play
+          </Link>
           <Link href="/stats" className="transition hover:text-neutral-100">
             Stats
           </Link>

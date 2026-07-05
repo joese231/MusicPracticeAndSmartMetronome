@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
 import {
+  buildBlockPlan,
   buildBlocks,
   INSTRUCTIONS,
   sessionLengthSec,
@@ -224,6 +225,37 @@ describe("buildBlocks — default template totals", () => {
 });
 
 describe("buildBlocks — fixed default durations", () => {
+  it("reports invalid smart templates explicitly", () => {
+    const plan = buildBlockPlan(
+      10,
+      makeSong([{ bpm: 150 }], {
+        blockTemplate: [
+          {
+            id: "fixed-only",
+            role: "ceilingWork",
+            name: "Fixed only",
+            purpose: "test",
+            instructions: ["test"],
+            enabled: true,
+            duration: { kind: "fixed", seconds: 60 },
+            tempoRule: { source: "working" },
+            metronomeEnabled: true,
+            progression: { kind: "working" },
+          },
+        ],
+      }),
+    );
+
+    expect(plan).toMatchObject({
+      ok: false,
+      kind: "invalidTemplate",
+      reason: "fixed-underfills-total",
+    });
+    expect(plan.blocks.map((block) => block.kind)).toEqual([
+      "consciousPractice",
+    ]);
+  });
+
   it("returns no smart body blocks when fixed-only base blocks underfill the selected length", () => {
     const blocks = buildBlocks(
       10,

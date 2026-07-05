@@ -41,20 +41,43 @@ export class SessionRecorder {
     }
     if (this.stopPromise) return this.stopPromise;
 
-    this.stopPromise = new Promise<RecorderResult>((resolve) => {
+    this.stopPromise = new Promise<RecorderResult>((resolve, reject) => {
       const mr = this.mediaRecorder!;
+      const finish = () => {
+        const type = mr.mimeType || "audio/webm";
+        const blob = new Blob(this.chunks, { type });
+        const durationSec = (Date.now() - this.startTime) / 1000;
+        this.releaseStream();
+        this.mediaRecorder = null;
+        resolve({ blob, durationSec });
+      };
+      const fail = (event: Event) => {
+        this.releaseStream();
+        this.mediaRecorder = null;
+        const maybeError = (event as Event & { error?: unknown }).error;
+        reject(
+          maybeError instanceof Error
+            ? maybeError
+            : new Error("Recorder failed while stopping."),
+        );
+      };
       mr.addEventListener(
         "stop",
-        () => {
-          const type = mr.mimeType || "audio/webm";
-          const blob = new Blob(this.chunks, { type });
-          const durationSec = (Date.now() - this.startTime) / 1000;
-          this.releaseStream();
-          resolve({ blob, durationSec });
-        },
+        finish,
         { once: true },
       );
-      if (mr.state !== "inactive") mr.stop();
+      mr.addEventListener("error", fail, { once: true });
+      if (mr.state !== "inactive") {
+        try {
+          mr.stop();
+        } catch (err) {
+          this.releaseStream();
+          this.mediaRecorder = null;
+          reject(err);
+        }
+        return;
+      }
+      queueMicrotask(finish);
     });
 
     return this.stopPromise;

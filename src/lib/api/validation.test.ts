@@ -10,6 +10,7 @@ import {
   validateExercisePatch,
   validateSettings,
   validateSettingsPatch,
+  validateSessionRecord,
   validateSong,
   validateSongPatch,
 } from "./validation";
@@ -54,6 +55,23 @@ const validExercise = {
   updatedAt: "2026-06-12T00:00:00.000Z",
 };
 
+const validSessionRecord = {
+  id: "session-1",
+  itemId: "song-1",
+  itemKind: "song",
+  itemTitle: "Blackberry Blossom",
+  startedAt: "2026-06-12T10:00:00.000Z",
+  endedAt: "2026-06-12T10:10:00.000Z",
+  durationSec: 600,
+  endedReason: "manual",
+  plannedMinutes: 10,
+  startWorkingBpm: 90,
+  endWorkingBpm: 92,
+  startTroubleBpms: [],
+  endTroubleBpms: [],
+  promotions: [],
+};
+
 describe("api validation", () => {
   it("accepts a valid song and rejects malformed song rows", () => {
     expect(validateSong(validSong)).toEqual({ ok: true, value: validSong });
@@ -89,6 +107,10 @@ describe("api validation", () => {
       ok: false,
       error: "song patch field totalPracticeSec is not editable here",
     });
+    expect(validateSongPatch({ patch: { sortIndex: 99 } })).toEqual({
+      ok: false,
+      error: "song patch field sortIndex is not editable here",
+    });
   });
 
   it("accepts a valid exercise and rejects malformed exercise rows", () => {
@@ -120,6 +142,10 @@ describe("api validation", () => {
       ok: false,
       error: "exercise patch field id is not editable here",
     });
+    expect(validateExercisePatch({ patch: { sortIndex: 99 } })).toEqual({
+      ok: false,
+      error: "exercise patch field sortIndex is not editable here",
+    });
   });
 
   it("validates settings and settings patches", () => {
@@ -134,6 +160,60 @@ describe("api validation", () => {
     expect(validateSettingsPatch({ metronomeVolume: 2 })).toEqual({
       ok: false,
       error: "settings.metronomeVolume must be between 0 and 1",
+    });
+  });
+
+  it("validates song, exercise, and free-play session records", () => {
+    expect(validateSessionRecord(validSessionRecord)).toEqual({
+      ok: true,
+      value: validSessionRecord,
+    });
+    expect(
+      validateSessionRecord({
+        ...validSessionRecord,
+        itemKind: "exercise",
+        itemId: "exercise-1",
+      }),
+    ).toEqual({
+      ok: true,
+      value: {
+        ...validSessionRecord,
+        itemKind: "exercise",
+        itemId: "exercise-1",
+      },
+    });
+    expect(
+      validateSessionRecord({
+        ...validSessionRecord,
+        itemKind: "freePlay",
+        itemId: "__freeplay__",
+        startWorkingBpm: undefined,
+        endWorkingBpm: undefined,
+      }),
+    ).toEqual({
+      ok: true,
+      value: {
+        ...validSessionRecord,
+        itemKind: "freePlay",
+        itemId: "__freeplay__",
+        startWorkingBpm: undefined,
+        endWorkingBpm: undefined,
+      },
+    });
+  });
+
+  it("rejects malformed session records", () => {
+    expect(validateSessionRecord({ ...validSessionRecord, itemKind: "jam" })).toEqual({
+      ok: false,
+      error: "session.itemKind is invalid",
+    });
+    expect(validateSessionRecord({ ...validSessionRecord, durationSec: -1 })).toEqual({
+      ok: false,
+      error: "session.durationSec must be non-negative",
+    });
+    expect(validateSessionRecord({ ...validSessionRecord, endedAt: "soon" })).toEqual({
+      ok: false,
+      error: "session timestamps must be ISO strings",
     });
   });
 });

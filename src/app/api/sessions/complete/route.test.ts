@@ -125,4 +125,67 @@ describe("complete session API", () => {
     expect(sessions).toHaveLength(1);
     expect(songs[0].totalPracticeSec).toBe(340);
   });
+
+  it("reconciles a pending duplicate completion by applying a missing item total increment", async () => {
+    const loaded = await loadRouteInTempDataDir();
+    tempDir = loaded.dir;
+    const { POST } = loaded.route;
+    await writeFile(
+      path.join(tempDir, "data", "songs.json"),
+      JSON.stringify([makeSong()], null, 2),
+    );
+    await writeFile(
+      path.join(tempDir, "data", "sessions.json"),
+      JSON.stringify([makeRecord("session-1")], null, 2),
+    );
+    await writeFile(
+      path.join(tempDir, "data", "session-completion-ledger.json"),
+      JSON.stringify({ "session-1": "pending" }, null, 2),
+    );
+
+    const res = await POST(
+      new Request("http://localhost/api/sessions/complete", {
+        method: "POST",
+        body: JSON.stringify({ record: makeRecord("session-1") }),
+      }),
+    );
+
+    expect(res.status).toBe(200);
+    const sessions = JSON.parse(
+      await readFile(path.join(tempDir, "data", "sessions.json"), "utf8"),
+    ) as SessionRecord[];
+    const songs = JSON.parse(
+      await readFile(path.join(tempDir, "data", "songs.json"), "utf8"),
+    ) as Song[];
+    const ledger = JSON.parse(
+      await readFile(
+        path.join(tempDir, "data", "session-completion-ledger.json"),
+        "utf8",
+      ),
+    ) as Record<string, string>;
+    expect(sessions).toHaveLength(1);
+    expect(songs[0].totalPracticeSec).toBe(340);
+    expect(ledger["session-1"]).toBe("applied");
+  });
+
+  it("rejects free-play records on the item-completion endpoint", async () => {
+    const loaded = await loadRouteInTempDataDir();
+    tempDir = loaded.dir;
+    const { POST } = loaded.route;
+
+    const res = await POST(
+      new Request("http://localhost/api/sessions/complete", {
+        method: "POST",
+        body: JSON.stringify({
+          record: {
+            ...makeRecord("free-session"),
+            itemId: "__freeplay__",
+            itemKind: "freePlay",
+          },
+        }),
+      }),
+    );
+
+    expect(res.status).toBe(400);
+  });
 });

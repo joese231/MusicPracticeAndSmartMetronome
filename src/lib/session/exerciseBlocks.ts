@@ -9,13 +9,20 @@ import {
   DEFAULT_EXERCISE_BLOCK_TEMPLATE,
 } from "@/types/song";
 import {
+  blockBuildFailureMessage,
+  type BlockBuildPlan,
   buildSimpleMetronomeBlock,
   buildTimedPracticeBlock,
   CONSCIOUS_PRACTICE_BLOCK,
   INSTRUCTIONS,
 } from "./blocks";
 import { workingBpmForTempo } from "./tempo";
-import { activeRecipeEntries, allocateRecipeBlocks, tempoRuleBlock } from "./templateBlocks";
+import {
+  activeRecipeEntries,
+  allocateRecipeBlocks,
+  allocateRecipeDurations,
+  tempoRuleBlock,
+} from "./templateBlocks";
 
 export const DEFAULT_EXERCISE_MINUTES = 5;
 export const MIN_EXERCISE_MINUTES = 5;
@@ -81,8 +88,20 @@ export const buildExerciseTimedBlocks = (
  *                              template, allocated proportionally.
  */
 export const buildExerciseBlocks = (exercise: Exercise): BlockDef[] => {
+  return buildExerciseBlockPlan(exercise).blocks;
+};
+
+export const buildExerciseBlockPlan = (exercise: Exercise): BlockBuildPlan => {
   if (exercise.openEnded || exercise.practiceMode === "openEnded") {
-    return [{ ...OPEN_ENDED_BLOCK, metronomeEnabled: exercise.metronomeEnabled !== false }];
+    return {
+      ok: true,
+      blocks: [
+        {
+          ...OPEN_ENDED_BLOCK,
+          metronomeEnabled: exercise.metronomeEnabled !== false,
+        },
+      ],
+    };
   }
 
   const out: BlockDef[] = [];
@@ -94,17 +113,44 @@ export const buildExerciseBlocks = (exercise: Exercise): BlockDef[] => {
       ...buildSimpleMetronomeBlock(minutes * 60),
       metronomeEnabled: exercise.metronomeEnabled !== false,
     });
-    return out;
+    return { ok: true, blocks: out };
   }
 
   if (exercise.practiceMode === "timed") {
     const minutes = clampMinutes(exercise.sessionMinutes);
     out.push(buildTimedPracticeBlock(minutes * 60, exercise.metronomeEnabled !== false));
-    return out;
+    return { ok: true, blocks: out };
   }
 
-  out.push(...buildExerciseTimedBlocks(exercise.sessionMinutes, exercise));
-  return out;
+  const total = clampMinutes(exercise.sessionMinutes) * 60;
+  const entries = activeExerciseEntries(exerciseTemplate(exercise));
+  if (entries.length === 0) {
+    return {
+      ok: false,
+      kind: "emptyBody",
+      reason: "no-active-blocks",
+      message: blockBuildFailureMessage("exercise", "no-active-blocks"),
+      blocks: out,
+    };
+  }
+
+  const allocation = allocateRecipeDurations(total, entries);
+  if (!allocation.ok) {
+    return {
+      ok: false,
+      kind: "invalidTemplate",
+      reason: allocation.reason,
+      message: blockBuildFailureMessage("exercise", allocation.reason),
+      blocks: out,
+    };
+  }
+
+  out.push(
+    ...entries.map((entry) =>
+      exerciseRecipeToBlock(entry, allocation.durations.get(entry.id) ?? 0),
+    ),
+  );
+  return { ok: true, blocks: out };
 };
 
 function exerciseRecipeToBlock(

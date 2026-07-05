@@ -147,10 +147,10 @@
     ],
     "defaultSessionMinutes": 10,
     "metronomeEnabled": false,
-    "totalPracticeSec": 2159,
+    "totalPracticeSec": 15476,
     "sortIndex": 0,
     "createdAt": "2026-06-10T14:04:57.223Z",
-    "updatedAt": "2026-06-12T13:54:52.479Z"
+    "updatedAt": "2026-07-03T16:56:38.938Z"
   },
   {
     "id": "5c5ffa71-9051-4eb6-95c1-4630265ac577",
@@ -300,10 +300,10 @@
     ],
     "defaultSessionMinutes": 10,
     "metronomeEnabled": false,
-    "totalPracticeSec": 2695,
+    "totalPracticeSec": 15178,
     "sortIndex": 1,
     "createdAt": "2026-06-10T14:59:09.110Z",
-    "updatedAt": "2026-06-12T14:16:50.923Z"
+    "updatedAt": "2026-07-03T17:11:07.106Z"
   },
   {
     "id": "58148c75-8f5b-4b2b-822a-098df01fb11d",
@@ -453,10 +453,10 @@
     ],
     "defaultSessionMinutes": 10,
     "metronomeEnabled": false,
-    "totalPracticeSec": 2625,
+    "totalPracticeSec": 10712,
     "sortIndex": 2,
     "createdAt": "2026-06-10T16:16:07.462Z",
-    "updatedAt": "2026-06-12T14:47:13.161Z"
+    "updatedAt": "2026-07-03T17:21:23.394Z"
   },
   {
     "id": "dc275ae4-6f34-45b0-a041-3a04783d7427",
@@ -466,17 +466,17 @@
     "warmupBpm": null,
     "troubleSpots": [
       {
-        "bpm": 176
+        "bpm": 190
       }
     ],
     "originalBpm": 200,
     "stepPercent": 2.5,
     "practiceMode": "smart",
     "includeWarmupBlock": false,
-    "totalPracticeSec": 14160,
+    "totalPracticeSec": 20039,
     "sortIndex": 3,
     "createdAt": "2026-04-27T15:29:18.877Z",
-    "updatedAt": "2026-06-12T16:24:34.896Z",
+    "updatedAt": "2026-07-03T17:22:15.871Z",
     "blockTemplate": [
       {
         "id": "song-slowReference",
@@ -626,10 +626,10 @@
     "stepPercent": 2.5,
     "practiceMode": "smart",
     "includeWarmupBlock": false,
-    "totalPracticeSec": 11786,
+    "totalPracticeSec": 15766,
     "sortIndex": 4,
     "createdAt": "2026-04-29T12:14:24.205Z",
-    "updatedAt": "2026-06-12T16:24:32.400Z",
+    "updatedAt": "2026-07-03T17:32:09.192Z",
     "blockTemplate": [
       {
         "id": "song-slowReference",
@@ -775,9 +775,9 @@
     "workingBpm": 182,
     "originalBpm": 271,
     "stepPercent": 2.5,
-    "totalPracticeSec": 15578,
+    "totalPracticeSec": 19662,
     "createdAt": "2026-04-13T21:21:14.941Z",
-    "updatedAt": "2026-06-12T16:24:30.048Z",
+    "updatedAt": "2026-07-01T15:53:16.763Z",
     "troubleSpots": [],
     "sortIndex": 5,
     "warmupBpm": null,
@@ -925,13 +925,13 @@
     "id": "f3b56365-1b75-4130-ad3c-a3e33cbd58be",
     "title": "Wildwood flower",
     "link": "https://truefire.com/bluegrass-guitar-lessons/bluegrass-blaze/wildwood-flower/v97807",
-    "workingBpm": 166,
+    "workingBpm": 170,
     "troubleSpots": [],
     "originalBpm": 186,
     "stepPercent": 2.5,
-    "totalPracticeSec": 9851,
+    "totalPracticeSec": 11275,
     "createdAt": "2026-04-13T22:43:56.394Z",
-    "updatedAt": "2026-06-10T19:55:45.530Z",
+    "updatedAt": "2026-07-01T15:56:28.162Z",
     "sortIndex": 6,
     "warmupBpm": null,
     "practiceMode": "smart",
@@ -1082,9 +1082,9 @@
     "troubleSpots": [],
     "originalBpm": 261,
     "stepPercent": 2.5,
-    "totalPracticeSec": 12980,
+    "totalPracticeSec": 15314,
     "createdAt": "2026-04-13T22:46:44.165Z",
-    "updatedAt": "2026-06-11T14:17:11.804Z",
+    "updatedAt": "2026-07-01T16:02:38.401Z",
     "sortIndex": 7,
     "warmupBpm": null,
     "practiceMode": "smart",
@@ -1235,9 +1235,9 @@
     "troubleSpots": [],
     "originalBpm": 248,
     "stepPercent": 2.5,
-    "totalPracticeSec": 9041,
+    "totalPracticeSec": 10317,
     "createdAt": "2026-04-13T22:48:00.779Z",
-    "updatedAt": "2026-06-11T14:28:06.947Z",
+    "updatedAt": "2026-07-01T16:04:51.247Z",
     "sortIndex": 8,
     "warmupBpm": null,
     "practiceMode": "smart",
@@ -1388,9 +1388,9 @@
     "troubleSpots": [],
     "originalBpm": 210,
     "stepPercent": 2.5,
-    "totalPracticeSec": 9680,
+    "totalPracticeSec": 11330,
     "createdAt": "2026-04-13T22:49:52.792Z",
-    "updatedAt": "2026-06-11T14:42:54.541Z",
+    "updatedAt": "2026-07-01T16:09:00.052Z",
     "sortIndex": 9,
     "warmupBpm": null,
     "practiceMode": "smart",
@@ -1543,14 +1543,14 @@
         "bpm": 97
       },
       {
-        "bpm": 95
+        "bpm": 90
       }
     ],
     "originalBpm": 125,
     "stepPercent": 2.5,
-    "totalPracticeSec": 10139,
+    "totalPracticeSec": 13075,
     "createdAt": "2026-04-13T22:50:50.703Z",
-    "updatedAt": "2026-06-11T15:00:46.726Z",
+    "updatedAt": "2026-07-01T16:15:27.633Z",
     "sortIndex": 10,
     "warmupBpm": 40,
     "practiceMode": "smart",

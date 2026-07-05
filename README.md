@@ -1,6 +1,6 @@
 # Music Practice & Smart Metronome
 
-A web app for structured bluegrass speed-practice sessions. It drives a three-tempo ladder (working / target / overspeed), a block timer, and a metronome — keeping sessions focused and progressive.
+A web app for structured guitar speed-practice across songs and exercises. It drives a three-tempo ladder (working / target / overspeed), customizable practice blocks, and a metronome to help players build BPM with focused, progressive sessions.
 
 ## Current state (April 2026)
 
@@ -50,7 +50,7 @@ Visit `/method` in the app for the full practice method explanation.
 
 ## Tech stack
 
-Next.js 14 (App Router) · TypeScript · Tailwind CSS · Zustand · Web Audio API · Vitest
+Next.js 15 (App Router) · TypeScript · Tailwind CSS · Zustand · Web Audio API · Vitest
 
 ## License
 

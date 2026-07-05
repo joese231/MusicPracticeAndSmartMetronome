@@ -2,8 +2,15 @@
 import { useCallback, useRef } from "react";
 import { useSessionStore } from "@/lib/store/useSessionStore";
 import { formatDuration } from "@/lib/format";
+import type { LatestRecording } from "@/types/recording";
 
-export function LatestRecordingPanel({ songId }: { songId: string }) {
+export function LatestRecordingPanel({
+  itemKind,
+  itemId,
+}: {
+  itemKind: LatestRecording["itemKind"];
+  itemId: string;
+}) {
   const recording = useSessionStore((s) => s.latestRecording);
   const clear = useSessionStore((s) => s.clearLatestRecording);
   const fixedRef = useRef(false);
@@ -30,9 +37,18 @@ export function LatestRecordingPanel({ songId }: { songId: string }) {
     [],
   );
 
-  if (!recording || recording.songId !== songId) return null;
+  if (
+    !recording ||
+    recording.itemKind !== itemKind ||
+    recording.itemId !== itemId
+  ) {
+    return null;
+  }
 
-  const modeLabel = `${recording.durationMinutes}-minute session`;
+  const modeLabel =
+    recording.plannedMinutes == null
+      ? "Open-ended session"
+      : `${recording.plannedMinutes}-minute session`;
 
   return (
     <section className="rounded-lg border border-bg-border bg-bg-elevated p-5">

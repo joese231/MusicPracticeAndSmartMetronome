@@ -17,7 +17,11 @@ import { BlockCountUp } from "@/components/session/BlockCountUp";
 import { RecordingIndicator } from "@/components/session/RecordingIndicator";
 import { MetronomeIndicator } from "@/components/metronome/MetronomeIndicator";
 import { formatPracticeTime } from "@/lib/format";
-import { FREE_PLAY_ITEM_ID, FREE_PLAY_ITEM_TITLE } from "@/lib/session/freePlay";
+import { FREE_PLAY_ITEM_ID } from "@/lib/session/freePlay";
+import {
+  buildFreePlaySessionRecord,
+  buildLatestRecording,
+} from "@/lib/session/sessionArtifacts";
 
 const DEFAULT_FREE_PLAY_BPM = 90;
 const MIN_BPM = 30;
@@ -134,41 +138,36 @@ export default function FreePlayPage() {
       metronomeRef.current = null;
     }
 
+    let sessionId: string | null = null;
     if (startIsoRef.current && elapsed > 0) {
-      const rec: SessionRecord = {
+      const rec: SessionRecord = buildFreePlaySessionRecord({
         id: genSessionRecordId(),
-        itemId: FREE_PLAY_ITEM_ID,
-        itemKind: "freePlay",
-        itemTitle: FREE_PLAY_ITEM_TITLE,
         startedAt: startIsoRef.current,
         endedAt: new Date().toISOString(),
-        durationSec: Math.max(0, Math.round(elapsed)),
-        endedReason: "complete",
-        plannedMinutes: 0,
-        startWorkingBpm: activeBpm,
-        endWorkingBpm: activeBpm,
-        startTroubleBpms: [],
-        endTroubleBpms: [],
-        promotions: [],
-      };
+        elapsedSec: elapsed,
+        bpm: activeBpm,
+      });
+      sessionId = rec.id;
       void appendSessionRecord(rec).catch(() => {
         // best-effort
       });
     }
 
     const rec = recorderRef.current;
-    if (rec) {
+    if (rec && sessionId) {
       try {
         const result = await rec.stop();
         const blobUrl = URL.createObjectURL(result.blob);
-        setLatestRecording({
-          songId: FREE_PLAY_ITEM_ID,
+        setLatestRecording(buildLatestRecording({
+          itemKind: "freePlay",
+          itemId: FREE_PLAY_ITEM_ID,
+          sessionId,
           blob: result.blob,
           blobUrl,
           durationSec: result.durationSec,
-          durationMinutes: 0,
+          plannedMinutes: null,
           createdAt: new Date().toISOString(),
-        });
+        }));
       } catch {
         // swallow
       }
@@ -366,7 +365,7 @@ export default function FreePlayPage() {
                 : "border-bg-border text-neutral-200 hover:border-accent"
             }`}
           >
-            {metronomeOn ? "Click on" : "Click off"}
+            {metronomeOn ? "Turn click off" : "Turn click on"}
           </button>
           <button
             onClick={() => void endSession()}

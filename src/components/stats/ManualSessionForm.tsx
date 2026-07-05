@@ -19,7 +19,9 @@ const SELECT_CLASS = "rounded bg-neutral-800 px-3 py-2 text-neutral-100";
 
 export function ManualSessionForm() {
   const songs = useSongsStore((s) => s.songs);
+  const loadSongs = useSongsStore((s) => s.load);
   const exercises = useExercisesStore((s) => s.exercises);
+  const loadExercises = useExercisesStore((s) => s.load);
   const append = useSessionHistoryStore((s) => s.append);
 
   // Form state
@@ -216,6 +218,11 @@ export function ManualSessionForm() {
 
       const record = createManualSessionRecord(params);
       await append(record);
+      if (record.itemKind === "song") {
+        await loadSongs();
+      } else if (record.itemKind === "exercise") {
+        await loadExercises();
+      }
 
       // Success feedback
       setSuccess(true);

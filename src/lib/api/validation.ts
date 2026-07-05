@@ -5,6 +5,7 @@ import {
   MIN_EXERCISE_MINUTES,
 } from "@/lib/session/exerciseBlocks";
 import type { Exercise } from "@/types/exercise";
+import type { PromotionEvent, SessionRecord } from "@/types/sessionRecord";
 import type {
   BlockDurationRule,
   ExerciseBlockTemplate,
@@ -41,6 +42,9 @@ const PRACTICE_MODES = new Set<PracticeMode>([
   "openEnded",
 ]);
 
+const SESSION_ITEM_KINDS = new Set(["song", "exercise", "freePlay"]);
+const SESSION_ENDED_REASONS = new Set(["complete", "abort", "manual"]);
+
 const SMART_ROLES = new Set<SmartBlockRole>([
   "slowReference",
   "troubleSpot",
@@ -66,7 +70,6 @@ const SONG_PATCH_FIELDS = new Set<keyof Song>([
   "blockTemplate",
   "defaultSessionMinutes",
   "metronomeEnabled",
-  "sortIndex",
   "updatedAt",
 ]);
 
@@ -83,7 +86,6 @@ const EXERCISE_PATCH_FIELDS = new Set<keyof Exercise>([
   "practiceMode",
   "includeWarmupBlock",
   "blockTemplate",
-  "sortIndex",
   "updatedAt",
 ]);
 
@@ -103,6 +105,9 @@ const SETTINGS_PATCH_FIELDS = new Set<keyof Settings>([
 const isObject = (value: unknown): value is Record<string, unknown> =>
   !!value && typeof value === "object" && !Array.isArray(value);
 
+const isNonEmptyString = (value: unknown): value is string =>
+  typeof value === "string" && value.length > 0;
+
 const isIsoString = (value: unknown): value is string =>
   typeof value === "string" && Number.isFinite(Date.parse(value));
 
@@ -120,6 +125,46 @@ const isNonNegativeNumber = (value: unknown): value is number =>
 
 const isPracticeMode = (value: unknown): value is PracticeMode =>
   typeof value === "string" && PRACTICE_MODES.has(value as PracticeMode);
+
+const isSessionItemKind = (
+  value: unknown,
+): value is SessionRecord["itemKind"] =>
+  typeof value === "string" && SESSION_ITEM_KINDS.has(value);
+
+const isSessionEndedReason = (
+  value: unknown,
+): value is SessionRecord["endedReason"] =>
+  typeof value === "string" && SESSION_ENDED_REASONS.has(value);
+
+const isOptionalPlayableBpm = (value: unknown): value is number | undefined =>
+  value === undefined || isPlayableBpm(value);
+
+function validateBpmArray(value: unknown): value is Array<number | null> {
+  return (
+    Array.isArray(value) &&
+    value.every((bpm) => bpm === null || isPlayableBpm(bpm))
+  );
+}
+
+function validatePromotionEvent(value: unknown): value is PromotionEvent {
+  if (!isObject(value)) return false;
+  if (!isIsoString(value.at)) return false;
+  if (value.kind !== "working" && value.kind !== "trouble") return false;
+  if (
+    value.troubleIndex !== undefined &&
+    (typeof value.troubleIndex !== "number" ||
+      !Number.isInteger(value.troubleIndex) ||
+      value.troubleIndex < 0)
+  ) {
+    return false;
+  }
+  return (
+    isPlayableBpm(value.fromBpm) &&
+    isPlayableBpm(value.toBpm) &&
+    isFiniteNumber(value.stepPercent) &&
+    value.stepPercent > 0
+  );
+}
 
 function validateTroubleSpots(value: unknown): value is TroubleSpot[] {
   return (
@@ -335,6 +380,57 @@ export function validateExercise(value: unknown): ApiValidationResult<Exercise> 
     return { ok: false, error: "exercise timestamps must be ISO strings" };
   }
   return { ok: true, value: value as Exercise };
+}
+
+export function validateSessionRecord(
+  value: unknown,
+): ApiValidationResult<SessionRecord> {
+  if (!isObject(value)) {
+    return { ok: false, error: "session must be an object" };
+  }
+  if (!isNonEmptyString(value.id)) {
+    return { ok: false, error: "session.id must be a non-empty string" };
+  }
+  if (!isNonEmptyString(value.itemId)) {
+    return { ok: false, error: "session.itemId must be a non-empty string" };
+  }
+  if (!isSessionItemKind(value.itemKind)) {
+    return { ok: false, error: "session.itemKind is invalid" };
+  }
+  if (!isNonEmptyString(value.itemTitle)) {
+    return { ok: false, error: "session.itemTitle must be a non-empty string" };
+  }
+  if (!isIsoString(value.startedAt) || !isIsoString(value.endedAt)) {
+    return { ok: false, error: "session timestamps must be ISO strings" };
+  }
+  if (!isNonNegativeNumber(value.durationSec)) {
+    return { ok: false, error: "session.durationSec must be non-negative" };
+  }
+  if (!isSessionEndedReason(value.endedReason)) {
+    return { ok: false, error: "session.endedReason is invalid" };
+  }
+  if (!isNonNegativeNumber(value.plannedMinutes)) {
+    return { ok: false, error: "session.plannedMinutes must be non-negative" };
+  }
+  if (
+    !isOptionalPlayableBpm(value.startWorkingBpm) ||
+    !isOptionalPlayableBpm(value.endWorkingBpm)
+  ) {
+    return { ok: false, error: "session working BPM fields are invalid" };
+  }
+  if (
+    !validateBpmArray(value.startTroubleBpms) ||
+    !validateBpmArray(value.endTroubleBpms)
+  ) {
+    return { ok: false, error: "session trouble BPM fields are invalid" };
+  }
+  if (
+    !Array.isArray(value.promotions) ||
+    !value.promotions.every(validatePromotionEvent)
+  ) {
+    return { ok: false, error: "session.promotions is invalid" };
+  }
+  return { ok: true, value: value as SessionRecord };
 }
 
 export function validateSongPatch(

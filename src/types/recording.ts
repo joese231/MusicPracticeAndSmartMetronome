@@ -1,8 +1,10 @@
 export type LatestRecording = {
-  songId: string;
+  itemKind: "song" | "exercise" | "freePlay";
+  itemId: string;
+  sessionId: string;
   blob: Blob;
   blobUrl: string;
   durationSec: number;
-  durationMinutes: number;
+  plannedMinutes: number | null;
   createdAt: string;
 };

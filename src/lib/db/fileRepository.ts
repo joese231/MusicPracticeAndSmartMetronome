@@ -17,20 +17,13 @@ const SETTINGS_URL = "/api/settings";
 const SESSIONS_URL = "/api/sessions";
 const COMPLETE_SESSION_URL = "/api/sessions/complete";
 const PRACTICE_TIME_URL = "/api/practice-time";
+const RESET_STATISTICS_URL = "/api/statistics/reset";
+const FACTORY_RESET_URL = "/api/factory-reset";
 
 async function getJson<T>(url: string): Promise<T> {
   const res = await fetch(url, { cache: "no-store" });
   if (!res.ok) throw new Error(`GET ${url} failed: ${res.status}`);
   return (await res.json()) as T;
-}
-
-async function putJson(url: string, body: unknown): Promise<void> {
-  const res = await fetch(url, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-  });
-  if (!res.ok) throw new Error(`PUT ${url} failed: ${res.status}`);
 }
 
 async function postJson<T>(url: string, body: unknown): Promise<T> {
@@ -182,6 +175,7 @@ export class FileRepository implements Repository {
         id: _id,
         createdAt: _createdAt,
         totalPracticeSec: _totalPracticeSec,
+        sortIndex: _sortIndex,
         ...patch
       } = song;
       await patchJson<Song>(`${SONGS_URL}/${encodeURIComponent(song.id)}`, {
@@ -225,6 +219,7 @@ export class FileRepository implements Repository {
         id: _id,
         createdAt: _createdAt,
         totalPracticeSec: _totalPracticeSec,
+        sortIndex: _sortIndex,
         ...patch
       } = exercise;
       await patchJson<Exercise>(
@@ -265,6 +260,11 @@ export class FileRepository implements Repository {
   }
 
   async appendSession(rec: SessionRecord): Promise<void> {
+    if (rec.itemKind === "song" || rec.itemKind === "exercise") {
+      await this.completeSession(rec);
+      return;
+    }
+
     const res = await fetch(SESSIONS_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -321,33 +321,10 @@ export class FileRepository implements Repository {
   }
 
   async resetAllStatistics(): Promise<void> {
-    // Zero totalPracticeSec on every song and exercise.
-    const songs = await getJson<Song[]>(SONGS_URL);
-    const songsZeroed = songs.map((s) => ({ ...s, totalPracticeSec: 0 }));
-    await this.chainSongs(async () => {
-      await putJson(SONGS_URL, songsZeroed);
-    });
-    const exercises = await getJson<Exercise[]>(EXERCISES_URL);
-    const exercisesZeroed = exercises.map((e) => ({
-      ...e,
-      totalPracticeSec: 0,
-    }));
-    await this.chainExercises(async () => {
-      await putJson(EXERCISES_URL, exercisesZeroed);
-    });
-    // Clear session history.
-    await putJson(SESSIONS_URL, []);
-    await deleteJson(PRACTICE_TIME_URL);
+    await postJson<{ ok: true }>(RESET_STATISTICS_URL, {});
   }
 
   async factoryReset(): Promise<void> {
-    await this.chainSongs(async () => {
-      await putJson(SONGS_URL, []);
-    });
-    await this.chainExercises(async () => {
-      await putJson(EXERCISES_URL, []);
-    });
-    await putJson(SESSIONS_URL, []);
-    await deleteJson(PRACTICE_TIME_URL);
+    await postJson<{ ok: true }>(FACTORY_RESET_URL, {});
   }
 }

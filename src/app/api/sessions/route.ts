@@ -1,11 +1,13 @@
 import { NextResponse } from "next/server";
 import type { SessionRecord } from "@/types/sessionRecord";
+import { validateSessionRecord } from "@/lib/api/validation";
 import { readJson, updateJsonAtomic, writeJsonAtomic } from "@/lib/db/fileStore";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 const FILE = "sessions.json";
+const COMPLETION_LEDGER_FILE = "session-completion-ledger.json";
 
 export async function GET() {
   const rows = await readJson<SessionRecord[]>(FILE, []);
@@ -22,10 +24,11 @@ export async function POST(req: Request) {
   if (!body || typeof body !== "object" || Array.isArray(body)) {
     return NextResponse.json({ error: "expected object" }, { status: 400 });
   }
-  const rec = body as SessionRecord;
-  if (typeof rec.id !== "string" || typeof rec.itemId !== "string") {
-    return NextResponse.json({ error: "invalid record" }, { status: 400 });
+  const valid = validateSessionRecord(body);
+  if (!valid.ok) {
+    return NextResponse.json({ error: valid.error }, { status: 400 });
   }
+  const rec = valid.value;
   const result = await updateJsonAtomic<SessionRecord[], { deduped: boolean }>(
     FILE,
     [],
@@ -53,6 +56,16 @@ export async function PUT(req: Request) {
   if (!Array.isArray(body)) {
     return NextResponse.json({ error: "expected array" }, { status: 400 });
   }
-  await writeJsonAtomic(FILE, body);
+  for (const row of body) {
+    const valid = validateSessionRecord(row);
+    if (!valid.ok) {
+      return NextResponse.json({ error: valid.error }, { status: 400 });
+    }
+  }
+  const rows = body as SessionRecord[];
+  await writeJsonAtomic(FILE, rows);
+  if (rows.length === 0) {
+    await writeJsonAtomic(COMPLETION_LEDGER_FILE, {});
+  }
   return NextResponse.json({ ok: true });
 }
