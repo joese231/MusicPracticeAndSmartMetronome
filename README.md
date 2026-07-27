@@ -1,5 +1,9 @@
 # Music Practice & Smart Metronome
 
+## Project Showcase
+
+[Open or download the standalone project showcase](./project-showcase.html)
+
 A web app for structured guitar speed-practice across songs and exercises. It drives a three-tempo ladder (working / target / overspeed), customizable practice blocks, and a metronome to help players build BPM with focused, progressive sessions.
 
 ## Current state (April 2026)
