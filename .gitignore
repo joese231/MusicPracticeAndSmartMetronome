@@ -12,3 +12,6 @@ tsconfig.tsbuildinfo
 .claude/
 .superpowers/
 docs/superpowers/
+
+# Atomic-write scratch files; durable app JSON remains tracked.
+data/*.tmp

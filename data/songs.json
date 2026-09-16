@@ -3,12 +3,12 @@
     "id": "a990d1f3-9f76-4f81-ae2d-557b50053f91",
     "title": "Ruben",
     "link": "https://truefire.com/bluegrass-guitar-lessons/bluegrass-blaze/rueben-/v97814",
-    "workingBpm": null,
+    "workingBpm": 158,
     "warmupBpm": null,
     "troubleSpots": [],
-    "originalBpm": null,
+    "originalBpm": 271,
     "stepPercent": 2.5,
-    "practiceMode": "timed",
+    "practiceMode": "smart",
     "includeWarmupBlock": false,
     "blockTemplate": [
       {
@@ -46,7 +46,7 @@
           "Loop just the hardest 1-2 bars of the tune.",
           "Three clean-and-relaxed reps earns the next rung."
         ],
-        "enabled": true,
+        "enabled": false,
         "duration": {
           "kind": "fixed",
           "seconds": 120
@@ -78,7 +78,7 @@
         "enabled": true,
         "duration": {
           "kind": "fixed",
-          "seconds": 300
+          "seconds": 390
         },
         "tempoRule": {
           "source": "working",
@@ -127,7 +127,7 @@
           "Play relaxed reps below working tempo.",
           "Stay here until you can play one very relaxed musical pass."
         ],
-        "enabled": true,
+        "enabled": false,
         "duration": {
           "kind": "fixed",
           "seconds": 90
@@ -147,10 +147,10 @@
     ],
     "defaultSessionMinutes": 10,
     "metronomeEnabled": false,
-    "totalPracticeSec": 15476,
-    "sortIndex": 0,
+    "totalPracticeSec": 40628,
+    "sortIndex": 1,
     "createdAt": "2026-06-10T14:04:57.223Z",
-    "updatedAt": "2026-07-03T16:56:38.938Z"
+    "updatedAt": "2026-09-14T04:17:05.487Z"
   },
   {
     "id": "5c5ffa71-9051-4eb6-95c1-4630265ac577",
@@ -300,10 +300,10 @@
     ],
     "defaultSessionMinutes": 10,
     "metronomeEnabled": false,
-    "totalPracticeSec": 15178,
-    "sortIndex": 1,
+    "totalPracticeSec": 64777,
+    "sortIndex": 0,
     "createdAt": "2026-06-10T14:59:09.110Z",
-    "updatedAt": "2026-07-03T17:11:07.106Z"
+    "updatedAt": "2026-09-11T07:13:06.575Z"
   },
   {
     "id": "58148c75-8f5b-4b2b-822a-098df01fb11d",
@@ -453,30 +453,30 @@
     ],
     "defaultSessionMinutes": 10,
     "metronomeEnabled": false,
-    "totalPracticeSec": 10712,
+    "totalPracticeSec": 18849,
     "sortIndex": 2,
     "createdAt": "2026-06-10T16:16:07.462Z",
-    "updatedAt": "2026-07-03T17:21:23.394Z"
+    "updatedAt": "2026-09-09T03:49:44.373Z"
   },
   {
     "id": "dc275ae4-6f34-45b0-a041-3a04783d7427",
     "title": "One - Depapepe Rythm Part",
     "link": "https://www.youtube.com/watch?v=Hpa4nTozXBw&list=RDHpa4nTozXBw",
-    "workingBpm": 192,
+    "workingBpm": 197,
     "warmupBpm": null,
     "troubleSpots": [
       {
-        "bpm": 190
+        "bpm": 195
       }
     ],
     "originalBpm": 200,
     "stepPercent": 2.5,
     "practiceMode": "smart",
     "includeWarmupBlock": false,
-    "totalPracticeSec": 20039,
+    "totalPracticeSec": 29740,
     "sortIndex": 3,
     "createdAt": "2026-04-27T15:29:18.877Z",
-    "updatedAt": "2026-07-03T17:22:15.871Z",
+    "updatedAt": "2026-09-09T03:49:50.344Z",
     "blockTemplate": [
       {
         "id": "song-slowReference",
@@ -621,15 +621,19 @@
     "link": null,
     "workingBpm": 197,
     "warmupBpm": 120,
-    "troubleSpots": [],
-    "originalBpm": 200,
+    "troubleSpots": [
+      {
+        "bpm": 174
+      }
+    ],
+    "originalBpm": 201,
     "stepPercent": 2.5,
     "practiceMode": "smart",
     "includeWarmupBlock": false,
-    "totalPracticeSec": 15766,
+    "totalPracticeSec": 24974,
     "sortIndex": 4,
     "createdAt": "2026-04-29T12:14:24.205Z",
-    "updatedAt": "2026-07-03T17:32:09.192Z",
+    "updatedAt": "2026-09-09T03:49:52.057Z",
     "blockTemplate": [
       {
         "id": "song-slowReference",
@@ -666,7 +670,7 @@
           "Loop just the hardest 1-2 bars of the tune.",
           "Three clean-and-relaxed reps earns the next rung."
         ],
-        "enabled": false,
+        "enabled": true,
         "duration": {
           "kind": "fixed",
           "seconds": 120
@@ -772,167 +776,14 @@
     "id": "de7b70c2-3c07-4e13-ae2b-6028a94269e7",
     "title": "Salt Creek [Capo2]",
     "link": "https://truefire.com/bluegrass-guitar-lessons/bluegrass-blaze/salt-creek/v97811",
-    "workingBpm": 182,
+    "workingBpm": 192,
     "originalBpm": 271,
     "stepPercent": 2.5,
-    "totalPracticeSec": 19662,
+    "totalPracticeSec": 32645,
     "createdAt": "2026-04-13T21:21:14.941Z",
-    "updatedAt": "2026-07-01T15:53:16.763Z",
+    "updatedAt": "2026-09-09T04:03:24.184Z",
     "troubleSpots": [],
     "sortIndex": 5,
-    "warmupBpm": null,
-    "practiceMode": "smart",
-    "includeWarmupBlock": true,
-    "blockTemplate": [
-      {
-        "id": "song-slowReference",
-        "role": "slowReference",
-        "name": "Slow Reference",
-        "purpose": "@ 80% working",
-        "instructions": [
-          "Play the full tune slowly and relaxed.",
-          "Stay here until you can play one clean-enough repetition of the song."
-        ],
-        "enabled": true,
-        "duration": {
-          "kind": "fixed",
-          "seconds": 90
-        },
-        "tempoRule": {
-          "source": "working",
-          "adjustment": {
-            "kind": "percent",
-            "value": 80
-          }
-        },
-        "metronomeEnabled": true,
-        "progression": {
-          "kind": "none"
-        }
-      },
-      {
-        "id": "song-troubleSpot",
-        "role": "troubleSpot",
-        "name": "Trouble Spot",
-        "purpose": "@ saved trouble BPM, else 80% working",
-        "instructions": [
-          "Loop just the hardest 1-2 bars of the tune.",
-          "Three clean-and-relaxed reps earns the next rung."
-        ],
-        "enabled": true,
-        "duration": {
-          "kind": "fixed",
-          "seconds": 120
-        },
-        "tempoRule": {
-          "source": "trouble",
-          "fallback": {
-            "source": "working",
-            "adjustment": {
-              "kind": "percent",
-              "value": 80
-            }
-          }
-        },
-        "metronomeEnabled": true,
-        "progression": {
-          "kind": "trouble"
-        }
-      },
-      {
-        "id": "song-ceilingWork",
-        "role": "ceilingWork",
-        "name": "Ceiling Work",
-        "purpose": "@ target BPM (working + 1 step)",
-        "instructions": [
-          "Full tune at the target tempo.",
-          "Three clean-and-relaxed reps earns a new working tempo."
-        ],
-        "enabled": true,
-        "duration": {
-          "kind": "fixed",
-          "seconds": 300
-        },
-        "tempoRule": {
-          "source": "working",
-          "adjustment": {
-            "kind": "steps",
-            "value": 1
-          }
-        },
-        "metronomeEnabled": true,
-        "progression": {
-          "kind": "working"
-        }
-      },
-      {
-        "id": "song-overspeed",
-        "role": "overspeed",
-        "name": "Overspeed",
-        "purpose": "@ overspeed (working + 2 steps)",
-        "instructions": [
-          "Play at least one repetition above your target tempo.",
-          "Messy is OK; the goal is to make target feel slower."
-        ],
-        "enabled": true,
-        "duration": {
-          "kind": "fixed",
-          "seconds": 120
-        },
-        "tempoRule": {
-          "source": "working",
-          "adjustment": {
-            "kind": "steps",
-            "value": 2
-          }
-        },
-        "metronomeEnabled": true,
-        "progression": {
-          "kind": "none"
-        }
-      },
-      {
-        "id": "song-consolidation",
-        "role": "consolidation",
-        "name": "Consolidation",
-        "purpose": "@ 70% working",
-        "instructions": [
-          "Play relaxed reps below working tempo.",
-          "Stay here until you can play one very relaxed musical pass."
-        ],
-        "enabled": true,
-        "duration": {
-          "kind": "fixed",
-          "seconds": 90
-        },
-        "tempoRule": {
-          "source": "working",
-          "adjustment": {
-            "kind": "percent",
-            "value": 70
-          }
-        },
-        "metronomeEnabled": true,
-        "progression": {
-          "kind": "none"
-        }
-      }
-    ],
-    "defaultSessionMinutes": 10,
-    "metronomeEnabled": true
-  },
-  {
-    "id": "f3b56365-1b75-4130-ad3c-a3e33cbd58be",
-    "title": "Wildwood flower",
-    "link": "https://truefire.com/bluegrass-guitar-lessons/bluegrass-blaze/wildwood-flower/v97807",
-    "workingBpm": 170,
-    "troubleSpots": [],
-    "originalBpm": 186,
-    "stepPercent": 2.5,
-    "totalPracticeSec": 11275,
-    "createdAt": "2026-04-13T22:43:56.394Z",
-    "updatedAt": "2026-07-01T15:56:28.162Z",
-    "sortIndex": 6,
     "warmupBpm": null,
     "practiceMode": "smart",
     "includeWarmupBlock": true,
@@ -1078,14 +929,14 @@
     "id": "ecbb5882-094b-4ee9-9856-13a5ab0c625f",
     "title": "Beamont Rag",
     "link": "https://truefire.com/bluegrass-guitar-lessons/bluegrass-blaze/beamont-rag/v97803",
-    "workingBpm": 169,
+    "workingBpm": 170,
     "troubleSpots": [],
     "originalBpm": 261,
     "stepPercent": 2.5,
-    "totalPracticeSec": 15314,
+    "totalPracticeSec": 24584,
     "createdAt": "2026-04-13T22:46:44.165Z",
-    "updatedAt": "2026-07-01T16:02:38.401Z",
-    "sortIndex": 7,
+    "updatedAt": "2026-09-10T04:01:17.832Z",
+    "sortIndex": 10,
     "warmupBpm": null,
     "practiceMode": "smart",
     "includeWarmupBlock": true,
@@ -1231,14 +1082,14 @@
     "id": "dc69fcf9-0d9a-46cd-837a-b7a10b887071",
     "title": "Arkansas Traveler Whole song",
     "link": "https://truefire.com/bluegrass-guitar-lessons/bluegrass-blaze/arkansas-traveler/v97799",
-    "workingBpm": 185,
+    "workingBpm": 195,
     "troubleSpots": [],
     "originalBpm": 248,
     "stepPercent": 2.5,
-    "totalPracticeSec": 10317,
+    "totalPracticeSec": 14856,
     "createdAt": "2026-04-13T22:48:00.779Z",
-    "updatedAt": "2026-07-01T16:04:51.247Z",
-    "sortIndex": 8,
+    "updatedAt": "2026-09-10T04:03:45.582Z",
+    "sortIndex": 6,
     "warmupBpm": null,
     "practiceMode": "smart",
     "includeWarmupBlock": true,
@@ -1388,10 +1239,10 @@
     "troubleSpots": [],
     "originalBpm": 210,
     "stepPercent": 2.5,
-    "totalPracticeSec": 11330,
+    "totalPracticeSec": 19501,
     "createdAt": "2026-04-13T22:49:52.792Z",
-    "updatedAt": "2026-07-01T16:09:00.052Z",
-    "sortIndex": 9,
+    "updatedAt": "2026-09-10T04:10:23.928Z",
+    "sortIndex": 7,
     "warmupBpm": null,
     "practiceMode": "smart",
     "includeWarmupBlock": true,
@@ -1537,21 +1388,21 @@
     "id": "cd5bdc97-4e73-41f8-81eb-aa8907e9ec2a",
     "title": "Escabana",
     "link": "https://www.youtube.com/watch?v=gRTh_N8jG40&list=RDgRTh_N8jG40&start_radio=1",
-    "workingBpm": 100,
+    "workingBpm": 97,
     "troubleSpots": [
       {
-        "bpm": 97
+        "bpm": 104
       },
       {
-        "bpm": 90
+        "bpm": 94
       }
     ],
     "originalBpm": 125,
     "stepPercent": 2.5,
-    "totalPracticeSec": 13075,
+    "totalPracticeSec": 23574,
     "createdAt": "2026-04-13T22:50:50.703Z",
-    "updatedAt": "2026-07-01T16:15:27.633Z",
-    "sortIndex": 10,
+    "updatedAt": "2026-09-10T04:16:05.907Z",
+    "sortIndex": 8,
     "warmupBpm": 40,
     "practiceMode": "smart",
     "includeWarmupBlock": true,
@@ -1841,9 +1692,9 @@
     ],
     "defaultSessionMinutes": 10,
     "metronomeEnabled": false,
-    "totalPracticeSec": 0,
-    "sortIndex": 11,
+    "totalPracticeSec": 1582,
+    "sortIndex": 9,
     "createdAt": "2026-06-10T15:00:17.441Z",
-    "updatedAt": "2026-06-12T16:24:15.595Z"
+    "updatedAt": "2026-09-10T04:16:07.936Z"
   }
 ]
