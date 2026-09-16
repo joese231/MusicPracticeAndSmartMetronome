@@ -145,17 +145,17 @@ export function ExerciseForm({
       setError("Step % must be between 0.5 and 10.");
       return null;
     }
-    const sm = parseInt(sessionMinutes, 10);
+    const sm = Number(sessionMinutes);
     // Session length is irrelevant for open-ended exercises but we still
     // persist a sane value so toggling the flag back on restores a length.
     if (
       !isOpenEnded &&
-      (!Number.isFinite(sm) ||
+      (!Number.isFinite(sm) || !Number.isInteger(sm * 2) ||
         sm < MIN_EXERCISE_MINUTES ||
         sm > MAX_EXERCISE_MINUTES)
     ) {
       setError(
-        `Session length must be between ${MIN_EXERCISE_MINUTES} and ${MAX_EXERCISE_MINUTES} minutes.`,
+        `Session length must be between ${MIN_EXERCISE_MINUTES} and ${MAX_EXERCISE_MINUTES} minutes in half-minute increments.`,
       );
       return null;
     }
@@ -281,14 +281,14 @@ export function ExerciseForm({
         {!isOpenEnded && (
           <Field
             label="Session length (minutes)"
-            hint={`Saved length for this exercise (${MIN_EXERCISE_MINUTES}-${MAX_EXERCISE_MINUTES} minutes). Smart blocks divide this time according to the block sequence.`}
+            hint={`Saved length for this exercise (${MIN_EXERCISE_MINUTES}-${MAX_EXERCISE_MINUTES} minutes, in half-minute increments). Smart blocks divide this time according to the block sequence.`}
           >
             <input
               type="number"
-              inputMode="numeric"
+              inputMode="decimal"
               min={MIN_EXERCISE_MINUTES}
               max={MAX_EXERCISE_MINUTES}
-              step={1}
+              step={0.5}
               value={sessionMinutes}
               onChange={(e) => {
                 setSessionMinutes(e.target.value);
@@ -358,7 +358,7 @@ export function ExerciseForm({
                 setBlockTemplateTouched(true);
               }}
               previewMinutes={(() => {
-                const sm = parseInt(sessionMinutes, 10);
+                const sm = Number(sessionMinutes);
                 return Number.isFinite(sm)
                   ? Math.max(MIN_EXERCISE_MINUTES, Math.min(MAX_EXERCISE_MINUTES, sm))
                   : DEFAULT_EXERCISE_MINUTES;

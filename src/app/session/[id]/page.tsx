@@ -40,6 +40,7 @@ import type { BlockDef } from "@/types/block";
 import { MetronomeDiagnosticsPanel } from "@/components/session/MetronomeDiagnostics";
 import { BpmEditorModal } from "@/components/session/BpmEditorModal";
 import { BetweenItemsOverlay } from "@/components/session/BetweenItemsOverlay";
+import { PracticeNotes } from "@/components/session/PracticeNotes";
 import { SessionShell } from "@/components/session/SessionShell";
 
 type BetweenSongs = {
@@ -642,6 +643,13 @@ function SessionPage() {
 
   return (
     <SessionShell
+      notesPanel={<PracticeNotes key={song.id} notes={song.notes ?? null} onSave={async (notes) => {
+        const current = songRuntimeRef.current;
+        if (!current) throw new Error("This item is no longer available.");
+        const updated = { ...current, notes };
+        songRuntimeRef.current = updated;
+        await queueSongUpdate(updated);
+      }} />}
       title={song.title}
       subtitle={`${durationMinutes}-min session`}
       currentBlock={currentBlock}

@@ -78,7 +78,7 @@ function sortExercises(rows: Exercise[]): Exercise[] {
 // written by an older build. Lazy — applied on read; the corrected shape is
 // persisted on the next upsert.
 function normalizeSong(row: Song): Song {
-  const next = { ...row };
+  const next = { ...row, notes: row.notes ?? null };
   if (
     next.practiceMode !== "simple" &&
     next.practiceMode !== "timed" &&

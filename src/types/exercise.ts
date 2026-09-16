@@ -9,8 +9,8 @@ export type Exercise = {
   /** Saved Conscious Practice BPM. null = use ⅓ × workingBpm rule (min 20). */
   warmupBpm: number | null;
   stepPercent: number;
-  /** Total session length in minutes (5..60). The Build block absorbs all
-   * extra time beyond the fixed 90s Burst + 30s Cool Down. Ignored when
+  /** Total session length in half-minute increments (0.5..60 minutes). Smart recipe durations
+   * must allocate this length exactly. Ignored when
    * `openEnded` is true. */
   sessionMinutes: number;
   /** When true, the session runs as a single unbounded count-up timer at

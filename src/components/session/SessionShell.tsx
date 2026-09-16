@@ -46,6 +46,7 @@ type SessionShellProps = {
   earnedHint?: string;
   unboundedActionLabel?: string;
   unboundedActionShortcut?: string;
+  notesPanel?: ReactNode;
   beforePrimaryControls?: ReactNode;
   children?: ReactNode;
   toasts?: Toast[];
@@ -91,6 +92,7 @@ export function SessionShell({
   earnedHint,
   unboundedActionLabel,
   unboundedActionShortcut = "(Space)",
+  notesPanel,
   beforePrimaryControls,
   children,
   toasts = [],
@@ -185,6 +187,7 @@ export function SessionShell({
         )}
 
         {currentBlock && <BlockInstructions items={currentBlock.instructions} />}
+        {notesPanel}
       </div>
 
       <div className="flex w-full shrink-0 flex-col items-center justify-center gap-3 pt-2">

@@ -18,6 +18,7 @@ import { useSettingsStore } from "./useSettingsStore";
 
 type NewSongInput = {
   title: string;
+  notes?: string | null;
   link: string | null;
   workingBpm: number | null;
   troubleSpots: TroubleSpot[];
@@ -106,6 +107,7 @@ export const useSongsStore = create<SongsState>((set, get) => ({
     const song: Song = {
       id: genId(),
       title: input.title.trim(),
+      notes: input.notes?.trim() || null,
       link: input.link?.trim() || null,
       workingBpm: input.workingBpm,
       warmupBpm: null,

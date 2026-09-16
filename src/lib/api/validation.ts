@@ -59,6 +59,7 @@ const SMART_ROLES = new Set<SmartBlockRole>([
 
 const SONG_PATCH_FIELDS = new Set<keyof Song>([
   "title",
+  "notes",
   "link",
   "workingBpm",
   "warmupBpm",
@@ -266,9 +267,13 @@ function validateSessionMinutes(
   value: unknown,
   min: number,
   max: number,
+  increment?: number,
 ): ApiValidationResult<number> {
   if (!isFiniteNumber(value) || value < min || value > max) {
     return { ok: false, error: `${field} is out of range` };
+  }
+  if (increment && !Number.isInteger(value / increment)) {
+    return { ok: false, error: `${field} must use ${increment}-minute increments` };
   }
   return { ok: true, value };
 }
@@ -280,6 +285,9 @@ export function validateSong(value: unknown): ApiValidationResult<Song> {
   }
   if (typeof value.title !== "string" || value.title.trim().length === 0) {
     return { ok: false, error: "song.title must be a non-empty string" };
+  }
+  if (value.notes !== undefined && !isNullableString(value.notes)) {
+    return { ok: false, error: "song.notes must be a string or null" };
   }
   if (!isNullableString(value.link)) {
     return { ok: false, error: "song.link must be a string or null" };
@@ -355,6 +363,7 @@ export function validateExercise(value: unknown): ApiValidationResult<Exercise> 
     value.sessionMinutes,
     MIN_EXERCISE_MINUTES,
     MAX_EXERCISE_MINUTES,
+    0.5,
   );
   if (!minutes.ok) return minutes;
   if (
@@ -520,6 +529,7 @@ export function validateSettings(value: unknown): ApiValidationResult<Settings> 
     value.defaultExerciseSessionMinutes,
     MIN_EXERCISE_MINUTES,
     MAX_EXERCISE_MINUTES,
+    0.5,
   );
   if (!exerciseMinutes.ok) return exerciseMinutes;
   if (!validateTemplate(value.defaultSongBlockTemplate)) {
@@ -569,6 +579,7 @@ export function validateSettingsPatch(
       value.defaultExerciseSessionMinutes,
       MIN_EXERCISE_MINUTES,
       MAX_EXERCISE_MINUTES,
+      0.5,
     ).ok
   ) {
     return { ok: false, error: "settings.defaultExerciseSessionMinutes is out of range" };

@@ -209,6 +209,13 @@ export default function SongDetailPage() {
           </button>
         </section>
 
+        {song.notes && (
+          <section aria-label="Practice notes" className="rounded-lg border border-bg-border bg-bg-elevated p-5">
+            <h2 className="mb-2 font-semibold">Practice notes</h2>
+            <p className="whitespace-pre-wrap break-words text-sm text-neutral-300">{song.notes}</p>
+          </section>
+        )}
+
         <LatestRecordingPanel itemKind="song" itemId={song.id} />
 
         {songRecords.length > 0 && (
@@ -240,6 +247,7 @@ export default function SongDetailPage() {
                 submitLabel="Save"
                 initial={{
                   title: song.title,
+                  notes: song.notes ?? null,
                   link: song.link,
                   workingBpm: song.workingBpm,
                   troubleSpots: song.troubleSpots,

@@ -275,6 +275,7 @@ export default function SettingsPage() {
             <NumberSetting
               value={settings.defaultExerciseSessionMinutes}
               min={MIN_EXERCISE_MINUTES}
+              step={0.5}
               max={MAX_EXERCISE_MINUTES}
               fallback={DEFAULT_EXERCISE_MINUTES}
               suffix="min"
@@ -639,6 +640,7 @@ function NumberSetting({
   max,
   fallback,
   suffix,
+  step = 1,
   onChange,
 }: {
   value: number;
@@ -646,22 +648,23 @@ function NumberSetting({
   max: number;
   fallback: number;
   suffix: string;
+  step?: number;
   onChange: (v: number) => void;
 }) {
   const clamp = (raw: number): number => {
     if (!Number.isFinite(raw)) return fallback;
-    return Math.max(min, Math.min(max, Math.round(raw)));
+    return Math.max(min, Math.min(max, Math.round(raw / step) * step));
   };
   return (
     <div className="flex items-center gap-2">
       <input
         type="number"
-        inputMode="numeric"
+        inputMode={step < 1 ? "decimal" : "numeric"}
         min={min}
         max={max}
-        step={1}
+        step={step}
         value={value}
-        onChange={(e) => onChange(clamp(parseInt(e.target.value, 10)))}
+        onChange={(e) => onChange(clamp(Number(e.target.value)))}
         className="w-24 rounded-lg border border-bg-border bg-bg px-3 py-1.5 text-right text-sm text-neutral-100 outline-none focus:border-accent"
       />
       <span className="w-10 text-sm text-neutral-400">{suffix}</span>

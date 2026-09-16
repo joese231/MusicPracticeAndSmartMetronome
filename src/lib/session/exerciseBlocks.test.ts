@@ -63,9 +63,9 @@ describe("buildExerciseTimedBlocks (default template)", () => {
   });
 
   it("clamps below the floor up to MIN_EXERCISE_MINUTES", () => {
-    const b = buildExerciseTimedBlocks(1);
-    expect(MIN_EXERCISE_MINUTES).toBe(5);
-    expect(b.reduce((a, x) => a + x.durationSec, 0)).toBe(300);
+    const b = buildExerciseBlocks(makeExercise(100, 0, { practiceMode: "timed", includeWarmupBlock: false }));
+    expect(MIN_EXERCISE_MINUTES).toBe(0.5);
+    expect(b.reduce((a, x) => a + x.durationSec, 0)).toBe(30);
   });
 
   it("clamps above the ceiling down to MAX_EXERCISE_MINUTES", () => {
@@ -313,5 +313,20 @@ describe("buildExerciseBlocks", () => {
       );
       expect(blocks5).toEqual(blocks30);
     });
+  });
+});
+
+
+describe("short exercise sessions", () => {
+  it.each([0.5, 1, 1.5, 2, 3, 4, 4.5])("runs a %s-minute timed session without raising it to five minutes", (minutes) => {
+    const plan = buildExerciseBlockPlan(makeExercise(100, minutes, { practiceMode: "timed", includeWarmupBlock: false }));
+    expect(plan.ok).toBe(true);
+    expect(plan.blocks.reduce((sum, block) => sum + block.durationSec, 0)).toBe(minutes * 60);
+  });
+  it("runs a short smart session with a matching template", () => {
+    const template = cloneExerciseTemplate(DEFAULT_EXERCISE_BLOCK_TEMPLATE).map((recipe) => ({ ...recipe, duration: { kind: "percent" as const, percent: 100 / 3 } }));
+    const plan = buildExerciseBlockPlan(makeExercise(100, 4.5, { blockTemplate: template, includeWarmupBlock: false }));
+    expect(plan.ok).toBe(true);
+    expect(plan.blocks.reduce((sum, block) => sum + block.durationSec, 0)).toBe(270);
   });
 });

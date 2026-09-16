@@ -33,6 +33,7 @@ import type { BlockDef } from "@/types/block";
 import { MetronomeDiagnosticsPanel } from "@/components/session/MetronomeDiagnostics";
 import { BpmEditorModal } from "@/components/session/BpmEditorModal";
 import { BetweenItemsOverlay } from "@/components/session/BetweenItemsOverlay";
+import { PracticeNotes } from "@/components/session/PracticeNotes";
 import { SessionShell } from "@/components/session/SessionShell";
 
 type BetweenItems = {
@@ -564,6 +565,13 @@ export default function ExerciseSessionPage() {
 
   return (
     <SessionShell
+      notesPanel={<PracticeNotes key={exercise.id} notes={exercise.notes ?? null} onSave={async (notes) => {
+        const current = exerciseRef.current;
+        if (!current) throw new Error("This item is no longer available.");
+        const updated = { ...current, notes };
+        exerciseRef.current = updated;
+        await queueExerciseUpdate(updated);
+      }} />}
       title={exercise.name}
       subtitle={`${isOpenEnded ? "Open-ended" : `${sessionMinutes}-min exercise`}${
         metronomeOff ? " · metronome off" : ""

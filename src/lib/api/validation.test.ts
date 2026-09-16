@@ -217,3 +217,28 @@ describe("api validation", () => {
     });
   });
 });
+
+
+describe("practice notes and short exercise validation", () => {
+  it("accepts legacy songs and nullable notes, but rejects non-text notes", () => {
+    expect(validateSong(validSong).ok).toBe(true);
+    expect(validateSong({ ...validSong, notes: "Relax the picking hand" }).ok).toBe(true);
+    expect(validateSong({ ...validSong, notes: null }).ok).toBe(true);
+    expect(validateSong({ ...validSong, notes: 123 }).ok).toBe(false);
+    expect(validateSongPatch({ patch: { notes: "Focus on bar 2" } }).ok).toBe(true);
+  });
+  it.each([0.5, 1, 1.5, 2, 3, 4, 4.5])("accepts %s-minute exercises", (sessionMinutes) => {
+    expect(validateExercise({ ...validExercise, practiceMode: "timed", sessionMinutes }).ok).toBe(true);
+  });
+  it("rejects zero-minute exercises", () => {
+    expect(validateExercise({ ...validExercise, practiceMode: "timed", sessionMinutes: 0 }).ok).toBe(false);
+  });
+});
+
+
+it("validates half-minute increments for exercises and exercise defaults", () => {
+  expect(validateExercise({ ...validExercise, sessionMinutes: 4.25 }).ok).toBe(false);
+  expect(validateSettings({ ...DEFAULT_SETTINGS, defaultExerciseSessionMinutes: 4.5 }).ok).toBe(true);
+  expect(validateSettingsPatch({ defaultExerciseSessionMinutes: 4.5 }).ok).toBe(true);
+  expect(validateSettingsPatch({ defaultExerciseSessionMinutes: 4.25 }).ok).toBe(false);
+});

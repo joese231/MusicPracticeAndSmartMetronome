@@ -29,6 +29,7 @@ const PRACTICE_MODE_OPTIONS: Array<{ value: PracticeMode; label: string }> = [
 
 export type SongFormValues = {
   title: string;
+  notes: string | null;
   link: string | null;
   workingBpm: number | null;
   troubleSpots: TroubleSpot[];
@@ -49,6 +50,7 @@ type Props = {
 };
 
 export function SongForm({ initial, submitLabel, onSubmit, onCancel }: Props) {
+  const [notes, setNotes] = useState(initial?.notes ?? "");
   const [title, setTitle] = useState(initial?.title ?? "");
   const [link, setLink] = useState(initial?.link ?? "");
   const [workingBpm, setWorkingBpm] = useState<string>(
@@ -225,6 +227,7 @@ export function SongForm({ initial, submitLabel, onSubmit, onCancel }: Props) {
     try {
       await onSubmit({
         title: title.trim(),
+        notes: notes.trim() || null,
         link: link.trim() ? link.trim() : null,
         workingBpm: w,
         troubleSpots: spots,
@@ -254,6 +257,10 @@ export function SongForm({ initial, submitLabel, onSubmit, onCancel }: Props) {
           placeholder="Blackberry Blossom"
           required
         />
+      </Field>
+
+      <Field label="Notes (optional)" hint="Shown on the timer screen and editable during practice.">
+        <textarea aria-label="Notes" value={notes} onChange={(e) => setNotes(e.target.value)} rows={3} className="field-input" />
       </Field>
 
       <Field label="Link (optional)" hint="A YouTube, Spotify, or tab URL — opens in a new tab from the song page.">

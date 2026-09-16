@@ -428,7 +428,7 @@ export function usePracticeSession({
       if (!startedRef.current) return;
       if (e.target instanceof HTMLElement) {
         const tag = e.target.tagName;
-        if (tag === "INPUT" || tag === "TEXTAREA") return;
+        if (tag === "INPUT" || tag === "TEXTAREA" || e.target.closest("[data-practice-notes]")) return;
       }
       const h = keyboardHandlersRef.current;
 

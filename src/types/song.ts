@@ -74,6 +74,8 @@ export type SongBlockTemplate = SmartBlockRecipe[];
 export type Song = {
   id: string;
   title: string;
+  /** Persistent practice notes; absent on legacy songs. */
+  notes?: string | null;
   link: string | null;
   workingBpm: number | null;
   /** Saved Conscious Practice BPM. null = use ⅓ × workingBpm rule (min 20). */

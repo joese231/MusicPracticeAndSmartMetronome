@@ -25,12 +25,12 @@ import {
 } from "./templateBlocks";
 
 export const DEFAULT_EXERCISE_MINUTES = 5;
-export const MIN_EXERCISE_MINUTES = 5;
+export const MIN_EXERCISE_MINUTES = 0.5;
 export const MAX_EXERCISE_MINUTES = 60;
 
 const clampMinutes = (m: number): number => {
   if (!Number.isFinite(m)) return DEFAULT_EXERCISE_MINUTES;
-  return Math.max(MIN_EXERCISE_MINUTES, Math.min(MAX_EXERCISE_MINUTES, Math.round(m)));
+  return Math.max(MIN_EXERCISE_MINUTES, Math.min(MAX_EXERCISE_MINUTES, Math.round(m * 2) / 2));
 };
 
 /**
