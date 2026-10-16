@@ -19,6 +19,7 @@ type Toast = { id: number; text: string };
 
 type SessionShellProps = {
   title: string;
+  finishing?: boolean;
   subtitle: string;
   currentBlock?: BlockDef;
   nextBlock?: BlockDef;
@@ -47,6 +48,8 @@ type SessionShellProps = {
   unboundedActionLabel?: string;
   unboundedActionShortcut?: string;
   notesPanel?: ReactNode;
+  itemControls?: ReactNode;
+  onRepeatSession?: () => void;
   beforePrimaryControls?: ReactNode;
   children?: ReactNode;
   toasts?: Toast[];
@@ -65,6 +68,7 @@ type SessionShellProps = {
 
 export function SessionShell({
   title,
+  finishing = false,
   subtitle,
   currentBlock,
   nextBlock,
@@ -93,6 +97,8 @@ export function SessionShell({
   unboundedActionLabel,
   unboundedActionShortcut = "(Space)",
   notesPanel,
+  itemControls,
+  onRepeatSession,
   beforePrimaryControls,
   children,
   toasts = [],
@@ -108,6 +114,16 @@ export function SessionShell({
   onRepeatBlock,
   onUnboundedAction,
 }: SessionShellProps) {
+  if (finishing) {
+    return (
+      <main className="flex min-h-dvh items-center justify-center px-6">
+        <div className="text-center">
+          <p className="text-sm text-neutral-400">{title}</p>
+          <p role="status" className="mt-3 text-2xl font-semibold text-accent">Finishing session…</p>
+        </div>
+      </main>
+    );
+  }
   const displayCurrentLabel = currentBlockLabel ?? currentBlock?.label ?? "";
   const displayNextLabel = nextBlockLabel ?? nextBlock?.label ?? "";
 
@@ -122,6 +138,7 @@ export function SessionShell({
           <div className="text-xs text-neutral-600">{subtitle}</div>
         </div>
         <div className="flex flex-wrap items-center justify-end gap-2">
+          {itemControls}
           {showMetronomeControls && (
             <MetronomeModeToggle
               mode={metronomeMode}
@@ -168,6 +185,12 @@ export function SessionShell({
         </div>
       </div>
 
+      {awaiting && !paused && (
+        <div role="status" className="mt-3 rounded-lg border border-accent/40 bg-bg-elevated px-4 py-3 text-center text-sm text-neutral-200">
+          {nextBlock ? `Finish your pass. Next: ${displayNextLabel}${nextTempoBpm != null && nextTempoBpm > 0 ? ` (${nextTempoBpm} BPM)` : ""}.` : "Timer finished. Adjust BPM, repeat, or finish your session."}
+        </div>
+      )}
+
       <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-4 pt-2">
         {currentBlock && (
           <BlockHeader
@@ -186,16 +209,21 @@ export function SessionShell({
           <BlockCountdown seconds={timeLeftSec} />
         )}
 
-        {currentBlock && <BlockInstructions items={currentBlock.instructions} />}
+        {currentBlock && !awaiting && <BlockInstructions items={currentBlock.instructions} />}
         {notesPanel}
       </div>
 
       <div className="flex w-full shrink-0 flex-col items-center justify-center gap-3 pt-2">
         {beforePrimaryControls}
 
+        {awaiting && showEarnedButton && (
+          <EarnedButton onClick={onEarned} disabled={false} compact />
+        )}
+
         {awaiting ? (
           !nextBlock ? (
             <div className="flex flex-wrap items-center justify-center gap-3">
+              {onRepeatSession && <button type="button" onClick={onRepeatSession} className="rounded-xl border border-accent px-6 py-5 text-xl font-semibold text-accent">Repeat session</button>}
               <button
                 type="button"
                 onClick={onRepeatBlock}
@@ -266,31 +294,6 @@ export function SessionShell({
         </div>
       )}
 
-      {awaiting && !paused && (
-        <div className="pointer-events-none absolute inset-0 flex items-start justify-center bg-bg/50 pt-24 backdrop-blur-[2px]">
-          <div className="pointer-events-none text-center">
-            <div className="text-xs uppercase tracking-[0.3em] text-neutral-400">
-              Finish your pass - then press Space
-            </div>
-            {nextBlock && (
-              <>
-                <div className="mt-3 text-xs uppercase tracking-wider text-neutral-500">
-                  Up next
-                </div>
-                <div className="mt-1 text-4xl font-semibold text-neutral-100">
-                  {displayNextLabel}
-                </div>
-                {nextTempoBpm != null && (
-                  <div className="mt-2 font-mono text-5xl font-bold text-accent tabular-nums">
-                    {nextTempoBpm}
-                    <span className="ml-2 text-xl text-neutral-400">BPM</span>
-                  </div>
-                )}
-              </>
-            )}
-          </div>
-        </div>
-      )}
 
       {children}
 

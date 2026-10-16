@@ -131,7 +131,7 @@ export const INSTRUCTIONS: Record<string, string[]> = {
     "Press End (or Esc) when you're done. Your time is recorded.",
   ],
   simpleMetronome: [
-    "Plain metronome at your working BPM — no ladder, no targets, no promotions.",
+    "Practice at your working BPM. Three clean, relaxed reps earn a tempo increase.",
     "Just play until the timer ends. Take it as a long sustained pass.",
   ],
   timedPractice: [
@@ -263,7 +263,7 @@ const additiveDurationSec = (
 export const sessionLengthSec = (minutes: number, song: Song): number => {
   if (song.practiceMode === "openEnded") return 0;
   if (song.practiceMode === "simple" || song.practiceMode === "timed") {
-    return minutes * 60;
+    return minutes * 60 + (song.practiceMode === "simple" ? song.troubleSpots.length * 120 : 0);
   }
   const template = songTemplate(song);
   const troubleCount = song.troubleSpots.length;
@@ -303,13 +303,23 @@ export const buildBlockPlan = (minutes: number, song: Song): BlockBuildPlan => {
   const result: BlockDef[] = [];
 
   if (song.practiceMode === "openEnded") {
-    return okBlockPlan([buildOpenEndedSongBlock(song.metronomeEnabled !== false)]);
+    return okBlockPlan([buildOpenEndedSongBlock(song.metronomeEnabled !== false && song.workingBpm != null)]);
   }
 
-  if (wantsWarmup(song)) result.push(CONSCIOUS_PRACTICE_BLOCK);
+  if (wantsWarmup(song)) result.push({ ...CONSCIOUS_PRACTICE_BLOCK, metronomeEnabled: song.workingBpm != null });
 
   if (song.practiceMode === "simple") {
-    result.push(buildSimpleMetronomeBlock(minutes * 60));
+    song.troubleSpots.forEach((spot, index) => result.push({
+      kind: "troubleSpot",
+      label: song.troubleSpots.length > 1 ? `Trouble Spot ${index + 1}` : "Trouble Spot",
+      durationSec: 120,
+      tempoFn: (subject) => troubleBlockBpmFor(subject, index),
+      showEarnedButton: true,
+      promotes: { kind: "trouble", index },
+      instructions: INSTRUCTIONS.troubleSpot,
+      metronomeEnabled: spot.bpm != null || song.workingBpm != null,
+    }));
+    result.push({ ...buildSimpleMetronomeBlock(minutes * 60), metronomeEnabled: song.workingBpm != null });
     return okBlockPlan(result);
   }
 

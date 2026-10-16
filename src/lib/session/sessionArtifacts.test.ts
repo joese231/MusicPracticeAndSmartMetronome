@@ -9,6 +9,18 @@ import {
 } from "./sessionArtifacts";
 
 describe("session artifact builders", () => {
+  it("omits missing exercise BPM from persisted session records", () => {
+    const record = buildExerciseSessionRecord({
+      id: "silent-session", itemId: "exercise-1", itemTitle: "Silent countdown",
+      startedAt: "2026-01-01T00:00:00.000Z", endedAt: "2026-01-01T00:05:00.000Z",
+      elapsedSec: 300, endedReason: "complete", plannedMinutes: 5,
+      startWorkingBpm: null, endWorkingBpm: null, promotions: [],
+    });
+    const persisted = JSON.parse(JSON.stringify(record));
+    expect(persisted.startWorkingBpm).toBeUndefined();
+    expect(persisted.endWorkingBpm).toBeUndefined();
+    expect(persisted.durationSec).toBe(300);
+  });
   it("builds song session records with rounded elapsed time", () => {
     const record = buildSongSessionRecord({
       id: "session-1",

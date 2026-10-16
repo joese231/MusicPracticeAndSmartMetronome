@@ -69,6 +69,7 @@ type UsePracticeSessionArgs = {
   onBlockStarted?: (block: BlockDef) => void;
   onRecordingError?: () => void;
   onComplete: () => void;
+  onFinalAdvance?: () => void;
   onAbort: () => void;
   onPlus?: () => void;
   isIntermissionActive?: () => boolean;
@@ -77,6 +78,7 @@ type UsePracticeSessionArgs = {
   onIntermissionPauseToggle?: () => void;
   metronomeSuppressed?: boolean;
   createMetronomeWhenSilent?: boolean;
+  editorOpen?: boolean;
 };
 
 export function usePracticeSession({
@@ -91,6 +93,7 @@ export function usePracticeSession({
   onBlockStarted,
   onRecordingError,
   onComplete,
+  onFinalAdvance,
   onAbort,
   onPlus,
   isIntermissionActive,
@@ -99,8 +102,10 @@ export function usePracticeSession({
   onIntermissionPauseToggle,
   metronomeSuppressed = false,
   createMetronomeWhenSilent = false,
+  editorOpen = false,
 }: UsePracticeSessionArgs) {
   const [started, setStarted] = useState(false);
+  const [finishing, setFinishing] = useState(false);
   const [metronomeModeState, setMetronomeModeState] =
     useState<MetronomeMode>(metronomeMode);
   const [toasts, setToasts] = useState<{ id: number; text: string }[]>([]);
@@ -125,6 +130,8 @@ export function usePracticeSession({
 
   const autoAdvanceRef = useRef(settings.autoAdvanceBlocks);
   autoAdvanceRef.current = settings.autoAdvanceBlocks;
+  const phaseCallbacksRef = useRef({ onComplete, onBlockStarted });
+  phaseCallbacksRef.current = { onComplete, onBlockStarted };
 
   useEffect(() => {
     setMetronomeModeState(metronomeMode);
@@ -145,7 +152,9 @@ export function usePracticeSession({
       if (!pausedRef.current) {
         const n = Date.now();
         setNowMs(n);
-        setSnap((prev) => (prev ? tickSnapshot(prev, blocks, n) : prev));
+        if (!endedRef.current) {
+          setSnap((prev) => (prev ? tickSnapshot(prev, blocks, n) : prev));
+        }
       }
       raf = requestAnimationFrame(loop);
     };
@@ -172,7 +181,7 @@ export function usePracticeSession({
     prevPhaseKeyRef.current = key;
 
     if (snap.phase === "ended") {
-      onComplete();
+      phaseCallbacksRef.current.onComplete();
       return;
     }
 
@@ -181,7 +190,7 @@ export function usePracticeSession({
 
     if (snap.phase === "awaiting") {
       m.playTransitionCue();
-      if (autoAdvanceRef.current) {
+      if (autoAdvanceRef.current && blocks[snap.blockIndex + 1]) {
         const t = setTimeout(() => advance(), AUTO_ADVANCE_DELAY_MS);
         return () => clearTimeout(t);
       }
@@ -192,8 +201,8 @@ export function usePracticeSession({
       const block = blocks[snap.blockIndex];
       const subject = runtimeSubjectRef.current;
       if (!block || !subject) return;
-      onBlockStarted?.(block);
-      if (block.metronomeEnabled === false) {
+      phaseCallbacksRef.current.onBlockStarted?.(block);
+      if (metronomeSuppressed || pausedRef.current || block.metronomeEnabled === false || (block.kind === "consciousPractice" && subject.workingBpm == null)) {
         m.pause();
       } else {
         m.resume();
@@ -201,7 +210,30 @@ export function usePracticeSession({
         m.alignToDownbeat();
       }
     }
-  }, [snap, started, blocks, advance, onBlockStarted, onComplete, runtimeSubjectRef]);
+  }, [snap, started, blocks, advance, runtimeSubjectRef, metronomeSuppressed]);
+
+  const liveTempo = snap && runtimeSubjectRef.current
+    ? blocks[snap.blockIndex]?.tempoFn(runtimeSubjectRef.current) ?? 0 : 0;
+  useEffect(() => {
+    const m = metronomeRef.current;
+    const block = snap ? blocks[snap.blockIndex] : undefined;
+    const subject = runtimeSubjectRef.current;
+    if (!m || !block || !subject || !started || endedRef.current) return;
+    if (paused || snap?.phase === "ended" || metronomeSuppressed || block.metronomeEnabled === false || (block.kind === "consciousPractice" && subject.workingBpm == null)) {
+      m.pause();
+    } else {
+      const diagnostics = m.getDiagnostics();
+      if (diagnostics.ctxState === "none") {
+        void m.start(block.tempoFn(subject), metronomeModeState);
+      } else {
+        m.setBpm(block.tempoFn(subject));
+        if (!diagnostics.running) {
+          m.resume();
+          m.alignToDownbeat();
+        }
+      }
+    }
+  }, [metronomeSuppressed, paused, blocks, started, snap, metronomeModeState, runtimeSubjectRef, liveTempo]);
 
   useEffect(() => {
     metronomeRef.current?.setVolume(settings.metronomeVolume);
@@ -213,7 +245,7 @@ export function usePracticeSession({
   }, [metronomeModeState]);
 
   const startSession = useCallback(async () => {
-    if (started || startingRef.current) return;
+    if (started || startedRef.current || startingRef.current) return;
     const subject = getStartSubject();
     if (!subject) return;
     const firstBlock = blocks[0];
@@ -233,8 +265,8 @@ export function usePracticeSession({
     }
 
     const anyMetronome =
-      !metronomeSuppressed && blocks.some((b) => b.metronomeEnabled !== false);
-    if (!metronomeSuppressed && (createMetronomeWhenSilent || anyMetronome)) {
+      !metronomeSuppressed && blocks.some((b) => b.metronomeEnabled !== false && (b.kind !== "consciousPractice" || subject.workingBpm != null));
+    if (createMetronomeWhenSilent || anyMetronome) {
       const m = new Metronome();
       m.setVolume(settings.metronomeVolume);
       m.setAccentsEnabled(settings.accentsEnabled);
@@ -250,28 +282,39 @@ export function usePracticeSession({
             m.dispose();
             return;
           }
-          if (firstBlock.metronomeEnabled === false) m.pause();
+          if (firstBlock.metronomeEnabled === false || (firstBlock.kind === "consciousPractice" && subject.workingBpm == null)) m.pause();
         }).catch(() => {
           // A later tempo change can retry after the user resolves audio setup.
         });
       }
     }
 
+    // Practice begins immediately. The browser may leave microphone permission
+    // pending indefinitely, so recording setup must not gate the timer or controls.
+    const startMs = Date.now();
+    sessionStartMsRef.current = startMs;
+    sessionStartIsoRef.current = new Date(startMs).toISOString();
+    prevPhaseKeyRef.current = "playing-0";
+    endedRef.current = false;
+    onSessionStarted?.(startMs, subject);
+    setSnap(initialSnapshot(startMs));
+    setNowMs(startMs);
+    startedRef.current = true;
+    setStarted(true);
+    startingRef.current = false;
+
     if (settings.recordingEnabled) {
       const rec = new SessionRecorder();
-      try {
-        await rec.start();
+      void rec.start().then(() => {
         if (generation !== startGenerationRef.current) {
           rec.cancel();
-          startingRef.current = false;
           return;
         }
         recorderRef.current = rec;
         setRecordingActive(true);
-      } catch (err) {
+      }).catch(() => {
+        rec.cancel();
         if (generation !== startGenerationRef.current) {
-          rec.cancel();
-          startingRef.current = false;
           return;
         }
         recorderRef.current = null;
@@ -281,20 +324,8 @@ export function usePracticeSession({
         } else {
           addToast("Recording disabled - mic permission denied.");
         }
-        void err;
-      }
+      });
     }
-
-    const startMs = Date.now();
-    sessionStartMsRef.current = startMs;
-    sessionStartIsoRef.current = new Date(startMs).toISOString();
-    prevPhaseKeyRef.current = "playing-0";
-    endedRef.current = false;
-    onSessionStarted?.(startMs, subject);
-    setSnap(initialSnapshot(startMs));
-    setNowMs(startMs);
-    setStarted(true);
-    startingRef.current = false;
   }, [
     blocks,
     clearLatestRecording,
@@ -319,6 +350,7 @@ export function usePracticeSession({
     ) => {
       if (endedRef.current) return;
       endedRef.current = true;
+      setFinishing(true);
       startGenerationRef.current += 1;
       startingRef.current = false;
 
@@ -356,6 +388,16 @@ export function usePracticeSession({
     if (pausedRef.current) return;
     advance();
   }, [snap, advance]);
+
+  const prepareRestart = useCallback(() => {
+    endedRef.current = false;
+    setFinishing(false);
+    prevPhaseKeyRef.current = "";
+    setSnap(null);
+    setPaused(false);
+    pausedRef.current = false;
+    setStarted(false);
+  }, []);
 
   const handleRepeatBlock = useCallback(() => {
     if (!snap) return;
@@ -410,9 +452,17 @@ export function usePracticeSession({
     onIntermissionSkip,
     onIntermissionCancel,
     onIntermissionPauseToggle,
+    editorOpen,
   });
   keyboardHandlersRef.current = {
-    handleSpace: advance,
+    handleSpace: () => {
+      if (pausedRef.current) return;
+      if (snap && !blocks[snap.blockIndex + 1] && onFinalAdvance) {
+        onFinalAdvance();
+      } else {
+        advance();
+      }
+    },
     handlePlus: onPlus,
     handlePauseToggle,
     handleResetBlock,
@@ -421,6 +471,7 @@ export function usePracticeSession({
     onIntermissionSkip,
     onIntermissionCancel,
     onIntermissionPauseToggle,
+    editorOpen,
   };
 
   useEffect(() => {
@@ -431,6 +482,7 @@ export function usePracticeSession({
         if (tag === "INPUT" || tag === "TEXTAREA" || e.target.closest("[data-practice-notes]")) return;
       }
       const h = keyboardHandlersRef.current;
+      if (h.editorOpen) return;
 
       if (h.isIntermissionActive?.()) {
         if (e.code === "Space" || e.key === " ") {
@@ -495,6 +547,7 @@ export function usePracticeSession({
 
   return {
     started,
+    finishing,
     snap,
     setSnap,
     nowMs,
@@ -519,6 +572,7 @@ export function usePracticeSession({
     addToast,
     startSession,
     finishSession,
+    prepareRestart,
     advance,
     handleSkip,
     handleRepeatBlock,

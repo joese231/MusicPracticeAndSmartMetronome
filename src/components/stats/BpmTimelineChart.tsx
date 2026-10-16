@@ -31,7 +31,7 @@ export function BpmTimelineChart({
   if (points.length === 0) {
     return (
       <div className="rounded-lg border border-dashed border-bg-border bg-bg-elevated/50 p-6 text-center text-sm text-neutral-500">
-        No sessions recorded yet — finish one to see your BPM curve here.
+        {records.length > 0 ? "No BPM recorded for these sessions yet." : "No sessions recorded yet — finish one to see your BPM curve here."}
       </div>
     );
   }

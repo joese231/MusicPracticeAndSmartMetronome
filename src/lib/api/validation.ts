@@ -295,6 +295,9 @@ export function validateSong(value: unknown): ApiValidationResult<Song> {
   if (!isNullablePlayableBpm(value.workingBpm)) {
     return { ok: false, error: "song.workingBpm must be null or a playable BPM" };
   }
+  if (value.workingBpm === null && value.practiceMode === "smart") {
+    return { ok: false, error: "smart songs require a working BPM" };
+  }
   if (!isNullablePlayableBpm(value.warmupBpm)) {
     return { ok: false, error: "song.warmupBpm must be null or a playable BPM" };
   }
@@ -349,8 +352,11 @@ export function validateExercise(value: unknown): ApiValidationResult<Exercise> 
   if (!isNullableString(value.link) || !isNullableString(value.notes)) {
     return { ok: false, error: "exercise.link and exercise.notes must be string or null" };
   }
-  if (!isPlayableBpm(value.workingBpm)) {
-    return { ok: false, error: "exercise.workingBpm must be a playable BPM" };
+  if (!isNullablePlayableBpm(value.workingBpm)) {
+    return { ok: false, error: "exercise.workingBpm must be null or a playable BPM" };
+  }
+  if (value.workingBpm === null && value.practiceMode === "smart" && value.openEnded !== true) {
+    return { ok: false, error: "smart exercises require a working BPM" };
   }
   if (!isNullablePlayableBpm(value.warmupBpm)) {
     return { ok: false, error: "exercise.warmupBpm must be null or a playable BPM" };

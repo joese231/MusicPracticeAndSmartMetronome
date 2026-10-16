@@ -1,11 +1,12 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
-import { useRouter, useParams } from "next/navigation";
+import { useRouter, useParams, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useSongsStore } from "@/lib/store/useSongsStore";
 import { useSessionHistoryStore } from "@/lib/store/useSessionHistoryStore";
 import { SongForm } from "@/components/songs/SongForm";
 import { LatestRecordingPanel } from "@/components/songs/LatestRecordingPanel";
+import { ItemStatistics } from "@/components/stats/ItemStatistics";
 import { BpmTimelineChart } from "@/components/stats/BpmTimelineChart";
 import { RecentSessionsList } from "@/components/stats/RecentSessionsList";
 import { formatPracticeTime } from "@/lib/format";
@@ -36,7 +37,8 @@ export default function SongDetailPage() {
   const historyLoaded = useSessionHistoryStore((s) => s.loaded);
   const loadHistory = useSessionHistoryStore((s) => s.load);
 
-  const [editing, setEditing] = useState(false);
+  const search = useSearchParams();
+  const [editing, setEditing] = useState(search.get("edit") === "1");
   const [confirmDelete, setConfirmDelete] = useState(false);
 
   useEffect(() => {
@@ -45,7 +47,7 @@ export default function SongDetailPage() {
   }, [loaded, load, historyLoaded, loadHistory]);
 
   const songRecords = useMemo(
-    () => (id ? records.filter((r) => r.itemId === id) : []),
+    () => (id ? records.filter((r) => r.itemKind === "song" && r.itemId === id) : []),
     [records, id],
   );
 
@@ -64,7 +66,7 @@ export default function SongDetailPage() {
       return `Single ${song.defaultSessionMinutes}-minute countdown with no metronome. No ladder or promotions.`;
     }
     if (song.practiceMode === "simple") {
-      return `Single ${song.defaultSessionMinutes}-minute steady metronome block at ${song.workingBpm} BPM.`;
+      return `${song.defaultSessionMinutes}-minute countdown${song.workingBpm != null ? ` at ${song.workingBpm} BPM` : " with no metronome"}. Each trouble spot adds 2 minutes before the main block.`;
     }
     const selectedMinutes = song.defaultSessionMinutes;
     const lengthSec = sessionLengthSec(selectedMinutes, song);
@@ -99,6 +101,10 @@ export default function SongDetailPage() {
         <h1 className="mt-4 text-2xl font-bold">Song not found</h1>
       </main>
     );
+  }
+
+  if (search.get("view") === "statistics") {
+    return <ItemStatistics title={song.title} itemId={song.id} records={songRecords} loaded={historyLoaded} troubleSpotCount={song.troubleSpots.length} />;
   }
 
   const hasWorkingBpm = song.workingBpm != null;
@@ -139,6 +145,48 @@ export default function SongDetailPage() {
       </header>
 
       <div className="mt-6 space-y-4">
+        <section className="rounded-lg border border-bg-border bg-bg-elevated p-5">
+          <div className="flex items-center justify-between">
+            <h2 className="text-lg font-semibold">Edit song</h2>
+            {!editing && (
+              <button
+                onClick={() => setEditing(true)}
+                className="text-sm text-accent hover:underline"
+              >
+                Edit
+              </button>
+            )}
+          </div>
+          {editing && (
+            <div className="mt-4">
+              <SongForm
+                submitLabel="Save"
+                initial={{
+                  title: song.title,
+                  notes: song.notes ?? null,
+                  link: song.link,
+                  workingBpm: song.workingBpm,
+                  troubleSpots: song.troubleSpots,
+                  originalBpm: song.originalBpm,
+                  stepPercent: song.stepPercent,
+                  practiceMode: song.practiceMode,
+                  includeWarmupBlock: song.includeWarmupBlock,
+                  blockTemplate: song.blockTemplate,
+                  defaultSessionMinutes: song.defaultSessionMinutes,
+                  metronomeEnabled: song.metronomeEnabled,
+                }}
+                onSubmit={async (values) => {
+                  await updateSong({
+                    ...song,
+                    ...values,
+                  });
+                  setEditing(false);
+                }}
+                onCancel={() => setEditing(false)}
+              />
+            </div>
+          )}
+        </section>
         <section className="rounded-lg border border-bg-border bg-bg-elevated p-5">
           <div className="flex flex-wrap items-center gap-x-8 gap-y-3 text-sm">
             <Stat label="Mode" value={modeName(song.practiceMode)} />
@@ -229,48 +277,7 @@ export default function SongDetailPage() {
           </>
         )}
 
-        <section className="rounded-lg border border-bg-border bg-bg-elevated p-5">
-          <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold">Edit song</h2>
-            {!editing && (
-              <button
-                onClick={() => setEditing(true)}
-                className="text-sm text-accent hover:underline"
-              >
-                Edit
-              </button>
-            )}
-          </div>
-          {editing && (
-            <div className="mt-4">
-              <SongForm
-                submitLabel="Save"
-                initial={{
-                  title: song.title,
-                  notes: song.notes ?? null,
-                  link: song.link,
-                  workingBpm: song.workingBpm,
-                  troubleSpots: song.troubleSpots,
-                  originalBpm: song.originalBpm,
-                  stepPercent: song.stepPercent,
-                  practiceMode: song.practiceMode,
-                  includeWarmupBlock: song.includeWarmupBlock,
-                  blockTemplate: song.blockTemplate,
-                  defaultSessionMinutes: song.defaultSessionMinutes,
-                  metronomeEnabled: song.metronomeEnabled,
-                }}
-                onSubmit={async (values) => {
-                  await updateSong({
-                    ...song,
-                    ...values,
-                  });
-                  setEditing(false);
-                }}
-                onCancel={() => setEditing(false)}
-              />
-            </div>
-          )}
-        </section>
+
 
         <section className="pt-4">
           {!confirmDelete ? (
@@ -327,7 +334,7 @@ function Stat({
 
 function modeName(mode: string): string {
   if (mode === "openEnded") return "Open-ended";
-  if (mode === "timed") return "Timed";
+  if (mode === "timed") return "Simple";
   if (mode === "simple") return "Simple";
   return "Smart";
 }

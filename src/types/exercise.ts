@@ -5,7 +5,8 @@ export type Exercise = {
   name: string;
   link: string | null;
   notes: string | null;
-  workingBpm: number;
+  /** null = silent countdown/count-up; smart mode requires a BPM. */
+  workingBpm: number | null;
   /** Saved Conscious Practice BPM. null = use ⅓ × workingBpm rule (min 20). */
   warmupBpm: number | null;
   stepPercent: number;

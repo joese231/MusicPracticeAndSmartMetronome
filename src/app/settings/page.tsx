@@ -35,7 +35,6 @@ import {
 const PRACTICE_MODE_OPTIONS: Array<{ value: PracticeMode; label: string }> = [
   { value: "smart", label: "Smart" },
   { value: "simple", label: "Simple" },
-  { value: "timed", label: "Timed" },
   { value: "openEnded", label: "Open" },
 ];
 
@@ -249,7 +248,7 @@ export default function SettingsPage() {
             hint="Used as the starting choice when you create a new song or exercise. You can still change it per item afterwards."
           >
             <SegmentedPracticeMode
-              value={settings.defaultPracticeMode}
+              value={settings.defaultPracticeMode === "timed" ? "simple" : settings.defaultPracticeMode}
               onChange={(v) => update({ defaultPracticeMode: v })}
             />
           </Row>

@@ -17,7 +17,7 @@ type NewExerciseInput = {
   name: string;
   link: string | null;
   notes: string | null;
-  workingBpm: number;
+  workingBpm: number | null;
   stepPercent?: number;
   sessionMinutes?: number;
   openEnded?: boolean;

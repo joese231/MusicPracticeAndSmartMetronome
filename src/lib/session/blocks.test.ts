@@ -440,7 +440,7 @@ describe("buildBlocks — timed and open-ended song modes", () => {
 
 describe("buildBlocks — simple practice mode", () => {
   it("returns Conscious + a single Steady BPM block at workingBpm", () => {
-    const song = makeSong([{ bpm: 150 }], { practiceMode: "simple" });
+    const song = makeSong([], { practiceMode: "simple" });
     const blocks = buildBlocks(10, song);
     expect(blocks).toHaveLength(2);
     expect(blocks[0].kind).toBe("consciousPractice");
@@ -452,13 +452,21 @@ describe("buildBlocks — simple practice mode", () => {
     expect(blocks[1].promotes).toEqual({ kind: "working" });
   });
 
-  it("ignores trouble spots and template in simple mode", () => {
+  it("adds independent two-minute trouble blocks before the steady countdown", () => {
     const song = makeSong(
       [{ bpm: 150 }, { bpm: 160 }, { bpm: 170 }],
       { practiceMode: "simple" },
     );
     const blocks = buildBlocks(10, song);
-    expect(blocks.some((b) => b.kind === "troubleSpot")).toBe(false);
+    const trouble = blocks.filter((b) => b.kind === "troubleSpot");
+    expect(trouble).toHaveLength(3);
+    trouble.forEach((block, index) => {
+      expect(block.durationSec).toBe(120);
+      expect(block.tempoFn(song)).toBe(150 + index * 10);
+      expect(block.promotes).toEqual({ kind: "trouble", index });
+    });
+    expect(blocks.at(-1)?.durationSec).toBe(600);
+    expect(sessionLengthSec(10, song)).toBe(960);
   });
 
   it("scales the Steady block to the chosen session length", () => {

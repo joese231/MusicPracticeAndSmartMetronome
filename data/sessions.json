@@ -11366,5 +11366,6484 @@
     "startTroubleBpms": [],
     "endTroubleBpms": [],
     "promotions": []
+  },
+  {
+    "id": "sr_1789614246688_l5f4nnmd",
+    "itemId": "e_1789444016171_suppinwq",
+    "itemKind": "exercise",
+    "itemTitle": "Emaj7 & B7 Arp 5th string",
+    "startedAt": "2026-09-17T02:59:00.380Z",
+    "endedAt": "2026-09-17T03:04:06.688Z",
+    "durationSec": 306,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 84,
+    "endWorkingBpm": 88,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-09-17T03:01:35.270Z",
+        "kind": "working",
+        "fromBpm": 84,
+        "toBpm": 86,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-09-17T03:01:38.030Z",
+        "kind": "working",
+        "fromBpm": 86,
+        "toBpm": 88,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1789614567257_lc41v919",
+    "itemId": "e_1789444146426_tym73dt8",
+    "itemKind": "exercise",
+    "itemTitle": "C#min7 & D#min7b5 Arp 5th string",
+    "startedAt": "2026-09-17T03:04:10.090Z",
+    "endedAt": "2026-09-17T03:09:27.257Z",
+    "durationSec": 317,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 94,
+    "endWorkingBpm": 94,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1789614996635_yukrrdhw",
+    "itemId": "e_1789535200319_nwfhr9x7",
+    "itemKind": "exercise",
+    "itemTitle": "3 Note Groups E D Shapes",
+    "startedAt": "2026-09-17T03:10:16.312Z",
+    "endedAt": "2026-09-17T03:16:36.635Z",
+    "durationSec": 380,
+    "endedReason": "complete",
+    "plannedMinutes": 2,
+    "startWorkingBpm": 109,
+    "endWorkingBpm": 109,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1789615592741_gj2ihp27",
+    "itemId": "e_1788079503663_n3d48trg",
+    "itemKind": "exercise",
+    "itemTitle": "3 Note Groups C A G shapes",
+    "startedAt": "2026-09-17T03:16:39.139Z",
+    "endedAt": "2026-09-17T03:26:32.741Z",
+    "durationSec": 594,
+    "endedReason": "complete",
+    "plannedMinutes": 3,
+    "startWorkingBpm": 109,
+    "endWorkingBpm": 109,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1789615840040_w0e5u191",
+    "itemId": "e_1789535332152_7zhv535u",
+    "itemKind": "exercise",
+    "itemTitle": "4 Note Groups E D",
+    "startedAt": "2026-09-17T03:26:36.167Z",
+    "endedAt": "2026-09-17T03:30:40.040Z",
+    "durationSec": 244,
+    "endedReason": "complete",
+    "plannedMinutes": 3,
+    "startWorkingBpm": 70,
+    "endWorkingBpm": 70,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1789616220935_ip0w76vw",
+    "itemId": "e_1788079586248_hz6yegpa",
+    "itemKind": "exercise",
+    "itemTitle": "4 Note Groups C A G shapes",
+    "startedAt": "2026-09-17T03:30:46.035Z",
+    "endedAt": "2026-09-17T03:37:00.935Z",
+    "durationSec": 375,
+    "endedReason": "complete",
+    "plannedMinutes": 4.5,
+    "startWorkingBpm": 70,
+    "endWorkingBpm": 70,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1789616753051_ditnsxvx",
+    "itemId": "e_1788080054019_rz2rm55e",
+    "itemKind": "exercise",
+    "itemTitle": "6 Note Groups E D",
+    "startedAt": "2026-09-17T03:39:13.887Z",
+    "endedAt": "2026-09-17T03:45:53.051Z",
+    "durationSec": 399,
+    "endedReason": "complete",
+    "plannedMinutes": 4,
+    "startWorkingBpm": 46,
+    "endWorkingBpm": 46,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1789617342349_nw8q4e4o",
+    "itemId": "e_1789535479544_s8lazn5p",
+    "itemKind": "exercise",
+    "itemTitle": "6 Note Groups C A G Shapes",
+    "startedAt": "2026-09-17T03:49:44.386Z",
+    "endedAt": "2026-09-17T03:55:42.349Z",
+    "durationSec": 358,
+    "endedReason": "complete",
+    "plannedMinutes": 6,
+    "startWorkingBpm": 46,
+    "endWorkingBpm": 46,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1789618298537_72vjueu8",
+    "itemId": "e_1786172379355_o9n1t5nj",
+    "itemKind": "exercise",
+    "itemTitle": "Start Depapepe Pulloffs",
+    "startedAt": "2026-09-17T04:05:08.277Z",
+    "endedAt": "2026-09-17T04:11:38.537Z",
+    "durationSec": 390,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 66,
+    "endWorkingBpm": 66,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1789618750351_7w5yi0bi",
+    "itemId": "66a868d0-750b-4fb5-82f3-6422ec05ca24",
+    "itemKind": "exercise",
+    "itemTitle": "Fast Strum",
+    "startedAt": "2026-09-17T04:11:40.320Z",
+    "endedAt": "2026-09-17T04:19:10.351Z",
+    "durationSec": 450,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 265,
+    "endWorkingBpm": 265,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1789704724322_0a11pmxe",
+    "itemId": "e_1789444016171_suppinwq",
+    "itemKind": "exercise",
+    "itemTitle": "Emaj7 & B7 Arp 5th string",
+    "startedAt": "2026-09-18T04:11:55.713Z",
+    "endedAt": "2026-09-18T04:12:04.322Z",
+    "durationSec": 9,
+    "endedReason": "abort",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 88,
+    "endWorkingBpm": 88,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1789705174039_gcob89r4",
+    "itemId": "e_1789444016171_suppinwq",
+    "itemKind": "exercise",
+    "itemTitle": "Emaj7 & B7 Arp 5th string",
+    "startedAt": "2026-09-18T04:12:23.666Z",
+    "endedAt": "2026-09-18T04:19:34.039Z",
+    "durationSec": 430,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 88,
+    "endWorkingBpm": 92,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-09-18T04:16:40.482Z",
+        "kind": "working",
+        "fromBpm": 88,
+        "toBpm": 90,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-09-18T04:16:41.226Z",
+        "kind": "working",
+        "fromBpm": 90,
+        "toBpm": 92,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1789705209456_9kbm2hzo",
+    "itemId": "e_1789444016171_suppinwq",
+    "itemKind": "exercise",
+    "itemTitle": "Emaj7 & B7 Arp 5th string",
+    "startedAt": "2026-09-18T04:19:38.731Z",
+    "endedAt": "2026-09-18T04:20:09.456Z",
+    "durationSec": 31,
+    "endedReason": "abort",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 92,
+    "endWorkingBpm": 92,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1789705673437_f2165di9",
+    "itemId": "e_1789444146426_tym73dt8",
+    "itemKind": "exercise",
+    "itemTitle": "C#min7 & D#min7b5 Arp 5th string",
+    "startedAt": "2026-09-18T04:20:12.757Z",
+    "endedAt": "2026-09-18T04:27:53.437Z",
+    "durationSec": 461,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 94,
+    "endWorkingBpm": 103,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-09-18T04:23:36.646Z",
+        "kind": "working",
+        "fromBpm": 94,
+        "toBpm": 96,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-09-18T04:23:37.183Z",
+        "kind": "working",
+        "fromBpm": 96,
+        "toBpm": 98,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-09-18T04:26:32.578Z",
+        "kind": "working",
+        "fromBpm": 98,
+        "toBpm": 100,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-09-18T04:26:33.267Z",
+        "kind": "working",
+        "fromBpm": 100,
+        "toBpm": 103,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1789706008561_j5wauvp5",
+    "itemId": "e_1789535200319_nwfhr9x7",
+    "itemKind": "exercise",
+    "itemTitle": "3 Note Groups E D Shapes",
+    "startedAt": "2026-09-18T04:27:57.757Z",
+    "endedAt": "2026-09-18T04:33:28.561Z",
+    "durationSec": 331,
+    "endedReason": "complete",
+    "plannedMinutes": 2,
+    "startWorkingBpm": 109,
+    "endWorkingBpm": 109,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1789706033100_bfyeval5",
+    "itemId": "e_1789535200319_nwfhr9x7",
+    "itemKind": "exercise",
+    "itemTitle": "3 Note Groups E D Shapes",
+    "startedAt": "2026-09-18T04:33:39.327Z",
+    "endedAt": "2026-09-18T04:33:53.100Z",
+    "durationSec": 14,
+    "endedReason": "abort",
+    "plannedMinutes": 2,
+    "startWorkingBpm": 109,
+    "endWorkingBpm": 115,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-09-18T04:33:44.829Z",
+        "kind": "working",
+        "fromBpm": 109,
+        "toBpm": 112,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-09-18T04:33:48.158Z",
+        "kind": "working",
+        "fromBpm": 112,
+        "toBpm": 115,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1789706406977_fpngomsx",
+    "itemId": "e_1788079503663_n3d48trg",
+    "itemKind": "exercise",
+    "itemTitle": "3 Note Groups C A G shapes",
+    "startedAt": "2026-09-18T04:34:01.373Z",
+    "endedAt": "2026-09-18T04:40:06.977Z",
+    "durationSec": 366,
+    "endedReason": "complete",
+    "plannedMinutes": 3,
+    "startWorkingBpm": 109,
+    "endWorkingBpm": 115,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-09-18T04:39:28.853Z",
+        "kind": "working",
+        "fromBpm": 109,
+        "toBpm": 112,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-09-18T04:39:30.797Z",
+        "kind": "working",
+        "fromBpm": 112,
+        "toBpm": 115,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1789706601323_qy4myyed",
+    "itemId": "e_1789535332152_7zhv535u",
+    "itemKind": "exercise",
+    "itemTitle": "4 Note Groups E D",
+    "startedAt": "2026-09-18T04:40:13.006Z",
+    "endedAt": "2026-09-18T04:43:21.323Z",
+    "durationSec": 188,
+    "endedReason": "complete",
+    "plannedMinutes": 3,
+    "startWorkingBpm": 70,
+    "endWorkingBpm": 70,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1789706887325_b19hp30u",
+    "itemId": "e_1788079586248_hz6yegpa",
+    "itemKind": "exercise",
+    "itemTitle": "4 Note Groups C A G shapes",
+    "startedAt": "2026-09-18T04:43:24.039Z",
+    "endedAt": "2026-09-18T04:48:07.326Z",
+    "durationSec": 283,
+    "endedReason": "complete",
+    "plannedMinutes": 4.5,
+    "startWorkingBpm": 70,
+    "endWorkingBpm": 70,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1789707646550_xg9dto2l",
+    "itemId": "e_1788080054019_rz2rm55e",
+    "itemKind": "exercise",
+    "itemTitle": "6 Note Groups E D",
+    "startedAt": "2026-09-18T04:55:23.442Z",
+    "endedAt": "2026-09-18T05:00:46.550Z",
+    "durationSec": 323,
+    "endedReason": "complete",
+    "plannedMinutes": 4,
+    "startWorkingBpm": 46,
+    "endWorkingBpm": 46,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1789708028170_e7uwgurf",
+    "itemId": "e_1789535479544_s8lazn5p",
+    "itemKind": "exercise",
+    "itemTitle": "6 Note Groups C A G Shapes",
+    "startedAt": "2026-09-18T05:00:49.525Z",
+    "endedAt": "2026-09-18T05:07:08.170Z",
+    "durationSec": 379,
+    "endedReason": "complete",
+    "plannedMinutes": 6,
+    "startWorkingBpm": 46,
+    "endWorkingBpm": 48,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-09-18T05:03:19.469Z",
+        "kind": "working",
+        "fromBpm": 46,
+        "toBpm": 47,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-09-18T05:03:19.961Z",
+        "kind": "working",
+        "fromBpm": 47,
+        "toBpm": 48,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1789708360633_us98mbiw",
+    "itemId": "e_1786172379355_o9n1t5nj",
+    "itemKind": "exercise",
+    "itemTitle": "Start Depapepe Pulloffs",
+    "startedAt": "2026-09-18T05:07:19.615Z",
+    "endedAt": "2026-09-18T05:12:40.633Z",
+    "durationSec": 290,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 66,
+    "endWorkingBpm": 70,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-09-18T05:08:49.557Z",
+        "kind": "working",
+        "fromBpm": 66,
+        "toBpm": 68,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-09-18T05:08:49.966Z",
+        "kind": "working",
+        "fromBpm": 68,
+        "toBpm": 70,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1789818018562_vg071vjl",
+    "itemId": "e_1789444016171_suppinwq",
+    "itemKind": "exercise",
+    "itemTitle": "Emaj7 & B7 Arp 5th string",
+    "startedAt": "2026-09-19T11:33:23.632Z",
+    "endedAt": "2026-09-19T11:40:18.562Z",
+    "durationSec": 415,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 92,
+    "endWorkingBpm": 103,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-09-19T11:36:43.051Z",
+        "kind": "working",
+        "fromBpm": 92,
+        "toBpm": 94,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-09-19T11:38:39.905Z",
+        "kind": "working",
+        "fromBpm": 94,
+        "toBpm": 96,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-09-19T11:38:55.944Z",
+        "kind": "working",
+        "fromBpm": 96,
+        "toBpm": 98,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-09-19T11:40:17.117Z",
+        "kind": "working",
+        "fromBpm": 98,
+        "toBpm": 100,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-09-19T11:40:17.758Z",
+        "kind": "working",
+        "fromBpm": 100,
+        "toBpm": 103,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1789818414137_i5vl5ata",
+    "itemId": "e_1789444146426_tym73dt8",
+    "itemKind": "exercise",
+    "itemTitle": "C#min7 & D#min7b5 Arp 5th string",
+    "startedAt": "2026-09-19T11:40:20.606Z",
+    "endedAt": "2026-09-19T11:46:54.137Z",
+    "durationSec": 394,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 103,
+    "endWorkingBpm": 109,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-09-19T11:46:03.817Z",
+        "kind": "working",
+        "fromBpm": 103,
+        "toBpm": 106,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-09-19T11:46:04.439Z",
+        "kind": "working",
+        "fromBpm": 106,
+        "toBpm": 109,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1789883998385_tkjfdr2d",
+    "itemId": "a990d1f3-9f76-4f81-ae2d-557b50053f91",
+    "itemKind": "song",
+    "itemTitle": "Ruben",
+    "startedAt": "2026-09-20T05:53:23.446Z",
+    "endedAt": "2026-09-20T05:59:58.385Z",
+    "durationSec": 395,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 158,
+    "endWorkingBpm": 158,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1789884003745_2kjsxmfy",
+    "itemId": "58148c75-8f5b-4b2b-822a-098df01fb11d",
+    "itemKind": "song",
+    "itemTitle": "Escabana (Rythm)",
+    "startedAt": "2026-09-20T06:00:03.341Z",
+    "endedAt": "2026-09-20T06:00:03.745Z",
+    "durationSec": 0,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1789884398715_4iaqbmql",
+    "itemId": "dc275ae4-6f34-45b0-a041-3a04783d7427",
+    "itemKind": "song",
+    "itemTitle": "One - Depapepe Rythm Part",
+    "startedAt": "2026-09-20T06:00:13.291Z",
+    "endedAt": "2026-09-20T06:06:38.715Z",
+    "durationSec": 385,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 197,
+    "endWorkingBpm": 197,
+    "startTroubleBpms": [
+      195
+    ],
+    "endTroubleBpms": [
+      195
+    ],
+    "promotions": []
+  },
+  {
+    "id": "sr_1789884753120_8xr7uvri",
+    "itemId": "ccc5bda1-f0e0-418f-a73c-c2855b575ad8",
+    "itemKind": "song",
+    "itemTitle": "One - Depapepe Melodic Part",
+    "startedAt": "2026-09-20T06:06:39.994Z",
+    "endedAt": "2026-09-20T06:12:33.120Z",
+    "durationSec": 353,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 197,
+    "endWorkingBpm": 197,
+    "startTroubleBpms": [
+      174
+    ],
+    "endTroubleBpms": [
+      174
+    ],
+    "promotions": []
+  },
+  {
+    "id": "sr_1789885008909_cni3dpxb",
+    "itemId": "de7b70c2-3c07-4e13-ae2b-6028a94269e7",
+    "itemKind": "song",
+    "itemTitle": "Salt Creek [Capo2]",
+    "startedAt": "2026-09-20T06:12:41.955Z",
+    "endedAt": "2026-09-20T06:16:48.909Z",
+    "durationSec": 247,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 192,
+    "endWorkingBpm": 192,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1789885087968_nfd6f3tu",
+    "itemId": "dc69fcf9-0d9a-46cd-837a-b7a10b887071",
+    "itemKind": "song",
+    "itemTitle": "Arkansas Traveler Whole song",
+    "startedAt": "2026-09-20T06:16:51.018Z",
+    "endedAt": "2026-09-20T06:18:07.968Z",
+    "durationSec": 77,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 195,
+    "endWorkingBpm": 195,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1789885350440_iya0cam1",
+    "itemId": "ecbb5882-094b-4ee9-9856-13a5ab0c625f",
+    "itemKind": "song",
+    "itemTitle": "Beamont Rag",
+    "startedAt": "2026-09-20T06:18:27.738Z",
+    "endedAt": "2026-09-20T06:22:30.440Z",
+    "durationSec": 243,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 170,
+    "endWorkingBpm": 170,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1789885629005_0y6qv75b",
+    "itemId": "59d69a12-2dce-41c7-9ebe-0325d5b9a277",
+    "itemKind": "song",
+    "itemTitle": "Seney stretch [Capo1]",
+    "startedAt": "2026-09-20T06:25:26.685Z",
+    "endedAt": "2026-09-20T06:27:09.005Z",
+    "durationSec": 102,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 195,
+    "endWorkingBpm": 195,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1789886022135_65s778t1",
+    "itemId": "cd5bdc97-4e73-41f8-81eb-aa8907e9ec2a",
+    "itemKind": "song",
+    "itemTitle": "Escabana",
+    "startedAt": "2026-09-20T06:27:09.645Z",
+    "endedAt": "2026-09-20T06:33:42.135Z",
+    "durationSec": 392,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 97,
+    "endWorkingBpm": 97,
+    "startTroubleBpms": [
+      104,
+      94
+    ],
+    "endTroubleBpms": [
+      104,
+      94
+    ],
+    "promotions": []
+  },
+  {
+    "id": "sr_1789886722658_n8cqeg88",
+    "itemId": "e_1789444016171_suppinwq",
+    "itemKind": "exercise",
+    "itemTitle": "Emaj7 & B7 Arp 5th string",
+    "startedAt": "2026-09-20T06:38:49.944Z",
+    "endedAt": "2026-09-20T06:45:22.658Z",
+    "durationSec": 393,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 103,
+    "endWorkingBpm": 115,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-09-20T06:42:09.655Z",
+        "kind": "working",
+        "fromBpm": 103,
+        "toBpm": 106,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-09-20T06:42:30.284Z",
+        "kind": "working",
+        "fromBpm": 106,
+        "toBpm": 109,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-09-20T06:45:20.309Z",
+        "kind": "working",
+        "fromBpm": 109,
+        "toBpm": 112,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-09-20T06:45:21.016Z",
+        "kind": "working",
+        "fromBpm": 112,
+        "toBpm": 115,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1789887409164_phokisr4",
+    "itemId": "e_1789444146426_tym73dt8",
+    "itemKind": "exercise",
+    "itemTitle": "C#min7 & D#min7b5 Arp 5th string",
+    "startedAt": "2026-09-20T06:45:42.808Z",
+    "endedAt": "2026-09-20T06:56:49.164Z",
+    "durationSec": 666,
+    "endedReason": "abort",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 109,
+    "endWorkingBpm": 64,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-09-20T06:48:36.320Z",
+        "kind": "working",
+        "fromBpm": 109,
+        "toBpm": 112,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-09-20T06:48:37.152Z",
+        "kind": "working",
+        "fromBpm": 112,
+        "toBpm": 115,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-09-20T06:50:37.867Z",
+        "kind": "working",
+        "fromBpm": 115,
+        "toBpm": 118,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-09-20T06:50:38.469Z",
+        "kind": "working",
+        "fromBpm": 118,
+        "toBpm": 121,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-09-20T06:55:13.988Z",
+        "kind": "working",
+        "fromBpm": 60,
+        "toBpm": 62,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-09-20T06:56:46.831Z",
+        "kind": "working",
+        "fromBpm": 62,
+        "toBpm": 64,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1789887546962_4icno0xc",
+    "itemId": "e_1789535200319_nwfhr9x7",
+    "itemKind": "exercise",
+    "itemTitle": "3 Note Groups E D Shapes",
+    "startedAt": "2026-09-20T06:57:01.784Z",
+    "endedAt": "2026-09-20T06:59:06.962Z",
+    "durationSec": 125,
+    "endedReason": "complete",
+    "plannedMinutes": 2,
+    "startWorkingBpm": 115,
+    "endWorkingBpm": 121,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-09-20T06:58:08.648Z",
+        "kind": "working",
+        "fromBpm": 115,
+        "toBpm": 118,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-09-20T06:58:09.875Z",
+        "kind": "working",
+        "fromBpm": 118,
+        "toBpm": 121,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1789887745682_20jltzl4",
+    "itemId": "e_1788079503663_n3d48trg",
+    "itemKind": "exercise",
+    "itemTitle": "3 Note Groups C A G shapes",
+    "startedAt": "2026-09-20T06:59:12.047Z",
+    "endedAt": "2026-09-20T07:02:25.682Z",
+    "durationSec": 194,
+    "endedReason": "complete",
+    "plannedMinutes": 3,
+    "startWorkingBpm": 115,
+    "endWorkingBpm": 115,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1789887935268_s0x72wa6",
+    "itemId": "e_1789535332152_7zhv535u",
+    "itemKind": "exercise",
+    "itemTitle": "4 Note Groups E D",
+    "startedAt": "2026-09-20T07:02:26.981Z",
+    "endedAt": "2026-09-20T07:05:35.268Z",
+    "durationSec": 188,
+    "endedReason": "complete",
+    "plannedMinutes": 3,
+    "startWorkingBpm": 70,
+    "endWorkingBpm": 70,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1789888236271_2gq4d4cm",
+    "itemId": "e_1788079586248_hz6yegpa",
+    "itemKind": "exercise",
+    "itemTitle": "4 Note Groups C A G shapes",
+    "startedAt": "2026-09-20T07:05:37.636Z",
+    "endedAt": "2026-09-20T07:10:36.271Z",
+    "durationSec": 299,
+    "endedReason": "complete",
+    "plannedMinutes": 4.5,
+    "startWorkingBpm": 70,
+    "endWorkingBpm": 70,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1789888310714_dwxatoui",
+    "itemId": "e_1788080054019_rz2rm55e",
+    "itemKind": "exercise",
+    "itemTitle": "6 Note Groups E D",
+    "startedAt": "2026-09-20T07:10:39.361Z",
+    "endedAt": "2026-09-20T07:11:50.714Z",
+    "durationSec": 71,
+    "endedReason": "abort",
+    "plannedMinutes": 4,
+    "startWorkingBpm": 46,
+    "endWorkingBpm": 46,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1789901908245_yzn9x5ln",
+    "itemId": "e_1788080054019_rz2rm55e",
+    "itemKind": "exercise",
+    "itemTitle": "6 Note Groups E D",
+    "startedAt": "2026-09-20T10:54:28.009Z",
+    "endedAt": "2026-09-20T10:58:28.245Z",
+    "durationSec": 240,
+    "endedReason": "complete",
+    "plannedMinutes": 4,
+    "startWorkingBpm": 46,
+    "endWorkingBpm": 46,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1789902674029_aq763ig0",
+    "itemId": "e_1789535479544_s8lazn5p",
+    "itemKind": "exercise",
+    "itemTitle": "6 Note Groups C A G Shapes",
+    "startedAt": "2026-09-20T11:04:45.419Z",
+    "endedAt": "2026-09-20T11:11:14.029Z",
+    "durationSec": 389,
+    "endedReason": "complete",
+    "plannedMinutes": 6,
+    "startWorkingBpm": 48,
+    "endWorkingBpm": 48,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1789902823464_71zz3qqg",
+    "itemId": "e_1788079503663_n3d48trg",
+    "itemKind": "exercise",
+    "itemTitle": "3 Note Groups C A G shapes",
+    "startedAt": "2026-09-20T11:11:18.551Z",
+    "endedAt": "2026-09-20T11:13:43.464Z",
+    "durationSec": 145,
+    "endedReason": "abort",
+    "plannedMinutes": 3,
+    "startWorkingBpm": 115,
+    "endWorkingBpm": 43,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1789902846334_4hkecfh5",
+    "itemId": "e_1788079503663_n3d48trg",
+    "itemKind": "exercise",
+    "itemTitle": "3 Note Groups C A G shapes",
+    "startedAt": "2026-09-20T11:13:58.172Z",
+    "endedAt": "2026-09-20T11:14:06.334Z",
+    "durationSec": 8,
+    "endedReason": "abort",
+    "plannedMinutes": 3,
+    "startWorkingBpm": 43,
+    "endWorkingBpm": 115,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1789902852438_9n3ctggv",
+    "itemId": "e_1788079503663_n3d48trg",
+    "itemKind": "exercise",
+    "itemTitle": "3 Note Groups C A G shapes",
+    "startedAt": "2026-09-20T11:14:09.255Z",
+    "endedAt": "2026-09-20T11:14:12.438Z",
+    "durationSec": 3,
+    "endedReason": "abort",
+    "plannedMinutes": 3,
+    "startWorkingBpm": 115,
+    "endWorkingBpm": 115,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1789902876556_m3kfetdb",
+    "itemId": "e_1789535479544_s8lazn5p",
+    "itemKind": "exercise",
+    "itemTitle": "6 Note Groups C A G Shapes",
+    "startedAt": "2026-09-20T11:14:34.992Z",
+    "endedAt": "2026-09-20T11:14:36.556Z",
+    "durationSec": 2,
+    "endedReason": "complete",
+    "plannedMinutes": 6,
+    "startWorkingBpm": 48,
+    "endWorkingBpm": 48,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1789902881720_d9y2koxw",
+    "itemId": "e_1789535479544_s8lazn5p",
+    "itemKind": "exercise",
+    "itemTitle": "6 Note Groups C A G Shapes",
+    "startedAt": "2026-09-20T11:14:40.464Z",
+    "endedAt": "2026-09-20T11:14:41.720Z",
+    "durationSec": 1,
+    "endedReason": "abort",
+    "plannedMinutes": 6,
+    "startWorkingBpm": 48,
+    "endWorkingBpm": 48,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1789973356583_knhgsno7",
+    "itemId": "e_1789444016171_suppinwq",
+    "itemKind": "exercise",
+    "itemTitle": "Emaj7 & B7 Arp 5th string",
+    "startedAt": "2026-09-21T06:44:30.630Z",
+    "endedAt": "2026-09-21T06:49:16.583Z",
+    "durationSec": 286,
+    "endedReason": "abort",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 115,
+    "endWorkingBpm": 115,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1789973654207_j38kq83o",
+    "itemId": "e_1789444016171_suppinwq",
+    "itemKind": "exercise",
+    "itemTitle": "Emaj7 & B7 Arp 5th string",
+    "startedAt": "2026-09-21T06:50:15.818Z",
+    "endedAt": "2026-09-21T06:54:14.207Z",
+    "durationSec": 238,
+    "endedReason": "abort",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 60,
+    "endWorkingBpm": 64,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-09-21T06:53:07.639Z",
+        "kind": "working",
+        "fromBpm": 60,
+        "toBpm": 62,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-09-21T06:53:11.213Z",
+        "kind": "working",
+        "fromBpm": 62,
+        "toBpm": 64,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1789974062287_7e31yob4",
+    "itemId": "e_1789444146426_tym73dt8",
+    "itemKind": "exercise",
+    "itemTitle": "C#min7 & D#min7b5 Arp 5th string",
+    "startedAt": "2026-09-21T06:54:25.254Z",
+    "endedAt": "2026-09-21T07:01:02.287Z",
+    "durationSec": 397,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 64,
+    "endWorkingBpm": 68,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-09-21T06:58:43.159Z",
+        "kind": "working",
+        "fromBpm": 64,
+        "toBpm": 66,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-09-21T07:00:38.381Z",
+        "kind": "working",
+        "fromBpm": 66,
+        "toBpm": 68,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1789974447597_yj7t8d7x",
+    "itemId": "e_1789535200319_nwfhr9x7",
+    "itemKind": "exercise",
+    "itemTitle": "3 Note Groups E D Shapes",
+    "startedAt": "2026-09-21T07:01:09.770Z",
+    "endedAt": "2026-09-21T07:07:27.597Z",
+    "durationSec": 378,
+    "endedReason": "complete",
+    "plannedMinutes": 2,
+    "startWorkingBpm": 121,
+    "endWorkingBpm": 124,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-09-21T07:05:36.944Z",
+        "kind": "working",
+        "fromBpm": 121,
+        "toBpm": 124,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1789974757020_rrxuea8w",
+    "itemId": "e_1788079503663_n3d48trg",
+    "itemKind": "exercise",
+    "itemTitle": "3 Note Groups C A G shapes",
+    "startedAt": "2026-09-21T07:07:28.576Z",
+    "endedAt": "2026-09-21T07:12:37.020Z",
+    "durationSec": 308,
+    "endedReason": "complete",
+    "plannedMinutes": 3,
+    "startWorkingBpm": 115,
+    "endWorkingBpm": 118,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-09-21T07:11:25.026Z",
+        "kind": "working",
+        "fromBpm": 115,
+        "toBpm": 118,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1789975036637_wppmzb9f",
+    "itemId": "e_1789535332152_7zhv535u",
+    "itemKind": "exercise",
+    "itemTitle": "4 Note Groups E D",
+    "startedAt": "2026-09-21T07:12:38.064Z",
+    "endedAt": "2026-09-21T07:17:16.637Z",
+    "durationSec": 279,
+    "endedReason": "complete",
+    "plannedMinutes": 3,
+    "startWorkingBpm": 70,
+    "endWorkingBpm": 72,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-09-21T07:14:03.628Z",
+        "kind": "working",
+        "fromBpm": 70,
+        "toBpm": 72,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1789975328254_r6x12di7",
+    "itemId": "e_1788079586248_hz6yegpa",
+    "itemKind": "exercise",
+    "itemTitle": "4 Note Groups C A G shapes",
+    "startedAt": "2026-09-21T07:17:18.069Z",
+    "endedAt": "2026-09-21T07:22:08.254Z",
+    "durationSec": 290,
+    "endedReason": "complete",
+    "plannedMinutes": 4.5,
+    "startWorkingBpm": 70,
+    "endWorkingBpm": 70,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1789975687180_hpkfkhv4",
+    "itemId": "e_1788080054019_rz2rm55e",
+    "itemKind": "exercise",
+    "itemTitle": "6 Note Groups E D",
+    "startedAt": "2026-09-21T07:22:10.049Z",
+    "endedAt": "2026-09-21T07:28:07.180Z",
+    "durationSec": 357,
+    "endedReason": "complete",
+    "plannedMinutes": 4,
+    "startWorkingBpm": 46,
+    "endWorkingBpm": 46,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1789976138286_6khwg1wv",
+    "itemId": "e_1789535479544_s8lazn5p",
+    "itemKind": "exercise",
+    "itemTitle": "6 Note Groups C A G Shapes",
+    "startedAt": "2026-09-21T07:28:27.246Z",
+    "endedAt": "2026-09-21T07:35:38.286Z",
+    "durationSec": 431,
+    "endedReason": "complete",
+    "plannedMinutes": 6,
+    "startWorkingBpm": 48,
+    "endWorkingBpm": 48,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1790270630302_tl21arm3",
+    "itemId": "e_1789444016171_suppinwq",
+    "itemKind": "exercise",
+    "itemTitle": "Emaj7 & B7 Arp 5th string",
+    "startedAt": "2026-09-24T17:15:48.145Z",
+    "endedAt": "2026-09-24T17:23:50.302Z",
+    "durationSec": 482,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 62,
+    "endWorkingBpm": 66,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-09-24T17:20:39.179Z",
+        "kind": "working",
+        "fromBpm": 62,
+        "toBpm": 64,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-09-24T17:22:39.900Z",
+        "kind": "working",
+        "fromBpm": 64,
+        "toBpm": 66,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1790271014678_htgd8ft8",
+    "itemId": "e_1789444146426_tym73dt8",
+    "itemKind": "exercise",
+    "itemTitle": "C#min7 & D#min7b5 Arp 5th string",
+    "startedAt": "2026-09-24T17:23:51.966Z",
+    "endedAt": "2026-09-24T17:30:14.678Z",
+    "durationSec": 383,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 68,
+    "endWorkingBpm": 68,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "1b26657a-75c9-4629-a71c-1b9ee76171b1",
+    "itemId": "e_1789444016171_suppinwq",
+    "itemKind": "exercise",
+    "itemTitle": "Emaj7 & B7 Arp 5th string",
+    "startedAt": "2026-09-26T07:01:27.680Z",
+    "endedAt": "2026-09-26T07:09:39.534Z",
+    "durationSec": 492,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 66,
+    "endWorkingBpm": 68,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-09-26T07:07:45.819Z",
+        "kind": "working",
+        "fromBpm": 66,
+        "toBpm": 68,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "78a94b59-de0b-4423-b2f1-cf1f553f6234",
+    "itemId": "e_1789444146426_tym73dt8",
+    "itemKind": "exercise",
+    "itemTitle": "C#min7 & D#min7b5 Arp 5th string",
+    "startedAt": "2026-09-26T07:09:41.403Z",
+    "endedAt": "2026-09-26T07:17:24.235Z",
+    "durationSec": 463,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 68,
+    "endWorkingBpm": 68,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "4c95728d-c815-488a-8894-2da19940a994",
+    "itemId": "e_1789535200319_nwfhr9x7",
+    "itemKind": "exercise",
+    "itemTitle": "3 Note Groups E D Shapes",
+    "startedAt": "2026-09-26T07:17:25.266Z",
+    "endedAt": "2026-09-26T07:22:27.623Z",
+    "durationSec": 302,
+    "endedReason": "complete",
+    "plannedMinutes": 2,
+    "startWorkingBpm": 124,
+    "endWorkingBpm": 127,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-09-26T07:21:23.739Z",
+        "kind": "working",
+        "fromBpm": 124,
+        "toBpm": 127,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "d755da2e-d62c-489d-b935-45457eeac652",
+    "itemId": "e_1788079503663_n3d48trg",
+    "itemKind": "exercise",
+    "itemTitle": "3 Note Groups C A G shapes",
+    "startedAt": "2026-09-26T07:22:29.181Z",
+    "endedAt": "2026-09-26T07:27:54.695Z",
+    "durationSec": 326,
+    "endedReason": "complete",
+    "plannedMinutes": 3,
+    "startWorkingBpm": 118,
+    "endWorkingBpm": 118,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "8fcf785c-6c16-42d2-9ce8-e2b5113dbd35",
+    "itemId": "e_1788079503663_n3d48trg",
+    "itemKind": "exercise",
+    "itemTitle": "3 Note Groups C A G shapes",
+    "startedAt": "2026-09-26T07:28:02.832Z",
+    "endedAt": "2026-09-26T07:28:15.560Z",
+    "durationSec": 13,
+    "endedReason": "abort",
+    "plannedMinutes": 3,
+    "startWorkingBpm": 118,
+    "endWorkingBpm": 121,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-09-26T07:28:04.105Z",
+        "kind": "working",
+        "fromBpm": 118,
+        "toBpm": 121,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "ab6b480a-9a54-4836-8b4b-9393dc61980d",
+    "itemId": "e_1789535332152_7zhv535u",
+    "itemKind": "exercise",
+    "itemTitle": "4 Note Groups E D",
+    "startedAt": "2026-09-26T07:28:20.010Z",
+    "endedAt": "2026-09-26T07:32:20.345Z",
+    "durationSec": 240,
+    "endedReason": "complete",
+    "plannedMinutes": 3,
+    "startWorkingBpm": 72,
+    "endWorkingBpm": 74,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-09-26T07:30:20.895Z",
+        "kind": "working",
+        "fromBpm": 72,
+        "toBpm": 74,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "570d3624-9ea0-4366-ac53-5d136bcfa789",
+    "itemId": "e_1789535332152_7zhv535u",
+    "itemKind": "exercise",
+    "itemTitle": "4 Note Groups E D",
+    "startedAt": "2026-09-26T07:32:23.623Z",
+    "endedAt": "2026-09-26T07:32:24.101Z",
+    "durationSec": 0,
+    "endedReason": "complete",
+    "plannedMinutes": 3,
+    "startWorkingBpm": 74,
+    "endWorkingBpm": 74,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "9575cf52-89ce-4525-aaac-1d50019fa996",
+    "itemId": "e_1789535332152_7zhv535u",
+    "itemKind": "exercise",
+    "itemTitle": "4 Note Groups E D",
+    "startedAt": "2026-09-26T07:32:27.880Z",
+    "endedAt": "2026-09-26T07:32:35.345Z",
+    "durationSec": 7,
+    "endedReason": "abort",
+    "plannedMinutes": 3,
+    "startWorkingBpm": 74,
+    "endWorkingBpm": 76,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-09-26T07:32:28.442Z",
+        "kind": "working",
+        "fromBpm": 74,
+        "toBpm": 76,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "c952d628-d5be-4d40-9d28-b090355b039a",
+    "itemId": "e_1788079586248_hz6yegpa",
+    "itemKind": "exercise",
+    "itemTitle": "4 Note Groups C A G shapes",
+    "startedAt": "2026-09-26T07:33:17.096Z",
+    "endedAt": "2026-09-26T07:37:52.196Z",
+    "durationSec": 275,
+    "endedReason": "complete",
+    "plannedMinutes": 4.5,
+    "startWorkingBpm": 70,
+    "endWorkingBpm": 74,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-09-26T07:36:19.399Z",
+        "kind": "working",
+        "fromBpm": 70,
+        "toBpm": 72,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-09-26T07:36:19.975Z",
+        "kind": "working",
+        "fromBpm": 72,
+        "toBpm": 74,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "b4bcaa9d-1238-445e-9363-75b78db2514d",
+    "itemId": "e_1788080054019_rz2rm55e",
+    "itemKind": "exercise",
+    "itemTitle": "6 Note Groups E D",
+    "startedAt": "2026-09-26T07:38:10.135Z",
+    "endedAt": "2026-09-26T07:42:46.482Z",
+    "durationSec": 276,
+    "endedReason": "complete",
+    "plannedMinutes": 4,
+    "startWorkingBpm": 46,
+    "endWorkingBpm": 46,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "d1ad9875-351a-443d-b0e8-44624fe4e866",
+    "itemId": "e_1789535479544_s8lazn5p",
+    "itemKind": "exercise",
+    "itemTitle": "6 Note Groups C A G Shapes",
+    "startedAt": "2026-09-26T07:42:47.922Z",
+    "endedAt": "2026-09-26T07:48:26.766Z",
+    "durationSec": 339,
+    "endedReason": "complete",
+    "plannedMinutes": 6,
+    "startWorkingBpm": 48,
+    "endWorkingBpm": 48,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "1c71609f-ae44-4712-bf9a-f21b57a6cafc",
+    "itemId": "e_1786172379355_o9n1t5nj",
+    "itemKind": "exercise",
+    "itemTitle": "Start Depapepe Pulloffs",
+    "startedAt": "2026-09-26T07:48:29.334Z",
+    "endedAt": "2026-09-26T07:52:58.551Z",
+    "durationSec": 269,
+    "endedReason": "abort",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 70,
+    "endWorkingBpm": 70,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "00000226-ce2a-46ef-8568-cc8e21d3a2d1",
+    "itemId": "e_1786172379355_o9n1t5nj",
+    "itemKind": "exercise",
+    "itemTitle": "Start Depapepe Pulloffs",
+    "startedAt": "2026-09-26T07:53:01.943Z",
+    "endedAt": "2026-09-26T07:53:10.060Z",
+    "durationSec": 8,
+    "endedReason": "abort",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 70,
+    "endWorkingBpm": 72,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-09-26T07:53:04.659Z",
+        "kind": "working",
+        "fromBpm": 70,
+        "toBpm": 72,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "b92efd34-c9bf-4d1b-adbe-761da2a66900",
+    "itemId": "66a868d0-750b-4fb5-82f3-6422ec05ca24",
+    "itemKind": "exercise",
+    "itemTitle": "Fast Strum",
+    "startedAt": "2026-09-26T07:53:29.052Z",
+    "endedAt": "2026-09-26T08:00:01.216Z",
+    "durationSec": 392,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 265,
+    "endWorkingBpm": 265,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "70fe44a8-71f3-4012-9952-9b6b567fe59a",
+    "itemId": "66a868d0-750b-4fb5-82f3-6422ec05ca24",
+    "itemKind": "exercise",
+    "itemTitle": "Fast Strum",
+    "startedAt": "2026-09-26T08:00:57.187Z",
+    "endedAt": "2026-09-26T08:01:00.069Z",
+    "durationSec": 3,
+    "endedReason": "abort",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 265,
+    "endWorkingBpm": 272,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-09-26T08:00:58.502Z",
+        "kind": "working",
+        "fromBpm": 265,
+        "toBpm": 272,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "48808bbf-9ce2-4959-b58a-6256733b4c6b",
+    "itemId": "1be58b6b-6aeb-4dd7-b0d0-86ea7c6464e1",
+    "itemKind": "exercise",
+    "itemTitle": "Hard part from one depapepe (16 sliding close to 12th fret)",
+    "startedAt": "2026-09-26T08:01:05.691Z",
+    "endedAt": "2026-09-26T08:06:52.505Z",
+    "durationSec": 347,
+    "endedReason": "abort",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 196,
+    "endWorkingBpm": 201,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-09-26T08:06:10.490Z",
+        "kind": "working",
+        "fromBpm": 196,
+        "toBpm": 201,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "5dabaea1-5125-4870-a0ae-e4da03ef99f3",
+    "itemId": "5c5ffa71-9051-4eb6-95c1-4630265ac577",
+    "itemKind": "song",
+    "itemTitle": "Start - Depapepe rythm",
+    "startedAt": "2026-09-26T08:10:26.837Z",
+    "endedAt": "2026-09-26T08:21:17.592Z",
+    "durationSec": 651,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 100,
+    "endWorkingBpm": 85,
+    "startTroubleBpms": [
+      60
+    ],
+    "endTroubleBpms": [
+      60
+    ],
+    "promotions": []
+  },
+  {
+    "id": "87a7d9be-ccc7-426e-ae0a-d2d02a683c27",
+    "itemId": "232e185f-6770-4775-80bf-f6f224e3ed5e",
+    "itemKind": "song",
+    "itemTitle": "Start - Depapepe Melody",
+    "startedAt": "2026-09-26T08:21:21.502Z",
+    "endedAt": "2026-09-26T08:23:43.893Z",
+    "durationSec": 142,
+    "endedReason": "abort",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 100,
+    "endWorkingBpm": 100,
+    "startTroubleBpms": [
+      60
+    ],
+    "endTroubleBpms": [
+      60
+    ],
+    "promotions": []
+  },
+  {
+    "id": "e33b8db4-2d7a-4db0-9364-e9484c1e006c",
+    "itemId": "232e185f-6770-4775-80bf-f6f224e3ed5e",
+    "itemKind": "song",
+    "itemTitle": "Start - Depapepe Melody",
+    "startedAt": "2026-09-26T08:24:17.517Z",
+    "endedAt": "2026-09-26T08:38:25.845Z",
+    "durationSec": 848,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 90,
+    "endWorkingBpm": 94,
+    "startTroubleBpms": [
+      60
+    ],
+    "endTroubleBpms": [
+      60
+    ],
+    "promotions": [
+      {
+        "at": "2026-09-26T08:30:51.364Z",
+        "kind": "working",
+        "fromBpm": 90,
+        "toBpm": 92,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-09-26T08:30:52.344Z",
+        "kind": "working",
+        "fromBpm": 92,
+        "toBpm": 94,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "45f6cf72-b6ac-471c-af7d-3bc2391a9bd1",
+    "itemId": "a990d1f3-9f76-4f81-ae2d-557b50053f91",
+    "itemKind": "song",
+    "itemTitle": "Ruben",
+    "startedAt": "2026-09-26T08:38:30.525Z",
+    "endedAt": "2026-09-26T08:46:45.748Z",
+    "durationSec": 495,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 158,
+    "endWorkingBpm": 158,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "a6da6cd0-d81d-4f2e-aa30-a91508508fb5",
+    "itemId": "58148c75-8f5b-4b2b-822a-098df01fb11d",
+    "itemKind": "song",
+    "itemTitle": "Escabana (Rythm)",
+    "startedAt": "2026-09-26T08:46:52.659Z",
+    "endedAt": "2026-09-26T08:55:49.054Z",
+    "durationSec": 536,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "944efc59-b854-4643-be31-3d2120cb5580",
+    "itemId": "dc275ae4-6f34-45b0-a041-3a04783d7427",
+    "itemKind": "song",
+    "itemTitle": "One - Depapepe Rythm Part",
+    "startedAt": "2026-09-26T08:55:51.132Z",
+    "endedAt": "2026-09-26T08:55:57.389Z",
+    "durationSec": 6,
+    "endedReason": "abort",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 197,
+    "endWorkingBpm": 197,
+    "startTroubleBpms": [
+      195
+    ],
+    "endTroubleBpms": [
+      195
+    ],
+    "promotions": []
+  },
+  {
+    "id": "cbcbfdc8-24a7-4fe1-936c-66e100bb4b59",
+    "itemId": "dc275ae4-6f34-45b0-a041-3a04783d7427",
+    "itemKind": "song",
+    "itemTitle": "One - Depapepe Rythm Part",
+    "startedAt": "2026-09-26T08:56:50.784Z",
+    "endedAt": "2026-09-26T09:00:47.821Z",
+    "durationSec": 237,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 197,
+    "endWorkingBpm": 197,
+    "startTroubleBpms": [
+      195
+    ],
+    "endTroubleBpms": [
+      195
+    ],
+    "promotions": []
+  },
+  {
+    "id": "cc37480e-7e52-4601-944f-6d1c0bb9ac57",
+    "itemId": "ccc5bda1-f0e0-418f-a73c-c2855b575ad8",
+    "itemKind": "song",
+    "itemTitle": "One - Depapepe Melodic Part",
+    "startedAt": "2026-09-26T09:00:50.451Z",
+    "endedAt": "2026-09-26T09:00:53.462Z",
+    "durationSec": 3,
+    "endedReason": "abort",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 197,
+    "endWorkingBpm": 197,
+    "startTroubleBpms": [
+      174
+    ],
+    "endTroubleBpms": [
+      174
+    ],
+    "promotions": []
+  },
+  {
+    "id": "a448cfac-a2a5-4a17-ba43-af97484a3071",
+    "itemId": "ccc5bda1-f0e0-418f-a73c-c2855b575ad8",
+    "itemKind": "song",
+    "itemTitle": "One - Depapepe Melodic Part",
+    "startedAt": "2026-09-26T09:01:06.088Z",
+    "endedAt": "2026-09-26T09:05:13.409Z",
+    "durationSec": 247,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 197,
+    "endWorkingBpm": 197,
+    "startTroubleBpms": [
+      174
+    ],
+    "endTroubleBpms": [
+      174
+    ],
+    "promotions": []
+  },
+  {
+    "id": "45754ffa-21ff-44e2-9771-e2625db34188",
+    "itemId": "de7b70c2-3c07-4e13-ae2b-6028a94269e7",
+    "itemKind": "song",
+    "itemTitle": "Salt Creek [Capo2]",
+    "startedAt": "2026-09-26T09:05:48.512Z",
+    "endedAt": "2026-09-26T09:13:27.994Z",
+    "durationSec": 435,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 192,
+    "endWorkingBpm": 197,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-09-26T09:11:15.975Z",
+        "kind": "working",
+        "fromBpm": 192,
+        "toBpm": 197,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "a477c3ee-28d3-4ad1-b5c6-1c03a7dae08c",
+    "itemId": "e_1789444016171_suppinwq",
+    "itemKind": "exercise",
+    "itemTitle": "Emaj7 & B7 Arp 5th string",
+    "startedAt": "2026-09-27T07:29:01.107Z",
+    "endedAt": "2026-09-27T07:38:18.230Z",
+    "durationSec": 533,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 68,
+    "endWorkingBpm": 70,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-09-27T07:35:14.869Z",
+        "kind": "working",
+        "fromBpm": 68,
+        "toBpm": 70,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "3ab0617a-a2dc-4a48-b707-a09c8c38b4ad",
+    "itemId": "e_1789444146426_tym73dt8",
+    "itemKind": "exercise",
+    "itemTitle": "C#min7 & D#min7b5 Arp 5th string",
+    "startedAt": "2026-09-27T07:38:20.470Z",
+    "endedAt": "2026-09-27T07:47:16.813Z",
+    "durationSec": 536,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 68,
+    "endWorkingBpm": 68,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "5578655e-821d-46f2-be1f-04cd7560b1d4",
+    "itemId": "e_1789535200319_nwfhr9x7",
+    "itemKind": "exercise",
+    "itemTitle": "3 Note Groups E D Shapes",
+    "startedAt": "2026-09-27T07:47:19.911Z",
+    "endedAt": "2026-09-27T07:52:56.960Z",
+    "durationSec": 337,
+    "endedReason": "complete",
+    "plannedMinutes": 2,
+    "startWorkingBpm": 127,
+    "endWorkingBpm": 130,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-09-27T07:52:32.145Z",
+        "kind": "working",
+        "fromBpm": 127,
+        "toBpm": 130,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "086fbf4b-9d72-401d-8c8c-df148f02087c",
+    "itemId": "e_1788079503663_n3d48trg",
+    "itemKind": "exercise",
+    "itemTitle": "3 Note Groups C A G shapes",
+    "startedAt": "2026-09-27T07:52:58.086Z",
+    "endedAt": "2026-09-27T08:00:59.008Z",
+    "durationSec": 481,
+    "endedReason": "complete",
+    "plannedMinutes": 3,
+    "startWorkingBpm": 121,
+    "endWorkingBpm": 124,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-09-27T07:59:42.747Z",
+        "kind": "working",
+        "fromBpm": 121,
+        "toBpm": 124,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "3ddcfbb7-0186-4f9a-affe-4d96e5835502",
+    "itemId": "e_1789535332152_7zhv535u",
+    "itemKind": "exercise",
+    "itemTitle": "4 Note Groups E D",
+    "startedAt": "2026-09-27T08:01:01.163Z",
+    "endedAt": "2026-09-27T08:05:40.574Z",
+    "durationSec": 279,
+    "endedReason": "complete",
+    "plannedMinutes": 3,
+    "startWorkingBpm": 76,
+    "endWorkingBpm": 80,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-09-27T08:03:51.119Z",
+        "kind": "working",
+        "fromBpm": 76,
+        "toBpm": 78,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-09-27T08:03:54.735Z",
+        "kind": "working",
+        "fromBpm": 78,
+        "toBpm": 80,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "9880dd24-9829-4ced-bcc9-0eac37062f58",
+    "itemId": "e_1789535332152_7zhv535u",
+    "itemKind": "exercise",
+    "itemTitle": "4 Note Groups E D",
+    "startedAt": "2026-09-27T08:05:47.458Z",
+    "endedAt": "2026-09-27T08:05:53.997Z",
+    "durationSec": 7,
+    "endedReason": "abort",
+    "plannedMinutes": 3,
+    "startWorkingBpm": 80,
+    "endWorkingBpm": 84,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-09-27T08:05:48.155Z",
+        "kind": "working",
+        "fromBpm": 80,
+        "toBpm": 82,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-09-27T08:05:49.958Z",
+        "kind": "working",
+        "fromBpm": 82,
+        "toBpm": 84,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "72acafd0-2089-4a51-a43c-7bc7e1828c5d",
+    "itemId": "e_1788079586248_hz6yegpa",
+    "itemKind": "exercise",
+    "itemTitle": "4 Note Groups C A G shapes",
+    "startedAt": "2026-09-27T08:05:59.883Z",
+    "endedAt": "2026-09-27T08:10:58.149Z",
+    "durationSec": 298,
+    "endedReason": "complete",
+    "plannedMinutes": 4.5,
+    "startWorkingBpm": 74,
+    "endWorkingBpm": 74,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "8b944b65-106e-409e-bb3f-3e61a6020292",
+    "itemId": "e_1788080054019_rz2rm55e",
+    "itemKind": "exercise",
+    "itemTitle": "6 Note Groups E D",
+    "startedAt": "2026-09-27T08:11:18.313Z",
+    "endedAt": "2026-09-27T08:16:00.476Z",
+    "durationSec": 282,
+    "endedReason": "complete",
+    "plannedMinutes": 4,
+    "startWorkingBpm": 46,
+    "endWorkingBpm": 46,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "98d14308-b8d1-485d-9ebc-f16ed9b1b45a",
+    "itemId": "e_1789535479544_s8lazn5p",
+    "itemKind": "exercise",
+    "itemTitle": "6 Note Groups C A G Shapes",
+    "startedAt": "2026-09-27T08:16:02.017Z",
+    "endedAt": "2026-09-27T08:22:28.157Z",
+    "durationSec": 386,
+    "endedReason": "complete",
+    "plannedMinutes": 6,
+    "startWorkingBpm": 48,
+    "endWorkingBpm": 48,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "8edc69c4-ad13-4ce2-b3cf-f1a3c0b1cbd8",
+    "itemId": "5c5ffa71-9051-4eb6-95c1-4630265ac577",
+    "itemKind": "song",
+    "itemTitle": "Start - Depapepe rythm",
+    "startedAt": "2026-09-27T08:23:10.641Z",
+    "endedAt": "2026-09-27T08:29:40.370Z",
+    "durationSec": 390,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 90,
+    "endWorkingBpm": 90,
+    "startTroubleBpms": [
+      60
+    ],
+    "endTroubleBpms": [
+      60
+    ],
+    "promotions": []
+  },
+  {
+    "id": "b7c5671f-a278-4150-a347-c0f06c64d437",
+    "itemId": "232e185f-6770-4775-80bf-f6f224e3ed5e",
+    "itemKind": "song",
+    "itemTitle": "Start - Depapepe Melody",
+    "startedAt": "2026-09-27T08:29:41.944Z",
+    "endedAt": "2026-09-27T08:37:22.815Z",
+    "durationSec": 461,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 94,
+    "endWorkingBpm": 94,
+    "startTroubleBpms": [
+      60
+    ],
+    "endTroubleBpms": [
+      60
+    ],
+    "promotions": []
+  },
+  {
+    "id": "d09a927d-4154-4b7d-a4e7-3b0ad5d835a0",
+    "itemId": "5c5ffa71-9051-4eb6-95c1-4630265ac577",
+    "itemKind": "song",
+    "itemTitle": "Start - Depapepe rythm",
+    "startedAt": "2026-09-27T08:37:27.699Z",
+    "endedAt": "2026-09-27T08:44:41.646Z",
+    "durationSec": 434,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 90,
+    "endWorkingBpm": 90,
+    "startTroubleBpms": [
+      60
+    ],
+    "endTroubleBpms": [
+      60
+    ],
+    "promotions": []
+  },
+  {
+    "id": "027bdd87-3078-4fbd-bea6-535c010f48a4",
+    "itemId": "dc275ae4-6f34-45b0-a041-3a04783d7427",
+    "itemKind": "song",
+    "itemTitle": "One - Depapepe Rythm Part",
+    "startedAt": "2026-09-27T08:45:06.600Z",
+    "endedAt": "2026-09-27T08:48:30.691Z",
+    "durationSec": 204,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 197,
+    "endWorkingBpm": 197,
+    "startTroubleBpms": [
+      195
+    ],
+    "endTroubleBpms": [
+      195
+    ],
+    "promotions": []
+  },
+  {
+    "id": "00519888-270a-4648-9c31-075071c63edb",
+    "itemId": "ccc5bda1-f0e0-418f-a73c-c2855b575ad8",
+    "itemKind": "song",
+    "itemTitle": "One - Depapepe Melodic Part",
+    "startedAt": "2026-09-27T08:48:31.746Z",
+    "endedAt": "2026-09-27T08:52:45.686Z",
+    "durationSec": 254,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 197,
+    "endWorkingBpm": 197,
+    "startTroubleBpms": [
+      174
+    ],
+    "endTroubleBpms": [
+      174
+    ],
+    "promotions": []
+  },
+  {
+    "id": "sr_1790572535595_9bknjux3",
+    "itemId": "e_1789444016171_suppinwq",
+    "itemKind": "exercise",
+    "itemTitle": "Emaj7 & B7 Arp 5th string",
+    "startedAt": "2026-09-28T05:06:53.692Z",
+    "endedAt": "2026-09-28T05:15:35.595Z",
+    "durationSec": 522,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 70,
+    "endWorkingBpm": 76,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-09-28T05:10:52.609Z",
+        "kind": "working",
+        "fromBpm": 70,
+        "toBpm": 72,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-09-28T05:12:31.421Z",
+        "kind": "working",
+        "fromBpm": 72,
+        "toBpm": 74,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-09-28T05:14:30.078Z",
+        "kind": "working",
+        "fromBpm": 74,
+        "toBpm": 76,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1790572990186_mw725hu7",
+    "itemId": "e_1789444146426_tym73dt8",
+    "itemKind": "exercise",
+    "itemTitle": "C#min7 & D#min7b5 Arp 5th string",
+    "startedAt": "2026-09-28T05:15:37.680Z",
+    "endedAt": "2026-09-28T05:23:10.186Z",
+    "durationSec": 453,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 68,
+    "endWorkingBpm": 68,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1790573329109_g63c9xwe",
+    "itemId": "e_1789535200319_nwfhr9x7",
+    "itemKind": "exercise",
+    "itemTitle": "3 Note Groups E D Shapes",
+    "startedAt": "2026-09-28T05:23:30.278Z",
+    "endedAt": "2026-09-28T05:28:49.109Z",
+    "durationSec": 319,
+    "endedReason": "complete",
+    "plannedMinutes": 2,
+    "startWorkingBpm": 130,
+    "endWorkingBpm": 133,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-09-28T05:27:23.128Z",
+        "kind": "working",
+        "fromBpm": 130,
+        "toBpm": 133,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1790573338157_yujhevvl",
+    "itemId": "e_1789535200319_nwfhr9x7",
+    "itemKind": "exercise",
+    "itemTitle": "3 Note Groups E D Shapes",
+    "startedAt": "2026-09-28T05:28:54.902Z",
+    "endedAt": "2026-09-28T05:28:58.157Z",
+    "durationSec": 3,
+    "endedReason": "abort",
+    "plannedMinutes": 2,
+    "startWorkingBpm": 133,
+    "endWorkingBpm": 136,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-09-28T05:28:56.703Z",
+        "kind": "working",
+        "fromBpm": 133,
+        "toBpm": 136,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1790573663419_i725o2tc",
+    "itemId": "e_1788079503663_n3d48trg",
+    "itemKind": "exercise",
+    "itemTitle": "3 Note Groups C A G shapes",
+    "startedAt": "2026-09-28T05:29:32.792Z",
+    "endedAt": "2026-09-28T05:34:23.419Z",
+    "durationSec": 291,
+    "endedReason": "complete",
+    "plannedMinutes": 3,
+    "startWorkingBpm": 124,
+    "endWorkingBpm": 127,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-09-28T05:32:53.459Z",
+        "kind": "working",
+        "fromBpm": 124,
+        "toBpm": 127,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1790573866942_bir038tt",
+    "itemId": "e_1788079503663_n3d48trg",
+    "itemKind": "exercise",
+    "itemTitle": "3 Note Groups C A G shapes",
+    "startedAt": "2026-09-28T05:34:27.417Z",
+    "endedAt": "2026-09-28T05:37:46.942Z",
+    "durationSec": 200,
+    "endedReason": "complete",
+    "plannedMinutes": 3,
+    "startWorkingBpm": 127,
+    "endWorkingBpm": 139,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-09-28T05:34:31.577Z",
+        "kind": "working",
+        "fromBpm": 127,
+        "toBpm": 130,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-09-28T05:34:35.908Z",
+        "kind": "working",
+        "fromBpm": 130,
+        "toBpm": 133,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-09-28T05:36:15.513Z",
+        "kind": "working",
+        "fromBpm": 133,
+        "toBpm": 136,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-09-28T05:37:13.466Z",
+        "kind": "working",
+        "fromBpm": 136,
+        "toBpm": 139,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1790574126236_y0ei5mvz",
+    "itemId": "e_1789535332152_7zhv535u",
+    "itemKind": "exercise",
+    "itemTitle": "4 Note Groups E D",
+    "startedAt": "2026-09-28T05:37:47.885Z",
+    "endedAt": "2026-09-28T05:42:06.236Z",
+    "durationSec": 258,
+    "endedReason": "complete",
+    "plannedMinutes": 3,
+    "startWorkingBpm": 84,
+    "endWorkingBpm": 88,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-09-28T05:40:19.498Z",
+        "kind": "working",
+        "fromBpm": 84,
+        "toBpm": 86,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-09-28T05:40:21.010Z",
+        "kind": "working",
+        "fromBpm": 86,
+        "toBpm": 88,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1790574425444_qzrbjanx",
+    "itemId": "e_1788079586248_hz6yegpa",
+    "itemKind": "exercise",
+    "itemTitle": "4 Note Groups C A G shapes",
+    "startedAt": "2026-09-28T05:42:07.240Z",
+    "endedAt": "2026-09-28T05:47:05.444Z",
+    "durationSec": 298,
+    "endedReason": "complete",
+    "plannedMinutes": 4.5,
+    "startWorkingBpm": 74,
+    "endWorkingBpm": 78,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-09-28T05:43:54.191Z",
+        "kind": "working",
+        "fromBpm": 74,
+        "toBpm": 76,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-09-28T05:43:54.793Z",
+        "kind": "working",
+        "fromBpm": 76,
+        "toBpm": 78,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1790574691881_23761by4",
+    "itemId": "e_1788080054019_rz2rm55e",
+    "itemKind": "exercise",
+    "itemTitle": "6 Note Groups E D",
+    "startedAt": "2026-09-28T05:47:17.489Z",
+    "endedAt": "2026-09-28T05:51:31.881Z",
+    "durationSec": 254,
+    "endedReason": "complete",
+    "plannedMinutes": 4,
+    "startWorkingBpm": 46,
+    "endWorkingBpm": 46,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1790575053544_ys6105tp",
+    "itemId": "e_1789535479544_s8lazn5p",
+    "itemKind": "exercise",
+    "itemTitle": "6 Note Groups C A G Shapes",
+    "startedAt": "2026-09-28T05:51:33.533Z",
+    "endedAt": "2026-09-28T05:57:33.544Z",
+    "durationSec": 360,
+    "endedReason": "complete",
+    "plannedMinutes": 6,
+    "startWorkingBpm": 48,
+    "endWorkingBpm": 48,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1790575380722_iss6o2xe",
+    "itemId": "e_1786172379355_o9n1t5nj",
+    "itemKind": "exercise",
+    "itemTitle": "Start Depapepe Pulloffs",
+    "startedAt": "2026-09-28T05:57:59.682Z",
+    "endedAt": "2026-09-28T06:03:00.722Z",
+    "durationSec": 301,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 72,
+    "endWorkingBpm": 76,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-09-28T06:02:48.042Z",
+        "kind": "working",
+        "fromBpm": 72,
+        "toBpm": 74,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-09-28T06:02:48.918Z",
+        "kind": "working",
+        "fromBpm": 74,
+        "toBpm": 76,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1790575801281_sau4wr83",
+    "itemId": "66a868d0-750b-4fb5-82f3-6422ec05ca24",
+    "itemKind": "exercise",
+    "itemTitle": "Fast Strum",
+    "startedAt": "2026-09-28T06:03:02.014Z",
+    "endedAt": "2026-09-28T06:10:01.281Z",
+    "durationSec": 419,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 272,
+    "endWorkingBpm": 279,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-09-28T06:06:18.116Z",
+        "kind": "working",
+        "fromBpm": 272,
+        "toBpm": 279,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1790576289905_eq8d0pk2",
+    "itemId": "1be58b6b-6aeb-4dd7-b0d0-86ea7c6464e1",
+    "itemKind": "exercise",
+    "itemTitle": "Hard part from one depapepe (16 sliding close to 12th fret)",
+    "startedAt": "2026-09-28T06:10:21.354Z",
+    "endedAt": "2026-09-28T06:18:09.905Z",
+    "durationSec": 297,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 201,
+    "endWorkingBpm": 201,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1790580691526_z9f91cyl",
+    "itemId": "a990d1f3-9f76-4f81-ae2d-557b50053f91",
+    "itemKind": "song",
+    "itemTitle": "Ruben",
+    "startedAt": "2026-09-28T07:25:34.072Z",
+    "endedAt": "2026-09-28T07:31:31.526Z",
+    "durationSec": 357,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 158,
+    "endWorkingBpm": 158,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1790581343575_7p0kup90",
+    "itemId": "58148c75-8f5b-4b2b-822a-098df01fb11d",
+    "itemKind": "song",
+    "itemTitle": "Escabana (Rythm)",
+    "startedAt": "2026-09-28T07:31:51.681Z",
+    "endedAt": "2026-09-28T07:42:23.575Z",
+    "durationSec": 632,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1790581373586_e3njk9ma",
+    "itemId": "dc275ae4-6f34-45b0-a041-3a04783d7427",
+    "itemKind": "song",
+    "itemTitle": "One - Depapepe Rythm Part",
+    "startedAt": "2026-09-28T07:42:43.645Z",
+    "endedAt": "2026-09-28T07:42:53.586Z",
+    "durationSec": 10,
+    "endedReason": "abort",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 197,
+    "endWorkingBpm": 197,
+    "startTroubleBpms": [
+      195
+    ],
+    "endTroubleBpms": [
+      195
+    ],
+    "promotions": []
+  },
+  {
+    "id": "sr_1790599480450_thc8svyq",
+    "itemId": "e_1789444016171_suppinwq",
+    "itemKind": "exercise",
+    "itemTitle": "Emaj7 & B7 Arp 5th string",
+    "startedAt": "2026-09-28T12:39:07.881Z",
+    "endedAt": "2026-09-28T12:44:40.450Z",
+    "durationSec": 333,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 76,
+    "endWorkingBpm": 80,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-09-28T12:41:18.038Z",
+        "kind": "working",
+        "fromBpm": 76,
+        "toBpm": 78,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-09-28T12:44:33.926Z",
+        "kind": "working",
+        "fromBpm": 78,
+        "toBpm": 80,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1790599947762_g1w7qqby",
+    "itemId": "e_1789444146426_tym73dt8",
+    "itemKind": "exercise",
+    "itemTitle": "C#min7 & D#min7b5 Arp 5th string",
+    "startedAt": "2026-09-28T12:44:42.965Z",
+    "endedAt": "2026-09-28T12:52:27.762Z",
+    "durationSec": 465,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 68,
+    "endWorkingBpm": 68,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1790599961948_wxb9ri4o",
+    "itemId": "e_1789444146426_tym73dt8",
+    "itemKind": "exercise",
+    "itemTitle": "C#min7 & D#min7b5 Arp 5th string",
+    "startedAt": "2026-09-28T12:52:33.990Z",
+    "endedAt": "2026-09-28T12:52:41.948Z",
+    "durationSec": 8,
+    "endedReason": "abort",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 68,
+    "endWorkingBpm": 70,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-09-28T12:52:35.073Z",
+        "kind": "working",
+        "fromBpm": 68,
+        "toBpm": 70,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1790600139151_y5c4oeqm",
+    "itemId": "e_1789535200319_nwfhr9x7",
+    "itemKind": "exercise",
+    "itemTitle": "3 Note Groups E D Shapes",
+    "startedAt": "2026-09-28T12:53:36.287Z",
+    "endedAt": "2026-09-28T12:55:39.151Z",
+    "durationSec": 123,
+    "endedReason": "complete",
+    "plannedMinutes": 2,
+    "startWorkingBpm": 136,
+    "endWorkingBpm": 142,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-09-28T12:54:52.147Z",
+        "kind": "working",
+        "fromBpm": 136,
+        "toBpm": 139,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-09-28T12:55:36.367Z",
+        "kind": "working",
+        "fromBpm": 139,
+        "toBpm": 142,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1790600383099_d51movc4",
+    "itemId": "e_1789535200319_nwfhr9x7",
+    "itemKind": "exercise",
+    "itemTitle": "3 Note Groups E D Shapes",
+    "startedAt": "2026-09-28T12:55:43.734Z",
+    "endedAt": "2026-09-28T12:59:43.099Z",
+    "durationSec": 239,
+    "endedReason": "complete",
+    "plannedMinutes": 2,
+    "startWorkingBpm": 142,
+    "endWorkingBpm": 150,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-09-28T12:56:38.655Z",
+        "kind": "working",
+        "fromBpm": 142,
+        "toBpm": 146,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-09-28T12:57:38.169Z",
+        "kind": "working",
+        "fromBpm": 146,
+        "toBpm": 150,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1790600728249_3ix1eor9",
+    "itemId": "e_1788079503663_n3d48trg",
+    "itemKind": "exercise",
+    "itemTitle": "3 Note Groups C A G shapes",
+    "startedAt": "2026-09-28T12:59:45.086Z",
+    "endedAt": "2026-09-28T13:05:28.249Z",
+    "durationSec": 343,
+    "endedReason": "complete",
+    "plannedMinutes": 3,
+    "startWorkingBpm": 139,
+    "endWorkingBpm": 139,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1790601101140_42acr38z",
+    "itemId": "e_1788079503663_n3d48trg",
+    "itemKind": "exercise",
+    "itemTitle": "3 Note Groups C A G shapes",
+    "startedAt": "2026-09-28T13:05:32.686Z",
+    "endedAt": "2026-09-28T13:11:41.140Z",
+    "durationSec": 368,
+    "endedReason": "abort",
+    "plannedMinutes": 3,
+    "startWorkingBpm": 139,
+    "endWorkingBpm": 142,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-09-28T13:05:34.317Z",
+        "kind": "working",
+        "fromBpm": 139,
+        "toBpm": 142,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1790601110496_mjppx6ta",
+    "itemId": "e_1788079503663_n3d48trg",
+    "itemKind": "exercise",
+    "itemTitle": "3 Note Groups C A G shapes",
+    "startedAt": "2026-09-28T13:11:43.857Z",
+    "endedAt": "2026-09-28T13:11:50.496Z",
+    "durationSec": 7,
+    "endedReason": "abort",
+    "plannedMinutes": 3,
+    "startWorkingBpm": 142,
+    "endWorkingBpm": 146,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-09-28T13:11:46.196Z",
+        "kind": "working",
+        "fromBpm": 142,
+        "toBpm": 146,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1790601441246_v2e8zfj0",
+    "itemId": "e_1789535332152_7zhv535u",
+    "itemKind": "exercise",
+    "itemTitle": "4 Note Groups E D",
+    "startedAt": "2026-09-28T13:12:13.093Z",
+    "endedAt": "2026-09-28T13:17:21.246Z",
+    "durationSec": 308,
+    "endedReason": "abort",
+    "plannedMinutes": 3,
+    "startWorkingBpm": 88,
+    "endWorkingBpm": 88,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1790601454002_yipc51lo",
+    "itemId": "e_1789535332152_7zhv535u",
+    "itemKind": "exercise",
+    "itemTitle": "4 Note Groups E D",
+    "startedAt": "2026-09-28T13:17:22.367Z",
+    "endedAt": "2026-09-28T13:17:34.002Z",
+    "durationSec": 12,
+    "endedReason": "abort",
+    "plannedMinutes": 3,
+    "startWorkingBpm": 88,
+    "endWorkingBpm": 92,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-09-28T13:17:28.200Z",
+        "kind": "working",
+        "fromBpm": 88,
+        "toBpm": 90,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-09-28T13:17:32.438Z",
+        "kind": "working",
+        "fromBpm": 90,
+        "toBpm": 92,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1790601837427_6aryabh5",
+    "itemId": "e_1788079586248_hz6yegpa",
+    "itemKind": "exercise",
+    "itemTitle": "4 Note Groups C A G shapes",
+    "startedAt": "2026-09-28T13:17:41.709Z",
+    "endedAt": "2026-09-28T13:23:57.427Z",
+    "durationSec": 376,
+    "endedReason": "abort",
+    "plannedMinutes": 4.5,
+    "startWorkingBpm": 78,
+    "endWorkingBpm": 78,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1790601840674_s62b373o",
+    "itemId": "e_1788079586248_hz6yegpa",
+    "itemKind": "exercise",
+    "itemTitle": "4 Note Groups C A G shapes",
+    "startedAt": "2026-09-28T13:23:58.695Z",
+    "endedAt": "2026-09-28T13:24:00.674Z",
+    "durationSec": 2,
+    "endedReason": "complete",
+    "plannedMinutes": 4.5,
+    "startWorkingBpm": 78,
+    "endWorkingBpm": 80,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-09-28T13:23:59.900Z",
+        "kind": "working",
+        "fromBpm": 78,
+        "toBpm": 80,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1790601848958_1yhazuco",
+    "itemId": "e_1788079586248_hz6yegpa",
+    "itemKind": "exercise",
+    "itemTitle": "4 Note Groups C A G shapes",
+    "startedAt": "2026-09-28T13:24:06.303Z",
+    "endedAt": "2026-09-28T13:24:08.958Z",
+    "durationSec": 3,
+    "endedReason": "abort",
+    "plannedMinutes": 4.5,
+    "startWorkingBpm": 80,
+    "endWorkingBpm": 82,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-09-28T13:24:07.120Z",
+        "kind": "working",
+        "fromBpm": 80,
+        "toBpm": 82,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1790602087617_j2l47qit",
+    "itemId": "e_1788080054019_rz2rm55e",
+    "itemKind": "exercise",
+    "itemTitle": "6 Note Groups E D",
+    "startedAt": "2026-09-28T13:25:33.236Z",
+    "endedAt": "2026-09-28T13:28:07.617Z",
+    "durationSec": 154,
+    "endedReason": "abort",
+    "plannedMinutes": 4,
+    "startWorkingBpm": 46,
+    "endWorkingBpm": 46,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1790669913865_j9ryxw6w",
+    "itemId": "e_1789444016171_suppinwq",
+    "itemKind": "exercise",
+    "itemTitle": "Emaj7 & B7 Arp 5th string",
+    "startedAt": "2026-09-29T08:11:04.524Z",
+    "endedAt": "2026-09-29T08:18:33.865Z",
+    "durationSec": 449,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 80,
+    "endWorkingBpm": 82,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-09-29T08:16:41.128Z",
+        "kind": "working",
+        "fromBpm": 80,
+        "toBpm": 82,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1790670464422_9kurj49h",
+    "itemId": "e_1789444146426_tym73dt8",
+    "itemKind": "exercise",
+    "itemTitle": "C#min7 & D#min7b5 Arp 5th string",
+    "startedAt": "2026-09-29T08:18:53.928Z",
+    "endedAt": "2026-09-29T08:27:44.422Z",
+    "durationSec": 530,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 70,
+    "endWorkingBpm": 70,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1790670872636_jhtqfhyi",
+    "itemId": "e_1789535200319_nwfhr9x7",
+    "itemKind": "exercise",
+    "itemTitle": "3 Note Groups E D Shapes",
+    "startedAt": "2026-09-29T08:28:04.480Z",
+    "endedAt": "2026-09-29T08:34:32.636Z",
+    "durationSec": 388,
+    "endedReason": "complete",
+    "plannedMinutes": 2,
+    "startWorkingBpm": 150,
+    "endWorkingBpm": 158,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-09-29T08:31:07.477Z",
+        "kind": "working",
+        "fromBpm": 150,
+        "toBpm": 154,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-09-29T08:31:10.015Z",
+        "kind": "working",
+        "fromBpm": 154,
+        "toBpm": 158,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1790671213721_okmzs7pt",
+    "itemId": "e_1788079503663_n3d48trg",
+    "itemKind": "exercise",
+    "itemTitle": "3 Note Groups C A G shapes",
+    "startedAt": "2026-09-29T08:34:33.908Z",
+    "endedAt": "2026-09-29T08:40:13.721Z",
+    "durationSec": 340,
+    "endedReason": "complete",
+    "plannedMinutes": 3,
+    "startWorkingBpm": 146,
+    "endWorkingBpm": 154,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-09-29T08:39:46.158Z",
+        "kind": "working",
+        "fromBpm": 146,
+        "toBpm": 150,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-09-29T08:39:48.187Z",
+        "kind": "working",
+        "fromBpm": 150,
+        "toBpm": 154,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1790671403014_xn65koqp",
+    "itemId": "e_1789535332152_7zhv535u",
+    "itemKind": "exercise",
+    "itemTitle": "4 Note Groups E D",
+    "startedAt": "2026-09-29T08:40:15.627Z",
+    "endedAt": "2026-09-29T08:43:23.014Z",
+    "durationSec": 187,
+    "endedReason": "complete",
+    "plannedMinutes": 3,
+    "startWorkingBpm": 92,
+    "endWorkingBpm": 94,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-09-29T08:42:54.087Z",
+        "kind": "working",
+        "fromBpm": 92,
+        "toBpm": 94,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1790671743623_nm4byy5f",
+    "itemId": "e_1788079586248_hz6yegpa",
+    "itemKind": "exercise",
+    "itemTitle": "4 Note Groups C A G shapes",
+    "startedAt": "2026-09-29T08:43:24.013Z",
+    "endedAt": "2026-09-29T08:49:03.623Z",
+    "durationSec": 340,
+    "endedReason": "complete",
+    "plannedMinutes": 4.5,
+    "startWorkingBpm": 82,
+    "endWorkingBpm": 86,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-09-29T08:46:02.696Z",
+        "kind": "working",
+        "fromBpm": 82,
+        "toBpm": 84,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-09-29T08:46:03.149Z",
+        "kind": "working",
+        "fromBpm": 84,
+        "toBpm": 86,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1790672058246_847fdbol",
+    "itemId": "e_1788080054019_rz2rm55e",
+    "itemKind": "exercise",
+    "itemTitle": "6 Note Groups E D",
+    "startedAt": "2026-09-29T08:49:06.911Z",
+    "endedAt": "2026-09-29T08:54:18.246Z",
+    "durationSec": 311,
+    "endedReason": "complete",
+    "plannedMinutes": 4,
+    "startWorkingBpm": 46,
+    "endWorkingBpm": 46,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1790672286606_hx010mk7",
+    "itemId": "e_1789535479544_s8lazn5p",
+    "itemKind": "exercise",
+    "itemTitle": "6 Note Groups C A G Shapes",
+    "startedAt": "2026-09-29T08:54:20.617Z",
+    "endedAt": "2026-09-29T08:58:06.606Z",
+    "durationSec": 226,
+    "endedReason": "complete",
+    "plannedMinutes": 6,
+    "startWorkingBpm": 48,
+    "endWorkingBpm": 50,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-09-29T08:58:00.323Z",
+        "kind": "working",
+        "fromBpm": 48,
+        "toBpm": 49,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-09-29T08:58:02.434Z",
+        "kind": "working",
+        "fromBpm": 49,
+        "toBpm": 50,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1790831697026_vzubsu2k",
+    "itemId": "e_1789444016171_suppinwq",
+    "itemKind": "exercise",
+    "itemTitle": "Emaj7 & B7 Arp 5th string",
+    "startedAt": "2026-10-01T05:05:29.073Z",
+    "endedAt": "2026-10-01T05:14:57.026Z",
+    "durationSec": 568,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 82,
+    "endWorkingBpm": 86,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-10-01T05:10:23.861Z",
+        "kind": "working",
+        "fromBpm": 82,
+        "toBpm": 84,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-10-01T05:13:04.730Z",
+        "kind": "working",
+        "fromBpm": 84,
+        "toBpm": 86,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1790831728002_9lj4ij6t",
+    "itemId": "e_1789444146426_tym73dt8",
+    "itemKind": "exercise",
+    "itemTitle": "C#min7 & D#min7b5 Arp 5th string",
+    "startedAt": "2026-10-01T05:15:17.082Z",
+    "endedAt": "2026-10-01T05:15:28.002Z",
+    "durationSec": 11,
+    "endedReason": "abort",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 70,
+    "endWorkingBpm": 70,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1790832043366_zr5u1144",
+    "itemId": "e_1790831797423_dqd7cpfl",
+    "itemKind": "exercise",
+    "itemTitle": "C#m7 5th string",
+    "startedAt": "2026-10-01T05:17:54.624Z",
+    "endedAt": "2026-10-01T05:20:43.366Z",
+    "durationSec": 169,
+    "endedReason": "abort",
+    "plannedMinutes": 2.5,
+    "startWorkingBpm": 70,
+    "endWorkingBpm": 86,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-10-01T05:18:08.832Z",
+        "kind": "working",
+        "fromBpm": 70,
+        "toBpm": 72,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-10-01T05:18:53.982Z",
+        "kind": "working",
+        "fromBpm": 72,
+        "toBpm": 74,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-10-01T05:19:19.104Z",
+        "kind": "working",
+        "fromBpm": 74,
+        "toBpm": 76,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-10-01T05:19:31.773Z",
+        "kind": "working",
+        "fromBpm": 76,
+        "toBpm": 78,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-10-01T05:19:55.789Z",
+        "kind": "working",
+        "fromBpm": 78,
+        "toBpm": 80,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-10-01T05:20:08.426Z",
+        "kind": "working",
+        "fromBpm": 80,
+        "toBpm": 82,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-10-01T05:20:20.320Z",
+        "kind": "working",
+        "fromBpm": 82,
+        "toBpm": 84,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-10-01T05:20:33.043Z",
+        "kind": "working",
+        "fromBpm": 84,
+        "toBpm": 86,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1790832069271_meegmm6e",
+    "itemId": "e_1790831797423_dqd7cpfl",
+    "itemKind": "exercise",
+    "itemTitle": "C#m7 5th string",
+    "startedAt": "2026-10-01T05:20:45.329Z",
+    "endedAt": "2026-10-01T05:21:09.271Z",
+    "durationSec": 24,
+    "endedReason": "abort",
+    "plannedMinutes": 2.5,
+    "startWorkingBpm": 86,
+    "endWorkingBpm": 86,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1790832147403_bj76so1q",
+    "itemId": "e_1789444016171_suppinwq",
+    "itemKind": "exercise",
+    "itemTitle": "Emaj7 Arp 5th string",
+    "startedAt": "2026-10-01T05:22:24.113Z",
+    "endedAt": "2026-10-01T05:22:27.403Z",
+    "durationSec": 3,
+    "endedReason": "abort",
+    "plannedMinutes": 2.5,
+    "startWorkingBpm": 86,
+    "endWorkingBpm": 88,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-10-01T05:22:25.859Z",
+        "kind": "working",
+        "fromBpm": 86,
+        "toBpm": 88,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1790832507409_xv7zzhr9",
+    "itemId": "e_1789535200319_nwfhr9x7",
+    "itemKind": "exercise",
+    "itemTitle": "3 Note Groups E D Shapes",
+    "startedAt": "2026-10-01T05:23:17.639Z",
+    "endedAt": "2026-10-01T05:28:27.409Z",
+    "durationSec": 310,
+    "endedReason": "complete",
+    "plannedMinutes": 2,
+    "startWorkingBpm": 158,
+    "endWorkingBpm": 162,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-10-01T05:26:35.278Z",
+        "kind": "working",
+        "fromBpm": 158,
+        "toBpm": 162,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1790833586682_sl28umhd",
+    "itemId": "e_1788079503663_n3d48trg",
+    "itemKind": "exercise",
+    "itemTitle": "3 Note Groups C A G shapes",
+    "startedAt": "2026-10-01T05:44:28.660Z",
+    "endedAt": "2026-10-01T05:46:26.682Z",
+    "durationSec": 16,
+    "endedReason": "abort",
+    "plannedMinutes": 3,
+    "startWorkingBpm": 154,
+    "endWorkingBpm": 154,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1790833981804_j02rljy6",
+    "itemId": "e_1788079503663_n3d48trg",
+    "itemKind": "exercise",
+    "itemTitle": "3 Note Groups C A G shapes",
+    "startedAt": "2026-10-01T05:46:28.046Z",
+    "endedAt": "2026-10-01T05:53:01.804Z",
+    "durationSec": 394,
+    "endedReason": "complete",
+    "plannedMinutes": 3,
+    "startWorkingBpm": 154,
+    "endWorkingBpm": 158,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-10-01T05:51:27.588Z",
+        "kind": "working",
+        "fromBpm": 154,
+        "toBpm": 158,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1790834209059_d2fkns67",
+    "itemId": "e_1789535332152_7zhv535u",
+    "itemKind": "exercise",
+    "itemTitle": "4 Note Groups E D",
+    "startedAt": "2026-10-01T05:53:10.027Z",
+    "endedAt": "2026-10-01T05:56:49.059Z",
+    "durationSec": 219,
+    "endedReason": "complete",
+    "plannedMinutes": 3,
+    "startWorkingBpm": 94,
+    "endWorkingBpm": 94,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1790834605982_xpj6pi75",
+    "itemId": "e_1788079586248_hz6yegpa",
+    "itemKind": "exercise",
+    "itemTitle": "4 Note Groups C A G shapes",
+    "startedAt": "2026-10-01T05:56:50.473Z",
+    "endedAt": "2026-10-01T06:03:25.982Z",
+    "durationSec": 396,
+    "endedReason": "complete",
+    "plannedMinutes": 4.5,
+    "startWorkingBpm": 86,
+    "endWorkingBpm": 88,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-10-01T06:00:49.364Z",
+        "kind": "working",
+        "fromBpm": 86,
+        "toBpm": 88,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1790834931453_vnpev2r0",
+    "itemId": "e_1788080054019_rz2rm55e",
+    "itemKind": "exercise",
+    "itemTitle": "6 Note Groups E D",
+    "startedAt": "2026-10-01T06:03:46.042Z",
+    "endedAt": "2026-10-01T06:08:51.453Z",
+    "durationSec": 305,
+    "endedReason": "complete",
+    "plannedMinutes": 4,
+    "startWorkingBpm": 46,
+    "endWorkingBpm": 47,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-10-01T06:08:43.657Z",
+        "kind": "working",
+        "fromBpm": 46,
+        "toBpm": 47,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1790835445406_7ysbfbul",
+    "itemId": "e_1789535479544_s8lazn5p",
+    "itemKind": "exercise",
+    "itemTitle": "6 Note Groups C A G Shapes",
+    "startedAt": "2026-10-01T06:08:52.630Z",
+    "endedAt": "2026-10-01T06:17:25.406Z",
+    "durationSec": 513,
+    "endedReason": "complete",
+    "plannedMinutes": 6,
+    "startWorkingBpm": 50,
+    "endWorkingBpm": 50,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1790835975093_xqniz7c6",
+    "itemId": "e_1786172379355_o9n1t5nj",
+    "itemKind": "exercise",
+    "itemTitle": "Start Depapepe Pulloffs",
+    "startedAt": "2026-10-01T06:17:45.458Z",
+    "endedAt": "2026-10-01T06:26:15.093Z",
+    "durationSec": 510,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 76,
+    "endWorkingBpm": 76,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1790835982895_4k07h94j",
+    "itemId": "e_1786172379355_o9n1t5nj",
+    "itemKind": "exercise",
+    "itemTitle": "Start Depapepe Pulloffs",
+    "startedAt": "2026-10-01T06:26:20.236Z",
+    "endedAt": "2026-10-01T06:26:22.895Z",
+    "durationSec": 3,
+    "endedReason": "abort",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 76,
+    "endWorkingBpm": 78,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-10-01T06:26:21.356Z",
+        "kind": "working",
+        "fromBpm": 76,
+        "toBpm": 78,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1790836346388_h74ledrj",
+    "itemId": "66a868d0-750b-4fb5-82f3-6422ec05ca24",
+    "itemKind": "exercise",
+    "itemTitle": "Fast Strum",
+    "startedAt": "2026-10-01T06:26:32.777Z",
+    "endedAt": "2026-10-01T06:32:26.388Z",
+    "durationSec": 354,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 279,
+    "endWorkingBpm": 286,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-10-01T06:28:53.919Z",
+        "kind": "working",
+        "fromBpm": 279,
+        "toBpm": 286,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1790836483114_ojj3ffzd",
+    "itemId": "1be58b6b-6aeb-4dd7-b0d0-86ea7c6464e1",
+    "itemKind": "exercise",
+    "itemTitle": "Hard part from one depapepe (16 sliding close to 12th fret)",
+    "startedAt": "2026-10-01T06:32:28.522Z",
+    "endedAt": "2026-10-01T06:34:43.114Z",
+    "durationSec": 135,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 201,
+    "endWorkingBpm": 201,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1790836873725_bvl0lvan",
+    "itemId": "5c5ffa71-9051-4eb6-95c1-4630265ac577",
+    "itemKind": "song",
+    "itemTitle": "Start - Depapepe rythm",
+    "startedAt": "2026-10-01T06:35:01.737Z",
+    "endedAt": "2026-10-01T06:41:13.725Z",
+    "durationSec": 372,
+    "endedReason": "abort",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 90,
+    "endWorkingBpm": 94,
+    "startTroubleBpms": [
+      60
+    ],
+    "endTroubleBpms": [
+      60
+    ],
+    "promotions": [
+      {
+        "at": "2026-10-01T06:41:04.787Z",
+        "kind": "working",
+        "fromBpm": 90,
+        "toBpm": 92,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-10-01T06:41:05.106Z",
+        "kind": "working",
+        "fromBpm": 92,
+        "toBpm": 94,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1790836877402_v9yi3ht1",
+    "itemId": "5c5ffa71-9051-4eb6-95c1-4630265ac577",
+    "itemKind": "song",
+    "itemTitle": "Start - Depapepe rythm",
+    "startedAt": "2026-10-01T06:41:15.662Z",
+    "endedAt": "2026-10-01T06:41:17.402Z",
+    "durationSec": 2,
+    "endedReason": "abort",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 94,
+    "endWorkingBpm": 94,
+    "startTroubleBpms": [
+      60
+    ],
+    "endTroubleBpms": [
+      60
+    ],
+    "promotions": []
+  },
+  {
+    "id": "sr_1790837262095_t0upsdo6",
+    "itemId": "232e185f-6770-4775-80bf-f6f224e3ed5e",
+    "itemKind": "song",
+    "itemTitle": "Start - Depapepe Melody",
+    "startedAt": "2026-10-01T06:41:20.890Z",
+    "endedAt": "2026-10-01T06:47:42.095Z",
+    "durationSec": 381,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 94,
+    "endWorkingBpm": 94,
+    "startTroubleBpms": [
+      60
+    ],
+    "endTroubleBpms": [
+      60
+    ],
+    "promotions": []
+  },
+  {
+    "id": "sr_1790837678190_t7hyxjje",
+    "itemId": "59d69a12-2dce-41c7-9ebe-0325d5b9a277",
+    "itemKind": "song",
+    "itemTitle": "Seney stretch [Capo1]",
+    "startedAt": "2026-10-01T06:47:57.389Z",
+    "endedAt": "2026-10-01T06:54:38.190Z",
+    "durationSec": 401,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 195,
+    "endWorkingBpm": 195,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1790838210729_myn4axay",
+    "itemId": "cd5bdc97-4e73-41f8-81eb-aa8907e9ec2a",
+    "itemKind": "song",
+    "itemTitle": "Escabana",
+    "startedAt": "2026-10-01T06:54:39.894Z",
+    "endedAt": "2026-10-01T07:03:30.729Z",
+    "durationSec": 531,
+    "endedReason": "abort",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 97,
+    "endWorkingBpm": 97,
+    "startTroubleBpms": [
+      104,
+      94
+    ],
+    "endTroubleBpms": [
+      104,
+      94
+    ],
+    "promotions": []
+  },
+  {
+    "id": "sr_1790865660629_ieoq65bn",
+    "itemId": "e_1789535200319_nwfhr9x7",
+    "itemKind": "exercise",
+    "itemTitle": "3 Note Groups E D Shapes",
+    "startedAt": "2026-10-01T14:37:53.024Z",
+    "endedAt": "2026-10-01T14:41:00.629Z",
+    "durationSec": 188,
+    "endedReason": "complete",
+    "plannedMinutes": 2,
+    "startWorkingBpm": 162,
+    "endWorkingBpm": 166,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-10-01T14:39:28.540Z",
+        "kind": "working",
+        "fromBpm": 162,
+        "toBpm": 166,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1790865846207_8akwi5a2",
+    "itemId": "e_1788079503663_n3d48trg",
+    "itemKind": "exercise",
+    "itemTitle": "3 Note Groups C A G shapes",
+    "startedAt": "2026-10-01T14:41:02.755Z",
+    "endedAt": "2026-10-01T14:44:06.207Z",
+    "durationSec": 183,
+    "endedReason": "complete",
+    "plannedMinutes": 3,
+    "startWorkingBpm": 158,
+    "endWorkingBpm": 158,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1790920997584_q3edmzmg",
+    "itemId": "e_1789444016171_suppinwq",
+    "itemKind": "exercise",
+    "itemTitle": "Emaj7 Arp 5th string",
+    "startedAt": "2026-10-02T06:00:09.395Z",
+    "endedAt": "2026-10-02T06:03:17.584Z",
+    "durationSec": 188,
+    "endedReason": "complete",
+    "plannedMinutes": 2.5,
+    "startWorkingBpm": 88,
+    "endWorkingBpm": 88,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1790921228559_imzidpip",
+    "itemId": "e_1790832168642_e1likwr5",
+    "itemKind": "exercise",
+    "itemTitle": "B7 Arp 5th string",
+    "startedAt": "2026-10-02T06:03:19.572Z",
+    "endedAt": "2026-10-02T06:07:08.559Z",
+    "durationSec": 229,
+    "endedReason": "complete",
+    "plannedMinutes": 2.5,
+    "startWorkingBpm": 86,
+    "endWorkingBpm": 90,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-10-02T06:05:35.672Z",
+        "kind": "working",
+        "fromBpm": 86,
+        "toBpm": 88,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-10-02T06:06:07.379Z",
+        "kind": "working",
+        "fromBpm": 88,
+        "toBpm": 90,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1790921440461_91r7ncri",
+    "itemId": "e_1790831797423_dqd7cpfl",
+    "itemKind": "exercise",
+    "itemTitle": "C#m7 5th string",
+    "startedAt": "2026-10-02T06:07:12.934Z",
+    "endedAt": "2026-10-02T06:10:40.461Z",
+    "durationSec": 208,
+    "endedReason": "complete",
+    "plannedMinutes": 2.5,
+    "startWorkingBpm": 86,
+    "endWorkingBpm": 88,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-10-02T06:08:31.028Z",
+        "kind": "working",
+        "fromBpm": 86,
+        "toBpm": 88,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1790922016556_mdaeuws7",
+    "itemId": "e_1789444146426_tym73dt8",
+    "itemKind": "exercise",
+    "itemTitle": "D#min7b5 Arp 5th string",
+    "startedAt": "2026-10-02T06:11:00.520Z",
+    "endedAt": "2026-10-02T06:20:16.556Z",
+    "durationSec": 556,
+    "endedReason": "complete",
+    "plannedMinutes": 2.5,
+    "startWorkingBpm": 70,
+    "endWorkingBpm": 70,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1790922283289_k9vatdkr",
+    "itemId": "e_1789535200319_nwfhr9x7",
+    "itemKind": "exercise",
+    "itemTitle": "3 Note Groups E D Shapes",
+    "startedAt": "2026-10-02T06:20:20.200Z",
+    "endedAt": "2026-10-02T06:24:43.289Z",
+    "durationSec": 263,
+    "endedReason": "complete",
+    "plannedMinutes": 2,
+    "startWorkingBpm": 166,
+    "endWorkingBpm": 170,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-10-02T06:23:41.835Z",
+        "kind": "working",
+        "fromBpm": 166,
+        "toBpm": 170,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1790922638239_0m2udji6",
+    "itemId": "e_1788079503663_n3d48trg",
+    "itemKind": "exercise",
+    "itemTitle": "3 Note Groups C A G shapes",
+    "startedAt": "2026-10-02T06:24:45.053Z",
+    "endedAt": "2026-10-02T06:30:38.239Z",
+    "durationSec": 353,
+    "endedReason": "complete",
+    "plannedMinutes": 3,
+    "startWorkingBpm": 158,
+    "endWorkingBpm": 162,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-10-02T06:30:14.332Z",
+        "kind": "working",
+        "fromBpm": 158,
+        "toBpm": 162,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1790922842793_yyksiykv",
+    "itemId": "e_1789535332152_7zhv535u",
+    "itemKind": "exercise",
+    "itemTitle": "4 Note Groups E D",
+    "startedAt": "2026-10-02T06:30:39.482Z",
+    "endedAt": "2026-10-02T06:34:02.793Z",
+    "durationSec": 203,
+    "endedReason": "abort",
+    "plannedMinutes": 3,
+    "startWorkingBpm": 94,
+    "endWorkingBpm": 94,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1790922846020_6mctebo2",
+    "itemId": "e_1789535332152_7zhv535u",
+    "itemKind": "exercise",
+    "itemTitle": "4 Note Groups E D",
+    "startedAt": "2026-10-02T06:34:04.132Z",
+    "endedAt": "2026-10-02T06:34:06.020Z",
+    "durationSec": 2,
+    "endedReason": "complete",
+    "plannedMinutes": 3,
+    "startWorkingBpm": 94,
+    "endWorkingBpm": 96,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-10-02T06:34:05.169Z",
+        "kind": "working",
+        "fromBpm": 94,
+        "toBpm": 96,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1790923115941_4ue90zz6",
+    "itemId": "e_1788079586248_hz6yegpa",
+    "itemKind": "exercise",
+    "itemTitle": "4 Note Groups C A G shapes",
+    "startedAt": "2026-10-02T06:34:07.713Z",
+    "endedAt": "2026-10-02T06:38:35.941Z",
+    "durationSec": 268,
+    "endedReason": "complete",
+    "plannedMinutes": 4.5,
+    "startWorkingBpm": 88,
+    "endWorkingBpm": 90,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-10-02T06:38:33.799Z",
+        "kind": "working",
+        "fromBpm": 88,
+        "toBpm": 90,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1790923471340_1inbvfe1",
+    "itemId": "e_1788080054019_rz2rm55e",
+    "itemKind": "exercise",
+    "itemTitle": "6 Note Groups E D",
+    "startedAt": "2026-10-02T06:40:00.959Z",
+    "endedAt": "2026-10-02T06:44:31.340Z",
+    "durationSec": 270,
+    "endedReason": "abort",
+    "plannedMinutes": 4,
+    "startWorkingBpm": 47,
+    "endWorkingBpm": 47,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1790923477258_4frbz4b8",
+    "itemId": "e_1788080054019_rz2rm55e",
+    "itemKind": "exercise",
+    "itemTitle": "6 Note Groups E D",
+    "startedAt": "2026-10-02T06:44:32.346Z",
+    "endedAt": "2026-10-02T06:44:37.258Z",
+    "durationSec": 5,
+    "endedReason": "abort",
+    "plannedMinutes": 4,
+    "startWorkingBpm": 47,
+    "endWorkingBpm": 49,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-10-02T06:44:33.490Z",
+        "kind": "working",
+        "fromBpm": 47,
+        "toBpm": 48,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-10-02T06:44:35.227Z",
+        "kind": "working",
+        "fromBpm": 48,
+        "toBpm": 49,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1790923850183_o5eb354f",
+    "itemId": "e_1789535479544_s8lazn5p",
+    "itemKind": "exercise",
+    "itemTitle": "6 Note Groups C A G Shapes",
+    "startedAt": "2026-10-02T06:44:42.816Z",
+    "endedAt": "2026-10-02T06:50:50.183Z",
+    "durationSec": 367,
+    "endedReason": "complete",
+    "plannedMinutes": 6,
+    "startWorkingBpm": 50,
+    "endWorkingBpm": 50,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1791025564658_0vm9ewmj",
+    "itemId": "e_1789444016171_suppinwq",
+    "itemKind": "exercise",
+    "itemTitle": "Emaj7 Arp 5th string",
+    "startedAt": "2026-10-03T11:02:44.819Z",
+    "endedAt": "2026-10-03T11:06:04.658Z",
+    "durationSec": 200,
+    "endedReason": "complete",
+    "plannedMinutes": 2.5,
+    "startWorkingBpm": 88,
+    "endWorkingBpm": 92,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-10-03T11:04:05.400Z",
+        "kind": "working",
+        "fromBpm": 88,
+        "toBpm": 90,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-10-03T11:04:41.367Z",
+        "kind": "working",
+        "fromBpm": 90,
+        "toBpm": 92,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1791025776267_d11sn148",
+    "itemId": "e_1790832168642_e1likwr5",
+    "itemKind": "exercise",
+    "itemTitle": "B7 Arp 5th string",
+    "startedAt": "2026-10-03T11:06:06.785Z",
+    "endedAt": "2026-10-03T11:09:36.267Z",
+    "durationSec": 209,
+    "endedReason": "complete",
+    "plannedMinutes": 2.5,
+    "startWorkingBpm": 90,
+    "endWorkingBpm": 94,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-10-03T11:07:42.693Z",
+        "kind": "working",
+        "fromBpm": 90,
+        "toBpm": 92,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-10-03T11:09:34.087Z",
+        "kind": "working",
+        "fromBpm": 92,
+        "toBpm": 94,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1791025991427_z2n5ijqi",
+    "itemId": "e_1790831797423_dqd7cpfl",
+    "itemKind": "exercise",
+    "itemTitle": "C#m7 5th string",
+    "startedAt": "2026-10-03T11:09:38.375Z",
+    "endedAt": "2026-10-03T11:13:11.427Z",
+    "durationSec": 213,
+    "endedReason": "complete",
+    "plannedMinutes": 2.5,
+    "startWorkingBpm": 88,
+    "endWorkingBpm": 96,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-10-03T11:10:36.761Z",
+        "kind": "working",
+        "fromBpm": 88,
+        "toBpm": 90,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-10-03T11:11:02.825Z",
+        "kind": "working",
+        "fromBpm": 90,
+        "toBpm": 92,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-10-03T11:11:27.124Z",
+        "kind": "working",
+        "fromBpm": 92,
+        "toBpm": 94,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-10-03T11:12:33.841Z",
+        "kind": "working",
+        "fromBpm": 94,
+        "toBpm": 96,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1791026215685_2oxql4qw",
+    "itemId": "e_1789444146426_tym73dt8",
+    "itemKind": "exercise",
+    "itemTitle": "D#min7b5 Arp 5th string",
+    "startedAt": "2026-10-03T11:13:21.441Z",
+    "endedAt": "2026-10-03T11:16:55.685Z",
+    "durationSec": 214,
+    "endedReason": "complete",
+    "plannedMinutes": 2.5,
+    "startWorkingBpm": 70,
+    "endWorkingBpm": 70,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1791026499216_1xdvodai",
+    "itemId": "e_1789535200319_nwfhr9x7",
+    "itemKind": "exercise",
+    "itemTitle": "3 Note Groups E D Shapes",
+    "startedAt": "2026-10-03T11:17:15.744Z",
+    "endedAt": "2026-10-03T11:21:39.216Z",
+    "durationSec": 263,
+    "endedReason": "complete",
+    "plannedMinutes": 2,
+    "startWorkingBpm": 170,
+    "endWorkingBpm": 174,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-10-03T11:20:45.574Z",
+        "kind": "working",
+        "fromBpm": 170,
+        "toBpm": 174,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1791026916424_thyrcrhu",
+    "itemId": "e_1788079503663_n3d48trg",
+    "itemKind": "exercise",
+    "itemTitle": "3 Note Groups C A G shapes",
+    "startedAt": "2026-10-03T11:21:39.941Z",
+    "endedAt": "2026-10-03T11:28:36.424Z",
+    "durationSec": 416,
+    "endedReason": "complete",
+    "plannedMinutes": 3,
+    "startWorkingBpm": 162,
+    "endWorkingBpm": 166,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-10-03T11:26:38.402Z",
+        "kind": "working",
+        "fromBpm": 162,
+        "toBpm": 166,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1791027088051_1s8c88a1",
+    "itemId": "e_1789535332152_7zhv535u",
+    "itemKind": "exercise",
+    "itemTitle": "4 Note Groups E D",
+    "startedAt": "2026-10-03T11:28:39.868Z",
+    "endedAt": "2026-10-03T11:31:28.051Z",
+    "durationSec": 168,
+    "endedReason": "complete",
+    "plannedMinutes": 3,
+    "startWorkingBpm": 96,
+    "endWorkingBpm": 96,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1791550456131_utkyw6d3",
+    "itemId": "e_1789444016171_suppinwq",
+    "itemKind": "exercise",
+    "itemTitle": "Emaj7 Arp 5th string",
+    "startedAt": "2026-10-09T12:49:19.411Z",
+    "endedAt": "2026-10-09T12:54:16.131Z",
+    "durationSec": 297,
+    "endedReason": "complete",
+    "plannedMinutes": 2.5,
+    "startWorkingBpm": 92,
+    "endWorkingBpm": 92,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1791550739085_hz3e4eem",
+    "itemId": "e_1790832168642_e1likwr5",
+    "itemKind": "exercise",
+    "itemTitle": "B7 Arp 5th string",
+    "startedAt": "2026-10-09T12:54:17.785Z",
+    "endedAt": "2026-10-09T12:58:59.085Z",
+    "durationSec": 281,
+    "endedReason": "complete",
+    "plannedMinutes": 2.5,
+    "startWorkingBpm": 94,
+    "endWorkingBpm": 94,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1791551014236_zqycqp7v",
+    "itemId": "e_1790831797423_dqd7cpfl",
+    "itemKind": "exercise",
+    "itemTitle": "C#m7 5th string",
+    "startedAt": "2026-10-09T12:59:00.780Z",
+    "endedAt": "2026-10-09T13:03:34.236Z",
+    "durationSec": 273,
+    "endedReason": "complete",
+    "plannedMinutes": 2.5,
+    "startWorkingBpm": 96,
+    "endWorkingBpm": 96,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1791551210229_cdxwtb0l",
+    "itemId": "e_1789444146426_tym73dt8",
+    "itemKind": "exercise",
+    "itemTitle": "D#min7b5 Arp 5th string",
+    "startedAt": "2026-10-09T13:03:35.474Z",
+    "endedAt": "2026-10-09T13:06:50.229Z",
+    "durationSec": 195,
+    "endedReason": "complete",
+    "plannedMinutes": 2.5,
+    "startWorkingBpm": 70,
+    "endWorkingBpm": 72,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-10-09T13:06:48.709Z",
+        "kind": "working",
+        "fromBpm": 70,
+        "toBpm": 72,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1791551492940_6wywg43o",
+    "itemId": "e_1789535200319_nwfhr9x7",
+    "itemKind": "exercise",
+    "itemTitle": "3 Note Groups E D Shapes",
+    "startedAt": "2026-10-09T13:06:51.886Z",
+    "endedAt": "2026-10-09T13:11:32.940Z",
+    "durationSec": 281,
+    "endedReason": "complete",
+    "plannedMinutes": 2,
+    "startWorkingBpm": 174,
+    "endWorkingBpm": 174,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1791551881731_vhjyew3l",
+    "itemId": "e_1788079503663_n3d48trg",
+    "itemKind": "exercise",
+    "itemTitle": "3 Note Groups C A G shapes",
+    "startedAt": "2026-10-09T13:11:36.314Z",
+    "endedAt": "2026-10-09T13:18:01.731Z",
+    "durationSec": 385,
+    "endedReason": "complete",
+    "plannedMinutes": 3,
+    "startWorkingBpm": 166,
+    "endWorkingBpm": 170,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-10-09T13:17:14.106Z",
+        "kind": "working",
+        "fromBpm": 166,
+        "toBpm": 170,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1791552066628_9g4xt272",
+    "itemId": "e_1789535332152_7zhv535u",
+    "itemKind": "exercise",
+    "itemTitle": "4 Note Groups E D",
+    "startedAt": "2026-10-09T13:18:02.925Z",
+    "endedAt": "2026-10-09T13:21:06.628Z",
+    "durationSec": 184,
+    "endedReason": "complete",
+    "plannedMinutes": 3,
+    "startWorkingBpm": 96,
+    "endWorkingBpm": 98,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-10-09T13:21:02.824Z",
+        "kind": "working",
+        "fromBpm": 96,
+        "toBpm": 98,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1791552317440_ci54qdao",
+    "itemId": "e_1788079586248_hz6yegpa",
+    "itemKind": "exercise",
+    "itemTitle": "4 Note Groups C A G shapes",
+    "startedAt": "2026-10-09T13:21:13.471Z",
+    "endedAt": "2026-10-09T13:25:17.440Z",
+    "durationSec": 244,
+    "endedReason": "complete",
+    "plannedMinutes": 4.5,
+    "startWorkingBpm": 90,
+    "endWorkingBpm": 94,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-10-09T13:23:01.757Z",
+        "kind": "working",
+        "fromBpm": 90,
+        "toBpm": 92,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-10-09T13:25:16.136Z",
+        "kind": "working",
+        "fromBpm": 92,
+        "toBpm": 94,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1791552939493_fkouoydk",
+    "itemId": "e_1788080054019_rz2rm55e",
+    "itemKind": "exercise",
+    "itemTitle": "6 Note Groups E D",
+    "startedAt": "2026-10-09T13:33:18.720Z",
+    "endedAt": "2026-10-09T13:35:39.493Z",
+    "durationSec": 141,
+    "endedReason": "abort",
+    "plannedMinutes": 4,
+    "startWorkingBpm": 49,
+    "endWorkingBpm": 49,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1791562830868_8l2asfzg",
+    "itemId": "e_1788080054019_rz2rm55e",
+    "itemKind": "exercise",
+    "itemTitle": "6 Note Groups E D",
+    "startedAt": "2026-10-09T16:16:28.852Z",
+    "endedAt": "2026-10-09T16:20:30.868Z",
+    "durationSec": 242,
+    "endedReason": "complete",
+    "plannedMinutes": 4,
+    "startWorkingBpm": 49,
+    "endWorkingBpm": 49,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1791563265741_og4fw7cg",
+    "itemId": "e_1789535479544_s8lazn5p",
+    "itemKind": "exercise",
+    "itemTitle": "6 Note Groups C A G Shapes",
+    "startedAt": "2026-10-09T16:20:32.243Z",
+    "endedAt": "2026-10-09T16:27:45.741Z",
+    "durationSec": 433,
+    "endedReason": "complete",
+    "plannedMinutes": 6,
+    "startWorkingBpm": 50,
+    "endWorkingBpm": 50,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1791563376965_0eb9u1qk",
+    "itemId": "e_1786172379355_o9n1t5nj",
+    "itemKind": "exercise",
+    "itemTitle": "Start Depapepe Pulloffs",
+    "startedAt": "2026-10-09T16:27:48.072Z",
+    "endedAt": "2026-10-09T16:29:36.965Z",
+    "durationSec": 48,
+    "endedReason": "abort",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 78,
+    "endWorkingBpm": 78,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1791563708947_8bg67zrj",
+    "itemId": "de7b70c2-3c07-4e13-ae2b-6028a94269e7",
+    "itemKind": "song",
+    "itemTitle": "Salt Creek [Capo2]",
+    "startedAt": "2026-10-09T16:29:56.705Z",
+    "endedAt": "2026-10-09T16:35:08.947Z",
+    "durationSec": 312,
+    "endedReason": "abort",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 197,
+    "endWorkingBpm": 197,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1791563896119_w8xx7gwo",
+    "itemId": "59d69a12-2dce-41c7-9ebe-0325d5b9a277",
+    "itemKind": "song",
+    "itemTitle": "Seney stretch [Capo1]",
+    "startedAt": "2026-10-09T16:35:18.424Z",
+    "endedAt": "2026-10-09T16:38:16.119Z",
+    "durationSec": 178,
+    "endedReason": "abort",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 195,
+    "endWorkingBpm": 195,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1791614795072_r9tef5s3",
+    "itemId": "e_1791614651732_pigo8klc",
+    "itemKind": "exercise",
+    "itemTitle": "3rds E D",
+    "startedAt": "2026-10-10T06:46:29.141Z",
+    "endedAt": "2026-10-10T06:46:35.072Z",
+    "durationSec": 6,
+    "endedReason": "abort",
+    "plannedMinutes": 4,
+    "startWorkingBpm": 30,
+    "endWorkingBpm": 30,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1791614826751_e198phrq",
+    "itemId": "e_1791614651732_pigo8klc",
+    "itemKind": "exercise",
+    "itemTitle": "3rds E D",
+    "startedAt": "2026-10-10T06:47:02.319Z",
+    "endedAt": "2026-10-10T06:47:06.751Z",
+    "durationSec": 4,
+    "endedReason": "abort",
+    "plannedMinutes": 4,
+    "startWorkingBpm": 30,
+    "endWorkingBpm": 30,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1791614972496_prq1yzej",
+    "itemId": "e_1791614651732_pigo8klc",
+    "itemKind": "exercise",
+    "itemTitle": "3rds E D",
+    "startedAt": "2026-10-10T06:49:26.900Z",
+    "endedAt": "2026-10-10T06:49:32.496Z",
+    "durationSec": 6,
+    "endedReason": "abort",
+    "plannedMinutes": 4,
+    "startWorkingBpm": 30,
+    "endWorkingBpm": 30,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1791615184458_6j4zowio",
+    "itemId": "e_1791614651732_pigo8klc",
+    "itemKind": "exercise",
+    "itemTitle": "3rds E D",
+    "startedAt": "2026-10-10T06:50:13.351Z",
+    "endedAt": "2026-10-10T06:53:04.458Z",
+    "durationSec": 171,
+    "endedReason": "abort",
+    "plannedMinutes": 4,
+    "startWorkingBpm": 30,
+    "endWorkingBpm": 30,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1791615421474_laljcpp3",
+    "itemId": "e_1791614651732_pigo8klc",
+    "itemKind": "exercise",
+    "itemTitle": "3rds E D",
+    "startedAt": "2026-10-10T06:55:30.968Z",
+    "endedAt": "2026-10-10T06:57:01.474Z",
+    "durationSec": 91,
+    "endedReason": "abort",
+    "plannedMinutes": 4,
+    "startWorkingBpm": 60,
+    "endWorkingBpm": 60,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1791615582627_jlyu54f1",
+    "itemId": "e_1791614651732_pigo8klc",
+    "itemKind": "exercise",
+    "itemTitle": "3rds E D",
+    "startedAt": "2026-10-10T06:57:07.266Z",
+    "endedAt": "2026-10-10T06:59:42.627Z",
+    "durationSec": 155,
+    "endedReason": "complete",
+    "plannedMinutes": 4,
+    "startWorkingBpm": 60,
+    "endWorkingBpm": 74,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-10-10T06:57:08.177Z",
+        "kind": "working",
+        "fromBpm": 60,
+        "toBpm": 62,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-10-10T06:57:09.026Z",
+        "kind": "working",
+        "fromBpm": 62,
+        "toBpm": 64,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-10-10T06:58:30.402Z",
+        "kind": "working",
+        "fromBpm": 64,
+        "toBpm": 66,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-10-10T06:58:30.760Z",
+        "kind": "working",
+        "fromBpm": 66,
+        "toBpm": 68,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-10-10T06:59:37.232Z",
+        "kind": "working",
+        "fromBpm": 68,
+        "toBpm": 70,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-10-10T06:59:38.167Z",
+        "kind": "working",
+        "fromBpm": 70,
+        "toBpm": 72,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-10-10T06:59:39.091Z",
+        "kind": "working",
+        "fromBpm": 72,
+        "toBpm": 74,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1791615588048_ltm2slx7",
+    "itemId": "e_1791614863182_llu7aw71",
+    "itemKind": "exercise",
+    "itemTitle": "3rds C A G",
+    "startedAt": "2026-10-10T06:59:45.654Z",
+    "endedAt": "2026-10-10T06:59:48.048Z",
+    "durationSec": 2,
+    "endedReason": "abort",
+    "plannedMinutes": 6,
+    "startWorkingBpm": 30,
+    "endWorkingBpm": 30,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1791615929032_ttgoteno",
+    "itemId": "e_1791614863182_llu7aw71",
+    "itemKind": "exercise",
+    "itemTitle": "3rds C A G",
+    "startedAt": "2026-10-10T07:00:05.417Z",
+    "endedAt": "2026-10-10T07:05:29.032Z",
+    "durationSec": 324,
+    "endedReason": "complete",
+    "plannedMinutes": 6,
+    "startWorkingBpm": 60,
+    "endWorkingBpm": 64,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-10-10T07:05:25.925Z",
+        "kind": "working",
+        "fromBpm": 60,
+        "toBpm": 62,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-10-10T07:05:26.501Z",
+        "kind": "working",
+        "fromBpm": 62,
+        "toBpm": 64,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1791615936751_77s1wae1",
+    "itemId": "e_1791614887634_nty1divb",
+    "itemKind": "exercise",
+    "itemTitle": "5ths E D",
+    "startedAt": "2026-10-10T07:05:33.539Z",
+    "endedAt": "2026-10-10T07:05:36.751Z",
+    "durationSec": 3,
+    "endedReason": "abort",
+    "plannedMinutes": 4,
+    "startWorkingBpm": 30,
+    "endWorkingBpm": 30,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1791616157571_pjkc2xl0",
+    "itemId": "e_1791614887634_nty1divb",
+    "itemKind": "exercise",
+    "itemTitle": "5ths E D",
+    "startedAt": "2026-10-10T07:06:22.257Z",
+    "endedAt": "2026-10-10T07:09:17.571Z",
+    "durationSec": 175,
+    "endedReason": "abort",
+    "plannedMinutes": 4,
+    "startWorkingBpm": 60,
+    "endWorkingBpm": 40,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1791616500594_ufsyxwd6",
+    "itemId": "e_1791614887634_nty1divb",
+    "itemKind": "exercise",
+    "itemTitle": "5ths E D",
+    "startedAt": "2026-10-10T07:09:28.971Z",
+    "endedAt": "2026-10-10T07:15:00.594Z",
+    "durationSec": 332,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 40,
+    "endWorkingBpm": 40,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1791616938808_40791gds",
+    "itemId": "e_1791614902982_mlns6ewv",
+    "itemKind": "exercise",
+    "itemTitle": "5ths C A G",
+    "startedAt": "2026-10-10T07:15:02.325Z",
+    "endedAt": "2026-10-10T07:22:18.808Z",
+    "durationSec": 436,
+    "endedReason": "complete",
+    "plannedMinutes": 6,
+    "startWorkingBpm": 60,
+    "endWorkingBpm": 40,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1791617093918_lh8rv9tl",
+    "itemId": "e_1791614917436_i7er8hbb",
+    "itemKind": "exercise",
+    "itemTitle": "6ths E D",
+    "startedAt": "2026-10-10T07:22:24.950Z",
+    "endedAt": "2026-10-10T07:24:53.918Z",
+    "durationSec": 149,
+    "endedReason": "abort",
+    "plannedMinutes": 4,
+    "startWorkingBpm": 60,
+    "endWorkingBpm": 40,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1791617291613_673lem0w",
+    "itemId": "e_1791614917436_i7er8hbb",
+    "itemKind": "exercise",
+    "itemTitle": "6ths E D",
+    "startedAt": "2026-10-10T07:24:59.794Z",
+    "endedAt": "2026-10-10T07:28:11.613Z",
+    "durationSec": 192,
+    "endedReason": "abort",
+    "plannedMinutes": 4,
+    "startWorkingBpm": 40,
+    "endWorkingBpm": 40,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1791617498687_1668kmad",
+    "itemId": "e_1791614917436_i7er8hbb",
+    "itemKind": "exercise",
+    "itemTitle": "6ths E D",
+    "startedAt": "2026-10-10T07:28:19.727Z",
+    "endedAt": "2026-10-10T07:31:38.687Z",
+    "durationSec": 199,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 40,
+    "endWorkingBpm": 40,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1791617505531_x97rtz3n",
+    "itemId": "e_1791614935970_qeba5rzc",
+    "itemKind": "exercise",
+    "itemTitle": "6ths C A G",
+    "startedAt": "2026-10-10T07:31:43.300Z",
+    "endedAt": "2026-10-10T07:31:45.531Z",
+    "durationSec": 2,
+    "endedReason": "abort",
+    "plannedMinutes": 6,
+    "startWorkingBpm": 60,
+    "endWorkingBpm": 60,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1791617859541_nf2jycep",
+    "itemId": "e_1791614935970_qeba5rzc",
+    "itemKind": "exercise",
+    "itemTitle": "6ths C A G",
+    "startedAt": "2026-10-10T07:31:58.143Z",
+    "endedAt": "2026-10-10T07:37:39.541Z",
+    "durationSec": 341,
+    "endedReason": "complete",
+    "plannedMinutes": 6,
+    "startWorkingBpm": 40,
+    "endWorkingBpm": 40,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1791622654171_zznjrhgi",
+    "itemId": "e_1789444016171_suppinwq",
+    "itemKind": "exercise",
+    "itemTitle": "Emaj7 Arp 5th string",
+    "startedAt": "2026-10-10T08:52:53.689Z",
+    "endedAt": "2026-10-10T08:57:34.171Z",
+    "durationSec": 280,
+    "endedReason": "complete",
+    "plannedMinutes": 2.5,
+    "startWorkingBpm": 92,
+    "endWorkingBpm": 92,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1791622847821_zanojbye",
+    "itemId": "e_1790832168642_e1likwr5",
+    "itemKind": "exercise",
+    "itemTitle": "B7 Arp 5th string",
+    "startedAt": "2026-10-10T08:57:38.493Z",
+    "endedAt": "2026-10-10T09:00:47.821Z",
+    "durationSec": 189,
+    "endedReason": "complete",
+    "plannedMinutes": 2.5,
+    "startWorkingBpm": 94,
+    "endWorkingBpm": 94,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1791623016815_6wo76h3p",
+    "itemId": "e_1790831797423_dqd7cpfl",
+    "itemKind": "exercise",
+    "itemTitle": "C#m7 5th string",
+    "startedAt": "2026-10-10T09:00:51.643Z",
+    "endedAt": "2026-10-10T09:03:36.815Z",
+    "durationSec": 165,
+    "endedReason": "complete",
+    "plannedMinutes": 2.5,
+    "startWorkingBpm": 96,
+    "endWorkingBpm": 98,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-10-10T09:03:33.159Z",
+        "kind": "working",
+        "fromBpm": 96,
+        "toBpm": 98,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1791623206489_8brrp0z3",
+    "itemId": "e_1789444146426_tym73dt8",
+    "itemKind": "exercise",
+    "itemTitle": "D#min7b5 Arp 5th string",
+    "startedAt": "2026-10-10T09:03:37.531Z",
+    "endedAt": "2026-10-10T09:06:46.489Z",
+    "durationSec": 189,
+    "endedReason": "complete",
+    "plannedMinutes": 2.5,
+    "startWorkingBpm": 72,
+    "endWorkingBpm": 72,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1791623484240_onxof3e5",
+    "itemId": "e_1789535200319_nwfhr9x7",
+    "itemKind": "exercise",
+    "itemTitle": "3 Note Groups E D Shapes",
+    "startedAt": "2026-10-10T09:06:51.513Z",
+    "endedAt": "2026-10-10T09:11:24.240Z",
+    "durationSec": 273,
+    "endedReason": "complete",
+    "plannedMinutes": 2,
+    "startWorkingBpm": 174,
+    "endWorkingBpm": 178,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-10-10T09:10:58.683Z",
+        "kind": "working",
+        "fromBpm": 174,
+        "toBpm": 178,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1791623849186_pka3irb1",
+    "itemId": "e_1788079503663_n3d48trg",
+    "itemKind": "exercise",
+    "itemTitle": "3 Note Groups C A G shapes",
+    "startedAt": "2026-10-10T09:11:25.507Z",
+    "endedAt": "2026-10-10T09:17:29.186Z",
+    "durationSec": 364,
+    "endedReason": "complete",
+    "plannedMinutes": 3,
+    "startWorkingBpm": 170,
+    "endWorkingBpm": 174,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-10-10T09:15:19.263Z",
+        "kind": "working",
+        "fromBpm": 170,
+        "toBpm": 174,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1791624028806_s7l38gu1",
+    "itemId": "e_1789535332152_7zhv535u",
+    "itemKind": "exercise",
+    "itemTitle": "4 Note Groups E D",
+    "startedAt": "2026-10-10T09:17:30.371Z",
+    "endedAt": "2026-10-10T09:20:28.806Z",
+    "durationSec": 178,
+    "endedReason": "complete",
+    "plannedMinutes": 3,
+    "startWorkingBpm": 98,
+    "endWorkingBpm": 100,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-10-10T09:20:27.533Z",
+        "kind": "working",
+        "fromBpm": 98,
+        "toBpm": 100,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1791624300582_1kgvbmm6",
+    "itemId": "e_1788079586248_hz6yegpa",
+    "itemKind": "exercise",
+    "itemTitle": "4 Note Groups C A G shapes",
+    "startedAt": "2026-10-10T09:20:29.619Z",
+    "endedAt": "2026-10-10T09:25:00.582Z",
+    "durationSec": 271,
+    "endedReason": "complete",
+    "plannedMinutes": 4.5,
+    "startWorkingBpm": 94,
+    "endWorkingBpm": 96,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-10-10T09:24:58.612Z",
+        "kind": "working",
+        "fromBpm": 94,
+        "toBpm": 96,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1791624546179_urjtlbky",
+    "itemId": "e_1788080054019_rz2rm55e",
+    "itemKind": "exercise",
+    "itemTitle": "6 Note Groups E D",
+    "startedAt": "2026-10-10T09:25:03.438Z",
+    "endedAt": "2026-10-10T09:29:06.179Z",
+    "durationSec": 243,
+    "endedReason": "complete",
+    "plannedMinutes": 4,
+    "startWorkingBpm": 49,
+    "endWorkingBpm": 53,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-10-10T09:28:58.245Z",
+        "kind": "working",
+        "fromBpm": 49,
+        "toBpm": 50,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-10-10T09:28:58.887Z",
+        "kind": "working",
+        "fromBpm": 50,
+        "toBpm": 51,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-10-10T09:29:02.408Z",
+        "kind": "working",
+        "fromBpm": 51,
+        "toBpm": 52,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-10-10T09:29:02.976Z",
+        "kind": "working",
+        "fromBpm": 52,
+        "toBpm": 53,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1791624773347_3oqcqf1x",
+    "itemId": "e_1789535479544_s8lazn5p",
+    "itemKind": "exercise",
+    "itemTitle": "6 Note Groups C A G Shapes",
+    "startedAt": "2026-10-10T09:29:07.375Z",
+    "endedAt": "2026-10-10T09:32:53.347Z",
+    "durationSec": 226,
+    "endedReason": "complete",
+    "plannedMinutes": 6,
+    "startWorkingBpm": 50,
+    "endWorkingBpm": 55,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-10-10T09:32:48.681Z",
+        "kind": "working",
+        "fromBpm": 50,
+        "toBpm": 51,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-10-10T09:32:49.190Z",
+        "kind": "working",
+        "fromBpm": 51,
+        "toBpm": 52,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-10-10T09:32:49.672Z",
+        "kind": "working",
+        "fromBpm": 52,
+        "toBpm": 53,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-10-10T09:32:50.021Z",
+        "kind": "working",
+        "fromBpm": 53,
+        "toBpm": 54,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-10-10T09:32:50.343Z",
+        "kind": "working",
+        "fromBpm": 54,
+        "toBpm": 55,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1791732096339_sbtrzxct",
+    "itemId": "e_1791614651732_pigo8klc",
+    "itemKind": "exercise",
+    "itemTitle": "3rds E D",
+    "startedAt": "2026-10-11T15:17:40.295Z",
+    "endedAt": "2026-10-11T15:21:36.339Z",
+    "durationSec": 236,
+    "endedReason": "complete",
+    "plannedMinutes": 4,
+    "startWorkingBpm": 74,
+    "endWorkingBpm": 74,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1791732459942_kq11nph3",
+    "itemId": "e_1791614863182_llu7aw71",
+    "itemKind": "exercise",
+    "itemTitle": "3rds C A G",
+    "startedAt": "2026-10-11T15:21:37.869Z",
+    "endedAt": "2026-10-11T15:27:39.942Z",
+    "durationSec": 362,
+    "endedReason": "complete",
+    "plannedMinutes": 6,
+    "startWorkingBpm": 64,
+    "endWorkingBpm": 68,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-10-11T15:26:32.806Z",
+        "kind": "working",
+        "fromBpm": 64,
+        "toBpm": 66,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-10-11T15:26:33.800Z",
+        "kind": "working",
+        "fromBpm": 66,
+        "toBpm": 68,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1791732768173_rzjyrnnq",
+    "itemId": "e_1791614887634_nty1divb",
+    "itemKind": "exercise",
+    "itemTitle": "5ths E D",
+    "startedAt": "2026-10-11T15:27:41.173Z",
+    "endedAt": "2026-10-11T15:32:48.173Z",
+    "durationSec": 307,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 40,
+    "endWorkingBpm": 40,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1791733169136_40otp2bo",
+    "itemId": "e_1791614902982_mlns6ewv",
+    "itemKind": "exercise",
+    "itemTitle": "5ths C A G",
+    "startedAt": "2026-10-11T15:32:52.331Z",
+    "endedAt": "2026-10-11T15:39:29.136Z",
+    "durationSec": 397,
+    "endedReason": "complete",
+    "plannedMinutes": 6,
+    "startWorkingBpm": 40,
+    "endWorkingBpm": 40,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1791733523783_94sx7l0t",
+    "itemId": "e_1791614917436_i7er8hbb",
+    "itemKind": "exercise",
+    "itemTitle": "6ths E D",
+    "startedAt": "2026-10-11T15:39:36.306Z",
+    "endedAt": "2026-10-11T15:45:23.783Z",
+    "durationSec": 347,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 40,
+    "endWorkingBpm": 40,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1791733768890_zao2m84d",
+    "itemId": "e_1791614935970_qeba5rzc",
+    "itemKind": "exercise",
+    "itemTitle": "6ths C A G",
+    "startedAt": "2026-10-11T15:45:28.756Z",
+    "endedAt": "2026-10-11T15:49:28.890Z",
+    "durationSec": 240,
+    "endedReason": "complete",
+    "plannedMinutes": 6,
+    "startWorkingBpm": 40,
+    "endWorkingBpm": 40,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1791733822767_prne8mvd",
+    "itemId": "e_1789444016171_suppinwq",
+    "itemKind": "exercise",
+    "itemTitle": "Emaj7 Arp 5th string",
+    "startedAt": "2026-10-11T15:49:31.942Z",
+    "endedAt": "2026-10-11T15:50:22.767Z",
+    "durationSec": 51,
+    "endedReason": "abort",
+    "plannedMinutes": 2.5,
+    "startWorkingBpm": 92,
+    "endWorkingBpm": 92,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1791734093536_hwpm45pr",
+    "itemId": "e_1789444016171_suppinwq",
+    "itemKind": "exercise",
+    "itemTitle": "Emaj7 Arp 5th string",
+    "startedAt": "2026-10-11T15:50:25.125Z",
+    "endedAt": "2026-10-11T15:54:53.536Z",
+    "durationSec": 268,
+    "endedReason": "complete",
+    "plannedMinutes": 2.5,
+    "startWorkingBpm": 92,
+    "endWorkingBpm": 94,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-10-11T15:53:55.345Z",
+        "kind": "working",
+        "fromBpm": 92,
+        "toBpm": 94,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1791734325431_hm5qzauf",
+    "itemId": "e_1790832168642_e1likwr5",
+    "itemKind": "exercise",
+    "itemTitle": "B7 Arp 5th string",
+    "startedAt": "2026-10-11T15:54:54.790Z",
+    "endedAt": "2026-10-11T15:58:45.431Z",
+    "durationSec": 231,
+    "endedReason": "complete",
+    "plannedMinutes": 2.5,
+    "startWorkingBpm": 94,
+    "endWorkingBpm": 96,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-10-11T15:56:35.115Z",
+        "kind": "working",
+        "fromBpm": 94,
+        "toBpm": 96,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1791734539772_ocjxqw4p",
+    "itemId": "e_1790831797423_dqd7cpfl",
+    "itemKind": "exercise",
+    "itemTitle": "C#m7 5th string",
+    "startedAt": "2026-10-11T15:58:49.473Z",
+    "endedAt": "2026-10-11T16:02:19.772Z",
+    "durationSec": 210,
+    "endedReason": "complete",
+    "plannedMinutes": 2.5,
+    "startWorkingBpm": 98,
+    "endWorkingBpm": 98,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1791734755885_9zbdqjyb",
+    "itemId": "e_1789444146426_tym73dt8",
+    "itemKind": "exercise",
+    "itemTitle": "D#min7b5 Arp 5th string",
+    "startedAt": "2026-10-11T16:02:20.646Z",
+    "endedAt": "2026-10-11T16:05:55.885Z",
+    "durationSec": 215,
+    "endedReason": "complete",
+    "plannedMinutes": 2.5,
+    "startWorkingBpm": 72,
+    "endWorkingBpm": 72,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1791734914171_ic274t8n",
+    "itemId": "e_1789535200319_nwfhr9x7",
+    "itemKind": "exercise",
+    "itemTitle": "3 Note Groups E D Shapes",
+    "startedAt": "2026-10-11T16:05:58.537Z",
+    "endedAt": "2026-10-11T16:08:34.171Z",
+    "durationSec": 156,
+    "endedReason": "complete",
+    "plannedMinutes": 2,
+    "startWorkingBpm": 178,
+    "endWorkingBpm": 178,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1791735110385_0nt01dl5",
+    "itemId": "e_1788079503663_n3d48trg",
+    "itemKind": "exercise",
+    "itemTitle": "3 Note Groups C A G shapes",
+    "startedAt": "2026-10-11T16:08:34.889Z",
+    "endedAt": "2026-10-11T16:11:50.385Z",
+    "durationSec": 195,
+    "endedReason": "complete",
+    "plannedMinutes": 3,
+    "startWorkingBpm": 174,
+    "endWorkingBpm": 178,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-10-11T16:10:18.271Z",
+        "kind": "working",
+        "fromBpm": 174,
+        "toBpm": 178,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1791735305463_rt705zo7",
+    "itemId": "e_1789535332152_7zhv535u",
+    "itemKind": "exercise",
+    "itemTitle": "4 Note Groups E D",
+    "startedAt": "2026-10-11T16:11:52.250Z",
+    "endedAt": "2026-10-11T16:15:05.463Z",
+    "durationSec": 193,
+    "endedReason": "complete",
+    "plannedMinutes": 3,
+    "startWorkingBpm": 100,
+    "endWorkingBpm": 100,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1791735579132_jtyh2spi",
+    "itemId": "e_1788079586248_hz6yegpa",
+    "itemKind": "exercise",
+    "itemTitle": "4 Note Groups C A G shapes",
+    "startedAt": "2026-10-11T16:15:06.932Z",
+    "endedAt": "2026-10-11T16:19:39.132Z",
+    "durationSec": 272,
+    "endedReason": "complete",
+    "plannedMinutes": 4.5,
+    "startWorkingBpm": 96,
+    "endWorkingBpm": 98,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-10-11T16:19:36.413Z",
+        "kind": "working",
+        "fromBpm": 96,
+        "toBpm": 98,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "sr_1791735813600_1t30hx0n",
+    "itemId": "e_1788080054019_rz2rm55e",
+    "itemKind": "exercise",
+    "itemTitle": "6 Note Groups E D",
+    "startedAt": "2026-10-11T16:19:41.238Z",
+    "endedAt": "2026-10-11T16:23:33.600Z",
+    "durationSec": 232,
+    "endedReason": "complete",
+    "plannedMinutes": 4,
+    "startWorkingBpm": 53,
+    "endWorkingBpm": 53,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1791736140226_7k6hhhf9",
+    "itemId": "e_1789535479544_s8lazn5p",
+    "itemKind": "exercise",
+    "itemTitle": "6 Note Groups C A G Shapes",
+    "startedAt": "2026-10-11T16:23:34.190Z",
+    "endedAt": "2026-10-11T16:29:00.226Z",
+    "durationSec": 326,
+    "endedReason": "abort",
+    "plannedMinutes": 6,
+    "startWorkingBpm": 55,
+    "endWorkingBpm": 55,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1791736161856_odf9l39m",
+    "itemId": "e_1788080054019_rz2rm55e",
+    "itemKind": "exercise",
+    "itemTitle": "6 Note Groups E D",
+    "startedAt": "2026-10-11T16:29:19.074Z",
+    "endedAt": "2026-10-11T16:29:21.856Z",
+    "durationSec": 3,
+    "endedReason": "abort",
+    "plannedMinutes": 4,
+    "startWorkingBpm": 53,
+    "endWorkingBpm": 53,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1791782508406_cih5ak9s",
+    "itemId": "e_1791614651732_pigo8klc",
+    "itemKind": "exercise",
+    "itemTitle": "3rds E D",
+    "startedAt": "2026-10-12T05:21:47.854Z",
+    "endedAt": "2026-10-12T05:21:48.406Z",
+    "durationSec": 1,
+    "endedReason": "abort",
+    "plannedMinutes": 4,
+    "startWorkingBpm": 74,
+    "endWorkingBpm": 74,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1791782525085_9lulqzr5",
+    "itemId": "e_1791614651732_pigo8klc",
+    "itemKind": "exercise",
+    "itemTitle": "3rds E D",
+    "startedAt": "2026-10-12T05:22:02.557Z",
+    "endedAt": "2026-10-12T05:22:05.085Z",
+    "durationSec": 3,
+    "endedReason": "abort",
+    "plannedMinutes": 4,
+    "startWorkingBpm": 74,
+    "endWorkingBpm": 74,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1791782552528_kfvf70jj",
+    "itemId": "e_1791614651732_pigo8klc",
+    "itemKind": "exercise",
+    "itemTitle": "3rds E D",
+    "startedAt": "2026-10-12T05:22:23.726Z",
+    "endedAt": "2026-10-12T05:22:32.528Z",
+    "durationSec": 9,
+    "endedReason": "abort",
+    "plannedMinutes": 4,
+    "startWorkingBpm": 74,
+    "endWorkingBpm": 74,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1791782595589_e7anbr94",
+    "itemId": "e_1791614651732_pigo8klc",
+    "itemKind": "exercise",
+    "itemTitle": "3rds E D",
+    "startedAt": "2026-10-12T05:22:34.100Z",
+    "endedAt": "2026-10-12T05:23:15.589Z",
+    "durationSec": 17,
+    "endedReason": "abort",
+    "plannedMinutes": 4,
+    "startWorkingBpm": 74,
+    "endWorkingBpm": 74,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1791782655293_t26l0880",
+    "itemId": "e_1791614651732_pigo8klc",
+    "itemKind": "exercise",
+    "itemTitle": "3rds E D",
+    "startedAt": "2026-10-12T05:24:14.181Z",
+    "endedAt": "2026-10-12T05:24:15.293Z",
+    "durationSec": 1,
+    "endedReason": "abort",
+    "plannedMinutes": 4,
+    "startWorkingBpm": 74,
+    "endWorkingBpm": 74,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1791782663671_rzjfznhj",
+    "itemId": "e_1791614651732_pigo8klc",
+    "itemKind": "exercise",
+    "itemTitle": "3rds E D",
+    "startedAt": "2026-10-12T05:24:21.957Z",
+    "endedAt": "2026-10-12T05:24:23.671Z",
+    "durationSec": 2,
+    "endedReason": "abort",
+    "plannedMinutes": 4,
+    "startWorkingBpm": 74,
+    "endWorkingBpm": 74,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1791782674069_euprepar",
+    "itemId": "e_1791614651732_pigo8klc",
+    "itemKind": "exercise",
+    "itemTitle": "3rds E D",
+    "startedAt": "2026-10-12T05:24:33.000Z",
+    "endedAt": "2026-10-12T05:24:34.069Z",
+    "durationSec": 1,
+    "endedReason": "abort",
+    "plannedMinutes": 4,
+    "startWorkingBpm": 74,
+    "endWorkingBpm": 74,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1791782856365_1sjlgt84",
+    "itemId": "e_1791614651732_pigo8klc",
+    "itemKind": "exercise",
+    "itemTitle": "3rds E D",
+    "startedAt": "2026-10-12T05:27:35.067Z",
+    "endedAt": "2026-10-12T05:27:36.365Z",
+    "durationSec": 1,
+    "endedReason": "abort",
+    "plannedMinutes": 4,
+    "startWorkingBpm": 74,
+    "endWorkingBpm": 74,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1791782859615_ddvowpli",
+    "itemId": "e_1791614863182_llu7aw71",
+    "itemKind": "exercise",
+    "itemTitle": "3rds C A G",
+    "startedAt": "2026-10-12T05:27:38.700Z",
+    "endedAt": "2026-10-12T05:27:39.615Z",
+    "durationSec": 1,
+    "endedReason": "abort",
+    "plannedMinutes": 6,
+    "startWorkingBpm": 68,
+    "endWorkingBpm": 68,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1791782863815_5as14fbb",
+    "itemId": "e_1791614863182_llu7aw71",
+    "itemKind": "exercise",
+    "itemTitle": "3rds C A G",
+    "startedAt": "2026-10-12T05:27:43.217Z",
+    "endedAt": "2026-10-12T05:27:43.815Z",
+    "durationSec": 1,
+    "endedReason": "abort",
+    "plannedMinutes": 6,
+    "startWorkingBpm": 68,
+    "endWorkingBpm": 68,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1791783094558_ukstsg4d",
+    "itemId": "e_1789444146426_tym73dt8",
+    "itemKind": "exercise",
+    "itemTitle": "D#min7b5 Arp 5th string",
+    "startedAt": "2026-10-12T05:27:48.595Z",
+    "endedAt": "2026-10-12T05:31:34.558Z",
+    "durationSec": 226,
+    "endedReason": "complete",
+    "plannedMinutes": 2.5,
+    "startWorkingBpm": 72,
+    "endWorkingBpm": 72,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1791783096933_2tdm7drd",
+    "itemId": "e_1789444146426_tym73dt8",
+    "itemKind": "exercise",
+    "itemTitle": "D#min7b5 Arp 5th string",
+    "startedAt": "2026-10-12T05:31:34.594Z",
+    "endedAt": "2026-10-12T05:31:36.933Z",
+    "durationSec": 2,
+    "endedReason": "abort",
+    "plannedMinutes": 2.5,
+    "startWorkingBpm": 72,
+    "endWorkingBpm": 72,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1791783113037_6s2yvona",
+    "itemId": "e_1791614651732_pigo8klc",
+    "itemKind": "exercise",
+    "itemTitle": "3rds E D",
+    "startedAt": "2026-10-12T05:31:47.575Z",
+    "endedAt": "2026-10-12T05:31:53.037Z",
+    "durationSec": 5,
+    "endedReason": "abort",
+    "plannedMinutes": 4,
+    "startWorkingBpm": 74,
+    "endWorkingBpm": 74,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "sr_1791783389301_jpnxp2v5",
+    "itemId": "5c5ffa71-9051-4eb6-95c1-4630265ac577",
+    "itemKind": "song",
+    "itemTitle": "Start - Depapepe rythm",
+    "startedAt": "2026-10-12T05:36:26.146Z",
+    "endedAt": "2026-10-12T05:36:29.301Z",
+    "durationSec": 3,
+    "endedReason": "abort",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 94,
+    "endWorkingBpm": 94,
+    "startTroubleBpms": [
+      60
+    ],
+    "endTroubleBpms": [
+      60
+    ],
+    "promotions": []
+  },
+  {
+    "id": "sr_1791783394102_3ssglbys",
+    "itemId": "232e185f-6770-4775-80bf-f6f224e3ed5e",
+    "itemKind": "song",
+    "itemTitle": "Start - Depapepe Melody",
+    "startedAt": "2026-10-12T05:36:31.627Z",
+    "endedAt": "2026-10-12T05:36:34.102Z",
+    "durationSec": 2,
+    "endedReason": "abort",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 94,
+    "endWorkingBpm": 94,
+    "startTroubleBpms": [
+      60
+    ],
+    "endTroubleBpms": [
+      60
+    ],
+    "promotions": []
+  },
+  {
+    "id": "sr_1791783458324_ku5x9qsw",
+    "itemId": "e_1791783447931_ggbwle7y",
+    "itemKind": "exercise",
+    "itemTitle": "test",
+    "startedAt": "2026-10-12T05:37:29.775Z",
+    "endedAt": "2026-10-12T05:37:38.324Z",
+    "durationSec": 6,
+    "endedReason": "abort",
+    "plannedMinutes": 5,
+    "endWorkingBpm": 80,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "42a3f0d4-930d-4e9b-8d2c-125f02d59731",
+    "itemId": "e_1791614651732_pigo8klc",
+    "itemKind": "exercise",
+    "itemTitle": "3rds E D",
+    "startedAt": "2026-10-12T18:10:49.936Z",
+    "endedAt": "2026-10-12T18:15:09.187Z",
+    "durationSec": 259,
+    "endedReason": "complete",
+    "plannedMinutes": 4,
+    "startWorkingBpm": 74,
+    "endWorkingBpm": 80,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-10-12T18:12:09.848Z",
+        "kind": "working",
+        "fromBpm": 74,
+        "toBpm": 76,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-10-12T18:14:25.628Z",
+        "kind": "working",
+        "fromBpm": 76,
+        "toBpm": 78,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-10-12T18:14:26.694Z",
+        "kind": "working",
+        "fromBpm": 78,
+        "toBpm": 80,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "8592a868-674e-41f6-9ef6-7badb7a384de",
+    "itemId": "e_1791614863182_llu7aw71",
+    "itemKind": "exercise",
+    "itemTitle": "3rds C A G",
+    "startedAt": "2026-10-12T18:15:14.209Z",
+    "endedAt": "2026-10-12T18:25:04.756Z",
+    "durationSec": 423,
+    "endedReason": "complete",
+    "plannedMinutes": 6,
+    "startWorkingBpm": 68,
+    "endWorkingBpm": 74,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-10-12T18:23:01.868Z",
+        "kind": "working",
+        "fromBpm": 68,
+        "toBpm": 70,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-10-12T18:23:03.303Z",
+        "kind": "working",
+        "fromBpm": 70,
+        "toBpm": 72,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-10-12T18:23:03.861Z",
+        "kind": "working",
+        "fromBpm": 72,
+        "toBpm": 74,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "f4c66c5b-6582-4b82-84f9-35b2383ca323",
+    "itemId": "e_1791614887634_nty1divb",
+    "itemKind": "exercise",
+    "itemTitle": "5ths E D",
+    "startedAt": "2026-10-12T18:25:25.022Z",
+    "endedAt": "2026-10-12T18:33:23.926Z",
+    "durationSec": 479,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 40,
+    "endWorkingBpm": 40,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "a4b3ff13-511a-44a9-a048-6c2cf6fe7bef",
+    "itemId": "e_1791614887634_nty1divb",
+    "itemKind": "exercise",
+    "itemTitle": "5ths E D",
+    "startedAt": "2026-10-12T18:37:41.976Z",
+    "endedAt": "2026-10-12T18:43:01.004Z",
+    "durationSec": 319,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 40,
+    "endWorkingBpm": 40,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "e0dd6be0-79fd-4b89-a8ab-78985eb49717",
+    "itemId": "e_1791614902982_mlns6ewv",
+    "itemKind": "exercise",
+    "itemTitle": "5ths C A G",
+    "startedAt": "2026-10-12T18:43:03.743Z",
+    "endedAt": "2026-10-12T18:50:22.065Z",
+    "durationSec": 438,
+    "endedReason": "complete",
+    "plannedMinutes": 6,
+    "startWorkingBpm": 40,
+    "endWorkingBpm": 40,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "c40aacd8-e4bd-47b5-9f54-f5c3395be446",
+    "itemId": "e_1791614917436_i7er8hbb",
+    "itemKind": "exercise",
+    "itemTitle": "6ths E D",
+    "startedAt": "2026-10-12T18:50:26.434Z",
+    "endedAt": "2026-10-12T18:55:11.310Z",
+    "durationSec": 285,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 40,
+    "endWorkingBpm": 40,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "0c284904-fdd8-4793-86b9-3ef5db12ae3e",
+    "itemId": "e_1791614935970_qeba5rzc",
+    "itemKind": "exercise",
+    "itemTitle": "6ths C A G",
+    "startedAt": "2026-10-12T18:55:13.418Z",
+    "endedAt": "2026-10-12T19:00:25.817Z",
+    "durationSec": 312,
+    "endedReason": "complete",
+    "plannedMinutes": 6,
+    "startWorkingBpm": 40,
+    "endWorkingBpm": 40,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "98599e5b-69ec-47ba-a5d4-13d5a9dfce87",
+    "itemId": "e_1791614935970_qeba5rzc",
+    "itemKind": "exercise",
+    "itemTitle": "6ths C A G",
+    "startedAt": "2026-10-12T19:01:19.605Z",
+    "endedAt": "2026-10-12T19:02:22.859Z",
+    "durationSec": 63,
+    "endedReason": "abort",
+    "plannedMinutes": 6,
+    "startWorkingBpm": 40,
+    "endWorkingBpm": 40,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "03996660-3454-4328-9688-5dbdbc621ca6",
+    "itemId": "e_1789444016171_suppinwq",
+    "itemKind": "exercise",
+    "itemTitle": "Emaj7 Arp 5th string",
+    "startedAt": "2026-10-12T19:02:35.234Z",
+    "endedAt": "2026-10-12T19:02:40.183Z",
+    "durationSec": 5,
+    "endedReason": "abort",
+    "plannedMinutes": 2.5,
+    "startWorkingBpm": 94,
+    "endWorkingBpm": 94,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "04f4bc1d-3574-4e19-91bb-6a33dcb72176",
+    "itemId": "5c5ffa71-9051-4eb6-95c1-4630265ac577",
+    "itemKind": "song",
+    "itemTitle": "Start - Depapepe rythm",
+    "startedAt": "2026-10-14T03:39:08.502Z",
+    "endedAt": "2026-10-14T03:50:47.333Z",
+    "durationSec": 699,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 94,
+    "endWorkingBpm": 94,
+    "startTroubleBpms": [
+      60
+    ],
+    "endTroubleBpms": [
+      60
+    ],
+    "promotions": []
+  },
+  {
+    "id": "ef49cbfb-90cb-479f-adaa-f193ca351420",
+    "itemId": "232e185f-6770-4775-80bf-f6f224e3ed5e",
+    "itemKind": "song",
+    "itemTitle": "Start - Depapepe Melody",
+    "startedAt": "2026-10-14T03:50:50.385Z",
+    "endedAt": "2026-10-14T03:58:08.399Z",
+    "durationSec": 438,
+    "endedReason": "abort",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 94,
+    "endWorkingBpm": 100,
+    "startTroubleBpms": [
+      60
+    ],
+    "endTroubleBpms": [
+      62
+    ],
+    "promotions": [
+      {
+        "at": "2026-10-14T03:50:56.848Z",
+        "kind": "trouble",
+        "troubleIndex": 0,
+        "fromBpm": 60,
+        "toBpm": 62,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-10-14T03:57:57.555Z",
+        "kind": "working",
+        "fromBpm": 94,
+        "toBpm": 96,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-10-14T03:57:58.267Z",
+        "kind": "working",
+        "fromBpm": 96,
+        "toBpm": 98,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-10-14T03:58:02.315Z",
+        "kind": "working",
+        "fromBpm": 98,
+        "toBpm": 100,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "c89f91e6-4b8b-4331-8038-476b78f0a2ae",
+    "itemId": "a990d1f3-9f76-4f81-ae2d-557b50053f91",
+    "itemKind": "song",
+    "itemTitle": "Ruben",
+    "startedAt": "2026-10-14T03:58:19.726Z",
+    "endedAt": "2026-10-14T04:03:55.909Z",
+    "durationSec": 336,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 158,
+    "endWorkingBpm": 158,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "0668384f-e1d3-4131-bc45-0ebd16622e8a",
+    "itemId": "58148c75-8f5b-4b2b-822a-098df01fb11d",
+    "itemKind": "song",
+    "itemTitle": "Escabana (Rythm)",
+    "startedAt": "2026-10-14T04:04:05.045Z",
+    "endedAt": "2026-10-14T04:07:49.564Z",
+    "durationSec": 225,
+    "endedReason": "abort",
+    "plannedMinutes": 10,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "1be2c1ed-4185-4aeb-83e7-0c631572d3fd",
+    "itemId": "cd5bdc97-4e73-41f8-81eb-aa8907e9ec2a",
+    "itemKind": "song",
+    "itemTitle": "Escabana",
+    "startedAt": "2026-10-14T04:07:55.037Z",
+    "endedAt": "2026-10-14T04:11:27.317Z",
+    "durationSec": 212,
+    "endedReason": "abort",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 97,
+    "endWorkingBpm": 97,
+    "startTroubleBpms": [
+      104,
+      94
+    ],
+    "endTroubleBpms": [
+      104,
+      94
+    ],
+    "promotions": []
+  },
+  {
+    "id": "ce33d983-77d6-4e0e-955e-91355fdf02b3",
+    "itemId": "ccc5bda1-f0e0-418f-a73c-c2855b575ad8",
+    "itemKind": "song",
+    "itemTitle": "One - Depapepe Melodic Part",
+    "startedAt": "2026-10-14T04:12:00.115Z",
+    "endedAt": "2026-10-14T04:20:15.042Z",
+    "durationSec": 495,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 197,
+    "endWorkingBpm": 197,
+    "startTroubleBpms": [
+      174
+    ],
+    "endTroubleBpms": [
+      174
+    ],
+    "promotions": []
+  },
+  {
+    "id": "b8a6ab6b-b525-48d8-93c7-23807b587237",
+    "itemId": "e_1789535200319_nwfhr9x7",
+    "itemKind": "exercise",
+    "itemTitle": "3 Note Groups E D Shapes",
+    "startedAt": "2026-10-14T04:20:35.003Z",
+    "endedAt": "2026-10-14T04:22:18.579Z",
+    "durationSec": 104,
+    "endedReason": "complete",
+    "plannedMinutes": 2,
+    "startWorkingBpm": 178,
+    "endWorkingBpm": 178,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "f3b24c87-d8d3-4d2e-8004-3abffe9ac78c",
+    "itemId": "e_1788079503663_n3d48trg",
+    "itemKind": "exercise",
+    "itemTitle": "3 Note Groups C A G shapes",
+    "startedAt": "2026-10-14T04:22:19.904Z",
+    "endedAt": "2026-10-14T04:25:23.811Z",
+    "durationSec": 184,
+    "endedReason": "complete",
+    "plannedMinutes": 3,
+    "startWorkingBpm": 178,
+    "endWorkingBpm": 178,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "ed6db76b-0624-4e82-8106-492c9486e0d0",
+    "itemId": "e_1789535332152_7zhv535u",
+    "itemKind": "exercise",
+    "itemTitle": "4 Note Groups E D",
+    "startedAt": "2026-10-14T04:25:25.714Z",
+    "endedAt": "2026-10-14T04:30:49.834Z",
+    "durationSec": 324,
+    "endedReason": "complete",
+    "plannedMinutes": 3,
+    "startWorkingBpm": 100,
+    "endWorkingBpm": 103,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-10-14T04:27:30.355Z",
+        "kind": "working",
+        "fromBpm": 100,
+        "toBpm": 103,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "88d1c2c3-3226-4a9a-8af3-415eed7f75e5",
+    "itemId": "e_1788079586248_hz6yegpa",
+    "itemKind": "exercise",
+    "itemTitle": "4 Note Groups C A G shapes",
+    "startedAt": "2026-10-14T04:30:50.971Z",
+    "endedAt": "2026-10-14T04:35:32.828Z",
+    "durationSec": 282,
+    "endedReason": "complete",
+    "plannedMinutes": 4.5,
+    "startWorkingBpm": 98,
+    "endWorkingBpm": 103,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-10-14T04:33:05.465Z",
+        "kind": "working",
+        "fromBpm": 98,
+        "toBpm": 100,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-10-14T04:33:07.125Z",
+        "kind": "working",
+        "fromBpm": 100,
+        "toBpm": 103,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "e33d67ce-1086-4d70-ac7a-44b672d7ef19",
+    "itemId": "e_1788080054019_rz2rm55e",
+    "itemKind": "exercise",
+    "itemTitle": "6 Note Groups E D",
+    "startedAt": "2026-10-14T04:35:52.971Z",
+    "endedAt": "2026-10-14T04:40:22.318Z",
+    "durationSec": 269,
+    "endedReason": "complete",
+    "plannedMinutes": 4,
+    "startWorkingBpm": 53,
+    "endWorkingBpm": 53,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "04a87432-2c9d-47a7-b483-ec2b04d07e4a",
+    "itemId": "e_1789535479544_s8lazn5p",
+    "itemKind": "exercise",
+    "itemTitle": "6 Note Groups C A G Shapes",
+    "startedAt": "2026-10-14T04:40:25.057Z",
+    "endedAt": "2026-10-14T04:44:21.334Z",
+    "durationSec": 236,
+    "endedReason": "complete",
+    "plannedMinutes": 6,
+    "startWorkingBpm": 55,
+    "endWorkingBpm": 55,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "4bf4c6cb-a9d4-4051-bc9b-987886267e8b",
+    "itemId": "e_1791614651732_pigo8klc",
+    "itemKind": "exercise",
+    "itemTitle": "3rds E D",
+    "startedAt": "2026-10-14T05:58:37.101Z",
+    "endedAt": "2026-10-14T05:58:38.280Z",
+    "durationSec": 1,
+    "endedReason": "complete",
+    "plannedMinutes": 4,
+    "startWorkingBpm": 80,
+    "endWorkingBpm": 80,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "8d7d2b37-56b2-4f1d-a10c-b2471be546c0",
+    "itemId": "e_1791614651732_pigo8klc",
+    "itemKind": "exercise",
+    "itemTitle": "3rds E D",
+    "startedAt": "2026-10-16T05:36:32.666Z",
+    "endedAt": "2026-10-16T05:40:36.380Z",
+    "durationSec": 244,
+    "endedReason": "complete",
+    "plannedMinutes": 4,
+    "startWorkingBpm": 80,
+    "endWorkingBpm": 86,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-10-16T05:37:47.739Z",
+        "kind": "working",
+        "fromBpm": 80,
+        "toBpm": 82,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-10-16T05:37:48.866Z",
+        "kind": "working",
+        "fromBpm": 82,
+        "toBpm": 84,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-10-16T05:37:56.536Z",
+        "kind": "working",
+        "fromBpm": 84,
+        "toBpm": 86,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "f68242cb-4213-4fc5-8526-81ef381afa04",
+    "itemId": "e_1791614863182_llu7aw71",
+    "itemKind": "exercise",
+    "itemTitle": "3rds C A G",
+    "startedAt": "2026-10-16T05:40:39.811Z",
+    "endedAt": "2026-10-16T05:46:56.192Z",
+    "durationSec": 376,
+    "endedReason": "complete",
+    "plannedMinutes": 6,
+    "startWorkingBpm": 74,
+    "endWorkingBpm": 84,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-10-16T05:43:36.942Z",
+        "kind": "working",
+        "fromBpm": 74,
+        "toBpm": 76,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-10-16T05:43:38.367Z",
+        "kind": "working",
+        "fromBpm": 76,
+        "toBpm": 78,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-10-16T05:43:40.176Z",
+        "kind": "working",
+        "fromBpm": 78,
+        "toBpm": 80,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-10-16T05:45:51.840Z",
+        "kind": "working",
+        "fromBpm": 80,
+        "toBpm": 82,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-10-16T05:45:53.046Z",
+        "kind": "working",
+        "fromBpm": 82,
+        "toBpm": 84,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "521762f3-1616-4644-a9c0-6298a3cba4cf",
+    "itemId": "e_1791614887634_nty1divb",
+    "itemKind": "exercise",
+    "itemTitle": "5ths E D",
+    "startedAt": "2026-10-16T05:46:58.038Z",
+    "endedAt": "2026-10-16T05:56:18.288Z",
+    "durationSec": 537,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 40,
+    "endWorkingBpm": 40,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "8919abbb-d9ef-4a31-8825-b0bc9be3cd44",
+    "itemId": "e_1791614902982_mlns6ewv",
+    "itemKind": "exercise",
+    "itemTitle": "5ths C A G",
+    "startedAt": "2026-10-16T05:56:21.114Z",
+    "endedAt": "2026-10-16T06:02:43.946Z",
+    "durationSec": 383,
+    "endedReason": "complete",
+    "plannedMinutes": 6,
+    "startWorkingBpm": 40,
+    "endWorkingBpm": 40,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "6d5ea865-d30d-4546-a834-2aed73a7ca72",
+    "itemId": "e_1791614917436_i7er8hbb",
+    "itemKind": "exercise",
+    "itemTitle": "6ths E D",
+    "startedAt": "2026-10-16T06:03:10.412Z",
+    "endedAt": "2026-10-16T06:08:52.920Z",
+    "durationSec": 343,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 40,
+    "endWorkingBpm": 40,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "3581977b-a89f-4232-a61a-8b71eae4afed",
+    "itemId": "e_1791614935970_qeba5rzc",
+    "itemKind": "exercise",
+    "itemTitle": "6ths C A G",
+    "startedAt": "2026-10-16T06:08:57.854Z",
+    "endedAt": "2026-10-16T06:15:35.931Z",
+    "durationSec": 398,
+    "endedReason": "complete",
+    "plannedMinutes": 6,
+    "startWorkingBpm": 40,
+    "endWorkingBpm": 40,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "3ec3363a-f4fa-400a-b418-1b6b9890df5d",
+    "itemId": "e_1789444016171_suppinwq",
+    "itemKind": "exercise",
+    "itemTitle": "Emaj7 Arp 5th string",
+    "startedAt": "2026-10-16T06:15:56.096Z",
+    "endedAt": "2026-10-16T06:19:57.538Z",
+    "durationSec": 241,
+    "endedReason": "complete",
+    "plannedMinutes": 2.5,
+    "startWorkingBpm": 94,
+    "endWorkingBpm": 96,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-10-16T06:19:00.607Z",
+        "kind": "working",
+        "fromBpm": 94,
+        "toBpm": 96,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "24dfb060-2cec-4a34-815f-2bb2c10ab6d1",
+    "itemId": "e_1790832168642_e1likwr5",
+    "itemKind": "exercise",
+    "itemTitle": "B7 Arp 5th string",
+    "startedAt": "2026-10-16T06:19:59.658Z",
+    "endedAt": "2026-10-16T06:25:28.988Z",
+    "durationSec": 277,
+    "endedReason": "complete",
+    "plannedMinutes": 2.5,
+    "startWorkingBpm": 96,
+    "endWorkingBpm": 98,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-10-16T06:21:27.404Z",
+        "kind": "working",
+        "fromBpm": 96,
+        "toBpm": 98,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "302458f4-5cc8-46c1-95ea-5c1d64a5dea1",
+    "itemId": "e_1788079503663_n3d48trg",
+    "itemKind": "exercise",
+    "itemTitle": "3 Note Groups C A G shapes",
+    "startedAt": "2026-10-16T06:25:42.631Z",
+    "endedAt": "2026-10-16T06:25:46.937Z",
+    "durationSec": 4,
+    "endedReason": "abort",
+    "plannedMinutes": 3,
+    "startWorkingBpm": 178,
+    "endWorkingBpm": 178,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "2ef07d8e-da42-42ea-bf89-a5ab0a4d0a1f",
+    "itemId": "5c5ffa71-9051-4eb6-95c1-4630265ac577",
+    "itemKind": "song",
+    "itemTitle": "Start - Depapepe rythm",
+    "startedAt": "2026-10-16T06:26:47.539Z",
+    "endedAt": "2026-10-16T06:26:49.993Z",
+    "durationSec": 2,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 94,
+    "endWorkingBpm": 94,
+    "startTroubleBpms": [
+      60
+    ],
+    "endTroubleBpms": [
+      60
+    ],
+    "promotions": []
+  },
+  {
+    "id": "2a468d48-a792-4798-9d51-3114ed651fc1",
+    "itemId": "e_1790831797423_dqd7cpfl",
+    "itemKind": "exercise",
+    "itemTitle": "C#m7 5th string",
+    "startedAt": "2026-10-16T06:27:11.157Z",
+    "endedAt": "2026-10-16T06:30:56.086Z",
+    "durationSec": 225,
+    "endedReason": "complete",
+    "plannedMinutes": 2.5,
+    "startWorkingBpm": 98,
+    "endWorkingBpm": 98,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "df2d2a90-8182-4567-afe2-2483c2920973",
+    "itemId": "e_1789444146426_tym73dt8",
+    "itemKind": "exercise",
+    "itemTitle": "D#min7b5 Arp 5th string",
+    "startedAt": "2026-10-16T06:30:58.887Z",
+    "endedAt": "2026-10-16T06:34:39.627Z",
+    "durationSec": 221,
+    "endedReason": "complete",
+    "plannedMinutes": 2.5,
+    "startWorkingBpm": 72,
+    "endWorkingBpm": 80,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-10-16T06:33:12.842Z",
+        "kind": "working",
+        "fromBpm": 72,
+        "toBpm": 74,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-10-16T06:33:14.793Z",
+        "kind": "working",
+        "fromBpm": 74,
+        "toBpm": 76,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-10-16T06:34:12.062Z",
+        "kind": "working",
+        "fromBpm": 76,
+        "toBpm": 78,
+        "stepPercent": 2.5
+      },
+      {
+        "at": "2026-10-16T06:34:13.089Z",
+        "kind": "working",
+        "fromBpm": 78,
+        "toBpm": 80,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "50e072ca-d1c1-4da0-b7e4-c337f8ece169",
+    "itemId": "e_1789535200319_nwfhr9x7",
+    "itemKind": "exercise",
+    "itemTitle": "3 Note Groups E D Shapes",
+    "startedAt": "2026-10-16T06:35:00.272Z",
+    "endedAt": "2026-10-16T06:42:09.705Z",
+    "durationSec": 429,
+    "endedReason": "complete",
+    "plannedMinutes": 2,
+    "startWorkingBpm": 178,
+    "endWorkingBpm": 178,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "c9da1f65-4037-47a3-8d48-6751a12a2eec",
+    "itemId": "e_1788079503663_n3d48trg",
+    "itemKind": "exercise",
+    "itemTitle": "3 Note Groups C A G shapes",
+    "startedAt": "2026-10-16T06:44:06.815Z",
+    "endedAt": "2026-10-16T06:51:45.059Z",
+    "durationSec": 458,
+    "endedReason": "complete",
+    "plannedMinutes": 3,
+    "startWorkingBpm": 178,
+    "endWorkingBpm": 178,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "69ca0561-cac2-4ae1-80b2-fb8670768c4e",
+    "itemId": "e_1789535332152_7zhv535u",
+    "itemKind": "exercise",
+    "itemTitle": "4 Note Groups E D",
+    "startedAt": "2026-10-16T06:51:46.151Z",
+    "endedAt": "2026-10-16T06:56:35.281Z",
+    "durationSec": 180,
+    "endedReason": "complete",
+    "plannedMinutes": 3,
+    "startWorkingBpm": 103,
+    "endWorkingBpm": 106,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-10-16T06:53:37.409Z",
+        "kind": "working",
+        "fromBpm": 103,
+        "toBpm": 106,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "bff41543-9c68-417f-a5dc-61c6e44e0057",
+    "itemId": "e_1788079586248_hz6yegpa",
+    "itemKind": "exercise",
+    "itemTitle": "4 Note Groups C A G shapes",
+    "startedAt": "2026-10-16T06:56:37.138Z",
+    "endedAt": "2026-10-16T07:02:09.955Z",
+    "durationSec": 333,
+    "endedReason": "complete",
+    "plannedMinutes": 4.5,
+    "startWorkingBpm": 103,
+    "endWorkingBpm": 106,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-10-16T06:57:51.099Z",
+        "kind": "working",
+        "fromBpm": 103,
+        "toBpm": 106,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "4297d5f9-2f38-4dfb-a04e-f730b019a5bc",
+    "itemId": "e_1788080054019_rz2rm55e",
+    "itemKind": "exercise",
+    "itemTitle": "6 Note Groups E D",
+    "startedAt": "2026-10-16T07:02:30.120Z",
+    "endedAt": "2026-10-16T07:11:00.824Z",
+    "durationSec": 506,
+    "endedReason": "complete",
+    "plannedMinutes": 4,
+    "startWorkingBpm": 53,
+    "endWorkingBpm": 54,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": [
+      {
+        "at": "2026-10-16T07:07:47.695Z",
+        "kind": "working",
+        "fromBpm": 53,
+        "toBpm": 54,
+        "stepPercent": 2.5
+      }
+    ]
+  },
+  {
+    "id": "c2d570c0-1396-44b0-b0dd-970f22962368",
+    "itemId": "e_1789535479544_s8lazn5p",
+    "itemKind": "exercise",
+    "itemTitle": "6 Note Groups C A G Shapes",
+    "startedAt": "2026-10-16T07:11:21.015Z",
+    "endedAt": "2026-10-16T07:15:08.058Z",
+    "durationSec": 227,
+    "endedReason": "complete",
+    "plannedMinutes": 6,
+    "startWorkingBpm": 55,
+    "endWorkingBpm": 55,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "f708bb25-d8d8-44ed-a95b-4900dd3919c1",
+    "itemId": "e_1786172379355_o9n1t5nj",
+    "itemKind": "exercise",
+    "itemTitle": "Start Depapepe Pulloffs",
+    "startedAt": "2026-10-16T07:15:09.587Z",
+    "endedAt": "2026-10-16T07:15:11.712Z",
+    "durationSec": 2,
+    "endedReason": "abort",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 78,
+    "endWorkingBpm": 78,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "0517c665-ca2f-48bd-a05a-00d13f8ef4f4",
+    "itemId": "5c5ffa71-9051-4eb6-95c1-4630265ac577",
+    "itemKind": "song",
+    "itemTitle": "Start - Depapepe rythm",
+    "startedAt": "2026-10-16T08:35:13.067Z",
+    "endedAt": "2026-10-16T08:35:19.634Z",
+    "durationSec": 7,
+    "endedReason": "abort",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 94,
+    "endWorkingBpm": 94,
+    "startTroubleBpms": [
+      60
+    ],
+    "endTroubleBpms": [
+      60
+    ],
+    "promotions": []
+  },
+  {
+    "id": "6db12281-5db9-4ca5-af06-18226ecc8878",
+    "itemId": "5c5ffa71-9051-4eb6-95c1-4630265ac577",
+    "itemKind": "song",
+    "itemTitle": "Start - Depapepe rythm",
+    "startedAt": "2026-10-16T08:35:26.018Z",
+    "endedAt": "2026-10-16T08:35:32.270Z",
+    "durationSec": 6,
+    "endedReason": "abort",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 94,
+    "endWorkingBpm": 94,
+    "startTroubleBpms": [
+      60
+    ],
+    "endTroubleBpms": [
+      60
+    ],
+    "promotions": []
+  },
+  {
+    "id": "e8be524b-7393-4018-950b-d0a213089ab4",
+    "itemId": "e_1789444016171_suppinwq",
+    "itemKind": "exercise",
+    "itemTitle": "Emaj7 Arp 5th string",
+    "startedAt": "2026-10-16T08:35:40.738Z",
+    "endedAt": "2026-10-16T08:35:44.918Z",
+    "durationSec": 4,
+    "endedReason": "abort",
+    "plannedMinutes": 2.5,
+    "startWorkingBpm": 96,
+    "endWorkingBpm": 96,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "385dc14e-6760-411f-81a4-1dd150b1ef1c",
+    "itemId": "e_1789444016171_suppinwq",
+    "itemKind": "exercise",
+    "itemTitle": "Emaj7 Arp 5th string",
+    "startedAt": "2026-10-16T08:36:18.192Z",
+    "endedAt": "2026-10-16T08:36:19.833Z",
+    "durationSec": 2,
+    "endedReason": "complete",
+    "plannedMinutes": 2.5,
+    "startWorkingBpm": 96,
+    "endWorkingBpm": 96,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
+  },
+  {
+    "id": "a88ef970-fc26-4412-a1f8-9b6985b44d0f",
+    "itemId": "5c5ffa71-9051-4eb6-95c1-4630265ac577",
+    "itemKind": "song",
+    "itemTitle": "Start - Depapepe rythm",
+    "startedAt": "2026-10-16T08:36:24.243Z",
+    "endedAt": "2026-10-16T08:36:26.845Z",
+    "durationSec": 3,
+    "endedReason": "complete",
+    "plannedMinutes": 10,
+    "startWorkingBpm": 94,
+    "endWorkingBpm": 94,
+    "startTroubleBpms": [
+      60
+    ],
+    "endTroubleBpms": [
+      60
+    ],
+    "promotions": []
+  },
+  {
+    "id": "e79dfe85-38ea-4e65-af53-f149fd51052b",
+    "itemId": "66a868d0-750b-4fb5-82f3-6422ec05ca24",
+    "itemKind": "exercise",
+    "itemTitle": "Fast Strum",
+    "startedAt": "2026-10-16T08:36:45.601Z",
+    "endedAt": "2026-10-16T08:37:25.296Z",
+    "durationSec": 40,
+    "endedReason": "complete",
+    "plannedMinutes": 5,
+    "startWorkingBpm": 286,
+    "endWorkingBpm": 286,
+    "startTroubleBpms": [],
+    "endTroubleBpms": [],
+    "promotions": []
   }
 ]

@@ -34,6 +34,8 @@ import { MetronomeDiagnosticsPanel } from "@/components/session/MetronomeDiagnos
 import { BpmEditorModal } from "@/components/session/BpmEditorModal";
 import { BetweenItemsOverlay } from "@/components/session/BetweenItemsOverlay";
 import { PracticeNotes } from "@/components/session/PracticeNotes";
+import { ExerciseForm } from "@/components/exercises/ExerciseForm";
+import { SessionItemEditor } from "@/components/session/SessionItemEditor";
 import { SessionShell } from "@/components/session/SessionShell";
 
 type BetweenItems = {
@@ -75,6 +77,9 @@ export default function ExerciseSessionPage() {
 
   const [betweenItems, setBetweenItems] = useState<BetweenItems | null>(null);
   const [betweenItemsPaused, setBetweenItemsPaused] = useState(false);
+  const [itemEditorOpen, setItemEditorOpen] = useState(false);
+  const resumeAfterEditRef = useRef(false);
+  const [activeBlocks, setActiveBlocks] = useState<BlockDef[] | null>(null);
   const [bpmEditorOpen, setBpmEditorOpen] = useState(false);
   const [consciousSlowMode, setConsciousSlowMode] = useState(false);
   const [consciousBpmEditorOpen, setConsciousBpmEditorOpen] = useState(false);
@@ -83,8 +88,9 @@ export default function ExerciseSessionPage() {
   const betweenItemsPausedRef = useRef(false);
   betweenItemsPausedRef.current = betweenItemsPaused;
   const betweenItemsPausedAtRef = useRef<number>(0);
-  const startWorkingBpmRef = useRef<number>(0);
+  const startWorkingBpmRef = useRef<number | null>(null);
   const promotionsRef = useRef<PromotionEvent[]>([]);
+  const plannedMinutesRef = useRef(0);
   // Runtime exercise (in Song-shape, for tempoFn). Promotion mutates this in
   // place via a fresh object; the underlying Exercise is rebuilt and saved
   // separately so the store stays canonical.
@@ -101,6 +107,8 @@ export default function ExerciseSessionPage() {
 
   const queueExerciseUpdate = useCallback(
     (next: Exercise) => {
+      exerciseRef.current = next;
+      runtimeSongRef.current = exerciseAsSong(next);
       const write = updateExercise(next);
       pendingExerciseWriteRef.current = write.catch(() => undefined);
       return write;
@@ -126,13 +134,7 @@ export default function ExerciseSessionPage() {
   const sessionMinutes = exercise?.sessionMinutes ?? 5;
   const isOpenEnded =
     !!exercise?.openEnded || exercise?.practiceMode === "openEnded";
-  const usesGlobalMetronomeToggle =
-    isOpenEnded ||
-    exercise?.practiceMode === "simple" ||
-    exercise?.practiceMode === "timed";
-  const metronomeOff = exercise
-    ? usesGlobalMetronomeToggle && exercise.metronomeEnabled === false
-    : false;
+  const metronomeOff = exercise?.metronomeEnabled === false;
   const blockPlan = useMemo(
     () => (exercise ? buildExerciseBlockPlan(exercise) : null),
     // Inputs that affect the block list. The exercise object identity changes
@@ -149,7 +151,8 @@ export default function ExerciseSessionPage() {
       exercise?.metronomeEnabled,
     ],
   );
-  const blocks = useMemo<BlockDef[]>(() => blockPlan?.blocks ?? [], [blockPlan]);
+  const plannedBlocks = useMemo<BlockDef[]>(() => blockPlan?.blocks ?? [], [blockPlan]);
+  const blocks = activeBlocks ?? plannedBlocks;
 
   const practice = usePracticeSession({
     blocks,
@@ -159,6 +162,12 @@ export default function ExerciseSessionPage() {
     clearLatestRecording,
     getStartSubject: () => (exercise ? exerciseAsSong(exercise) : null),
     onBeforeStart: (subject) => {
+      if (!exercise) return;
+      setActiveBlocks(plannedBlocks.map((block) => ({
+        ...block,
+        metronomeEnabled: block.kind === "consciousPractice" || exercise.practiceMode !== "smart" ? true : block.metronomeEnabled,
+      })));
+      plannedMinutesRef.current = sessionMinutes;
       if (!exercise) return;
       exerciseRef.current = exercise;
       runtimeSongRef.current = subject as Song;
@@ -173,7 +182,8 @@ export default function ExerciseSessionPage() {
         setConsciousSlowMode(false);
       }
     },
-    onComplete: () => endSessionRef.current("complete"),
+    onComplete: () => { practice.metronomeRef.current?.pause(); },
+    onFinalAdvance: () => endSessionRef.current("complete"),
     onAbort: () => endSessionRef.current("abort"),
     onPlus: () => earnedHandlerRef.current(),
     isIntermissionActive: () => !!betweenItemsRef.current,
@@ -181,10 +191,12 @@ export default function ExerciseSessionPage() {
     onIntermissionCancel: () => handleBetweenItemsCancelRef.current(),
     onIntermissionPauseToggle: () => handleBetweenItemsPauseToggleRef.current(),
     metronomeSuppressed: metronomeOff,
+    createMetronomeWhenSilent: true,
+    editorOpen: itemEditorOpen || bpmEditorOpen || consciousBpmEditorOpen,
   });
 
   const endSession = useCallback(
-    async (reason: "complete" | "abort") => {
+    async (reason: "complete" | "abort", repeat = false) => {
       await practice.finishSession(reason, async ({ elapsedSec, startedAt, recorder }) => {
       await pendingExerciseWriteRef.current.catch(() => undefined);
       const exId = exercise?.id;
@@ -200,13 +212,13 @@ export default function ExerciseSessionPage() {
           endedAt: new Date().toISOString(),
           elapsedSec,
           endedReason: reason,
-          plannedMinutes: exercise?.sessionMinutes ?? sessionMinutes,
+          plannedMinutes: plannedMinutesRef.current,
           startWorkingBpm: startWorkingBpmRef.current,
-          endWorkingBpm: exNow?.workingBpm ?? startWorkingBpmRef.current,
+          endWorkingBpm: exNow?.workingBpm ?? null,
           promotions: promotionsRef.current.slice(),
         });
         sessionId = rec.id;
-        void completeSessionRecord(rec)
+        await completeSessionRecord(rec)
           .then(() => loadExercises())
           .catch(() => {
             // best-effort
@@ -224,12 +236,18 @@ export default function ExerciseSessionPage() {
             blob: result.blob,
             blobUrl,
             durationSec: result.durationSec,
-            plannedMinutes: exerciseRef.current?.sessionMinutes ?? 5,
+            plannedMinutes: plannedMinutesRef.current,
             createdAt: new Date().toISOString(),
           }));
         } catch {
           // swallow
         }
+      }
+
+      if (repeat) {
+        setActiveBlocks(null);
+        practice.prepareRestart();
+        return;
       }
 
       // On a normal completion, flow into the next exercise in the user's
@@ -266,7 +284,6 @@ export default function ExerciseSessionPage() {
       router,
       setLatestRecording,
       completeSessionRecord,
-      sessionMinutes,
       settings.interSongPauseSec,
     ],
   );
@@ -303,6 +320,7 @@ export default function ExerciseSessionPage() {
     if (!currentBlock) return 0;
     const s = runtimeSongRef.current;
     if (!s) return 0;
+    if (currentBlock.kind === "consciousPractice" && s.workingBpm == null) return 0;
     if (currentBlock.kind === "consciousPractice" && consciousSlowMode) {
       return Math.max(20, Math.floor(warmupBpmFor(s) / 2));
     }
@@ -321,7 +339,7 @@ export default function ExerciseSessionPage() {
   useEffect(() => {
     if (!started || !snap || snap.phase !== "playing") return;
     const block = blocks[snap.blockIndex];
-    if (!block || block.kind !== "consciousPractice") return;
+    if (!block) return;
     if (tempoBpm <= 0) return;
     metronomeRef.current?.setBpm(tempoBpm);
   }, [tempoBpm, snap, started, blocks, metronomeRef]);
@@ -331,18 +349,19 @@ export default function ExerciseSessionPage() {
   const showEarnedButton =
     !!currentBlock &&
     currentBlock.showEarnedButton &&
-    snap?.phase === "playing" &&
+    !practice.endedRef.current &&
+    exercise?.workingBpm != null &&
     !paused;
 
   const canPause = snap?.phase === "playing";
   const canReset = snap?.phase === "playing" && !paused;
-  const canEditBpm = snap?.phase === "playing" && !paused;
+  const canEditBpm = !!snap && !paused;
   const isConscious = currentBlock?.kind === "consciousPractice";
   const isUnbounded = !!currentBlock?.unbounded;
   const elapsedSec = practice.elapsedSec;
   const consciousPlayedBpm = currentBlock ? tempoBpm : 0;
   const consciousDefaultBpm = exercise
-    ? Math.max(20, Math.round(exercise.workingBpm / 3))
+    ? Math.max(20, Math.round((exercise.workingBpm ?? 0) / 3))
     : 0;
   const consciousSlowerBpm = runtimeSongRef.current
     ? Math.max(20, Math.floor(warmupBpmFor(runtimeSongRef.current) / 2))
@@ -355,24 +374,26 @@ export default function ExerciseSessionPage() {
     if (!currentBlock) return null;
     const songNow = runtimeSongRef.current;
     if (!songNow) return null;
-    if (songNow.workingBpm == null) return null;
+
     const playedBpm = currentBlock.tempoFn(songNow);
     const isDerived = playedBpm !== songNow.workingBpm;
     return {
       title: "Edit Working BPM",
-      helperText: isDerived
+      helperText: songNow.workingBpm == null ? "Set a working BPM to add a click to this timer." : isDerived
         ? `This block plays at ${playedBpm} BPM (derived from working ${songNow.workingBpm}).`
         : `This block plays at ${playedBpm} BPM.`,
-      initialBpm: songNow.workingBpm,
+      initialBpm: songNow.workingBpm ?? 60,
     };
-  }, [currentBlock]);
+  // The saved exercise refreshes the runtime ref after live edits.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentBlock, exercise]);
 
   const handleEarned = useCallback(async () => {
-    if (!snap || snap.phase !== "playing") return;
+    if (!snap || practice.endedRef.current) return;
     const block = blocks[snap.blockIndex];
     const songNow = runtimeSongRef.current;
     const exNow = exerciseRef.current;
-    if (!block || !songNow || !exNow || !block.showEarnedButton) return;
+    if (!block || !songNow || !exNow || exNow.workingBpm == null || !block.showEarnedButton) return;
     if (block.promotes?.kind !== "working") return;
 
     const oldBpm = exNow.workingBpm;
@@ -389,12 +410,12 @@ export default function ExerciseSessionPage() {
       at: nowIso(),
       kind: "working",
       fromBpm: oldBpm,
-      toBpm: promotedExercise.workingBpm,
+      toBpm: promotedExercise.workingBpm ?? oldBpm,
       stepPercent: exNow.stepPercent,
     });
     addToast(`Working: ${oldBpm} → ${promotedExercise.workingBpm}`);
     await queueExerciseUpdate(promotedExercise);
-  }, [snap, blocks, queueExerciseUpdate, addToast, metronomeRef]);
+  }, [snap, blocks, queueExerciseUpdate, addToast, metronomeRef, practice.endedRef]);
   earnedHandlerRef.current = () => {
     void handleEarned();
   };
@@ -406,7 +427,7 @@ export default function ExerciseSessionPage() {
 
   const handleEditBpm = useCallback(
     async (newBpm: number) => {
-      if (!snap || snap.phase !== "playing") return;
+      if (!snap || practice.endedRef.current) return;
       const block = blocks[snap.blockIndex];
       const songNow = runtimeSongRef.current;
       const exNow = exerciseRef.current;
@@ -430,7 +451,7 @@ export default function ExerciseSessionPage() {
       addToast(`Working: ${oldBpm} → ${newBpm}`);
       await queueExerciseUpdate(updatedExercise);
     },
-    [snap, blocks, queueExerciseUpdate, addToast, metronomeRef],
+    [snap, blocks, queueExerciseUpdate, addToast, metronomeRef, practice.endedRef],
   );
 
   const handleResetBlock = practice.handleResetBlock;
@@ -510,7 +531,7 @@ export default function ExerciseSessionPage() {
     );
   }
 
-  if (blockPlan && !blockPlan.ok) {
+  if (!started && blockPlan && !blockPlan.ok) {
     return (
       <main className="mx-auto flex min-h-screen max-w-xl flex-col justify-center px-6 py-10">
         <p className="text-sm font-semibold uppercase text-accent">
@@ -561,10 +582,19 @@ export default function ExerciseSessionPage() {
     );
   }
 
-  const awaiting = snap.phase === "awaiting";
+  const awaiting = snap.phase === "awaiting" || snap.phase === "ended";
 
   return (
     <SessionShell
+      finishing={practice.finishing}
+      itemControls={<>
+        <button type="button" onClick={() => { resumeAfterEditRef.current = !paused && snap.phase === "playing"; if (resumeAfterEditRef.current) practice.handlePauseToggle(); setItemEditorOpen(true); }} className="rounded-lg border border-bg-border px-3 py-2 text-sm text-accent">Edit exercise</button>
+        <label className="flex items-center gap-2 text-sm text-neutral-300"><input type="checkbox" checked={exercise.metronomeEnabled === false} onChange={async (event) => {
+          const current = exerciseRef.current;
+          if (!current) return;
+          try { await queueExerciseUpdate({ ...current, metronomeEnabled: !event.target.checked }); } catch { addToast("Could not save metronome preference."); }
+        }} />Disable metronome</label>
+      </>}
       notesPanel={<PracticeNotes key={exercise.id} notes={exercise.notes ?? null} onSave={async (notes) => {
         const current = exerciseRef.current;
         if (!current) throw new Error("This item is no longer available.");
@@ -573,7 +603,7 @@ export default function ExerciseSessionPage() {
         await queueExerciseUpdate(updated);
       }} />}
       title={exercise.name}
-      subtitle={`${isOpenEnded ? "Open-ended" : `${sessionMinutes}-min exercise`}${
+      subtitle={`${isOpenEnded ? "Open-ended" : `${plannedMinutesRef.current}-min exercise`}${
         metronomeOff ? " · metronome off" : ""
       }`}
       currentBlock={currentBlock}
@@ -598,7 +628,7 @@ export default function ExerciseSessionPage() {
         !metronomeOff && currentBlock?.metronomeEnabled !== false
       }
       showMetronomeIndicator={
-        !metronomeOff && currentBlock?.metronomeEnabled !== false
+        tempoBpm > 0 && !metronomeOff && currentBlock?.metronomeEnabled !== false
       }
       canResetBlock={canReset}
       canEditBpm={canEditBpm}
@@ -669,15 +699,15 @@ export default function ExerciseSessionPage() {
       onSkip={handleSkip}
       onEnd={() => void endSession("abort")}
       onEarned={handleEarned}
-      onAdvance={advance}
+      onAdvance={() => !nextBlock ? void endSession("complete") : advance()}
+      onRepeatSession={() => void endSession("complete", true)}
       onRepeatBlock={handleRepeatBlock}
-      onUnboundedAction={
-        currentBlock?.kind === "openEnded"
-          ? () => void endSession("complete")
-          : advance
-      }
+      onUnboundedAction={advance}
       toasts={toasts}
     >
+      {itemEditorOpen && <SessionItemEditor title="Edit exercise" onClose={() => { setItemEditorOpen(false); if (resumeAfterEditRef.current) { resumeAfterEditRef.current = false; practice.handlePauseToggle(); } }}>
+        <ExerciseForm initial={exercise} submitLabel="Save" onSubmit={async (values) => { const current = exerciseRef.current; if (!current) throw new Error("Item unavailable."); await queueExerciseUpdate({ ...current, ...values }); setItemEditorOpen(false); if (resumeAfterEditRef.current) { resumeAfterEditRef.current = false; practice.handlePauseToggle(); } }} onCancel={() => { setItemEditorOpen(false); if (resumeAfterEditRef.current) { resumeAfterEditRef.current = false; practice.handlePauseToggle(); } }} />
+      </SessionItemEditor>}
       {bpmEditorState && (
         <BpmEditorModal
           open={bpmEditorOpen}

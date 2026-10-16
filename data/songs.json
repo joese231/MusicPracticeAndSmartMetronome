@@ -146,22 +146,27 @@
       }
     ],
     "defaultSessionMinutes": 10,
-    "metronomeEnabled": false,
-    "totalPracticeSec": 40628,
-    "sortIndex": 1,
+    "metronomeEnabled": true,
+    "totalPracticeSec": 42211,
+    "sortIndex": 2,
     "createdAt": "2026-06-10T14:04:57.223Z",
-    "updatedAt": "2026-09-14T04:17:05.487Z"
+    "updatedAt": "2026-10-14T04:03:55.979Z",
+    "notes": null
   },
   {
     "id": "5c5ffa71-9051-4eb6-95c1-4630265ac577",
-    "title": "Start - Depapepe",
+    "title": "Start - Depapepe rythm",
     "link": "https://www.youtube.com/watch?v=lWd6MEcum-E",
-    "workingBpm": null,
+    "workingBpm": 94,
     "warmupBpm": null,
-    "troubleSpots": [],
-    "originalBpm": null,
+    "troubleSpots": [
+      {
+        "bpm": 60
+      }
+    ],
+    "originalBpm": 125,
     "stepPercent": 2.5,
-    "practiceMode": "timed",
+    "practiceMode": "simple",
     "includeWarmupBlock": false,
     "blockTemplate": [
       {
@@ -299,11 +304,12 @@
       }
     ],
     "defaultSessionMinutes": 10,
-    "metronomeEnabled": false,
-    "totalPracticeSec": 64777,
+    "metronomeEnabled": true,
+    "totalPracticeSec": 67346,
     "sortIndex": 0,
     "createdAt": "2026-06-10T14:59:09.110Z",
-    "updatedAt": "2026-09-11T07:13:06.575Z"
+    "updatedAt": "2026-10-16T08:36:26.905Z",
+    "notes": null
   },
   {
     "id": "58148c75-8f5b-4b2b-822a-098df01fb11d",
@@ -453,10 +459,10 @@
     ],
     "defaultSessionMinutes": 10,
     "metronomeEnabled": false,
-    "totalPracticeSec": 18849,
-    "sortIndex": 2,
+    "totalPracticeSec": 20242,
+    "sortIndex": 3,
     "createdAt": "2026-06-10T16:16:07.462Z",
-    "updatedAt": "2026-09-09T03:49:44.373Z"
+    "updatedAt": "2026-10-14T04:07:49.622Z"
   },
   {
     "id": "dc275ae4-6f34-45b0-a041-3a04783d7427",
@@ -471,12 +477,12 @@
     ],
     "originalBpm": 200,
     "stepPercent": 2.5,
-    "practiceMode": "smart",
+    "practiceMode": "simple",
     "includeWarmupBlock": false,
-    "totalPracticeSec": 29740,
-    "sortIndex": 3,
+    "totalPracticeSec": 30582,
+    "sortIndex": 4,
     "createdAt": "2026-04-27T15:29:18.877Z",
-    "updatedAt": "2026-09-09T03:49:50.344Z",
+    "updatedAt": "2026-09-28T07:42:53.658Z",
     "blockTemplate": [
       {
         "id": "song-slowReference",
@@ -613,7 +619,8 @@
       }
     ],
     "defaultSessionMinutes": 10,
-    "metronomeEnabled": true
+    "metronomeEnabled": true,
+    "notes": null
   },
   {
     "id": "ccc5bda1-f0e0-418f-a73c-c2855b575ad8",
@@ -628,12 +635,12 @@
     ],
     "originalBpm": 201,
     "stepPercent": 2.5,
-    "practiceMode": "smart",
+    "practiceMode": "simple",
     "includeWarmupBlock": false,
-    "totalPracticeSec": 24974,
-    "sortIndex": 4,
+    "totalPracticeSec": 26326,
+    "sortIndex": 5,
     "createdAt": "2026-04-29T12:14:24.205Z",
-    "updatedAt": "2026-09-09T03:49:52.057Z",
+    "updatedAt": "2026-10-14T04:20:15.085Z",
     "blockTemplate": [
       {
         "id": "song-slowReference",
@@ -770,20 +777,21 @@
       }
     ],
     "defaultSessionMinutes": 10,
-    "metronomeEnabled": true
+    "metronomeEnabled": true,
+    "notes": null
   },
   {
     "id": "de7b70c2-3c07-4e13-ae2b-6028a94269e7",
     "title": "Salt Creek [Capo2]",
     "link": "https://truefire.com/bluegrass-guitar-lessons/bluegrass-blaze/salt-creek/v97811",
-    "workingBpm": 192,
+    "workingBpm": 197,
     "originalBpm": 271,
     "stepPercent": 2.5,
-    "totalPracticeSec": 32645,
+    "totalPracticeSec": 33639,
     "createdAt": "2026-04-13T21:21:14.941Z",
-    "updatedAt": "2026-09-09T04:03:24.184Z",
+    "updatedAt": "2026-10-09T16:35:09.113Z",
     "troubleSpots": [],
-    "sortIndex": 5,
+    "sortIndex": 6,
     "warmupBpm": null,
     "practiceMode": "smart",
     "includeWarmupBlock": true,
@@ -923,7 +931,8 @@
       }
     ],
     "defaultSessionMinutes": 10,
-    "metronomeEnabled": true
+    "metronomeEnabled": true,
+    "notes": null
   },
   {
     "id": "ecbb5882-094b-4ee9-9856-13a5ab0c625f",
@@ -933,9 +942,9 @@
     "troubleSpots": [],
     "originalBpm": 261,
     "stepPercent": 2.5,
-    "totalPracticeSec": 24584,
+    "totalPracticeSec": 24827,
     "createdAt": "2026-04-13T22:46:44.165Z",
-    "updatedAt": "2026-09-10T04:01:17.832Z",
+    "updatedAt": "2026-09-20T06:22:30.516Z",
     "sortIndex": 10,
     "warmupBpm": null,
     "practiceMode": "smart",
@@ -1086,10 +1095,10 @@
     "troubleSpots": [],
     "originalBpm": 248,
     "stepPercent": 2.5,
-    "totalPracticeSec": 14856,
+    "totalPracticeSec": 14933,
     "createdAt": "2026-04-13T22:48:00.779Z",
-    "updatedAt": "2026-09-10T04:03:45.582Z",
-    "sortIndex": 6,
+    "updatedAt": "2026-09-20T06:18:08.011Z",
+    "sortIndex": 11,
     "warmupBpm": null,
     "practiceMode": "smart",
     "includeWarmupBlock": true,
@@ -1239,9 +1248,9 @@
     "troubleSpots": [],
     "originalBpm": 210,
     "stepPercent": 2.5,
-    "totalPracticeSec": 19501,
+    "totalPracticeSec": 20182,
     "createdAt": "2026-04-13T22:49:52.792Z",
-    "updatedAt": "2026-09-10T04:10:23.928Z",
+    "updatedAt": "2026-10-09T16:38:16.238Z",
     "sortIndex": 7,
     "warmupBpm": null,
     "practiceMode": "smart",
@@ -1399,9 +1408,9 @@
     ],
     "originalBpm": 125,
     "stepPercent": 2.5,
-    "totalPracticeSec": 23574,
+    "totalPracticeSec": 24709,
     "createdAt": "2026-04-13T22:50:50.703Z",
-    "updatedAt": "2026-09-10T04:16:05.907Z",
+    "updatedAt": "2026-10-14T04:11:27.356Z",
     "sortIndex": 8,
     "warmupBpm": 40,
     "practiceMode": "smart",
@@ -1696,5 +1705,163 @@
     "sortIndex": 9,
     "createdAt": "2026-06-10T15:00:17.441Z",
     "updatedAt": "2026-09-10T04:16:07.936Z"
+  },
+  {
+    "id": "232e185f-6770-4775-80bf-f6f224e3ed5e",
+    "title": "Start - Depapepe Melody",
+    "notes": null,
+    "link": null,
+    "workingBpm": 100,
+    "warmupBpm": null,
+    "troubleSpots": [
+      {
+        "bpm": 62
+      }
+    ],
+    "originalBpm": 125,
+    "stepPercent": 2.5,
+    "practiceMode": "simple",
+    "includeWarmupBlock": true,
+    "blockTemplate": [
+      {
+        "id": "song-slowReference",
+        "role": "slowReference",
+        "name": "Slow Reference",
+        "purpose": "@ 80% working",
+        "instructions": [
+          "Play the full tune slowly and relaxed.",
+          "Stay here until you can play one clean-enough repetition of the song."
+        ],
+        "enabled": true,
+        "duration": {
+          "kind": "fixed",
+          "seconds": 90
+        },
+        "tempoRule": {
+          "source": "working",
+          "adjustment": {
+            "kind": "percent",
+            "value": 80
+          }
+        },
+        "metronomeEnabled": true,
+        "progression": {
+          "kind": "none"
+        }
+      },
+      {
+        "id": "song-troubleSpot",
+        "role": "troubleSpot",
+        "name": "Trouble Spot",
+        "purpose": "@ saved trouble BPM, else 80% working",
+        "instructions": [
+          "Loop just the hardest 1-2 bars of the tune.",
+          "Three clean-and-relaxed reps earns the next rung."
+        ],
+        "enabled": true,
+        "duration": {
+          "kind": "fixed",
+          "seconds": 120
+        },
+        "tempoRule": {
+          "source": "trouble",
+          "fallback": {
+            "source": "working",
+            "adjustment": {
+              "kind": "percent",
+              "value": 80
+            }
+          }
+        },
+        "metronomeEnabled": true,
+        "progression": {
+          "kind": "trouble"
+        }
+      },
+      {
+        "id": "song-ceilingWork",
+        "role": "ceilingWork",
+        "name": "Ceiling Work",
+        "purpose": "@ target BPM (working + 1 step)",
+        "instructions": [
+          "Full tune at the target tempo.",
+          "Three clean-and-relaxed reps earns a new working tempo."
+        ],
+        "enabled": true,
+        "duration": {
+          "kind": "fixed",
+          "seconds": 300
+        },
+        "tempoRule": {
+          "source": "working",
+          "adjustment": {
+            "kind": "steps",
+            "value": 1
+          }
+        },
+        "metronomeEnabled": true,
+        "progression": {
+          "kind": "working"
+        }
+      },
+      {
+        "id": "song-overspeed",
+        "role": "overspeed",
+        "name": "Overspeed",
+        "purpose": "@ overspeed (working + 2 steps)",
+        "instructions": [
+          "Play at least one repetition above your target tempo.",
+          "Messy is OK; the goal is to make target feel slower."
+        ],
+        "enabled": true,
+        "duration": {
+          "kind": "fixed",
+          "seconds": 120
+        },
+        "tempoRule": {
+          "source": "working",
+          "adjustment": {
+            "kind": "steps",
+            "value": 2
+          }
+        },
+        "metronomeEnabled": true,
+        "progression": {
+          "kind": "none"
+        }
+      },
+      {
+        "id": "song-consolidation",
+        "role": "consolidation",
+        "name": "Consolidation",
+        "purpose": "@ 70% working",
+        "instructions": [
+          "Play relaxed reps below working tempo.",
+          "Stay here until you can play one very relaxed musical pass."
+        ],
+        "enabled": true,
+        "duration": {
+          "kind": "fixed",
+          "seconds": 90
+        },
+        "tempoRule": {
+          "source": "working",
+          "adjustment": {
+            "kind": "percent",
+            "value": 70
+          }
+        },
+        "metronomeEnabled": true,
+        "progression": {
+          "kind": "none"
+        }
+      }
+    ],
+    "defaultSessionMinutes": 10,
+    "metronomeEnabled": true,
+    "totalPracticeSec": 2272,
+    "sortIndex": 1,
+    "createdAt": "2026-09-26T08:10:14.797Z",
+    "updatedAt": "2026-10-14T03:58:08.443Z"
   }
 ]

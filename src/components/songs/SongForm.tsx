@@ -23,7 +23,6 @@ import { SegmentedControl } from "@/components/ui/SegmentedControl";
 const PRACTICE_MODE_OPTIONS: Array<{ value: PracticeMode; label: string }> = [
   { value: "smart", label: "Smart" },
   { value: "simple", label: "Simple" },
-  { value: "timed", label: "Timed" },
   { value: "openEnded", label: "Open Ended" },
 ];
 
@@ -61,7 +60,7 @@ export function SongForm({ initial, submitLabel, onSubmit, onCancel }: Props) {
   );
   const [defaultSessionMinutesTouched, setDefaultSessionMinutesTouched] =
     useState(false);
-  const [metronomeEnabled, setMetronomeEnabled] = useState<boolean>(
+  const [metronomeEnabled] = useState<boolean>(
     initial?.metronomeEnabled ?? true,
   );
 
@@ -95,7 +94,7 @@ export function SongForm({ initial, submitLabel, onSubmit, onCancel }: Props) {
   const settingsLoad = useSettingsStore((s) => s.load);
   const isEditing = initial?.practiceMode !== undefined;
   const [practiceMode, setPracticeMode] = useState<PracticeMode>(
-    initial?.practiceMode ?? "smart",
+    initial?.practiceMode === "timed" ? "simple" : initial?.practiceMode ?? "smart",
   );
   const [practiceModeTouched, setPracticeModeTouched] = useState(false);
   const [includeWarmupBlock, setIncludeWarmupBlock] = useState<boolean>(
@@ -113,7 +112,7 @@ export function SongForm({ initial, submitLabel, onSubmit, onCancel }: Props) {
   useEffect(() => {
     if (isEditing || practiceModeTouched) return;
     if (!settingsLoaded) return;
-    setPracticeMode(settingsDefaultMode);
+    setPracticeMode(settingsDefaultMode === "timed" ? "simple" : settingsDefaultMode);
   }, [isEditing, practiceModeTouched, settingsLoaded, settingsDefaultMode]);
   useEffect(() => {
     if (isEditing || blockTemplateTouched) return;
@@ -169,10 +168,7 @@ export function SongForm({ initial, submitLabel, onSubmit, onCancel }: Props) {
       return;
     }
     const w = parseOptInt(workingBpm);
-    const bpmRequired =
-      practiceMode === "smart" ||
-      practiceMode === "simple" ||
-      metronomeEnabled;
+    const bpmRequired = practiceMode === "smart";
     if (bpmRequired && w == null) {
       setError("Working BPM is required when the metronome or ladder is used.");
       return;
@@ -241,6 +237,8 @@ export function SongForm({ initial, submitLabel, onSubmit, onCancel }: Props) {
           : DEFAULT_SONG_SESSION_MINUTES,
         metronomeEnabled,
       });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Could not save song.");
     } finally {
       setBusy(false);
     }
@@ -283,11 +281,7 @@ export function SongForm({ initial, submitLabel, onSubmit, onCancel }: Props) {
             value={workingBpm}
             onChange={(e) => setWorkingBpm(e.target.value)}
             className="field-input"
-            required={
-              practiceMode === "smart" ||
-              practiceMode === "simple" ||
-              metronomeEnabled
-            }
+            required={practiceMode === "smart"}
           />
         </Field>
 
@@ -343,7 +337,7 @@ export function SongForm({ initial, submitLabel, onSubmit, onCancel }: Props) {
             Practice mode
           </div>
           <div className="mt-1 text-xs text-neutral-500">
-            Smart runs your custom block sequence. Simple is one steady-BPM countdown. Timed is one countdown block. Open Ended is a count-up timer.
+            Smart runs your custom block sequence. Simple is a countdown with an optional BPM. Open Ended is a count-up timer. Leave BPM blank for silent practice.
           </div>
           <div className="mt-3">
             <SegmentedControl
@@ -357,25 +351,6 @@ export function SongForm({ initial, submitLabel, onSubmit, onCancel }: Props) {
             />
           </div>
         </div>
-
-        {(practiceMode === "timed" || practiceMode === "openEnded") && (
-          <label className="flex cursor-pointer items-start gap-3">
-            <input
-              type="checkbox"
-              checked={!metronomeEnabled}
-              onChange={(e) => setMetronomeEnabled(!e.target.checked)}
-              className="mt-1 h-4 w-4 cursor-pointer accent-amber-500"
-            />
-            <div>
-              <div className="text-sm font-medium text-neutral-200">
-                Disable metronome for this song
-              </div>
-              <div className="mt-0.5 text-xs text-neutral-500">
-                When off, this song can be practiced without a working BPM.
-              </div>
-            </div>
-          </label>
-        )}
 
         {practiceMode !== "openEnded" && (
           <label className="flex cursor-pointer items-start gap-3">
@@ -434,9 +409,9 @@ export function SongForm({ initial, submitLabel, onSubmit, onCancel }: Props) {
       </section>
 
       <section className="rounded-lg border-2 border-accent/40 bg-bg-elevated p-5">
-        {practiceMode !== "smart" && (
+        {practiceMode !== "smart" && practiceMode !== "simple" && (
           <div className="mb-3 rounded border border-bg-border bg-bg/40 px-3 py-2 text-xs text-neutral-400">
-            Trouble spots are saved but only used in Smart Practice.
+            Trouble spots are saved and used in Smart and Simple practice.
           </div>
         )}
         <div className="flex items-center justify-between gap-3">
@@ -445,7 +420,7 @@ export function SongForm({ initial, submitLabel, onSubmit, onCancel }: Props) {
               Trouble spots ({troubleCount} of {MAX_TROUBLE_SPOTS})
             </div>
             <div className="mt-1 text-xs text-neutral-400">
-              How many hard passages does this tune have? Each spot gets its own practice block and promotes independently. Use the + / − buttons to set the count.
+              Each spot gets its own block and tempo. Simple adds 2 minutes per spot before the base countdown. Use the + / − buttons to set the count.
             </div>
           </div>
           <div className="flex items-center gap-2">

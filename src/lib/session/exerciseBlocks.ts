@@ -92,33 +92,34 @@ export const buildExerciseBlocks = (exercise: Exercise): BlockDef[] => {
 };
 
 export const buildExerciseBlockPlan = (exercise: Exercise): BlockBuildPlan => {
+  const metronomeEnabled = exercise.metronomeEnabled !== false && exercise.workingBpm !== null;
   if (exercise.openEnded || exercise.practiceMode === "openEnded") {
     return {
       ok: true,
       blocks: [
         {
           ...OPEN_ENDED_BLOCK,
-          metronomeEnabled: exercise.metronomeEnabled !== false,
+          metronomeEnabled,
         },
       ],
     };
   }
 
   const out: BlockDef[] = [];
-  if (exercise.includeWarmupBlock !== false) out.push(CONSCIOUS_PRACTICE_BLOCK);
+  if (exercise.includeWarmupBlock !== false) out.push({ ...CONSCIOUS_PRACTICE_BLOCK, metronomeEnabled });
 
   if (exercise.practiceMode === "simple") {
     const minutes = clampMinutes(exercise.sessionMinutes);
     out.push({
       ...buildSimpleMetronomeBlock(minutes * 60),
-      metronomeEnabled: exercise.metronomeEnabled !== false,
+      metronomeEnabled,
     });
     return { ok: true, blocks: out };
   }
 
   if (exercise.practiceMode === "timed") {
     const minutes = clampMinutes(exercise.sessionMinutes);
-    out.push(buildTimedPracticeBlock(minutes * 60, exercise.metronomeEnabled !== false));
+    out.push(buildTimedPracticeBlock(minutes * 60, metronomeEnabled));
     return { ok: true, blocks: out };
   }
 

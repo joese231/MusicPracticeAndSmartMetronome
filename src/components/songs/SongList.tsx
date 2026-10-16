@@ -1,6 +1,7 @@
 "use client";
 import { useState, type DragEvent } from "react";
 import Link from "next/link";
+import { unlockSharedAudioContext } from "@/lib/metronome/scheduler";
 import type { Song } from "@/types/song";
 import { formatPracticeTime } from "@/lib/format";
 import { useSongsStore } from "@/lib/store/useSongsStore";
@@ -99,7 +100,7 @@ export function SongList({
                   : "border-bg-border hover:border-accent/60 hover:bg-bg-elevated/80"
             } ${isDragging ? "opacity-40" : ""}`}
           >
-            <div className="flex items-center gap-3 px-3 py-4">
+            <div className="flex flex-wrap items-center gap-3 px-3 py-3">
               <div className="flex flex-none flex-col gap-1">
                 <button
                   type="button"
@@ -128,21 +129,27 @@ export function SongList({
                 ⋮⋮
               </span>
               <Link
-                href={`/songs/${song.id}`}
-                className="flex min-w-0 flex-1 items-center justify-between gap-4"
+                href={`/session/${song.id}`}
+                onClick={() => unlockSharedAudioContext()}
+                className="flex min-w-[8rem] flex-1 items-center justify-between gap-4"
                 draggable={false}
               >
                 <div className="min-w-0 flex-1">
-                  <h3 className="truncate text-xl font-semibold text-neutral-100">
-                    {song.title}
-                  </h3>
-                  <div className="mt-1 flex flex-wrap gap-x-4 gap-y-1 text-sm text-neutral-400">
+                  <div className="flex min-w-0 items-baseline gap-3">
+                    <h3 className="min-w-0 flex-1 truncate text-xl font-semibold text-neutral-100">
+                      {song.title}
+                    </h3>
+                    <span className="shrink-0 whitespace-nowrap text-base font-semibold text-accent" title="Session length">
+                      {song.practiceMode === "openEnded" ? "Open ended" : `${song.defaultSessionMinutes} min`}
+                    </span>
+                  </div>
+                  <div className="mt-1 flex flex-wrap gap-x-3 gap-y-1 text-sm text-neutral-400">
                     <span>
                       Working <span className="text-neutral-200">{bpmLabel(song)}</span>
                     </span>
                     {song.troubleSpots.length > 0 && (
                       <span>
-                        Trouble spots{" "}
+                        Spots{" "}
                         <span className="text-neutral-200">
                           {song.troubleSpots.length}
                         </span>
@@ -150,7 +157,7 @@ export function SongList({
                     )}
                     {song.originalBpm != null && (
                       <span>
-                        Original{" "}
+                        Orig{" "}
                         <span className="text-neutral-200">{song.originalBpm}</span>{" "}
                         BPM
                       </span>
@@ -163,10 +170,11 @@ export function SongList({
                     </span>
                   </div>
                 </div>
-                <span className="text-2xl text-neutral-500" aria-hidden>
-                  ›
-                </span>
               </Link>
+              <div className="ml-auto flex flex-wrap gap-2">
+                <Link href={`/songs/${song.id}?view=statistics`} aria-label={`Statistics for ${song.title}`} className="rounded-lg border border-bg-border px-3 py-2 text-sm font-semibold text-neutral-200 hover:border-accent hover:bg-bg" draggable={false}>Statistics</Link>
+                <Link href={`/songs/${song.id}?edit=1`} aria-label={`Edit ${song.title}`} className="rounded-lg border border-bg-border px-3 py-2 text-sm text-accent hover:bg-bg" draggable={false}>Edit</Link>
+              </div>
             </div>
           </li>
         );

@@ -80,8 +80,8 @@ export function buildExerciseSessionRecord({
   elapsedSec: number;
   endedReason: EndedReason;
   plannedMinutes: number;
-  startWorkingBpm: number;
-  endWorkingBpm: number;
+  startWorkingBpm: number | null;
+  endWorkingBpm: number | null;
   promotions: PromotionEvent[];
 }): SessionRecord {
   return {
@@ -94,8 +94,8 @@ export function buildExerciseSessionRecord({
     durationSec: roundedDuration(elapsedSec),
     endedReason,
     plannedMinutes,
-    startWorkingBpm,
-    endWorkingBpm,
+    startWorkingBpm: startWorkingBpm ?? undefined,
+    endWorkingBpm: endWorkingBpm ?? undefined,
     startTroubleBpms: [],
     endTroubleBpms: [],
     promotions,

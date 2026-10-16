@@ -16,12 +16,12 @@ export function BlockHeader({
         Block {blockIndex + 1} / {totalBlocks}
       </div>
       <h2 className="mt-1 text-2xl font-semibold text-neutral-100 md:text-3xl">{label}</h2>
-      <div className="mt-2 flex items-baseline justify-center gap-2">
+      {tempoBpm > 0 ? <div className="mt-2 flex items-baseline justify-center gap-2">
         <span className="font-mono text-7xl font-bold leading-none text-accent tabular-nums md:text-8xl">
           {tempoBpm}
         </span>
         <span className="text-xl text-neutral-400">BPM</span>
-      </div>
+      </div> : <div className="mt-2 text-2xl text-neutral-400">No BPM</div>}
     </div>
   );
 }

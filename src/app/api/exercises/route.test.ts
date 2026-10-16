@@ -69,7 +69,7 @@ describe("exercises API validation", () => {
 
     expect(res.status).toBe(400);
     await expect(res.json()).resolves.toEqual({
-      error: "exercise.workingBpm must be a playable BPM",
+      error: "exercise.workingBpm must be null or a playable BPM",
     });
   });
 
@@ -86,7 +86,7 @@ describe("exercises API validation", () => {
 
     expect(res.status).toBe(400);
     await expect(res.json()).resolves.toEqual({
-      error: "exercise.workingBpm must be a playable BPM",
+      error: "exercise.workingBpm must be null or a playable BPM",
     });
   });
 });

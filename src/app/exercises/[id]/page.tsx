@@ -1,11 +1,12 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
-import { useRouter, useParams } from "next/navigation";
+import { useRouter, useParams, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useExercisesStore } from "@/lib/store/useExercisesStore";
 import { useSessionHistoryStore } from "@/lib/store/useSessionHistoryStore";
 import { ExerciseForm } from "@/components/exercises/ExerciseForm";
 import { LatestRecordingPanel } from "@/components/songs/LatestRecordingPanel";
+import { ItemStatistics } from "@/components/stats/ItemStatistics";
 import { BpmTimelineChart } from "@/components/stats/BpmTimelineChart";
 import { RecentSessionsList } from "@/components/stats/RecentSessionsList";
 import { formatPracticeTime } from "@/lib/format";
@@ -29,7 +30,8 @@ export default function ExerciseDetailPage() {
   const historyLoaded = useSessionHistoryStore((s) => s.loaded);
   const loadHistory = useSessionHistoryStore((s) => s.load);
 
-  const [editing, setEditing] = useState(false);
+  const search = useSearchParams();
+  const [editing, setEditing] = useState(search.get("edit") === "1");
   const [confirmDelete, setConfirmDelete] = useState(false);
 
   useEffect(() => {
@@ -38,7 +40,7 @@ export default function ExerciseDetailPage() {
   }, [loaded, load, historyLoaded, loadHistory]);
 
   const exerciseRecords = useMemo(
-    () => (id ? records.filter((r) => r.itemId === id) : []),
+    () => (id ? records.filter((r) => r.itemKind === "exercise" && r.itemId === id) : []),
     [records, id],
   );
 
@@ -61,6 +63,10 @@ export default function ExerciseDetailPage() {
         <h1 className="mt-4 text-2xl font-bold">Exercise not found</h1>
       </main>
     );
+  }
+
+  if (search.get("view") === "statistics") {
+    return <ItemStatistics title={exercise.name} itemId={exercise.id} records={exerciseRecords} loaded={historyLoaded} onBack={() => setActiveHomeTab("exercises")} />;
   }
 
   const songLike = exerciseAsSong(exercise);
@@ -104,82 +110,6 @@ export default function ExerciseDetailPage() {
 
       <div className="mt-6 space-y-4">
         <section className="rounded-lg border border-bg-border bg-bg-elevated p-5">
-          <div className="flex flex-wrap items-center gap-x-8 gap-y-3 text-sm">
-            <Stat label="Working" value={`${exercise.workingBpm} BPM`} highlight />
-            {isSmart && (
-              <>
-                <Stat label="Burst (overspeed)" value={`${burst} BPM`} />
-                <Stat label="Cool down" value={`${cool} BPM`} />
-              </>
-            )}
-            {!isOpenEnded && <Stat label="Length" value={`${exercise.sessionMinutes} min`} />}
-            <Stat label="Step" value={`${exercise.stepPercent}%`} />
-            <Stat label="Mode" value={modeLabel} />
-            {!exercise.metronomeEnabled && <Stat label="Metronome" value="Off" />}
-            <Stat label="Total practice" value={formatPracticeTime(exercise.totalPracticeSec)} />
-          </div>
-          {exercise.notes && (
-            <div className="mt-4 whitespace-pre-wrap rounded-md border border-bg-border bg-bg/50 px-4 py-3 text-sm text-neutral-300">
-              {exercise.notes}
-            </div>
-          )}
-        </section>
-
-        <section className="rounded-lg border border-bg-border bg-bg-elevated p-5">
-          <h2 className="text-lg font-semibold">Start session</h2>
-          <p className="mt-2 text-xs text-neutral-500">
-            {isOpenEnded ? (
-              <>
-                Open-ended count-up timer at <span className="font-mono">{exercise.workingBpm}</span>{" "}
-                BPM
-                {exercise.metronomeEnabled ? "" : " (metronome off)"}. Press{" "}
-                <span className="font-mono">Esc</span> when you&apos;re done.
-              </>
-            ) : isSmart ? (
-              <>
-                {exercise.includeWarmupBlock
-                  ? "Conscious Practice warm-up (you end it when ready), then "
-                  : ""}
-                your saved smart block sequence for {exercise.sessionMinutes} minutes. Press{" "}
-                <span className="font-mono">+</span> in Build to promote your working BPM.
-              </>
-            ) : exercise.practiceMode === "timed" ? (
-              <>
-                Single {exercise.sessionMinutes}-minute countdown block at{" "}
-                <span className="font-mono">{exercise.workingBpm}</span> BPM
-                {exercise.metronomeEnabled ? "" : " with the metronome off"}.
-              </>
-            ) : (
-              <>
-                Single {exercise.sessionMinutes}-minute steady metronome block at{" "}
-                <span className="font-mono">{exercise.workingBpm}</span> BPM.
-              </>
-            )}
-          </p>
-          <button
-            onClick={handleStart}
-            className="mt-4 block w-full rounded-lg bg-accent px-6 py-5 text-center text-xl font-semibold text-black transition hover:bg-accent-strong"
-          >
-            {isOpenEnded
-              ? "Start open-ended session"
-              : `Start ${exercise.sessionMinutes}-min session`}
-          </button>
-        </section>
-
-        <LatestRecordingPanel itemKind="exercise" itemId={exercise.id} />
-
-        {exerciseRecords.length > 0 && (
-          <>
-            <BpmTimelineChart
-              records={exerciseRecords}
-              itemId={exercise.id}
-              troubleSpotCount={0}
-            />
-            <RecentSessionsList records={exerciseRecords} limit={10} />
-          </>
-        )}
-
-        <section className="rounded-lg border border-bg-border bg-bg-elevated p-5">
           <div className="flex items-center justify-between">
             <h2 className="text-lg font-semibold">Edit exercise</h2>
             {!editing && (
@@ -220,6 +150,58 @@ export default function ExerciseDetailPage() {
             </div>
           )}
         </section>
+        <section className="rounded-lg border border-bg-border bg-bg-elevated p-5">
+          <div className="flex flex-wrap items-center gap-x-8 gap-y-3 text-sm">
+            <Stat label="Working" value={exercise.workingBpm == null ? "No BPM" : `${exercise.workingBpm} BPM`} highlight />
+            {isSmart && exercise.workingBpm != null && (
+              <>
+                <Stat label="Burst (overspeed)" value={`${burst} BPM`} />
+                <Stat label="Cool down" value={`${cool} BPM`} />
+              </>
+            )}
+            {!isOpenEnded && <Stat label="Length" value={`${exercise.sessionMinutes} min`} />}
+            <Stat label="Step" value={`${exercise.stepPercent}%`} />
+            <Stat label="Mode" value={modeLabel} />
+            {!exercise.metronomeEnabled && <Stat label="Metronome" value="Off" />}
+            <Stat label="Total practice" value={formatPracticeTime(exercise.totalPracticeSec)} />
+          </div>
+          {exercise.notes && (
+            <div className="mt-4 whitespace-pre-wrap rounded-md border border-bg-border bg-bg/50 px-4 py-3 text-sm text-neutral-300">
+              {exercise.notes}
+            </div>
+          )}
+        </section>
+
+        <section className="rounded-lg border border-bg-border bg-bg-elevated p-5">
+          <h2 className="text-lg font-semibold">Start session</h2>
+          <p className="mt-2 text-xs text-neutral-500">
+            {isSmart ? `Your saved smart block sequence for ${exercise.sessionMinutes} minutes, with ${exercise.includeWarmupBlock ? "a Conscious Practice warm-up first" : "no warm-up"}.` :
+              `${isOpenEnded ? "Open-ended count-up" : `${exercise.sessionMinutes}-minute countdown`}${exercise.workingBpm != null ? ` at ${exercise.workingBpm} BPM` : " with no metronome"}.`}
+          </p>
+          <button
+            onClick={handleStart}
+            className="mt-4 block w-full rounded-lg bg-accent px-6 py-5 text-center text-xl font-semibold text-black transition hover:bg-accent-strong"
+          >
+            {isOpenEnded
+              ? "Start open-ended session"
+              : `Start ${exercise.sessionMinutes}-min session`}
+          </button>
+        </section>
+
+        <LatestRecordingPanel itemKind="exercise" itemId={exercise.id} />
+
+        {exerciseRecords.length > 0 && (
+          <>
+            <BpmTimelineChart
+              records={exerciseRecords}
+              itemId={exercise.id}
+              troubleSpotCount={0}
+            />
+            <RecentSessionsList records={exerciseRecords} limit={10} />
+          </>
+        )}
+
+
 
         <section className="pt-4">
           {!confirmDelete ? (
@@ -258,7 +240,7 @@ export default function ExerciseDetailPage() {
 
 function modeName(mode: string, isOpenEnded: boolean): string {
   if (isOpenEnded) return "Open-ended";
-  if (mode === "timed") return "Timed";
+  if (mode === "timed") return "Simple";
   if (mode === "simple") return "Simple";
   return "Smart";
 }

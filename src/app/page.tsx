@@ -215,7 +215,7 @@ function ExercisesPanel({
       ) : (
         <>
           <p className="mb-3 text-xs text-neutral-500">
-            Drag the ⋮⋮ handle to reorder. Tap an exercise to edit or run it.
+            Drag the ⋮⋮ handle to reorder. Tap an exercise to start practice, or choose Edit.
           </p>
           <ExerciseList exercises={exercises} lastPlayedId={lastPlayedId} />
         </>

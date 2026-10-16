@@ -38,6 +38,14 @@ const makeExercise = (
   ...overrides,
 });
 
+describe("exercises without a BPM", () => {
+  it.each(["simple", "timed", "openEnded"] as const)("runs %s silently, including the optional warm-up", (practiceMode) => {
+    const blocks = buildExerciseBlocks(makeExercise(100, 5, { workingBpm: null, practiceMode }));
+    expect(blocks.length).toBeGreaterThan(0);
+    expect(blocks.every((block) => block.metronomeEnabled === false)).toBe(true);
+  });
+});
+
 describe("buildExerciseTimedBlocks (default template)", () => {
   it("default 5 min: Build 210s, Burst 60s, Cool Down 30s — totals 300s", () => {
     const b = buildExerciseTimedBlocks(5);

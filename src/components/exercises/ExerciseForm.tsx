@@ -22,7 +22,6 @@ import { SegmentedControl } from "@/components/ui/SegmentedControl";
 const PRACTICE_MODE_OPTIONS: Array<{ value: PracticeMode; label: string }> = [
   { value: "smart", label: "Smart" },
   { value: "simple", label: "Simple" },
-  { value: "timed", label: "Timed" },
   { value: "openEnded", label: "Open Ended" },
 ];
 
@@ -30,7 +29,7 @@ export type ExerciseFormValues = {
   name: string;
   link: string | null;
   notes: string | null;
-  workingBpm: number;
+  workingBpm: number | null;
   stepPercent: number;
   sessionMinutes: number;
   openEnded: boolean;
@@ -71,9 +70,7 @@ export function ExerciseForm({
     String(initial?.sessionMinutes ?? DEFAULT_EXERCISE_MINUTES),
   );
   const [sessionMinutesTouched, setSessionMinutesTouched] = useState(false);
-  const [metronomeEnabled, setMetronomeEnabled] = useState<boolean>(
-    initial?.metronomeEnabled ?? true,
-  );
+  const metronomeEnabled = initial?.metronomeEnabled ?? true;
 
   const settingsLoaded = useSettingsStore((s) => s.loaded);
   const settingsDefaultMode = useSettingsStore(
@@ -88,7 +85,7 @@ export function ExerciseForm({
   const settingsLoad = useSettingsStore((s) => s.load);
   const isEditing = initial?.practiceMode !== undefined;
   const [practiceMode, setPracticeMode] = useState<PracticeMode>(
-    initial?.openEnded ? "openEnded" : initial?.practiceMode ?? "smart",
+    initial?.openEnded ? "openEnded" : initial?.practiceMode === "timed" ? "simple" : initial?.practiceMode ?? "smart",
   );
   const [practiceModeTouched, setPracticeModeTouched] = useState(false);
   const [includeWarmupBlock, setIncludeWarmupBlock] = useState<boolean>(
@@ -106,7 +103,7 @@ export function ExerciseForm({
   useEffect(() => {
     if (isEditing || practiceModeTouched) return;
     if (!settingsLoaded) return;
-    setPracticeMode(settingsDefaultMode);
+    setPracticeMode(settingsDefaultMode === "timed" ? "simple" : settingsDefaultMode);
   }, [isEditing, practiceModeTouched, settingsLoaded, settingsDefaultMode]);
   useEffect(() => {
     if (isEditing || blockTemplateTouched) return;
@@ -135,8 +132,9 @@ export function ExerciseForm({
       setError("Name is required.");
       return null;
     }
-    const w = parseInt(workingBpm, 10);
-    if (!Number.isFinite(w) || w < 30 || w > 400) {
+    const w = workingBpm.trim() === "" ? null : Number(workingBpm);
+    if ((w === null && practiceMode === "smart") ||
+      (w !== null && (!Number.isInteger(w) || w < 30 || w > 400))) {
       setError("Working BPM must be between 30 and 400.");
       return null;
     }
@@ -251,7 +249,7 @@ export function ExerciseForm({
       </Field>
 
       <div className="grid gap-5 md:grid-cols-2">
-        <Field label="Starting working BPM" hint="The BPM at which you can already play this exercise cleanly and relaxed.">
+        <Field label="Starting working BPM" hint="The BPM at which you can play cleanly. Optional in Simple and Open Ended; leave blank for silent practice.">
           <input
             type="number"
             inputMode="numeric"
@@ -260,7 +258,7 @@ export function ExerciseForm({
             value={workingBpm}
             onChange={(e) => setWorkingBpm(e.target.value)}
             className="field-input"
-            required
+            required={practiceMode === "smart"}
           />
         </Field>
 
@@ -301,22 +299,13 @@ export function ExerciseForm({
         )}
       </div>
 
-      <div className="space-y-3 rounded-lg border border-bg-border bg-bg/40 p-4">
-        <Checkbox
-          checked={!metronomeEnabled}
-          onChange={(v) => setMetronomeEnabled(!v)}
-          label="Disable metronome for this exercise"
-          hint="When on, the session runs without the click. Saved on this exercise so transcribing-style drills don't need to re-toggle every session."
-        />
-      </div>
-
       <div className="space-y-4 rounded-lg border border-bg-border bg-bg/40 p-4 transition">
         <div>
           <div className="text-sm font-semibold text-neutral-100">
             Practice mode
           </div>
           <div className="mt-1 text-xs text-neutral-500">
-            Smart runs your custom block sequence with promotion. Simple plays one steady-BPM countdown. Timed is a single countdown block that can run without a click. Open Ended is a count-up timer.
+            Smart runs your custom block sequence with promotion. Simple runs a countdown, with an optional BPM. Open Ended is a count-up timer. Control the metronome during practice.
           </div>
           <div className="mt-3">
             <SegmentedControl

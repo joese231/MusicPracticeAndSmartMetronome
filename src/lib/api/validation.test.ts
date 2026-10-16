@@ -73,6 +73,11 @@ const validSessionRecord = {
 };
 
 describe("api validation", () => {
+  it("allows a silent countdown exercise without BPM while retaining smart BPM validation", () => {
+    expect(validateExercise({ ...validExercise, practiceMode: "simple", workingBpm: null }).ok).toBe(true);
+    expect(validateExercise({ ...validExercise, practiceMode: "smart", workingBpm: null }).ok).toBe(false);
+    expect(validateExercise({ ...validExercise, practiceMode: "openEnded", workingBpm: null }).ok).toBe(true);
+  });
   it("accepts a valid song and rejects malformed song rows", () => {
     expect(validateSong(validSong)).toEqual({ ok: true, value: validSong });
     expect(validateSong({ ...validSong, title: "" })).toEqual({
@@ -120,7 +125,7 @@ describe("api validation", () => {
     });
     expect(validateExercise({ ...validExercise, workingBpm: 0 })).toEqual({
       ok: false,
-      error: "exercise.workingBpm must be a playable BPM",
+      error: "exercise.workingBpm must be null or a playable BPM",
     });
   });
 

@@ -41,6 +41,8 @@ import { MetronomeDiagnosticsPanel } from "@/components/session/MetronomeDiagnos
 import { BpmEditorModal } from "@/components/session/BpmEditorModal";
 import { BetweenItemsOverlay } from "@/components/session/BetweenItemsOverlay";
 import { PracticeNotes } from "@/components/session/PracticeNotes";
+import { SongForm } from "@/components/songs/SongForm";
+import { SessionItemEditor } from "@/components/session/SessionItemEditor";
 import { SessionShell } from "@/components/session/SessionShell";
 
 type BetweenSongs = {
@@ -94,6 +96,9 @@ function SessionPage() {
 
   const [betweenSongs, setBetweenSongs] = useState<BetweenSongs | null>(null);
   const [betweenSongsPaused, setBetweenSongsPaused] = useState(false);
+  const [itemEditorOpen, setItemEditorOpen] = useState(false);
+  const resumeAfterEditRef = useRef(false);
+  const [activeBlocks, setActiveBlocks] = useState<BlockDef[] | null>(null);
   const [bpmEditorOpen, setBpmEditorOpen] = useState(false);
   // Transient "2× slower" toggle for the Conscious Practice block. When on,
   // halves whatever the block would otherwise play (the saved warmupBpm,
@@ -113,6 +118,7 @@ function SessionPage() {
   const startWorkingBpmRef = useRef<number | null>(null);
   const startTroubleBpmsRef = useRef<(number | null)[]>([]);
   const promotionsRef = useRef<PromotionEvent[]>([]);
+  const plannedMinutesRef = useRef(0);
   const songRuntimeRef = useRef<Song | null>(null);
   const earnedHandlerRef = useRef<() => void>(() => {});
   const pendingSongWriteRef = useRef<Promise<void>>(Promise.resolve());
@@ -126,6 +132,7 @@ function SessionPage() {
 
   const queueSongUpdate = useCallback(
     (next: Song) => {
+      songRuntimeRef.current = next;
       const write = updateSong(next);
       pendingSongWriteRef.current = write.catch(() => undefined);
       return write;
@@ -152,7 +159,8 @@ function SessionPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [durationMinutes, song?.id, blockStructureKey],
   );
-  const blocks = useMemo<BlockDef[]>(() => blockPlan?.blocks ?? [], [blockPlan]);
+  const plannedBlocks = useMemo<BlockDef[]>(() => blockPlan?.blocks ?? [], [blockPlan]);
+  const blocks = activeBlocks ?? plannedBlocks;
 
   const practice = usePracticeSession({
     blocks,
@@ -162,6 +170,12 @@ function SessionPage() {
     clearLatestRecording,
     getStartSubject: () => song ?? null,
     onBeforeStart: (subject) => {
+      if (!song) return;
+      setActiveBlocks(plannedBlocks.map((block) => ({
+        ...block,
+        metronomeEnabled: block.kind === "consciousPractice" || song.practiceMode !== "smart" ? true : block.metronomeEnabled,
+      })));
+      plannedMinutesRef.current = durationMinutes;
       songRuntimeRef.current = subject as Song;
     },
     onSessionStarted: (_startMs, subject) => {
@@ -175,7 +189,8 @@ function SessionPage() {
         setConsciousSlowMode(false);
       }
     },
-    onComplete: () => endSessionRef.current("complete"),
+    onComplete: () => { practice.metronomeRef.current?.pause(); },
+    onFinalAdvance: () => endSessionRef.current("complete"),
     onAbort: () => endSessionRef.current("abort"),
     onPlus: () => earnedHandlerRef.current(),
     isIntermissionActive: () => !!betweenSongsRef.current,
@@ -183,10 +198,12 @@ function SessionPage() {
     onIntermissionCancel: () => handleBetweenSongsCancelRef.current(),
     onIntermissionPauseToggle: () => handleBetweenSongsPauseToggleRef.current(),
     createMetronomeWhenSilent: true,
+    metronomeSuppressed: song?.metronomeEnabled === false,
+    editorOpen: itemEditorOpen || bpmEditorOpen || consciousBpmEditorOpen,
   });
 
   const endSession = useCallback(
-    async (reason: "complete" | "abort") => {
+    async (reason: "complete" | "abort", repeat = false) => {
       await practice.finishSession(reason, async ({ elapsedSec, startedAt, recorder }) => {
       await pendingSongWriteRef.current.catch(() => undefined);
       const songId = song?.id;
@@ -202,7 +219,7 @@ function SessionPage() {
           endedAt: new Date().toISOString(),
           elapsedSec,
           endedReason: reason,
-          plannedMinutes: durationMinutes,
+          plannedMinutes: plannedMinutesRef.current,
           startWorkingBpm: startWorkingBpmRef.current ?? undefined,
           endWorkingBpm: songNow?.workingBpm ?? startWorkingBpmRef.current ?? undefined,
           startTroubleBpms: startTroubleBpmsRef.current,
@@ -210,7 +227,7 @@ function SessionPage() {
           promotions: promotionsRef.current.slice(),
         });
         sessionId = rec.id;
-        void completeSessionRecord(rec)
+        await completeSessionRecord(rec)
           .then(() => loadSongs())
           .catch(() => {
             // best-effort — never block session teardown
@@ -228,12 +245,18 @@ function SessionPage() {
             blob: result.blob,
             blobUrl,
             durationSec: result.durationSec,
-            plannedMinutes: durationMinutes,
+            plannedMinutes: plannedMinutesRef.current,
             createdAt: new Date().toISOString(),
           }));
         } catch {
           // swallow
         }
+      }
+
+      if (repeat) {
+        setActiveBlocks(null);
+        practice.prepareRestart();
+        return;
       }
 
       // On a normal completion, flow straight into the next song in the
@@ -267,7 +290,6 @@ function SessionPage() {
       });
     },
     [
-      durationMinutes,
       loadSongs,
       practice,
       router,
@@ -323,6 +345,7 @@ function SessionPage() {
     if (!currentBlock) return 0;
     const s = songRuntimeRef.current ?? song;
     if (!s) return 0;
+    if (currentBlock.kind === "consciousPractice" && s.workingBpm == null) return 0;
     const base = currentBlock.tempoFn(s);
     if (currentBlock.kind === "consciousPractice" && consciousSlowMode) {
       return Math.max(20, Math.floor(warmupBpmFor(s) / 2));
@@ -340,7 +363,7 @@ function SessionPage() {
   useEffect(() => {
     if (!started || !snap || snap.phase !== "playing") return;
     const block = blocks[snap.blockIndex];
-    if (!block || block.kind !== "consciousPractice") return;
+    if (!block) return;
     if (tempoBpm <= 0) return;
     metronomeRef.current?.setBpm(tempoBpm);
   }, [tempoBpm, snap, started, blocks, metronomeRef]);
@@ -350,12 +373,15 @@ function SessionPage() {
   const showEarnedButton =
     !!currentBlock &&
     currentBlock.showEarnedButton &&
-    snap?.phase === "playing" &&
+    !practice.endedRef.current &&
+    (currentBlock.promotes?.kind === "trouble"
+      ? song?.troubleSpots[currentBlock.promotes.index]?.bpm != null
+      : song?.workingBpm != null) &&
     !paused;
 
   const canPause = snap?.phase === "playing";
   const canReset = snap?.phase === "playing" && !paused;
-  const canEditBpm = snap?.phase === "playing" && !paused;
+  const canEditBpm = !!snap && !paused;
   const isConscious = currentBlock?.kind === "consciousPractice";
   const isUnbounded = !!currentBlock?.unbounded;
   const elapsedSec = practice.elapsedSec;
@@ -395,19 +421,19 @@ function SessionPage() {
       };
     }
     const playedBpm = currentBlock.tempoFn(songNow);
-    if (songNow.workingBpm == null) return null;
+
     const isDerived = playedBpm !== songNow.workingBpm;
     return {
       title: "Edit Working BPM",
-      helperText: isDerived
+      helperText: songNow.workingBpm == null ? "Set a working BPM to add a click to this timer." : isDerived
         ? `This block plays at ${playedBpm} BPM (derived from working ${songNow.workingBpm}).`
         : `This block plays at ${playedBpm} BPM.`,
-      initialBpm: songNow.workingBpm,
+      initialBpm: songNow.workingBpm ?? 60,
     };
   }, [currentBlock, song]);
 
   const handleEarned = useCallback(async () => {
-    if (!snap || snap.phase !== "playing") return;
+    if (!snap || practice.endedRef.current) return;
     const block = blocks[snap.blockIndex];
     const songNow = songRuntimeRef.current;
     if (!block || !songNow || !block.showEarnedButton) return;
@@ -455,7 +481,7 @@ function SessionPage() {
       addToast(`${label}: ${oldBpm} → ${newSpot.bpm}`);
       await queueSongUpdate(promoted);
     }
-  }, [snap, blocks, queueSongUpdate, addToast, metronomeRef]);
+  }, [snap, blocks, queueSongUpdate, addToast, metronomeRef, practice.endedRef]);
   earnedHandlerRef.current = () => {
     void handleEarned();
   };
@@ -472,7 +498,7 @@ function SessionPage() {
   // automatically through `block.tempoFn`).
   const handleEditBpm = useCallback(
     async (newBpm: number) => {
-      if (!snap || snap.phase !== "playing") return;
+      if (!snap || practice.endedRef.current) return;
       const block = blocks[snap.blockIndex];
       const songNow = songRuntimeRef.current;
       if (!block || !songNow) return;
@@ -492,8 +518,7 @@ function SessionPage() {
         label =
           songNow.troubleSpots.length > 1 ? `Trouble ${idx + 1}` : "Trouble";
       } else {
-        if (songNow.workingBpm == null) return;
-        oldBpm = songNow.workingBpm;
+        oldBpm = songNow.workingBpm ?? 0;
         updated = { ...songNow, workingBpm: newBpm, updatedAt: nowIso() };
         label = "Working";
       }
@@ -504,7 +529,7 @@ function SessionPage() {
       addToast(`${label}: ${oldBpm} → ${newBpm}`);
       await queueSongUpdate(updated);
     },
-    [snap, blocks, queueSongUpdate, addToast, metronomeRef],
+    [snap, blocks, queueSongUpdate, addToast, metronomeRef, practice.endedRef],
   );
 
   const handleResetBlock = practice.handleResetBlock;
@@ -588,7 +613,7 @@ function SessionPage() {
     );
   }
 
-  if (blockPlan && !blockPlan.ok) {
+  if (!started && blockPlan && !blockPlan.ok) {
     return (
       <main className="mx-auto flex min-h-screen max-w-xl flex-col justify-center px-6 py-10">
         <p className="text-sm font-semibold uppercase text-accent">
@@ -639,10 +664,19 @@ function SessionPage() {
     );
   }
 
-  const awaiting = snap.phase === "awaiting";
+  const awaiting = snap.phase === "awaiting" || snap.phase === "ended";
 
   return (
     <SessionShell
+      finishing={practice.finishing}
+      itemControls={<>
+        <button type="button" onClick={() => { resumeAfterEditRef.current = !paused && snap.phase === "playing"; if (resumeAfterEditRef.current) practice.handlePauseToggle(); setItemEditorOpen(true); }} className="rounded-lg border border-bg-border px-3 py-2 text-sm text-accent">Edit song</button>
+        <label className="flex items-center gap-2 text-sm text-neutral-300"><input type="checkbox" checked={song.metronomeEnabled === false} onChange={async (event) => {
+          const current = songRuntimeRef.current;
+          if (!current) return;
+          try { await queueSongUpdate({ ...current, metronomeEnabled: !event.target.checked }); } catch { addToast("Could not save metronome preference."); }
+        }} />Disable metronome</label>
+      </>}
       notesPanel={<PracticeNotes key={song.id} notes={song.notes ?? null} onSave={async (notes) => {
         const current = songRuntimeRef.current;
         if (!current) throw new Error("This item is no longer available.");
@@ -651,7 +685,7 @@ function SessionPage() {
         await queueSongUpdate(updated);
       }} />}
       title={song.title}
-      subtitle={`${durationMinutes}-min session`}
+      subtitle={`${plannedMinutesRef.current}-min session`}
       currentBlock={currentBlock}
       nextBlock={nextBlock}
       currentBlockLabel={
@@ -674,8 +708,8 @@ function SessionPage() {
       recordingActive={recordingActive}
       metronomeMode={metronomeMode}
       metronome={metronomeRef.current}
-      showMetronomeControls={currentBlock?.metronomeEnabled !== false}
-      showMetronomeIndicator={currentBlock?.metronomeEnabled !== false}
+      showMetronomeControls={song.metronomeEnabled !== false && currentBlock?.metronomeEnabled !== false}
+      showMetronomeIndicator={tempoBpm > 0 && song.metronomeEnabled !== false && currentBlock?.metronomeEnabled !== false}
       canResetBlock={canReset}
       canEditBpm={canEditBpm}
       canPause={canPause}
@@ -740,10 +774,16 @@ function SessionPage() {
       onSkip={handleSkip}
       onEnd={() => void endSession("abort")}
       onEarned={handleEarned}
-      onAdvance={advance}
+      onAdvance={() => !nextBlock ? void endSession("complete") : advance()}
+      onRepeatSession={() => void endSession("complete", true)}
       onRepeatBlock={handleRepeatBlock}
+      unboundedActionLabel={currentBlock?.kind === "openEnded" ? "End session" : undefined}
+      onUnboundedAction={advance}
       toasts={toasts}
     >
+      {itemEditorOpen && <SessionItemEditor title="Edit song" onClose={() => { setItemEditorOpen(false); if (resumeAfterEditRef.current) { resumeAfterEditRef.current = false; practice.handlePauseToggle(); } }}>
+        <SongForm initial={song} submitLabel="Save" onSubmit={async (values) => { const current = songRuntimeRef.current; if (!current) throw new Error("Item unavailable."); await queueSongUpdate({ ...current, ...values }); setItemEditorOpen(false); if (resumeAfterEditRef.current) { resumeAfterEditRef.current = false; practice.handlePauseToggle(); } }} onCancel={() => { setItemEditorOpen(false); if (resumeAfterEditRef.current) { resumeAfterEditRef.current = false; practice.handlePauseToggle(); } }} />
+      </SessionItemEditor>}
       {bpmEditor && (
         <BpmEditorModal
           open={bpmEditorOpen}

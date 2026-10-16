@@ -8,6 +8,7 @@ export function bpmLabel(song: Song): string {
   if (
     song.metronomeEnabled === false ||
     song.practiceMode === "timed" ||
+    song.practiceMode === "simple" ||
     song.practiceMode === "openEnded"
   ) {
     return "No BPM";

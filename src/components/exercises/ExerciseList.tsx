@@ -1,6 +1,7 @@
 "use client";
 import { useState, type DragEvent } from "react";
 import Link from "next/link";
+import { unlockSharedAudioContext } from "@/lib/metronome/scheduler";
 import type { Exercise } from "@/types/exercise";
 import { formatPracticeTime } from "@/lib/format";
 import { useExercisesStore } from "@/lib/store/useExercisesStore";
@@ -96,7 +97,7 @@ export function ExerciseList({
                   : "border-bg-border hover:border-accent/60 hover:bg-bg-elevated/80"
             } ${isDragging ? "opacity-40" : ""}`}
           >
-            <div className="flex items-center gap-3 px-3 py-4">
+            <div className="flex flex-wrap items-center gap-3 px-3 py-3">
               <div className="flex flex-none flex-col gap-1">
                 <button
                   type="button"
@@ -125,31 +126,38 @@ export function ExerciseList({
                 ⋮⋮
               </span>
               <Link
-                href={`/exercises/${ex.id}`}
-                className="flex min-w-0 flex-1 items-center justify-between gap-4"
+                href={`/exercise-session/${ex.id}`}
+                onClick={() => unlockSharedAudioContext()}
+                className="flex min-w-[8rem] flex-1 items-center justify-between gap-4"
                 draggable={false}
               >
                 <div className="min-w-0 flex-1">
-                  <h3 className="truncate text-xl font-semibold text-neutral-100">
-                    {ex.name}
-                  </h3>
+                  <div className="flex min-w-0 items-baseline gap-3">
+                    <h3 className="min-w-0 flex-1 truncate text-xl font-semibold text-neutral-100">
+                      {ex.name}
+                    </h3>
+                    <span className="shrink-0 whitespace-nowrap text-base font-semibold text-accent" title="Session length">
+                      {ex.openEnded || ex.practiceMode === "openEnded" ? "Open ended" : `${ex.sessionMinutes} min`}
+                    </span>
+                  </div>
                   <div className="mt-1 flex flex-wrap gap-x-4 gap-y-1 text-sm text-neutral-400">
                     <span>
                       Working{" "}
-                      <span className="text-neutral-200">{ex.workingBpm}</span> BPM
+                      <span className="text-neutral-200">{ex.workingBpm == null ? "No BPM" : `${ex.workingBpm} BPM`}</span>
                     </span>
                     <span>
-                      Total{" "}
+                      Total practice{" "}
                       <span className="text-neutral-200">
                         {formatPracticeTime(ex.totalPracticeSec)}
                       </span>
                     </span>
                   </div>
                 </div>
-                <span className="text-2xl text-neutral-500" aria-hidden>
-                  ›
-                </span>
               </Link>
+              <div className="ml-auto flex flex-wrap gap-2">
+                <Link href={`/exercises/${ex.id}?view=statistics`} aria-label={`Statistics for ${ex.name}`} className="rounded-lg border border-bg-border px-3 py-2 text-sm font-semibold text-neutral-200 hover:border-accent hover:bg-bg" draggable={false}>Statistics</Link>
+                <Link href={`/exercises/${ex.id}?edit=1`} aria-label={`Edit ${ex.name}`} className="rounded-lg border border-bg-border px-3 py-2 text-sm text-accent hover:bg-bg" draggable={false}>Edit</Link>
+              </div>
             </div>
           </li>
         );
